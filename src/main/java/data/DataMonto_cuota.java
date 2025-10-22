@@ -18,7 +18,6 @@ public class DataMonto_cuota {
 
             while (rs != null && rs.next()) {
                 Monto_cuota mc = new Monto_cuota();
-                mc.setFecha(rs.getDate("fecha").toLocalDate());
                 mc.setMonto(rs.getDouble("monto"));
                 mc.setId_cuota(rs.getInt("id_cuota"));
                 montos.add(mc);
@@ -54,7 +53,6 @@ public class DataMonto_cuota {
 
             if (rs != null && rs.next()) {
                 mc = new Monto_cuota();
-                mc.setFecha(rs.getDate("fecha").toLocalDate());
                 mc.setMonto(rs.getDouble("monto"));
                 mc.setId_cuota(rs.getInt("id_cuota"));
             }
