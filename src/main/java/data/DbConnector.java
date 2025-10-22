@@ -5,6 +5,7 @@ import java.sql.*;
 public class DbConnector {
 
 	private static DbConnector instancia;
+	
 	private String driver="com.mysql.cj.jdbc.Driver";
 	private String host="localhost";
 	private String port="3306";
