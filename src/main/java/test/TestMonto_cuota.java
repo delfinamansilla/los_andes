@@ -10,7 +10,7 @@ import java.time.LocalDate;
 public class TestMonto_cuota {
 	public static void main(String[] args) {
 		
-		DataMonto_cuota dmc = new DataMonto_cuota();
+		/*DataMonto_cuota dmc = new DataMonto_cuota();
         Monto_cuota monto = new Monto_cuota(LocalDate.now(), 1500.0, 1); 
         
         DataCuota dc = new DataCuota();
@@ -38,7 +38,7 @@ public class TestMonto_cuota {
         Monto_cuota montoRec = dmc.getByFecha(monto.getFecha());
         System.out.println("Monto recuperado: " + montoRec.getMonto());
 
-        /*// Delete
+        // Delete
         dmc.delete(monto.getFecha());
         System.out.println("Monto eliminado.");*/
 	}

@@ -81,10 +81,6 @@ public class LogicCancha {
         return dataCancha.getPartidosByCancha(idCancha);
     }
 
-    public LinkedList<Alquiler_cancha> getAlquileresByCancha(int idCancha) throws Exception {
-        if (idCancha <= 0) throw new Exception("ID de cancha inválido.");
-        return dataCancha.getAlquileresByCancha(idCancha);
-    }
 
     public LinkedList<Actividad> getActividadesByCancha(int idCancha) throws Exception {
         if (idCancha <= 0) throw new Exception("ID de cancha inválido.");
