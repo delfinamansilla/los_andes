@@ -199,37 +199,6 @@ public class DataCancha {
         return partidos;
     }
 
-    public LinkedList<Alquiler_cancha> getAlquileresByCancha(int idCancha) {
-        LinkedList<Alquiler_cancha> alquileres = new LinkedList<>();
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            stmt = DbConnector.getInstancia().getConn().prepareStatement(
-                "SELECT * FROM alquiler_cancha WHERE id_cancha = ?"
-            );
-            stmt.setInt(1, idCancha);
-            rs = stmt.executeQuery();
-
-            while (rs != null && rs.next()) {
-                Alquiler_cancha a = new Alquiler_cancha();
-                a.setId(rs.getInt("id"));
-                alquileres.add(a);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return alquileres;
-    }
 
     public LinkedList<Actividad> getActividadesByCancha(int idCancha) {
         LinkedList<Actividad> actividades = new LinkedList<>();

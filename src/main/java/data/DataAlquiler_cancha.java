@@ -1,9 +1,10 @@
 package data;
 
 import entities.Alquiler_cancha;
-import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.LinkedList;
+import java.sql.*;
 
 public class DataAlquiler_cancha {
 
@@ -167,6 +168,56 @@ public class DataAlquiler_cancha {
                 e.printStackTrace();
             }
         }
+    }
+    
+    public LinkedList<Alquiler_cancha> getAlquileresByCancha(int idCancha) {
+        LinkedList<Alquiler_cancha> alquileres = new LinkedList<>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT * FROM alquiler_cancha WHERE id_cancha = ?"
+            );
+            stmt.setInt(1, idCancha);
+            rs = stmt.executeQuery();
+
+            while (rs != null && rs.next()) {
+                Alquiler_cancha a = new Alquiler_cancha();
+                a.setId(rs.getInt("id"));
+                alquileres.add(a);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return alquileres;
+    }
+    
+    public boolean isHorarioDisponible(int idCancha, LocalDate fecha, String horaDesde, String horaHasta) {
+        LinkedList<Alquiler_cancha> alquileres = getAlquileresByCancha(idCancha);
+        
+        LocalTime nuevoDesde = LocalTime.parse(horaDesde);
+        LocalTime nuevoHasta = LocalTime.parse(horaHasta);
+
+        for (Alquiler_cancha alq : alquileres) {
+            if (alq.getFechaAlquiler().equals(fecha)) {
+                LocalTime existDesde = LocalTime.parse(alq.getHoraDesde());
+                LocalTime existHasta = LocalTime.parse(alq.getHoraHasta());
+                if (nuevoDesde.isBefore(existHasta) && nuevoHasta.isAfter(existDesde)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     
 }
