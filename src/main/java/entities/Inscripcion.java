@@ -27,7 +27,7 @@ public class Inscripcion {
         this.id_actividad = id_actividad;
     }
 
-    // Getters
+   
     public int getIdInscripcion() {
         return id;
     }
@@ -44,7 +44,7 @@ public class Inscripcion {
         return id_actividad;
     }
 
-    // Setters
+    
     public void setIdInscripcion(int id) {
         this.id = id;
     }
