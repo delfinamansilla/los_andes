@@ -5,13 +5,11 @@ public class Salon {
     private String nombre;
     private int capacidad;
     private String descripcion;
-    private byte[] imagen; // opcional (puede ser null)
+    private byte[] imagen; 
 
-    // Constructor vacío (necesario para frameworks o carga dinámica)
     public Salon() {
     }
 
-    // Constructor sin ID, sin imagen (imagen opcional)
     public Salon(String nombre, int capacidad, String descripcion) {
         this.nombre = nombre;
         this.capacidad = capacidad;
@@ -19,7 +17,6 @@ public class Salon {
         this.imagen = null;
     }
 
-    // Constructor sin ID, con imagen (cuando se quiera agregar)
     public Salon(String nombre, int capacidad, String descripcion, byte[] imagen) {
         this.nombre = nombre;
         this.capacidad = capacidad;
@@ -27,7 +24,6 @@ public class Salon {
         this.imagen = imagen;
     }
 
-    // Constructor con ID, sin imagen (cuando la imagen no esté cargada)
     public Salon(int id, String nombre, int capacidad, String descripcion) {
         this.id = id;
         this.nombre = nombre;
@@ -36,7 +32,6 @@ public class Salon {
         this.imagen = null;
     }
 
-    // Constructor con ID e imagen (para registros completos)
     public Salon(int id, String nombre, int capacidad, String descripcion, byte[] imagen) {
         this.id = id;
         this.nombre = nombre;
@@ -45,7 +40,6 @@ public class Salon {
         this.imagen = imagen;
     }
 
-    // Getters
     public int getId() {
         return id;
     }
@@ -66,7 +60,6 @@ public class Salon {
         return imagen;
     }
 
-    // Setters
     public void setId(int id) {
         this.id = id;
     }
@@ -87,7 +80,6 @@ public class Salon {
         this.imagen = imagen;
     }
 
-    // Opcional: para logs o depuración
     @Override
     public String toString() {
         return "Salon{" +
