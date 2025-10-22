@@ -5,13 +5,11 @@ public class Horario {
     private String dia;
     private String horaDesde;
     private String horaHasta;
-    private int idActividad; // clave foránea hacia Actividad
+    private int idActividad; 
 
-    // Constructor vacío (necesario para frameworks o DAOs)
     public Horario() {
     }
 
-    // Constructor sin ID (para nuevos registros)
     public Horario(String dia, String horaDesde, String horaHasta, int idActividad) {
         this.dia = dia;
         this.horaDesde = horaDesde;
@@ -19,7 +17,6 @@ public class Horario {
         this.idActividad = idActividad;
     }
 
-    // Constructor con ID (para registros ya existentes en la BD)
     public Horario(int id, String dia, String horaDesde, String horaHasta, int idActividad) {
         this.id = id;
         this.dia = dia;
@@ -28,7 +25,6 @@ public class Horario {
         this.idActividad = idActividad;
     }
 
-    // Getters
     public int getId() {
         return id;
     }
@@ -49,7 +45,6 @@ public class Horario {
         return idActividad;
     }
 
-    // Setters
     public void setId(int id) {
         this.id = id;
     }
@@ -70,7 +65,6 @@ public class Horario {
         this.idActividad = idActividad;
     }
 
-    // Para depuración o logs
     @Override
     public String toString() {
         return "Horario{" +
