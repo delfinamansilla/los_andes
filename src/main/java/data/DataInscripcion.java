@@ -84,27 +84,6 @@ public class DataInscripcion {
         try {
             Connection conn = DbConnector.getInstancia().getConn();
 
-            // 🔍 Verificar que exista el usuario
-            PreparedStatement checkUsuario = conn.prepareStatement(
-                "SELECT id FROM usuario WHERE id = ?"
-            );
-            checkUsuario.setInt(1, i.getIdUsuario());
-            ResultSet rsUsuario = checkUsuario.executeQuery();
-            if (!rsUsuario.next()) {
-                throw new SQLException("El usuario con ID " + i.getIdUsuario() + " no existe.");
-            }
-
-            // 🔍 Verificar que exista la actividad
-            PreparedStatement checkActividad = conn.prepareStatement(
-                "SELECT id FROM actividad WHERE id = ?"
-            );
-            checkActividad.setInt(1, i.getIdActividad());
-            ResultSet rsActividad = checkActividad.executeQuery();
-            if (!rsActividad.next()) {
-                throw new SQLException("La actividad con ID " + i.getIdActividad() + " no existe.");
-            }
-
-            // ✅ Insertar la inscripción
             stmt = conn.prepareStatement(
                 "INSERT INTO inscripcion (fecha_inscripcion, id_usuario, id_actividad) VALUES (?, ?, ?)",
                 PreparedStatement.RETURN_GENERATED_KEYS
@@ -180,5 +159,42 @@ public class DataInscripcion {
             }
         }
     }
+    
+    public LinkedList<Inscripcion> getByActividad(int idActividad) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        LinkedList<Inscripcion> inscripciones = new LinkedList<>();
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT * FROM inscripcion WHERE id_actividad = ?"
+            );
+            stmt.setInt(1, idActividad);
+            rs = stmt.executeQuery();
+
+            while (rs != null && rs.next()) {
+                Inscripcion i = new Inscripcion();
+                i.setIdInscripcion(rs.getInt("id"));
+                i.setFechaInscripcion(rs.getDate("fecha_inscripcion").toLocalDate());
+                i.setIdUsuario(rs.getInt("id_usuario"));
+                i.setIdActividad(rs.getInt("id_actividad"));
+                inscripciones.add(i);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener inscripciones por actividad: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return inscripciones;
+    }
+
 }
 

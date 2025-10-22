@@ -181,6 +181,8 @@ public class DataAlquiler_salon {
             }
         }
     }
+    
+    
 
     /**
      * Devuelve todos los alquileres de un salón específico.
@@ -209,6 +211,77 @@ public class DataAlquiler_salon {
                 alquileres.add(a);
             }
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return alquileres;
+    }
+    
+    public boolean tieneReservasActivas(int idSalon) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        boolean tiene = false;
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT COUNT(*) FROM alquiler_salon " +
+                "WHERE id_salon = ? " +
+                "AND (fecha > CURDATE() OR (fecha = CURDATE() AND hora_hasta > CURTIME()))"
+            );
+
+            stmt.setInt(1, idSalon);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                tiene = rs.getInt(1) > 0;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return tiene;
+    }
+    public LinkedList<Alquiler_salon> getBySalonYFecha(int idSalon, LocalDate fecha) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        LinkedList<Alquiler_salon> alquileres = new LinkedList<>();
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT * FROM alquiler_salon WHERE id_salon = ? AND fecha = ?"
+            );
+            stmt.setInt(1, idSalon);
+            stmt.setDate(2, Date.valueOf(fecha));
+            rs = stmt.executeQuery();
+
+            while (rs != null && rs.next()) {
+                Alquiler_salon a = new Alquiler_salon();
+                a.setId(rs.getInt("id"));
+                a.setFecha(rs.getDate("fecha").toLocalDate());
+                a.setHoraDesde(rs.getString("hora_desde"));
+                a.setHoraHasta(rs.getString("hora_hasta"));
+                a.setIdSalon(rs.getInt("id_salon"));
+                a.setIdUsuario(rs.getInt("id_usuario"));
+                alquileres.add(a);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

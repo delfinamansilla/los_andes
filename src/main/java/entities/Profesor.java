@@ -17,7 +17,7 @@ public class Profesor {
     public Profesor() {
     }
 
-    // Constructor con ID (para profesores ya cargados en la BD)
+   
     public Profesor(int id, String nombre_completo, String telefono, String mail) {
         this.id = id;
         this.nombre_completo = nombre_completo;
@@ -25,7 +25,7 @@ public class Profesor {
         this.mail = mail;
     }
 
-    // Getters
+ 
     public int getIdProfesor() {
         return id;
     }
@@ -42,7 +42,7 @@ public class Profesor {
         return mail;
     }
 
-    // Setters
+    
     public void setIdProfesor(int id) {
         this.id = id;
     }
