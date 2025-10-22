@@ -92,7 +92,7 @@ CREATE TABLE `alquiler_salon` (
   `id` int NOT NULL AUTO_INCREMENT,
   `fecha` date NOT NULL,
   `hora_desde` varchar(255) NOT NULL,
-  `hora_antes` varchar(255) NOT NULL,
+  `hora_hasta` varchar(255) NOT NULL,
   `id_salon` int NOT NULL,
   `id_usuario` int NOT NULL,
   PRIMARY KEY (`id`),
