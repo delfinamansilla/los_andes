@@ -66,6 +66,41 @@ public class DataPagoCuota {
             }
         }
     }
+    /**
+     * Busca un pago existente por el ID de la cuota.
+     * Sirve para verificar si una cuota ya ha sido pagada.
+     * @param idCuota el ID de la cuota a buscar.
+     * @return El objeto PagoCuota si se encuentra, sino null.
+     */
+    public PagoCuota getByCuotaId(int idCuota) {
+        PagoCuota pc = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT * FROM pago_cuota WHERE id_cuota = ?");
+            stmt.setInt(1, idCuota);
+            rs = stmt.executeQuery();
+            if (rs != null && rs.next()) {
+                pc = new PagoCuota();
+                pc.setId(rs.getInt("id"));
+                pc.setFecha_pago(rs.getObject("fecha_pago", LocalDate.class));
+                pc.setId_usuario(rs.getInt("id_usuario"));
+                pc.setId_cuota(rs.getInt("id_cuota"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return pc;
+    }
 
     public void delete(int id) {
         PreparedStatement stmt = null;
