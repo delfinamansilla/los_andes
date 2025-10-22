@@ -5,11 +5,59 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.LinkedList;
 
+
 /**
  * Clase para interactuar con la tabla 'usuario' en la base de datos.
  * Contiene métodos CRUD: obtener, buscar, agregar, actualizar y eliminar usuarios.
  */
 public class DataUsuario {
+	/** Busca un usuario por su DNI.
+	 * @param dni El DNI a buscar.
+	 * @return El objeto Usuario completo si existe, o null si no.
+	 */
+	public Usuario getByDNI(String dni) {
+	    Usuario u = null;
+	    PreparedStatement stmt = null;
+	    ResultSet rs = null;
+
+	    try {
+	        stmt = DbConnector.getInstancia().getConn().prepareStatement(
+	            "SELECT * FROM usuario WHERE dni = ?"
+	        );
+	        stmt.setString(1, dni);
+	        rs = stmt.executeQuery();
+
+	        if (rs != null && rs.next()) {
+	            u = new Usuario();
+	            u.setIdUsuario(rs.getInt("id"));
+	            u.setNombreCompleto(rs.getString("nombre_completo"));
+	            u.setDni(rs.getString("dni"));
+	            u.setTelefono(rs.getString("telefono"));
+	            u.setMail(rs.getString("mail"));
+	            u.setNroSocio(rs.getInt("nro_socio"));
+	            
+	            Date fecha = rs.getDate("fecha_nacimiento");
+	            if (fecha != null) {
+	                u.setFechaNacimiento(fecha.toLocalDate());
+	            }
+	            u.setContrasenia(rs.getString("contrasenia"));
+	            u.setEstado(rs.getBoolean("estado"));
+	            u.setRol(rs.getString("rol"));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (rs != null) rs.close();
+	            if (stmt != null) stmt.close();
+	            DbConnector.getInstancia().releaseConn();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return u;
+	}
 
     /**
      * Devuelve una lista con todos los usuarios de la base de datos.
@@ -191,6 +239,55 @@ public class DataUsuario {
             }
         }
     }
+    /**
+     * Busca y devuelve un usuario por su ID.
+     * @param id El ID del usuario a buscar.
+     * @return El objeto Usuario completo si se encuentra, o null si no.
+     */
+    public Usuario getById(int id) {
+        Usuario u = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT * FROM usuario WHERE id = ?"
+            );
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+
+            if (rs != null && rs.next()) {
+                u = new Usuario();
+                u.setIdUsuario(rs.getInt("id"));
+                u.setNombreCompleto(rs.getString("nombre_completo"));
+                u.setDni(rs.getString("dni"));
+                u.setTelefono(rs.getString("telefono"));
+                u.setMail(rs.getString("mail"));
+                u.setNroSocio(rs.getInt("nro_socio"));
+                
+                Date fecha = rs.getDate("fecha_nacimiento");
+                if (fecha != null) {
+                    u.setFechaNacimiento(fecha.toLocalDate());
+                }
+                u.setContrasenia(rs.getString("contrasenia"));
+                u.setEstado(rs.getBoolean("estado"));
+                u.setRol(rs.getString("rol"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return u;
+    }
+    
 
     /**
      * Elimina un usuario de la base de datos por su ID.
