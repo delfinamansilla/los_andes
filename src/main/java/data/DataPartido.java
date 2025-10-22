@@ -46,6 +46,46 @@ public class DataPartido {
         return partidos;
     }
     
+    public LinkedList<Partido> getByCanchaAndFecha(int idCancha, LocalDate fecha) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        LinkedList<Partido> partidos = new LinkedList<>();
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT * FROM partido WHERE id_cancha = ? AND fecha = ?"
+            );
+            stmt.setInt(1, idCancha);
+            stmt.setObject(2, fecha);
+            rs = stmt.executeQuery();
+
+            while (rs != null && rs.next()) {
+                Partido p = new Partido();
+                // Esto es lo importante: Carga TODOS los datos que necesitas
+                p.setId(rs.getInt("id"));
+                p.setFecha(rs.getObject("fecha", LocalDate.class));
+                p.setOponente(rs.getString("oponente"));
+                p.setHora_desde(rs.getObject("hora_desde", LocalTime.class));
+                p.setHora_hasta(rs.getObject("hora_hasta", LocalTime.class));
+                p.setCategoria(rs.getString("categoria"));
+                p.setPrecio_entrada(rs.getDouble("precio_entrada"));
+                p.setId_cancha(rs.getInt("id_cancha"));
+                p.setId_actividad(rs.getInt("id_actividad"));
+                partidos.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return partidos;
+    }
 
     public Partido getById(int id) {
         Partido p = null;
