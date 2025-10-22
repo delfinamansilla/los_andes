@@ -28,7 +28,7 @@ public class Actividad {
     public Actividad() {
     }
 
-    // Constructor con ID (para actividades ya existentes en la BD)
+    
     public Actividad(int id, String nombre, int cupo, String descripcion, LocalDate inscripcion_desde,
                      LocalDate inscripcion_hasta, int id_profesor, int id_cancha) {
         this.id = id;
@@ -41,7 +41,7 @@ public class Actividad {
         this.id_cancha = id_cancha;
     }
 
-    // Getters
+ 
     public int getIdActividad() {
         return id;
     }
@@ -74,7 +74,7 @@ public class Actividad {
         return id_cancha;
     }
 
-    // Setters
+   
     public void setIdActividad(int id) {
         this.id = id;
     }

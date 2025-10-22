@@ -92,27 +92,7 @@ public class DataActividad {
         try {
             Connection conn = DbConnector.getInstancia().getConn();
 
-            // 🔍 Verificar que exista el profesor
-            PreparedStatement checkProfesor = conn.prepareStatement(
-                "SELECT id FROM profesor WHERE id = ?"
-            );
-            checkProfesor.setInt(1, a.getIdProfesor());
-            ResultSet rsProfesor = checkProfesor.executeQuery();
-            if (!rsProfesor.next()) {
-                throw new SQLException("El profesor con ID " + a.getIdProfesor() + " no existe.");
-            }
 
-            // 🔍 Verificar que exista la cancha
-            PreparedStatement checkCancha = conn.prepareStatement(
-                "SELECT id FROM cancha WHERE id = ?"
-            );
-            checkCancha.setInt(1, a.getIdCancha());
-            ResultSet rsCancha = checkCancha.executeQuery();
-            if (!rsCancha.next()) {
-                throw new SQLException("La cancha con ID " + a.getIdCancha() + " no existe.");
-            }
-
-            // ✅ Insertar la actividad
             stmt = conn.prepareStatement(
                 "INSERT INTO actividad (nombre, descripcion, cupo, inscripcion_desde, inscripcion_hasta, id_profesor, id_cancha) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)",
