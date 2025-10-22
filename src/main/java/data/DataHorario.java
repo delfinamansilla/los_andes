@@ -27,6 +27,7 @@ public class DataHorario {
                 h.setHoraHasta(rs.getString("hora_hasta"));
                 h.setIdActividad(rs.getInt("id_actividad"));
 
+                
                 horarios.add(h);
             }
         } catch (SQLException e) {
