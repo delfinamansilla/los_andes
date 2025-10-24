@@ -7,7 +7,9 @@ import java.util.LinkedList;
 
 public class TestCuota {
     public static void main(String[] args) {
-        DataCuota dc = new DataCuota();
+/*  
+       DataCuota dc = new DataCuota();
+ 
         Cuota cuotaPrueba = null;
 
         System.out.println("--- Agregando nueva cuota ---");
@@ -48,6 +50,6 @@ public class TestCuota {
             } else {
                 System.out.println("Error al eliminar la cuota.");
             }
-        }
+        }*/
     }
 }

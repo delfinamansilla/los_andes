@@ -10,7 +10,7 @@ import entities.Usuario;
 import java.time.LocalDate;
 
 public class TestPagoCuota {
-
+/*
     public static void main(String[] args) {
         DataUsuario du = new DataUsuario();
         DataCuota dc = new DataCuota();
@@ -53,5 +53,5 @@ public class TestPagoCuota {
         dc.delete(cuotaPrueba.getId());
         System.out.println("Cuota temporal eliminada.");
 
-    }
+    }*/
 }
