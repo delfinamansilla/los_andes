@@ -2,6 +2,7 @@ package data;
 
 import entities.Horario;
 import java.sql.*;
+import java.time.LocalTime;
 import java.util.LinkedList;
 
 public class DataHorario {
@@ -23,8 +24,8 @@ public class DataHorario {
                 Horario h = new Horario();
                 h.setId(rs.getInt("id"));
                 h.setDia(rs.getString("dia"));
-                h.setHoraDesde(rs.getString("hora_desde"));
-                h.setHoraHasta(rs.getString("hora_hasta"));
+                h.setHoraDesde(rs.getTime("hora_desde").toLocalTime());
+                h.setHoraHasta(rs.getTime("hora_hasta").toLocalTime());
                 h.setIdActividad(rs.getInt("id_actividad"));
 
                 
@@ -66,8 +67,8 @@ public class DataHorario {
                 h = new Horario();
                 h.setId(rs.getInt("id"));
                 h.setDia(rs.getString("dia"));
-                h.setHoraDesde(rs.getString("hora_desde"));
-                h.setHoraHasta(rs.getString("hora_hasta"));
+                h.setHoraDesde(rs.getTime("hora_desde").toLocalTime());
+                h.setHoraHasta(rs.getTime("hora_hasta").toLocalTime());
                 h.setIdActividad(rs.getInt("id_actividad"));
             }
 
@@ -100,8 +101,8 @@ public class DataHorario {
                 PreparedStatement.RETURN_GENERATED_KEYS
             );
             stmt.setString(1, h.getDia());
-            stmt.setString(2, h.getHoraDesde());
-            stmt.setString(3, h.getHoraHasta());
+            stmt.setTime(2, Time.valueOf(h.getHoraDesde()));
+            stmt.setTime(3, Time.valueOf(h.getHoraHasta()));
             stmt.setInt(4, h.getIdActividad());
 
             stmt.executeUpdate();
@@ -136,8 +137,8 @@ public class DataHorario {
                 "UPDATE horario SET dia=?, hora_desde=?, hora_hasta=?, id_actividad=? WHERE id=?"
             );
             stmt.setString(1, h.getDia());
-            stmt.setString(2, h.getHoraDesde());
-            stmt.setString(3, h.getHoraHasta());
+            stmt.setTime(2, Time.valueOf(h.getHoraDesde()));
+            stmt.setTime(3, Time.valueOf(h.getHoraHasta()));
             stmt.setInt(4, h.getIdActividad());
             stmt.setInt(5, h.getId());
 

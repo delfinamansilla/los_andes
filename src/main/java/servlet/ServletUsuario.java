@@ -36,12 +36,6 @@ public class ServletUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/plain");
-        response.getWriter().println("Servlet Usuario activo y corriendo.");
-    }
-    /*@Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
 
         String action = request.getParameter("action");
 
@@ -81,7 +75,7 @@ public class ServletUsuario extends HttpServlet {
             request.setAttribute("error", e.getMessage());
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
-    }*/
+    }
 
     /**
      * Maneja peticiones POST: login, registrar y actualizar usuario.

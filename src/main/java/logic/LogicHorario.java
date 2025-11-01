@@ -59,17 +59,40 @@ public class LogicHorario {
         if (h == null) {
             throw new Exception("El horario no puede ser nulo.");
         }
-        if (h.getDia() == null || h.getDia().isEmpty()) {
+
+        if (h.getDia() == null || h.getDia().trim().isEmpty()) {
             throw new Exception("Debe ingresar un día válido.");
         }
-        if (h.getHoraDesde() == null || h.getHoraDesde().isEmpty()) {
+
+        String[] diasValidos = {
+            "lunes", "martes", "miércoles", "miercoles", "jueves", "viernes", "sábado", "sabado", "domingo"
+        };
+
+        boolean diaValido = false;
+        for (String dia : diasValidos) {
+            if (dia.equalsIgnoreCase(h.getDia().trim())) {
+                diaValido = true;
+                break;
+            }
+        }
+        if (!diaValido) {
+            throw new Exception("El día ingresado no es válido. Debe ser un día de la semana.");
+        }
+
+        if (h.getHoraDesde() == null) {
             throw new Exception("Debe ingresar una hora de inicio válida.");
         }
-        if (h.getHoraHasta() == null || h.getHoraHasta().isEmpty()) {
+        if (h.getHoraHasta() == null) {
             throw new Exception("Debe ingresar una hora de fin válida.");
         }
+
+        if (!h.getHoraDesde().isBefore(h.getHoraHasta())) {
+            throw new Exception("La hora de inicio debe ser anterior a la hora de fin.");
+        }
+
         if (h.getIdActividad() <= 0) {
             throw new Exception("Debe seleccionar una actividad válida.");
         }
     }
-}
+    }
+
