@@ -57,28 +57,78 @@ public class ServletProfesor extends HttpServlet {
 
             switch (action.toLowerCase()) {
 
-                case "listar": {
+            case "listar": {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                try {
                     LinkedList<Profesor> profesores = logicProfesor.getAll();
-                    request.setAttribute("listaProfesores", profesores);
-                    request.getRequestDispatcher("WEB-INF/listaProfesores.jsp").forward(request, response);
-                    break;
+                    
+                    // Necesitas una librería como Gson para convertir la lista a JSON
+                    // Si no la tienes, añádela a tu pom.xml o a tus librerías
+                    com.google.gson.Gson gson = new com.google.gson.Gson();
+                    String jsonProfesores = gson.toJson(profesores);
+                    
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    response.getWriter().write(jsonProfesores);
+                    
+                } catch (Exception e) {
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    response.getWriter().write("{\"error\":\"Error al obtener la lista de profesores: " + e.getMessage() + "\"}");
                 }
+                break;
+            }
 
-                case "buscar": {
+            case "buscar": {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                try {
+                	String idParam = request.getParameter("id");
+                    // AÑADE ESTA LÍNEA PARA VER QUÉ ID LLEGA
+                    System.out.println("--- BUSCANDO PROFESOR CON ID: " + idParam + " ---");
                     int id = Integer.parseInt(request.getParameter("id"));
                     Profesor p = logicProfesor.getOne(id);
-                    request.setAttribute("profesor", p);
-                    request.getRequestDispatcher("WEB-INF/detalleProfesor.jsp").forward(request, response);
-                    break;
+                   
+                    
+                    // AÑADE ESTA LÍNEA PARA VER QUÉ ENCONTRÓ
+                    System.out.println("--- RESULTADO DE LA BÚSQUEDA: " + p + " ---");
+                    if (p != null) {
+                        // Usamos Gson para convertir el objeto a JSON
+                        com.google.gson.Gson gson = new com.google.gson.Gson();
+                        String jsonProfesor = gson.toJson(p);
+                        response.setStatus(HttpServletResponse.SC_OK);
+                        response.getWriter().write(jsonProfesor);
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        response.getWriter().write("{\"error\":\"Profesor no encontrado\"}");
+                    }
+                } catch (Exception e) {
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
                 }
+                break;
+            }
 
-                case "eliminar": {
+            case "eliminar": {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                try {
+                    // Obtenemos el ID del profesor a eliminar
                     int id = Integer.parseInt(request.getParameter("id"));
+                    
+                    // Llamamos a la lógica de negocio para que lo borre de la BD
                     logicProfesor.delete(id);
-                    response.sendRedirect("profesor?action=listar");
-                    break;
-                }
 
+                    // Si no hubo errores, enviamos una respuesta de éxito
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    response.getWriter().write("{\"status\":\"ok\", \"message\":\"Profesor eliminado correctamente\"}");
+
+                } catch (Exception e) {
+                    // Si algo falla (ej: el ID no existe, error de BD), enviamos un error
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"" + e.getMessage() + "\"}");
+                }
+                break;
+            }
                 default:
                     response.getWriter().append("Acción GET no reconocida: ").append(action);
             }
@@ -137,7 +187,10 @@ public class ServletProfesor extends HttpServlet {
             }
 
 
-                case "actualizar": {
+            case "actualizar": {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                try {
                     Profesor p = new Profesor();
                     p.setIdProfesor(Integer.parseInt(request.getParameter("id")));
                     p.setNombreCompleto(request.getParameter("nombre_completo"));
@@ -146,9 +199,15 @@ public class ServletProfesor extends HttpServlet {
 
                     logicProfesor.update(p);
 
-                    response.sendRedirect("profesor?action=listar");
-                    break;
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    response.getWriter().write("{\"status\":\"ok\", \"message\":\"Profesor actualizado correctamente\"}");
+
+                } catch (Exception e) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"" + e.getMessage() + "\"}");
                 }
+                break;
+            }
 
                 default:
                     response.getWriter().append("Acción POST no reconocida: ").append(action);

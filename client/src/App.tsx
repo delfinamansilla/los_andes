@@ -6,6 +6,8 @@ import InicioAdmin from './pages/InicioAdmin';
 import AgregarProfesor from './pages/AgregarProfesor';
 import InicioSocio from './pages/InicioSocio';
 import MiCuenta from './pages/MiCuenta';
+import ListadoProfesor from './pages/ListadoProfesor';
+import ModificarProfesor from './pages/ModificarProfesor';
 function App() {
   return (
     <Router>
@@ -17,6 +19,8 @@ function App() {
 		<Route path="/agregar-profesor" element={<AgregarProfesor/>} />
 		<Route path="/inicio-socio" element={<InicioSocio />} />
 		<Route path="/modificar-usuario" element={<MiCuenta />} />
+		<Route path="/modificar-profesor" element={<ModificarProfesor />} />
+		<Route path="/listado-profesor" element={<ListadoProfesor />} />
         <Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>

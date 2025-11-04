@@ -1,5 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import NavbarAdmin from '../pages/NavbarAdmin';
 
 const AgregarProfesor: React.FC = () => {
   const [nombreCompleto, setNombreCompleto] = useState('');
@@ -60,11 +61,6 @@ const AgregarProfesor: React.FC = () => {
         setNombreCompleto('');
         setTelefono('');
         setMail('');
-
-        // Redirigir a la lista de profesores después de 2 segundos
-        setTimeout(() => {
-          navigate('/profesores');
-        }, 2000);
       } else {
         setError(data.message || '⚠ Error inesperado al agregar el profesor.');
       }
@@ -75,8 +71,11 @@ const AgregarProfesor: React.FC = () => {
   };
 
   return (
+	
     <div className="agregar-profesor-page">
+	<NavbarAdmin />
       <div className="form-container">
+	 
         <h2>Agregar Nuevo Profesor</h2>
         <p>Complete los datos para registrar un nuevo profesor en el sistema.</p>
 
