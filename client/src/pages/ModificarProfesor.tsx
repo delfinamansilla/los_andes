@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import NavbarAdmin from '../pages/NavbarAdmin';
 // Interfaz para el objeto Profesor
 interface Profesor {
   id: number;
@@ -100,6 +100,7 @@ const ModificarProfesor: React.FC = () => {
 
   return (
     <div className="admin-page">
+	<NavbarAdmin />
       <h2>Modificar Profesor</h2>
       <p>Edita los datos y haz clic en "Guardar Cambios".</p>
 
