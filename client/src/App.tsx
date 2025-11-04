@@ -9,17 +9,12 @@ import ModificarCancha from './pages/ModificarCancha';
 import CrearCancha from './pages/CrearCancha';
 import InicioSocio from './pages/InicioSocio';
 import MiCuenta from './pages/MiCuenta';
-<<<<<<< HEAD
 import Canchas from './pages/Canchas';
-=======
 import ListadoProfesor from './pages/ListadoProfesor';
 import ModificarProfesor from './pages/ModificarProfesor';
 import ListaActividades from './pages/ListaActividades';
 import AgregarActividad from './pages/AgregarActividad';
->>>>>>> 50e700d5ef72affd55ec2230cb38b56027877b75
 import InicioSocio from './pages/InicioSocio';
-import MiCuenta from './pages/MiCuenta';
->>>>>>> e1ccdbc234c872fe5ce88be40c75ef1763793d67
 function App() {
   return (
     <Router>
