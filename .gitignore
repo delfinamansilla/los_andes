@@ -1,2 +1,14 @@
-/build/
+# Archivos de configuración de Eclipse
+.classpath
+.project
+.settings/
+
+# Archivos compilados y carpetas de salida
 /bin/
+/build/
+
+# Archivos de configuración de ejecución
+*.launch
+
+# Otros archivos generados por Eclipse
+.metadata
