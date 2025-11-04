@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Registro: React.FC = () => {
   const [rol, setRol] = useState<'socio' | 'administrador'>('socio');
+  
   const [formData, setFormData] = useState({
     nombre_completo: '',
     dni: '',
@@ -10,7 +11,6 @@ const Registro: React.FC = () => {
     mail: '',
     fecha_nacimiento: '',
     contrasenia: '',
-    nro_socio: '',
   });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -49,19 +49,22 @@ const Registro: React.FC = () => {
       params.append('contrasenia', formData.contrasenia);
       params.append('rol', rol);
 
-      const res = await fetch('http://localhost:8080/club/usuario', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params.toString(),
-      });
+	  const res = await fetch('http://localhost:8080/club/usuario', {
+	    method: 'POST',
+	    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+	    body: params.toString(),
+	  });
 
-      if (res.ok) {
-        setSuccess('✅ Usuario registrado correctamente. Redirigiendo...');
-        // redirigir a login después de 4 segundos
-        setTimeout(() => navigate('/login'), 4000);
-      } else {
-        setError('⚠ Error al registrar el usuario.');
-      }
+	  const text = await res.text();
+	  console.log('Respuesta del servidor:', text);
+
+	  if (res.ok) {
+	    setSuccess('✅ Usuario registrado correctamente. Redirigiendo...');
+	    setTimeout(() => navigate('/login'), 4000);
+	  } else {
+	    setError(`⚠ Error al registrar el usuario: ${text}`);
+	  }
+
     } catch (err) {
       console.error(err);
       setError('🚫 Error al conectar con el servidor.');

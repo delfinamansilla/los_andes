@@ -171,7 +171,7 @@ public class LogicUsuario {
         }
 
         String rol = u.getRol();
-        if (rol == null || (!rol.equalsIgnoreCase("admin") && !rol.equalsIgnoreCase("socio") && !rol.equalsIgnoreCase("cliente"))) {
+        if (rol == null || (!rol.equalsIgnoreCase("administrador") && !rol.equalsIgnoreCase("socio") )) {
             throw new Exception("El rol especificado no es válido.");
         }
   

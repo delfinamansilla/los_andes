@@ -51,7 +51,7 @@ const Login: React.FC = () => {
 		  if (data.usuario.rol === 'socio') {
 		    //navigate('/InicioAdmin');
 		  } else {
-		    navigate('/InicioAdmin');
+		    navigate('/inicio-admin');
 		  }
 		}, 2000);
 
