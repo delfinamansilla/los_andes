@@ -37,6 +37,9 @@ public class ServletUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+           response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+           response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
         String action = request.getParameter("action");
 
@@ -99,6 +102,9 @@ public class ServletUsuario extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+           response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+           response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
         String action = request.getParameter("action");
 

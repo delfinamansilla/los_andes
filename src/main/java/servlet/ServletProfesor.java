@@ -37,8 +37,14 @@ public class ServletProfesor extends HttpServlet {
      *  - eliminar: elimina un profesor por ID
      */
     @Override
+    
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+ 	   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+       response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+       response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+       
 
         String action = request.getParameter("action");
         response.setContentType("text/html;charset=UTF-8");
@@ -92,6 +98,11 @@ public class ServletProfesor extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+ 	   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+       response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+       response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        System.out.println("\n--- SERVLET PROFESOR: Petición POST recibida ---");
+
 
         String action = request.getParameter("action");
 
@@ -103,18 +114,28 @@ public class ServletProfesor extends HttpServlet {
 
             switch (action.toLowerCase()) {
 
-                case "agregar": {
+            case "agregar": {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                try {
                     Profesor p = new Profesor();
                     p.setNombreCompleto(request.getParameter("nombre_completo"));
                     p.setTelefono(request.getParameter("telefono"));
                     p.setMail(request.getParameter("mail"));
 
                     logicProfesor.add(p);
+                    
+                    // ✅ SOLUCIÓN: Envía una respuesta JSON de éxito
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    response.getWriter().write("{\"status\":\"ok\", \"message\":\"¡Profesor agregado exitosamente!\"}");
 
-                    request.setAttribute("mensaje", "Profesor agregado correctamente.");
-                    response.sendRedirect("profesor?action=listar");
-                    break;
+                } catch (Exception e) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    response.getWriter().write("{\"status\":\"error\", \"message\":\"" + e.getMessage() + "\"}");
                 }
+                break;
+            }
+
 
                 case "actualizar": {
                     Profesor p = new Profesor();

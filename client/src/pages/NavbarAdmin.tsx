@@ -31,8 +31,7 @@ const NavbarAdmin: React.FC = () => {
           {activeMenu === 'profesores' && (
             <ul className="dropdown">
               <li><Link to="/profesores">Ver todos</Link></li>
-              <li><Link to="/profesores/nuevo">Agregar nuevo</Link></li>
-              <li><Link to="/profesores/eliminar">Eliminar profesor</Link></li>
+              <li><Link to="/agregar-profesor">Agregar nuevo</Link></li>
             </ul>
           )}
         </li>

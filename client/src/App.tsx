@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './pages/Login';
 import Registro from './pages/Registro';
 import InicioAdmin from './pages/InicioAdmin';
+import AgregarProfesor from './pages/AgregarProfesor';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
 		<Route path="/inicio-admin" element={<InicioAdmin />} />
+		<Route path="/agregar-profesor" element={<AgregarProfesor/>} />
         <Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>
