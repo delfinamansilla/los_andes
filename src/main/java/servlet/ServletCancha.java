@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import entities.Cancha;
 import logic.LogicCancha;
 
-@WebServlet({"/cancha", "/Cancha", "/CANCHA"})
+@WebServlet("/cancha")
 public class ServletCancha extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private LogicCancha logicCancha;
@@ -24,13 +24,9 @@ public class ServletCancha extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/plain");
-        response.getWriter().println("Servlet Cancha activo y corriendo.");
-    }
-    /*
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    	response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         String action = request.getParameter("action");
 
         try {
@@ -41,9 +37,29 @@ public class ServletCancha extends HttpServlet {
 
             switch (action.toLowerCase()) {
                 case "listar": {
-                    LinkedList<Cancha> canchas = logicCancha.getAll();
-                    request.setAttribute("listaCanchas", canchas);
-                    request.getRequestDispatcher("WEB-INF/listaCanchas.jsp").forward(request, response);
+                	LinkedList<Cancha> canchas = logicCancha.getAll();
+
+                	response.setContentType("application/json");
+                	response.setCharacterEncoding("UTF-8");
+
+                	StringBuilder sb = new StringBuilder();
+                	sb.append("[");
+                	for (int i = 0; i < canchas.size(); i++) {
+                	    Cancha c = canchas.get(i);
+                	    sb.append("{");
+                	    sb.append("\"id\":").append(c.getId()).append(",");
+                	    sb.append("\"nro_cancha\":").append(c.getNro_cancha()).append(",");
+                	    sb.append("\"ubicacion\":\"").append(c.getUbicacion()).append("\",");
+                	    sb.append("\"descripcion\":\"").append(c.getDescripcion()).append("\",");
+                	    sb.append("\"tamanio\":").append(c.getTamanio()).append(",");
+                	    sb.append("\"estado\":").append(c.isEstado());
+                	    sb.append("}");
+                	    if (i < canchas.size() - 1) sb.append(",");
+                	}
+                	sb.append("]");
+
+                	response.getWriter().write(sb.toString());
+
                     break;
                 }
                 case "buscar": {
@@ -67,11 +83,21 @@ public class ServletCancha extends HttpServlet {
             request.setAttribute("error", e.getMessage());
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
-    } */
+    } 
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    }
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         String action = request.getParameter("action");
 
         try {
@@ -81,17 +107,34 @@ public class ServletCancha extends HttpServlet {
             }
 
             switch (action.toLowerCase()) {
-                case "registrar": {
-                    Cancha nueva = new Cancha();
-                    nueva.setNro_cancha(Integer.parseInt(request.getParameter("nro_cancha")));
-                    nueva.setUbicacion(request.getParameter("ubicacion"));
-                    nueva.setDescripcion(request.getParameter("descripcion"));
-                    nueva.setTamanio(Float.parseFloat(request.getParameter("tamanio")));
-                    nueva.setEstado(Boolean.parseBoolean(request.getParameter("estado")));
+            case "registrar": {
+                Cancha nueva = new Cancha();
+                nueva.setNro_cancha(Integer.parseInt(request.getParameter("nro_cancha")));
+                nueva.setUbicacion(request.getParameter("ubicacion"));
+                nueva.setDescripcion(request.getParameter("descripcion"));
+                nueva.setTamanio(Float.parseFloat(request.getParameter("tamanio")));
+                nueva.setEstado(Boolean.parseBoolean(request.getParameter("estado")));
 
-                    logicCancha.add(nueva);
-                    request.setAttribute("mensaje", "Cancha registrada correctamente.");
-                    request.getRequestDispatcher("WEB-INF/listaCanchas.jsp").forward(request, response);
+                logicCancha.add(nueva);
+
+                // ✅ Responder con JSON para React
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"status\":\"ok\"}");
+                break;
+            }
+
+                case "buscar": {
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    Cancha c = logicCancha.getOne(id);
+
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    String json = String.format(
+                        "{\"id\":%d,\"nro_cancha\":%d,\"ubicacion\":\"%s\",\"descripcion\":\"%s\",\"tamanio\":%f,\"estado\":%b}",
+                        c.getId(), c.getNro_cancha(), c.getUbicacion(), c.getDescripcion(), c.getTamanio(), c.isEstado()
+                    );
+                    response.getWriter().write(json);
                     break;
                 }
                 case "actualizar": {
@@ -104,9 +147,15 @@ public class ServletCancha extends HttpServlet {
                     c.setEstado(Boolean.parseBoolean(request.getParameter("estado")));
 
                     logicCancha.update(c);
-                    response.sendRedirect("cancha?action=listar");
+
+                    // Responder con éxito en JSON para React
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write("{\"status\":\"ok\"}");
                     break;
                 }
+
+
                 default:
                     response.getWriter().append("Acción POST no reconocida: ").append(action);
             }
