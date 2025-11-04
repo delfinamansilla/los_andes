@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from '../pages/NavbarAdmin';
-// import './ListadoProfesores.css'; // Descomenta si creas un archivo de estilos
+import '../styles/ListadoProfesor.css'; 
 
 // Interfaz para definir la estructura de un profesor (mejora la seguridad del código)
 interface Profesor {
@@ -132,6 +132,8 @@ const ListadoProfesor: React.FC = () => {
   return (
     <div className="admin-page">
 	<NavbarAdmin />
+	<div className="content-area">
+	        <div className="list-container">
       <h2>Listado de Profesores</h2>
       {profesores.length === 0 ? (
         <p>No hay profesores registrados en la base de datos.</p>
@@ -152,16 +154,17 @@ const ListadoProfesor: React.FC = () => {
                 <td>{profesor.nombre_completo}</td>
                 <td>{profesor.telefono}</td>
                 <td>{profesor.mail}</td>
-                <td>
+                
+				
+				<td className="actions-cell">
+				                     <button className="btn-modify" onClick={() => handleModify(profesor)}>
+				                       Modificar
+				                     </button>
+				                     <button className="btn-delete" onClick={() => handleDelete(profesor.id)}>
+				                       Borrar
+				                     </button>
 				
 				
-				
-				  <button onClick={() => handleModify(profesor)}>
-				    Modificar
-				  </button>
-                  <button className="btn-delete" onClick={() => handleDelete(profesor.id)}>
-                    Borrar
-                  </button>
                 </td>
               </tr>
             ))}
@@ -169,6 +172,8 @@ const ListadoProfesor: React.FC = () => {
         </table>
       )}
     </div>
+	</div>
+	    </div>
   );
 };
 

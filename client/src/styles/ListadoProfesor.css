@@ -1,0 +1,122 @@
+/* --- ListadoProfesores.css (Botón Borrar Actualizado) --- */
+
+/* 1. Estructura principal de la página (sin cambios) */
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20321E;
+}
+
+/* 2. Área de contenido (sin cambios) */
+.content-area {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 3. Contenedor principal para el título y la tabla */
+.list-container {
+  width: 100%;
+  max-width: 1000px;
+  background-color: #DDD8CA;
+  color: #20321E;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Título de la página */
+.list-container h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 2rem;
+}
+
+/* Mensaje cuando no hay profesores */
+.list-container p {
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 20px;
+}
+
+/* 4. Estilo de la tabla de datos */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+/* Cabecera de la tabla */
+.data-table thead th {
+  background-color: #20321E;
+  color: #DDD8CA;
+  padding: 15px;
+  text-align: left;
+  font-size: 1rem;
+}
+
+/* Celdas del cuerpo de la tabla */
+.data-table tbody td {
+  padding: 15px;
+  border-top: 1px solid #466245;
+}
+
+/* Efecto hover en las filas */
+.data-table tbody tr:hover {
+  background-color: #c9c4b5;
+}
+
+/* Contenedor para los botones de acción */
+.data-table .actions-cell {
+  display: flex;
+  gap: 10px;
+}
+
+/* 5. Estilo de los botones */
+.actions-cell button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+/* Botón de Modificar (se mantiene igual) */
+.btn-modify {
+  background-color: #DDD8CA;
+  color: #20321E;
+  border: 2px solid #20321E;
+}
+.btn-modify:hover {
+  background-color: #c9c4b5;
+  border-color: #466245;
+}
+
+/* Botón de Borrar (Verde Oscuro) */
+.btn-delete {
+  /* --- CAMBIO AQUÍ --- */
+  background-color: #20321E; /* Verde oscuro del fondo */
+  color: #DDD8CA;            /* Letras color cremita */
+}
+.btn-delete:hover {
+  background-color: #466245; /* Verde medio para el efecto hover */
+}
+
+/* 6. Estilos para estados de carga y error (sin cambios) */
+.loading-container, .access-denied-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #20321E;
+  color: #DDD8CA;
+  font-size: 1.5rem;
+}

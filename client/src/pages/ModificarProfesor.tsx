@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from '../pages/NavbarAdmin';
+import '../styles/ModificarProfesor.css'; 
 // Interfaz para el objeto Profesor
 interface Profesor {
   id: number;
@@ -99,42 +100,58 @@ const ModificarProfesor: React.FC = () => {
   if (error) return <div className="error-box">{error}</div>;
 
   return (
-    <div className="admin-page">
-	<NavbarAdmin />
-      <h2>Modificar Profesor</h2>
-      <p>Edita los datos y haz clic en "Guardar Cambios".</p>
+    // --> CAMBIO 1: La clase del div principal ahora es "modify-profesor-page"
+    <div className="modify-profesor-page">
+      <NavbarAdmin />
+      
+      {/* --> CAMBIO 2: Añadimos los dos divs que centran el contenido */}
+      <div className="content-area">
+        <div className="form-container">
+          
+          {/* El título y el párrafo ahora van DENTRO del recuadro cremita */}
+          <h2>Modificar Profesor</h2>
+          <p>Edita los datos y haz clic en "Guardar Cambios".</p>
+          
+          {/* Mostramos errores aquí si los hay */}
+          {error && !success && <p className="error-box">{error}</p>}
 
-      <form onSubmit={handleSubmit} className="form-container">
-        <div className="form-group">
-          <label htmlFor="nombreCompleto">Nombre Completo</label>
-          <input
-            id="nombreCompleto" type="text" className="inp"
-            value={nombreCompleto} onChange={(e) => setNombreCompleto(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="telefono">Teléfono</label>
-          <input
-            id="telefono" type="tel" className="inp"
-            value={telefono} 
-            onChange={(e) => setTelefono(e.target.value)} // <-- ESTA LÍNEA ESTABA INCOMPLETA
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="mail">Email</label>
-          <input
-            id="mail" type="email" className="inp"
-            value={mail} onChange={(e) => setMail(e.target.value)}
-          />
-        </div>
-        
-        <button type="submit" className="btn_agregar">Guardar Cambios</button>
-        <button type="button" onClick={() => navigate('/listado-profesor')} className="btn_secondary">
-          Volver a la Lista
-        </button>
-      </form>
+          {/* --> CAMBIO 3: La etiqueta <form> ya no necesita una clase */}
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="nombreCompleto">Nombre Completo</label>
+              <input
+                id="nombreCompleto" type="text" className="inp"
+                value={nombreCompleto} onChange={(e) => setNombreCompleto(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="telefono">Teléfono</label>
+              <input
+                id="telefono" type="tel" className="inp"
+                value={telefono} 
+                onChange={(e) => setTelefono(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="mail">Email</label>
+              <input
+                id="mail" type="email" className="inp"
+                value={mail} onChange={(e) => setMail(e.target.value)}
+              />
+            </div>
+            
+            {/* --> CAMBIO 4: Agrupamos los botones en un div y cambiamos la clase del principal */}
+            <div className="button-group">
+                <button type="submit" className="btn-save">Guardar Cambios</button>
+                <button type="button" onClick={() => navigate('/listado-profesor')} className="btn-secondary">
+                  Volver a la Lista
+                </button>
+            </div>
+          </form>
 
-      {success && <p className="success-box">{success}</p>}
+          {success && <p className="success-box">{success}</p>}
+        </div>
+      </div>
     </div>
   );
 };

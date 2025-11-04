@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from '../pages/NavbarAdmin';
+import '../styles/AgregarProfesor.css';
 
 const AgregarProfesor: React.FC = () => {
   const [nombreCompleto, setNombreCompleto] = useState('');
@@ -74,6 +75,7 @@ const AgregarProfesor: React.FC = () => {
 	
     <div className="agregar-profesor-page">
 	<NavbarAdmin />
+	<div className="content-area"> {/* <-- AÑADE ESTE DIV ENVOLVIENDO EL FORMULARIO */}
       <div className="form-container">
 	 
         <h2>Agregar Nuevo Profesor</h2>
@@ -123,6 +125,7 @@ const AgregarProfesor: React.FC = () => {
         {error && <p className="error-box">{error}</p>}
         {success && <p className="success-box">{success}</p>}
       </div>
+	  </div>
     </div>
   );
 };
