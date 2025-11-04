@@ -1,0 +1,67 @@
+.navbar-admin {
+  background-color: #1e3a8a; /* azul oscuro */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.btn-usuario {
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 6px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-usuario:hover {
+  background-color: white;
+  color: #1e3a8a;
+}
+
+.navbar-menu {
+  list-style: none;
+  display: flex;
+  gap: 40px;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-item {
+  position: relative;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.dropdown {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  background-color: white;
+  color: black;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  list-style: none;
+  padding: 8px 0;
+  min-width: 180px;
+}
+
+.dropdown li {
+  padding: 8px 14px;
+}
+
+.dropdown li:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown a {
+  color: black;
+  text-decoration: none;
+  display: block;
+}

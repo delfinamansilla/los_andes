@@ -14,6 +14,7 @@ const Registro: React.FC = () => {
   });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const toggleRol = () => {
@@ -35,6 +36,7 @@ const Registro: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSuccess(null);
 
     try {
       const params = new URLSearchParams();
@@ -46,7 +48,6 @@ const Registro: React.FC = () => {
       params.append('fecha_nacimiento', formData.fecha_nacimiento);
       params.append('contrasenia', formData.contrasenia);
       params.append('rol', rol);
-      if (formData.nro_socio) params.append('nro_socio', formData.nro_socio);
 
       const res = await fetch('http://localhost:8080/club/usuario', {
         method: 'POST',
@@ -55,8 +56,9 @@ const Registro: React.FC = () => {
       });
 
       if (res.ok) {
-        alert('✅ Usuario registrado correctamente');
-        navigate('/login');
+        setSuccess('✅ Usuario registrado correctamente. Redirigiendo...');
+        // redirigir a login después de 4 segundos
+        setTimeout(() => navigate('/login'), 4000);
       } else {
         setError('⚠ Error al registrar el usuario.');
       }
@@ -70,7 +72,9 @@ const Registro: React.FC = () => {
     <div className="form-container">
       <h2>Registro de {rol === 'socio' ? 'Socio' : 'Administrador'}</h2>
 
+      {/* Mensajes */}
       {error && <p className="error-box">{error}</p>}
+      {success && <p className="success-box">{success}</p>}
 
       <form onSubmit={handleSubmit}>
         <input
@@ -117,7 +121,6 @@ const Registro: React.FC = () => {
           required
         />
 
-
         <div className="relative password-field">
           <input
             type={isPasswordVisible ? 'text' : 'password'}
@@ -140,6 +143,13 @@ const Registro: React.FC = () => {
           {rol === 'socio'
             ? 'Registrarme como Administrador'
             : 'Registrarme como Socio'}
+        </button>
+      </div>
+
+      {/* 🔙 Botón para volver */}
+      <div className="volver-container">
+        <button onClick={() => navigate('/login')} className="volver-btn">
+          ← Volver al Login
         </button>
       </div>
     </div>

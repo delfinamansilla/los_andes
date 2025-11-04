@@ -6,10 +6,11 @@
 
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-    <welcome-file>default.htm</welcome-file>
   </welcome-file-list>
+
+  <!-- ✅ Este filtro redirige cualquier ruta desconocida al index.html -->
+  <error-page>
+    <error-code>404</error-code>
+    <location>/index.html</location>
+  </error-page>
 </web-app>

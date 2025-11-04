@@ -110,29 +110,39 @@ public class ServletUsuario extends HttpServlet {
 
             switch (action.toLowerCase()) {
 
-                case "login": {
-                    String mail = request.getParameter("mail");
-                    String contrasenia = request.getParameter("contrasenia");
+            case "login": {
+                String mail = request.getParameter("mail");
+                String contrasenia = request.getParameter("contrasenia");
 
-                    Usuario u = new Usuario();
-                    u.setMail(mail);
-                    u.setContrasenia(contrasenia);
+                Usuario u = new Usuario();
+                u.setMail(mail);
+                u.setContrasenia(contrasenia);
 
-                    Usuario usuarioLogueado = logicUsuario.login(u);
+                Usuario usuarioLogueado = logicUsuario.login(u);
 
-                    if (usuarioLogueado != null) {
-                        request.getSession().setAttribute("usuarioActual", usuarioLogueado);
-                        response.setContentType("application/json");
-                        response.getWriter().write("{\"status\":\"ok\", \"nombre\":\"" 
-                            + usuarioLogueado.getNombreCompleto() + "\", \"rol\":\"" + usuarioLogueado.getRol() + "\"}");
-                    } else {
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.setContentType("application/json");
-                        response.getWriter().write("{\"status\":\"error\", \"mensaje\":\"Correo o contraseña incorrectos.\"}");
-                    }
+                response.setContentType("application/json;charset=UTF-8");
 
-                    break;
+                if (usuarioLogueado != null) {
+                    request.getSession().setAttribute("usuarioActual", usuarioLogueado);
+
+                    // ✅ Gson con soporte para LocalDate
+                    com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
+                        .registerTypeAdapter(java.time.LocalDate.class,
+                            (com.google.gson.JsonSerializer<java.time.LocalDate>)
+                            (src, typeOfSrc, context) ->
+                                new com.google.gson.JsonPrimitive(src.toString()))
+                        .create();
+
+                    String usuarioJson = gson.toJson(usuarioLogueado);
+                    response.getWriter().write("{\"status\":\"ok\", \"usuario\":" + usuarioJson + "}");
+                } else {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("{\"status\":\"error\", \"mensaje\":\"Correo o contraseña incorrectos.\"}");
                 }
+                break;
+            }
+
+
 
                 case "registrar": {
                     Usuario nuevo = new Usuario();
@@ -149,9 +159,22 @@ public class ServletUsuario extends HttpServlet {
                         nuevo.setFechaNacimiento(LocalDate.parse(fecha));
                     }
 
-                    logicUsuario.add(nuevo);
-                    request.setAttribute("mensaje", "Usuario registrado correctamente.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    try {
+                        logicUsuario.add(nuevo);
+
+                        // ✅ devolvemos JSON simple al frontend
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        response.setStatus(HttpServletResponse.SC_OK);
+                        response.getWriter().write("{\"message\":\"Usuario registrado correctamente\"}");
+
+                    } catch (Exception e) {
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+                    }
+
                     break;
                 }
 

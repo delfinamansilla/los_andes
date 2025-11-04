@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // 👈 para redirigir
-import { Link } from 'react-router-dom';
-
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login: React.FC = () => {
   const [mail, setMail] = useState('');
   const [contrasenia, setContrasenia] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const navigate = useNavigate(); // 👈
+  const navigate = useNavigate();
 
   const handleClick = () => setIsVisible(!isVisible);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSuccess(null);
 
     try {
       const params = new URLSearchParams();
@@ -24,9 +24,7 @@ const Login: React.FC = () => {
 
       const res = await fetch('http://localhost:8080/club/usuario', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         credentials: 'include',
         body: params.toString(),
       });
@@ -42,8 +40,21 @@ const Login: React.FC = () => {
       }
 
       if (data && data.status === 'ok') {
-        alert('✅ Login exitoso: ' + data.nombre);
-        //navigate('/panel-usuario');
+        // ✅ Guardar usuario en localStorage
+        localStorage.setItem('usuario', JSON.stringify(data.usuario));
+
+        // ✅ Mostrar mensaje en pantalla
+        setSuccess(`✅ Bienvenido ${data.usuario.nombre_completo}`);
+
+        // ✅ Redirigir después de 2 segundos
+		setTimeout(() => {
+		  if (data.usuario.rol === 'socio') {
+		    //navigate('/InicioAdmin');
+		  } else {
+		    navigate('/InicioAdmin');
+		  }
+		}, 2000);
+
       } else if (res.status === 401) {
         setError('❌ Correo o contraseña incorrectos.');
       } else {
@@ -90,13 +101,15 @@ const Login: React.FC = () => {
             <button type="submit" className="btn_is">Iniciar Sesión</button>
           </form>
 
+          {/* Mostrar mensajes */}
           {error && <p className="error-box">{error}</p>}
+          {success && <p className="success-box">{success}</p>}
 
           <hr style={{ margin: '20px 0', opacity: 0.4 }} />
 
-		  <p>
-		    ¿No tenés cuenta? <Link to="/registro">Registrate acá</Link>
-		  </p>
+          <p>
+            ¿No tenés cuenta? <Link to="/registro">Registrate acá</Link>
+          </p>
         </div>
       </div>
     </div>
@@ -104,4 +117,5 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+
 
