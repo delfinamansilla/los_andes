@@ -21,7 +21,6 @@ const Login: React.FC = () => {
       params.append('action', 'login');
       params.append('mail', mail);
       params.append('contrasenia', contrasenia);
-
       const res = await fetch('http://localhost:8080/club/usuario', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

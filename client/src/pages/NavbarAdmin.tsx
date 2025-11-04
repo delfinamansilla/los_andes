@@ -77,8 +77,8 @@ const NavbarAdmin: React.FC = () => {
             Canchas
             {activeMenu === 'canchas' && (
               <ul className="dropdown">
-                <li><button onClick={() => navigate('/canchas')}>Ver todas</button></li>
-                <li><button onClick={() => navigate('/canchas/nueva')}>Agregar nueva</button></li>
+                <li><button onClick={() => navigate('/canchas-admin')}>Ver todas</button></li>
+                <li><button onClick={() => navigate('/crear')}>Agregar nueva</button></li>
               </ul>
             )}
           </li>

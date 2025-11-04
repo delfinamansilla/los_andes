@@ -1,0 +1,111 @@
+import React, { useState, useEffect } from 'react';
+import NavbarAdmin from './NavbarAdmin';
+
+interface Cancha {
+  id: number;
+  nro_cancha: number;
+  ubicacion: string;
+  descripcion: string;
+  tamanio: number;
+  estado: boolean;
+}
+
+const CanchasAdmin = () => {
+  const [canchas, setCanchas] = useState<Cancha[]>([]);
+  const [mensajeError, setMensajeError] = useState('');
+  const [showModalEliminar, setShowModalEliminar] = useState(false);
+  const [canchaAEliminar, setCanchaAEliminar] = useState<Cancha | null>(null);
+
+  const fetchCanchas = async () => {
+    try {
+      const res = await fetch('http://localhost:8080/club/cancha?action=listar');
+      if (!res.ok) throw new Error('Error al traer las canchas');
+      const data: Cancha[] = await res.json();
+      setCanchas(data);
+    } catch (err) {
+      if (err instanceof Error) setMensajeError(err.message);
+      else setMensajeError(String(err));
+    }
+  };
+
+  useEffect(() => {
+    fetchCanchas();
+  }, []);
+
+  // Abrir modal de confirmación
+  const handleEliminar = (cancha: Cancha) => {
+    setCanchaAEliminar(cancha);
+    setShowModalEliminar(true);
+  };
+
+  // Confirmar eliminación
+  const confirmarEliminar = async () => {
+    if (!canchaAEliminar) return;
+    try {
+      const res = await fetch(
+        `http://localhost:8080/club/cancha?action=eliminar&id=${canchaAEliminar.id}`
+      );
+      if (!res.ok) throw new Error('Error al eliminar cancha');
+      setShowModalEliminar(false);
+      setCanchaAEliminar(null);
+      fetchCanchas();
+    } catch (err) {
+      if (err instanceof Error) setMensajeError(err.message);
+      else setMensajeError(String(err));
+      setShowModalEliminar(false);
+      setCanchaAEliminar(null);
+    }
+  };
+
+  const handleModificar = (cancha: Cancha) => {
+    localStorage.setItem('canchaSeleccionada', JSON.stringify(cancha));
+    // Redirigir a la nueva ruta
+    window.location.href = '/canchas-admin/modificar';
+  };
+
+  return (
+    <div>
+      <NavbarAdmin />
+      <div className="contenido-admin">
+        <h2>Todas las Canchas</h2>
+        {mensajeError && <p style={{ color: 'red' }}>{mensajeError}</p>}
+        <ul>
+          {canchas.map((c) => (
+            <li key={c.id} style={{ border: '1px solid #ccc', marginBottom: '10px', padding: '10px' }}>
+              <h3>Cancha {c.nro_cancha}</h3>
+              <p>Ubicación: {c.ubicacion}</p>
+              <p>Descripción: {c.descripcion}</p>
+              <p>Tamaño: {c.tamanio} m²</p>
+              <p>Estado: {c.estado ? 'Disponible' : 'No disponible'}</p>
+              <button onClick={() => handleModificar(c)} style={{ marginRight: '10px' }}>
+                Modificar datos
+              </button>
+              <button
+                onClick={() => handleEliminar(c)}
+                style={{ backgroundColor: '#dc2626', color: 'white' }}
+              >
+                Eliminar
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Modal de confirmación de eliminación */}
+      {showModalEliminar && canchaAEliminar && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <h3>¿Estás seguro que quieres eliminar la cancha {canchaAEliminar.nro_cancha}?</h3>
+            <div className="modal-buttons">
+              <button onClick={confirmarEliminar} className="btn-confirm">Sí</button>
+              <button onClick={() => setShowModalEliminar(false)} className="btn-cancel">No</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CanchasAdmin;
+
