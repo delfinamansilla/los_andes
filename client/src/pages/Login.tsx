@@ -49,7 +49,7 @@ const Login: React.FC = () => {
         // ✅ Redirigir después de 2 segundos
 		setTimeout(() => {
 		  if (data.usuario.rol === 'socio') {
-		    //navigate('/InicioAdmin');
+		    navigate('/inicio-socio');
 		  } else {
 		    navigate('/inicio-admin');
 		  }

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/NavbarAdmin.css';
+import '../styles/NavbarSocio.css';
 
-const NavbarAdmin: React.FC = () => {
+const NavbarSocio: React.FC = () => {
   const navigate = useNavigate();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [nombreUsuario, setNombreUsuario] = useState<string>('Usuario');
@@ -30,55 +30,20 @@ const NavbarAdmin: React.FC = () => {
     localStorage.removeItem('usuario');
     navigate('/');
   };
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setActiveMenu(null);
-    }, 300); // delay de 300ms antes de cerrar el dropdown
-  };
 
-  useEffect(() => {
-    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-    if (usuario.nombre_completo) setNombreUsuario(usuario.nombre_completo);
-  }, []);
-
-  const handleCerrarSesion = () => {
-    localStorage.removeItem('usuario');
-    navigate('/');
-  };
-
-  const handleInicio = () => navigate('/inicio-admin');
-
-  const handleInicio = () => navigate('/inicio-admin');
+  const handleInicio = () => navigate('/inicio-socio');
 
   return (
     <>
-      <nav className="navbar-admin">
+      <nav className="navbar-socio">
         <div className="navbar-left">
           <button className="btn-usuario" onClick={() => navigate('/modificar-usuario')}>
             👤 {nombreUsuario}
           </button>
 
-<<<<<<< HEAD
-      <ul className="navbar-menu">
-        {/* PROFESORES */}
-        <li
-          className="menu-item"
-          onMouseEnter={() => toggleMenu('profesores')}
-          onMouseLeave={() => toggleMenu(null)}
-        >
-          Profesores
-          {activeMenu === 'profesores' && (
-            <ul className="dropdown">
-              <li><Link to="/profesores">Ver todos</Link></li>
-              <li><Link to="/agregar-profesor">Agregar nuevo</Link></li>
-            </ul>
-          )}
-        </li>
-=======
           <button className="btn-usuario" style={{ marginLeft: '10px' }} onClick={handleInicio}>
             🏠 Inicio
           </button>
->>>>>>> 95ffe351dd49db298ffd820f3b78e432ddba63ed
 
           <button
             className="btn-usuario"
@@ -92,14 +57,14 @@ const NavbarAdmin: React.FC = () => {
         <ul className="navbar-menu">
           <li
             className="menu-item"
-            onMouseOver={() => handleMouseEnter('profesores')}
+            onMouseOver={() => handleMouseEnter('actividades')}
             onMouseOut={handleMouseLeave}
           >
-            Profesores
-            {activeMenu === 'profesores' && (
+            Actividades
+            {activeMenu === 'actividades' && (
               <ul className="dropdown">
-                <li><button onClick={() => navigate('/profesores')}>Ver todos</button></li>
-                <li><button onClick={() => navigate('/profesores/nuevo')}>Agregar nuevo</button></li>
+                <li><button onClick={() => navigate('/actividades')}>Ver todas</button></li>
+                <li><button onClick={() => navigate('/actividades/mis-actividades')}>Ver mis actividades</button></li>
               </ul>
             )}
           </li>
@@ -113,21 +78,6 @@ const NavbarAdmin: React.FC = () => {
             {activeMenu === 'canchas' && (
               <ul className="dropdown">
                 <li><button onClick={() => navigate('/canchas')}>Ver todas</button></li>
-                <li><button onClick={() => navigate('/canchas/nueva')}>Agregar nueva</button></li>
-              </ul>
-            )}
-          </li>
-
-          <li
-            className="menu-item"
-            onMouseOver={() => handleMouseEnter('actividades')}
-            onMouseOut={handleMouseLeave}
-          >
-            Actividades
-            {activeMenu === 'actividades' && (
-              <ul className="dropdown">
-                <li><button onClick={() => navigate('/actividades')}>Ver todas</button></li>
-                <li><button onClick={() => navigate('/actividades/nueva')}>Agregar nueva</button></li>
               </ul>
             )}
           </li>
@@ -150,5 +100,6 @@ const NavbarAdmin: React.FC = () => {
   );
 };
 
-export default NavbarAdmin;
+export default NavbarSocio;
+
 
