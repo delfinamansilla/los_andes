@@ -9,7 +9,17 @@ import ModificarCancha from './pages/ModificarCancha';
 import CrearCancha from './pages/CrearCancha';
 import InicioSocio from './pages/InicioSocio';
 import MiCuenta from './pages/MiCuenta';
+<<<<<<< HEAD
 import Canchas from './pages/Canchas';
+=======
+import ListadoProfesor from './pages/ListadoProfesor';
+import ModificarProfesor from './pages/ModificarProfesor';
+import ListaActividades from './pages/ListaActividades';
+import AgregarActividad from './pages/AgregarActividad';
+>>>>>>> 50e700d5ef72affd55ec2230cb38b56027877b75
+import InicioSocio from './pages/InicioSocio';
+import MiCuenta from './pages/MiCuenta';
+>>>>>>> e1ccdbc234c872fe5ce88be40c75ef1763793d67
 function App() {
   return (
     <Router>
@@ -25,7 +35,14 @@ function App() {
 		<Route path="/crear" element={<CrearCancha />} />
 		<Route path="/inicio-socio" element={<InicioSocio />} />
 		<Route path="/modificar-usuario" element={<MiCuenta />} />
-        <Route path="*" element={<h2>404 - Página no encontrada</h2>} />
+		<Route path="/modificar-profesor" element={<ModificarProfesor />} />
+		<Route path="/listado-profesor" element={<ListadoProfesor />} />
+		<Route path="/actividades" element={<ListaActividades />} />
+		<Route path="/actividades/nueva" element={<AgregarActividad />} />
+        <Route path="*" element={<
+		<Route path="/inicio-socio" element={<InicioSocio />} />
+		<Route path="/modificar-usuario" element={<MiCuenta />} />
+		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>
   );

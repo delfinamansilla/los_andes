@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './ListadoProfesores.css'; // Opcional: para estilos
+import NavbarAdmin from '../pages/NavbarAdmin';
+// import './ListadoProfesores.css'; // Descomenta si creas un archivo de estilos
 
-// Definimos una interfaz para el objeto Profesor, para tener un tipado fuerte
+// Interfaz para definir la estructura de un profesor (mejora la seguridad del código)
 interface Profesor {
-  id_profesor: number; // Asegúrate que los nombres coincidan con los de tu clase Java
-  nombre_completo: string;
-  telefono: string;
+  id: number;      // ¡IMPORTANTE! Asegúrate de que estos nombres
+  nombre_completo: string;  // de propiedades coincidan exactamente con los
+  telefono: string;         // que tienes en tu clase `Profesor` de Java.
   mail: string;
 }
 
-const ListadoProfesores: React.FC = () => {
+const ListadoProfesor: React.FC = () => {
   const [profesores, setProfesores] = useState<Profesor[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,91 +19,124 @@ const ListadoProfesores: React.FC = () => {
   
   const navigate = useNavigate();
 
-  // 1. Cargar el rol del usuario y la lista de profesores al montar el componente
+  // Se ejecuta una sola vez cuando el componente se carga
   useEffect(() => {
-    const role = localStorage.getItem('userRole');
-    setUserRole(role);
+    // 1. OBTENER EL USUARIO DE LOCALSTORAGE
+    const usuarioJSON = localStorage.getItem('usuario');
+    
+    if (usuarioJSON) {
+      // 2. CONVERTIR EL TEXTO A OBJETO
+      const usuario = JSON.parse(usuarioJSON);
+      const role = usuario.rol; // Extraemos la propiedad 'rol'
+      setUserRole(role);
 
-    if (role === 'administrador') {
-      fetchProfesores();
+      // 3. VERIFICAR PERMISOS
+      if (role === 'administrador') {
+        fetchProfesores(); // Si es admin, buscamos los profesores
+      } else {
+        setLoading(false); // Si no es admin, dejamos de cargar
+      }
     } else {
+      // Si no hay usuario logueado, no tiene permisos
       setLoading(false);
+      setUserRole(null);
     }
   }, []);
 
+  // Función para obtener los profesores desde el backend
   const fetchProfesores = async () => {
     try {
+      // NOTA: Tu servlet debe estar preparado para devolver un JSON en esta ruta
       const response = await fetch('http://localhost:8080/club/profesor?action=listar');
+      
       if (!response.ok) {
-        throw new Error('Error al obtener los datos del servidor.');
+        throw new Error('La respuesta del servidor no fue exitosa.');
       }
+      
       const data: Profesor[] = await response.json();
       setProfesores(data);
+
     } catch (err: any) {
-      setError(err.message);
+      setError('No se pudo cargar la lista de profesores. Asegúrate de que el backend esté funcionando y devuelva un JSON válido.');
+      console.error(err);
     } finally {
-      setLoading(false);
+      setLoading(false); // Oculta el mensaje de "Cargando..."
     }
   };
 
-  // 2. Función para manejar la eliminación de un profesor
+  // Función para manejar la eliminación de un profesor
+  // En ListadoProfesor.tsx
+
   const handleDelete = async (id: number) => {
-    // Pedimos confirmación al usuario
     if (!window.confirm('¿Estás seguro de que quieres eliminar a este profesor?')) {
       return;
     }
 
     try {
+      // 1. Hacemos la llamada real al backend para eliminar
       const response = await fetch(`http://localhost:8080/club/profesor?action=eliminar&id=${id}`);
+      
+      // 2. Leemos la respuesta JSON que nos envía el servlet
       const data = await response.json();
 
-      if (response.ok && data.status === 'ok') {
-        // Si se borra en el backend, lo eliminamos de la lista en el frontend
-        // para no tener que recargar la página.
-        setProfesores(profesores.filter(p => p.id_profesor !== id));
-        alert('✅ Profesor eliminado correctamente.');
-      } else {
+      // 3. Verificamos si el backend respondió con un error
+      if (!response.ok || data.status !== 'ok') {
         throw new Error(data.message || 'No se pudo eliminar al profesor.');
       }
+
+      // 4. Si todo salió bien en el backend, actualizamos la lista en el frontend
+      //    para que el profesor desaparecido desaparezca de la pantalla sin recargar.
+      setProfesores(profesores.filter(p => p.id !== id));
+      alert('✅ Profesor eliminado correctamente.');
+
     } catch (err: any) {
-      setError(err.message);
-      alert(`❌ Error: ${err.message}`);
+      // 5. Si algo falló, mostramos el mensaje de error que vino del backend
+      alert(`❌ Error al eliminar: ${err.message}`);
+      console.error("Error en handleDelete:", err);
     }
   };
 
-  // 3. Función para redirigir a la página de modificación
-  const handleModify = (id: number) => {
-    // Te llevará a una ruta como "/editar-profesor/5"
-    // Deberás crear este componente y esta ruta más adelante.
-    navigate(`/editar-profesor/${id}`);
+  // Función para redirigir a la página de modificación
+  const handleModify = (profesor: Profesor) => { // <-- CAMBIO 1: Recibe el objeto completo
+    
+    // CAMBIO 2: Guarda el objeto profesor en localStorage
+    localStorage.setItem('profesorSeleccionado', JSON.stringify(profesor));
+    
+    // CAMBIO 3: Redirige a la página de modificar (sin pasar el ID en la URL)
+    navigate('/modificar-profesor'); 
   };
 
-  // --- Renderizado del Componente ---
+  // --- Lógica de Renderizado ---
 
+  // 1. Muestra "Cargando..." mientras se obtienen los datos
   if (loading) {
-    return <div className="loading">Cargando profesores...</div>;
+    return <div className="loading-container">Cargando...</div>;
   }
 
+  // 2. Muestra "Acceso Denegado" si el rol no es el correcto
   if (userRole !== 'administrador') {
     return (
-      <div className="admin-page">
+      <div className="access-denied-container">
         <h2>Acceso Denegado</h2>
         <p>No tienes permisos para ver esta sección.</p>
       </div>
     );
   }
   
+  // 3. Muestra un mensaje de error si la petición falló
   if (error) {
     return <div className="error-box">Error: {error}</div>;
   }
 
+  // 4. Si todo está bien, muestra la lista de profesores
   return (
     <div className="admin-page">
+	<NavbarAdmin />
       <h2>Listado de Profesores</h2>
       {profesores.length === 0 ? (
-        <p>No hay profesores registrados.</p>
+        <p>No hay profesores registrados en la base de datos.</p>
       ) : (
-        <table className="profesores-table">
+        <table className="data-table">
           <thead>
             <tr>
               <th>Nombre Completo</th>
@@ -112,16 +146,20 @@ const ListadoProfesores: React.FC = () => {
             </tr>
           </thead>
           <tbody>
+
             {profesores.map((profesor) => (
-              <tr key={profesor.id_profesor}>
+              <tr key={profesor.id}>
                 <td>{profesor.nombre_completo}</td>
                 <td>{profesor.telefono}</td>
                 <td>{profesor.mail}</td>
                 <td>
-                  <button className="btn-modify" onClick={() => handleModify(profesor.id_profesor)}>
-                    Modificar
-                  </button>
-                  <button className="btn-delete" onClick={() => handleDelete(profesor.id_profesor)}>
+				
+				
+				
+				  <button onClick={() => handleModify(profesor)}>
+				    Modificar
+				  </button>
+                  <button className="btn-delete" onClick={() => handleDelete(profesor.id)}>
                     Borrar
                   </button>
                 </td>
@@ -134,4 +172,4 @@ const ListadoProfesores: React.FC = () => {
   );
 };
 
-export default ListadoProfesores;
+export default ListadoProfesor;

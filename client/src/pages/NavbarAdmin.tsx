@@ -63,7 +63,7 @@ const NavbarAdmin: React.FC = () => {
             Profesores
             {activeMenu === 'profesores' && (
               <ul className="dropdown">
-                <li><button onClick={() => navigate('/profesores')}>Ver todos</button></li>
+                <li><button onClick={() => navigate('/listado-profesor')}>Ver todos</button></li>
                 <li><button onClick={() => navigate('/agregar-profesor')}>Agregar nuevo</button></li>
               </ul>
             )}
