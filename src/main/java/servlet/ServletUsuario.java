@@ -193,10 +193,28 @@ public class ServletUsuario extends HttpServlet {
                         u.setFechaNacimiento(LocalDate.parse(fecha));
                     }
 
-                    logicUsuario.update(u);
-                    response.sendRedirect("usuario?action=listar");
+                    try {
+                        logicUsuario.update(u);
+
+                        // ✅ Devolver JSON con los datos actualizados
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        response.setStatus(HttpServletResponse.SC_OK);
+                        response.getWriter().write("{\"id\":" + u.getIdUsuario() +
+                            ",\"nombre_completo\":\"" + u.getNombreCompleto() + "\"" +
+                            ",\"mail\":\"" + u.getMail() + "\"" +
+                            ",\"telefono\":\"" + u.getTelefono() + "\"" +
+                            ",\"rol\":\"" + u.getRol() + "\"" +
+                            "}");
+                    } catch (Exception e) {
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+                    }
                     break;
                 }
+
 
                 default:
                     response.getWriter().append("Acción POST no reconocida: ").append(action);
