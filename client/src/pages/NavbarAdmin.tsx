@@ -30,23 +30,6 @@ const NavbarAdmin: React.FC = () => {
     localStorage.removeItem('usuario');
     navigate('/');
   };
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setActiveMenu(null);
-    }, 300); // delay de 300ms antes de cerrar el dropdown
-  };
-
-  useEffect(() => {
-    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-    if (usuario.nombre_completo) setNombreUsuario(usuario.nombre_completo);
-  }, []);
-
-  const handleCerrarSesion = () => {
-    localStorage.removeItem('usuario');
-    navigate('/');
-  };
-
-  const handleInicio = () => navigate('/inicio-admin');
 
   const handleInicio = () => navigate('/inicio-admin');
 
@@ -58,27 +41,9 @@ const NavbarAdmin: React.FC = () => {
             👤 {nombreUsuario}
           </button>
 
-<<<<<<< HEAD
-      <ul className="navbar-menu">
-        {/* PROFESORES */}
-        <li
-          className="menu-item"
-          onMouseEnter={() => toggleMenu('profesores')}
-          onMouseLeave={() => toggleMenu(null)}
-        >
-          Profesores
-          {activeMenu === 'profesores' && (
-            <ul className="dropdown">
-              <li><Link to="/profesores">Ver todos</Link></li>
-              <li><Link to="/agregar-profesor">Agregar nuevo</Link></li>
-            </ul>
-          )}
-        </li>
-=======
           <button className="btn-usuario" style={{ marginLeft: '10px' }} onClick={handleInicio}>
             🏠 Inicio
           </button>
->>>>>>> 95ffe351dd49db298ffd820f3b78e432ddba63ed
 
           <button
             className="btn-usuario"
@@ -99,7 +64,7 @@ const NavbarAdmin: React.FC = () => {
             {activeMenu === 'profesores' && (
               <ul className="dropdown">
                 <li><button onClick={() => navigate('/profesores')}>Ver todos</button></li>
-                <li><button onClick={() => navigate('/profesores/nuevo')}>Agregar nuevo</button></li>
+                <li><button onClick={() => navigate('/agregar-profesor')}>Agregar nuevo</button></li>
               </ul>
             )}
           </li>
@@ -151,4 +116,3 @@ const NavbarAdmin: React.FC = () => {
 };
 
 export default NavbarAdmin;
-
