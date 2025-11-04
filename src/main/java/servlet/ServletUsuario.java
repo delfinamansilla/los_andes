@@ -18,7 +18,7 @@ import logic.LogicUsuario;
  * Servlet para gestionar las operaciones CRUD de Usuario.
  * Incluye login, alta, modificación, eliminación y listado.
  */
-@WebServlet({"/usuario", "/Usuario", "/USUARIO"})
+@WebServlet("/usuario")
 public class ServletUsuario extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private LogicUsuario logicUsuario;
@@ -54,14 +54,25 @@ public class ServletUsuario extends HttpServlet {
                     break;
                 }
                 case "buscar": {
+                	System.out.println("➡️ Entró al case 'buscar'");
                     int id = Integer.parseInt(request.getParameter("id"));
+                    System.out.println("este es el id"+id);
                     Usuario u = logicUsuario.getAll().stream()
                             .filter(x -> x.getIdUsuario() == id)
                             .findFirst().orElse(null);
-                    request.setAttribute("usuario", u);
-                    request.getRequestDispatcher("WEB-INF/detalleUsuario.jsp").forward(request, response);
+                    System.out.println("este es el usuario"+u);
+                    response.setContentType("application/json;charset=UTF-8");
+                    if (u != null) {
+                        response.getWriter().write("{\"id\":" + u.getIdUsuario() + 
+                            ", \"nombre\":\"" + u.getNombreCompleto() + 
+                            "\", \"mail\":\"" + u.getMail() + "\"}");
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        response.getWriter().write("{\"error\":\"Usuario no encontrado\"}");
+                    }
                     break;
                 }
+
                 case "eliminar": {
                     int id = Integer.parseInt(request.getParameter("id"));
                     logicUsuario.delete(id);
@@ -111,15 +122,15 @@ public class ServletUsuario extends HttpServlet {
 
                     if (usuarioLogueado != null) {
                         request.getSession().setAttribute("usuarioActual", usuarioLogueado);
-                        // Si usás JSP:
-                        request.getRequestDispatcher("WEB-INF/panelUsuario.jsp").forward(request, response);
-                        // Si usás React, en cambio podrías responder con JSON:
-                        // response.setContentType("application/json");
-                        // response.getWriter().write("{\"status\":\"ok\", \"usuario\":\""+usuarioLogueado.getNombreCompleto()+"\"}");
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"status\":\"ok\", \"nombre\":\"" 
+                            + usuarioLogueado.getNombreCompleto() + "\", \"rol\":\"" + usuarioLogueado.getRol() + "\"}");
                     } else {
-                        request.setAttribute("error", "Correo o contraseña incorrectos.");
-                        request.getRequestDispatcher("login.jsp").forward(request, response);
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"status\":\"error\", \"mensaje\":\"Correo o contraseña incorrectos.\"}");
                     }
+
                     break;
                 }
 
@@ -136,11 +147,6 @@ public class ServletUsuario extends HttpServlet {
                     String fecha = request.getParameter("fecha_nacimiento");
                     if (fecha != null && !fecha.isEmpty()) {
                         nuevo.setFechaNacimiento(LocalDate.parse(fecha));
-                    }
-
-                    String nroSocioStr = request.getParameter("nro_socio");
-                    if (nroSocioStr != null && !nroSocioStr.isEmpty()) {
-                        nuevo.setNroSocio(Integer.parseInt(nroSocioStr));
                     }
 
                     logicUsuario.add(nuevo);
@@ -162,10 +168,6 @@ public class ServletUsuario extends HttpServlet {
                     String fecha = request.getParameter("fecha_nacimiento");
                     if (fecha != null && !fecha.isEmpty()) {
                         u.setFechaNacimiento(LocalDate.parse(fecha));
-                    }
-                    String nroSocioStr = request.getParameter("nro_socio");
-                    if (nroSocioStr != null && !nroSocioStr.isEmpty()) {
-                        u.setNroSocio(Integer.parseInt(nroSocioStr));
                     }
 
                     logicUsuario.update(u);

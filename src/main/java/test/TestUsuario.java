@@ -7,9 +7,9 @@ import java.util.LinkedList;
 
 public class TestUsuario {
     public static void main(String[] args) {
-        DataUsuario dataUsuario = new DataUsuario();
+       DataUsuario dataUsuario = new DataUsuario();
 
-        // 🔹 1. Probar agregar un usuario nuevo
+        /*// 🔹 1. Probar agregar un usuario nuevo
         Usuario nuevo = new Usuario(
                 "Juan Pérez",
                 "12345678",
@@ -23,7 +23,7 @@ public class TestUsuario {
         );
         dataUsuario.add(nuevo);
         System.out.println("Usuario agregado con ID: " + nuevo.getIdUsuario());
-
+*/
         // 🔹 2. Obtener todos los usuarios
         LinkedList<Usuario> lista = dataUsuario.getAll();
         System.out.println("Usuarios en BD:");
@@ -31,7 +31,7 @@ public class TestUsuario {
             System.out.println(u.getIdUsuario() + " - " + u.getNombreCompleto());
         }
 
-        // 🔹 3. Buscar un usuario por mail y clave
+        /*// 🔹 3. Buscar un usuario por mail y clave
         Usuario login = new Usuario();
         login.setMail("juan@mail.com");
         login.setContrasenia("1234");
@@ -47,6 +47,6 @@ public class TestUsuario {
             encontrado.setTelefono("1199887766");
             dataUsuario.update(encontrado);
             System.out.println("Usuario actualizado");
-        }
+        }*/
     }
 }

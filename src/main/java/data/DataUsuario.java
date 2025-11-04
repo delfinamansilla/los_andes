@@ -34,7 +34,6 @@ public class DataUsuario {
 	            u.setDni(rs.getString("dni"));
 	            u.setTelefono(rs.getString("telefono"));
 	            u.setMail(rs.getString("mail"));
-	            u.setNroSocio(rs.getInt("nro_socio"));
 	            
 	            Date fecha = rs.getDate("fecha_nacimiento");
 	            if (fecha != null) {
@@ -80,7 +79,6 @@ public class DataUsuario {
                     u.setDni(rs.getString("dni"));
                     u.setTelefono(rs.getString("telefono"));
                     u.setMail(rs.getString("mail"));
-                    u.setNroSocio(rs.getInt("nro_socio"));
                     
                     Date fecha = rs.getDate("fecha_nacimiento");
                     if (fecha != null) {
@@ -134,7 +132,6 @@ public class DataUsuario {
                 u.setDni(rs.getString("dni"));
                 u.setTelefono(rs.getString("telefono"));
                 u.setMail(rs.getString("mail"));
-                u.setNroSocio(rs.getInt("nro_socio"));
                 
                 Date fecha = rs.getDate("fecha_nacimiento");
                 if (fecha != null) {
@@ -169,8 +166,8 @@ public class DataUsuario {
 
         try {
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
-                "INSERT INTO usuario (nombre_completo, dni, telefono, mail, fecha_nacimiento, contrasenia, estado, rol, nro_socio) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO usuario (nombre_completo, dni, telefono, mail, fecha_nacimiento, contrasenia, estado, rol) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 PreparedStatement.RETURN_GENERATED_KEYS
             );
             stmt.setString(1, u.getNombreCompleto());
@@ -181,7 +178,6 @@ public class DataUsuario {
             stmt.setString(6, u.getContrasenia());
             stmt.setBoolean(7, u.isEstado());
             stmt.setString(8, u.getRol());
-            stmt.setInt(9, u.getNroSocio());
 
             stmt.executeUpdate();
 
@@ -212,7 +208,7 @@ public class DataUsuario {
 
         try {
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
-                "UPDATE usuario SET nombre_completo=?, dni=?, telefono=?, mail=?, fecha_nacimiento=?, contrasenia=?, estado=?, rol=?, nro_socio=? " +
+                "UPDATE usuario SET nombre_completo=?, dni=?, telefono=?, mail=?, fecha_nacimiento=?, contrasenia=?, estado=?, rol=? " +
                 "WHERE id=?"
             );
             stmt.setString(1, u.getNombreCompleto());
@@ -223,8 +219,7 @@ public class DataUsuario {
             stmt.setString(6, u.getContrasenia());
             stmt.setBoolean(7, u.isEstado());
             stmt.setString(8, u.getRol());
-            stmt.setInt(9, u.getNroSocio());
-            stmt.setInt(10, u.getIdUsuario());
+            stmt.setInt(9, u.getIdUsuario());
 
             stmt.executeUpdate();
 
@@ -263,7 +258,6 @@ public class DataUsuario {
                 u.setDni(rs.getString("dni"));
                 u.setTelefono(rs.getString("telefono"));
                 u.setMail(rs.getString("mail"));
-                u.setNroSocio(rs.getInt("nro_socio"));
                 
                 Date fecha = rs.getDate("fecha_nacimiento");
                 if (fecha != null) {
