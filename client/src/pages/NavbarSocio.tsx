@@ -38,20 +38,20 @@ const NavbarSocio: React.FC = () => {
       <nav className="navbar-socio">
         <div className="navbar-left">
           <button className="btn-usuario" onClick={() => navigate('/modificar-usuario')}>
-            👤 {nombreUsuario}
+            {nombreUsuario}
           </button>
 
           <button className="btn-usuario" style={{ marginLeft: '10px' }} onClick={handleInicio}>
-            🏠 Inicio
+            Inicio
           </button>
 
-          <button
-            className="btn-usuario"
-            style={{ marginLeft: '10px', backgroundColor: '#dc2626', borderColor: '#dc2626' }}
-            onClick={() => setShowModal(true)}
-          >
-            🔒 Cerrar sesión
-          </button>
+		  <button
+		    className="btn-usuario"
+		    style={{ marginLeft: '10px' }}  // <-- QUITA el backgroundColor y borderColor
+		    onClick={() => setShowModal(true)}
+		  >
+		    Cerrar sesión
+		  </button>
         </div>
 
         <ul className="navbar-menu">

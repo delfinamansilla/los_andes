@@ -1,0 +1,160 @@
+/* --- Registro.css (Corregido para Autocompletar) --- */
+
+/* 1. Estructura principal de la página (sin cambios) */
+.registro-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20321E;
+}
+
+/* 2. Área de contenido (sin cambios) */
+.content-area {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 3. Contenedor del formulario (sin cambios) */
+.form-container {
+  background-color: #DDD8CA;
+  color: #20321E;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  max-width: 550px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Título */
+.form-container h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+/* Estructura interna del formulario */
+.form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: left;
+}
+
+/* Estilo para todos los inputs del formulario */
+.form-container form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #466245;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s;
+  background-color: #DDD8CA;
+  color: #20321E;
+}
+
+.form-container form input:focus {
+  border-color: #20321E;
+  box-shadow: 0 0 5px rgba(32, 50, 30, 0.5);
+}
+
+/* --- INICIO DE LA CORRECCIÓN --- */
+/* Forzar el estilo en los inputs autocompletados por el navegador */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-text-fill-color: #20321E !important; /* Color del texto */
+    box-shadow: 0 0 0 30px #DDD8CA inset !important; /* Simula el fondo cremita */
+    -webkit-box-shadow: 0 0 0 30px #DDD8CA inset !important; /* Lo mismo para Webkit */
+}
+/* --- FIN DE LA CORRECCIÓN --- */
+
+/* Estilo para el campo de contraseña */
+.password-field {
+  position: relative;
+}
+
+/* Botón para ver/ocultar contraseña */
+.password-field button {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0;
+}
+
+/* Botón principal "Registrarse" (Verde Oscuro) */
+.btn-primary {
+  width: 100%;
+  padding: 12px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.2s;
+  border: none;
+  background-color: #20321E;
+  color: #DDD8CA;
+}
+
+.btn-primary:hover {
+  background-color: #466245;
+}
+
+/* Separador y botón para cambiar de rol */
+.separador {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.btn-toggle-role {
+  background: none;
+  border: none;
+  color: #466245;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* Contenedor y botón para volver */
+.volver-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.volver-btn {
+  background: none;
+  border: none;
+  color: #20321E;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* Mensajes de error/éxito */
+.error-box, .success-box {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+.error-box {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+.success-box {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}

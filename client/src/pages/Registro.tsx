@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import NavbarAdmin from '../pages/NavbarAdmin';
+import '../styles/Registro.css';
 
 const Registro: React.FC = () => {
   const [rol, setRol] = useState<'socio' | 'administrador'>('socio');
@@ -72,88 +74,99 @@ const Registro: React.FC = () => {
   };
 
   return (
-    <div className="form-container">
-      <h2>Registro de {rol === 'socio' ? 'Socio' : 'Administrador'}</h2>
+    // 1. Añadimos el contenedor principal de la página
+	
+    <div className="registro-page">
+	<NavbarAdmin />
+      {/* 2. Añadimos el contenedor que centra el contenido */}
+      <div className="content-area">
+        {/* El .form-container ahora es el recuadro cremita */}
+        <div className="form-container">
+          <h2>Registro de {rol === 'socio' ? 'Socio' : 'Administrador'}</h2>
 
-      {/* Mensajes */}
-      {error && <p className="error-box">{error}</p>}
-      {success && <p className="success-box">{success}</p>}
+          {/* Mensajes */}
+          {error && <p className="error-box">{error}</p>}
+          {success && <p className="success-box">{success}</p>}
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Nombre Completo"
-          name="nombre_completo"
-          value={formData.nombre_completo}
-          onChange={handleInputChange}
-          required
-        />
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Nombre Completo"
+              name="nombre_completo"
+              value={formData.nombre_completo}
+              onChange={handleInputChange}
+              required
+            />
 
-        <input
-          type="text"
-          placeholder="DNI"
-          name="dni"
-          value={formData.dni}
-          onChange={handleInputChange}
-          required
-        />
+            <input
+              type="text"
+              placeholder="DNI"
+              name="dni"
+              value={formData.dni}
+              onChange={handleInputChange}
+              required
+            />
 
-        <input
-          type="tel"
-          placeholder="Teléfono"
-          name="telefono"
-          value={formData.telefono}
-          onChange={handleInputChange}
-          required
-        />
+            <input
+              type="tel"
+              placeholder="Teléfono"
+              name="telefono"
+              value={formData.telefono}
+              onChange={handleInputChange}
+              required
+            />
 
-        <input
-          type="email"
-          placeholder="Email"
-          name="mail"
-          value={formData.mail}
-          onChange={handleInputChange}
-          required
-        />
+            <input
+              type="email"
+              placeholder="Email"
+              name="mail"
+              value={formData.mail}
+              onChange={handleInputChange}
+              required
+            />
 
-        <input
-          type="date"
-          name="fecha_nacimiento"
-          value={formData.fecha_nacimiento}
-          onChange={handleInputChange}
-          required
-        />
+            <input
+              type="date"
+              name="fecha_nacimiento"
+              value={formData.fecha_nacimiento}
+              onChange={handleInputChange}
+              required
+            />
 
-        <div className="relative password-field">
-          <input
-            type={isPasswordVisible ? 'text' : 'password'}
-            placeholder="Contraseña"
-            name="contrasenia"
-            value={formData.contrasenia}
-            onChange={handleInputChange}
-            required
-          />
-          <button type="button" onClick={togglePasswordVisibility}>
-            {isPasswordVisible ? '🔒' : '👁️'}
-          </button>
+            {/* El div de la contraseña ya tiene la clase correcta */}
+            <div className="password-field">
+              <input
+                type={isPasswordVisible ? 'text' : 'password'}
+                placeholder="Contraseña"
+                name="contrasenia"
+                value={formData.contrasenia}
+                onChange={handleInputChange}
+                required
+              />
+              <button type="button" onClick={togglePasswordVisibility}>
+                {isPasswordVisible ? '🔒' : '👁️'}
+              </button>
+            </div>
+
+            {/* 3. Cambiamos la clase del botón principal */}
+            <button type="submit" className="btn-primary">Registrarse</button>
+          </form>
+
+          <div className="separador">
+            {/* 4. Cambiamos la clase del botón de cambio de rol */}
+            <button onClick={toggleRol} className="btn-toggle-role">
+              {rol === 'socio'
+                ? 'Registrarme como Administrador'
+                : 'Registrarme como Socio'}
+            </button>
+          </div>
+
+          <div className="volver-container">
+            <button onClick={() => navigate('/login')} className="volver-btn">
+              Volver al Login
+            </button>
+          </div>
         </div>
-
-        <button type="submit">Registrarse</button>
-      </form>
-
-      <div className="separador">
-        <button onClick={toggleRol}>
-          {rol === 'socio'
-            ? 'Registrarme como Administrador'
-            : 'Registrarme como Socio'}
-        </button>
-      </div>
-
-      {/* 🔙 Botón para volver */}
-      <div className="volver-container">
-        <button onClick={() => navigate('/login')} className="volver-btn">
-          ← Volver al Login
-        </button>
       </div>
     </div>
   );

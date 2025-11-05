@@ -1,112 +1,152 @@
+/* --- NavbarAdmin.css (Dropdown Actualizado) --- */
+/* 1. Contenedor principal de la Navbar */
 .navbar-admin {
-  background-color: #1e3a8a; /* azul oscuro */
-  color: white;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   padding: 10px 30px;
-  position: sticky;
-  top: 0;
+  background-color: #DDD8CA;
+  color: #20321E;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
   z-index: 1000;
 }
 
+/* 2. Sección izquierda (Usuario, Inicio, Cerrar Sesión) */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Estilo para los botones de la izquierda - TODOS CON VERDE */
 .btn-usuario {
-  background: transparent;
-  color: white;
-  border: 1px solid white;
-  padding: 6px 14px;
-  border-radius: 5px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #20321E !important;
+  border: 2.5px solid #20321E !important;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 900;
+  font-size: 1rem;
+  transition: all 0.2s;
 }
 
 .btn-usuario:hover {
-  background-color: white;
-  color: #1e3a8a;
+  background-color: #20321E !important;
+  color: #DDD8CA !important;
 }
 
+/* 3. Menú de navegación de la derecha */
 .navbar-menu {
-  list-style: none;
   display: flex;
-  gap: 40px;
+  list-style: none;
   margin: 0;
   padding: 0;
+  gap: 20px;
 }
 
 .menu-item {
   position: relative;
+  padding: 10px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: bold;
+  color: #20321E;
 }
 
+/* 4. Dropdown (con fondo claro y texto oscuro) */
 .dropdown {
   position: absolute;
-  top: 30px;
+  top: 100%;
   left: 0;
-  background-color: white;
-  color: black;
-  border-radius: 6px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  background-color: #f0ede6;
   list-style: none;
-  padding: 8px 0;
-  min-width: 180px;
+  padding: 5px;
+  margin-top: 8px;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  width: 180px;
+  border: 1px solid #e0dbd1;
 }
 
-.dropdown li {
-  padding: 8px 14px;
+.dropdown li button {
+  width: 100%;
+  padding: 10px 15px;
+  background: none;
+  border: none;
+  border-radius: 5px;
+  color: #20321E;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s;
 }
 
-.dropdown li:hover {
-  background-color: #f1f1f1;
+.dropdown li button:hover {
+  background-color: #20321E;
+  color: #DDD8CA;
 }
 
-.dropdown a {
-  color: black;
-  text-decoration: none;
-  display: block;
-}
+/* 5. Modal de confirmación */
 .modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   z-index: 2000;
 }
 
 .modal {
-  background-color: white;
-  padding: 25px 30px;
-  border-radius: 10px;
+  background-color: #DDD8CA;
+  color: #20321E;
+  padding: 30px 40px;
+  border-radius: 15px;
   text-align: center;
-  min-width: 300px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.modal h3 {
+  margin-top: 0;
+  margin-bottom: 25px;
 }
 
 .modal-buttons {
   display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
+  gap: 15px;
+  justify-content: center;
+}
+
+.modal-buttons button {
+  padding: 10px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.2s;
 }
 
 .btn-confirm {
+  border: none;
   background-color: #dc2626;
   color: white;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 5px;
-  cursor: pointer;
+}
+
+.btn-confirm:hover {
+  background-color: #b91c1c;
 }
 
 .btn-cancel {
-  background-color: #6b7280;
-  color: white;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 5px;
-  cursor: pointer;
+  background-color: #DDD8CA;
+  color: #20321E;
+  border: 2px solid #20321E;
+}
+
+.btn-cancel:hover {
+  background-color: #c9c4b5;
+  border-color: #466245;
 }

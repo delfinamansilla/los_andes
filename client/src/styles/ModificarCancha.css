@@ -1,0 +1,136 @@
+/* --- ModificarCancha.css (Diseño de Título Centrado) --- */
+
+/* 1. Contenedor principal de la página */
+.pag-modificar {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20321E;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 2. NUEVO Contenedor para centrar el contenido */
+.contenido-cancha {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column; /* Apila el título y el formulario */
+  justify-content: center; /* Centra todo verticalmente */
+  align-items: center;     /* Centra todo horizontalmente */
+  padding: 40px;
+}
+
+/* 3. Título principal "Modificar Cancha" */
+.contenido-cancha h1 {
+  font-size: 2.5rem;
+  color: #DDD8CA;
+  font-weight: 800;
+  margin: 0 0 30px 0; /* Espacio debajo del título */
+  text-align: center;
+}
+
+/* 4. Formulario (el recuadro cremita) */
+.form-modificar {
+  background-color: #DDD8CA;
+  color: #20321E;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 600px; /* Ancho máximo para el formulario */
+}
+
+/* Estructura del formulario interno */
+.modificar {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: left;
+}
+
+/* Labels */
+.modificar label {
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin-bottom: -5px;
+}
+
+/* Inputs y Select */
+.modificar input,
+.modificar select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #466245;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s;
+  background-color: #DDD8CA;
+  color: #20321E;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.modificar input:focus,
+.modificar select:focus {
+  border-color: #20321E;
+  box-shadow: 0 0 5px rgba(32, 50, 30, 0.5);
+}
+
+/* Contenedor y estilo de los botones */
+.botones-container {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.botones-container button {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+/* Botón Principal ("Guardar cambios") */
+.botones-container button[type="submit"] {
+  border: none;
+  background-color: #20321E;
+  color: #DDD8CA;
+}
+
+.botones-container button[type="submit"]:hover {
+  background-color: #466245;
+}
+
+/* Botón Secundario ("Cancelar") */
+.btn-cancel {
+  background-color: #DDD8CA;
+  color: #20321E;
+  border: 2px solid #20321E;
+}
+
+.btn-cancel:hover {
+  background-color: #c9c4b5;
+  border-color: #466245;
+}
+
+/* Mensajes de éxito y error */
+.mensaje-exito, .mensaje-error {
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+}
+.mensaje-exito {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+.mensaje-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}

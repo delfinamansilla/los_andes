@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavbarAdmin from './NavbarAdmin';
 import { useNavigate } from 'react-router-dom';
+import '../styles/ModificarCancha.css';
 
 interface Cancha {
   id: number;
@@ -78,36 +79,45 @@ const ModificarCancha: React.FC = () => {
   return (
     <div className="pag-modificar">
       <NavbarAdmin />
-      <div className="form-modificar">
+      
+      {/* Este es el contenedor principal que centra todo verticalmente */}
+      <div className="contenido-cancha">
+        
+        {/* Título principal de la página */}
         <h1>Modificar Cancha {cancha.nro_cancha}</h1>
-        {mensajeExito && <p className="mensaje-exito">{mensajeExito}</p>}
-        {mensajeError && <p className="mensaje-error">{mensajeError}</p>}
-        <form onSubmit={handleSubmit} className="modificar">
-          <label>Número de Cancha:</label>
-          <input type="number" value={nroCancha} onChange={(e) => setNroCancha(Number(e.target.value))} />
 
-          <label>Ubicación:</label>
-          <input value={ubicacion} onChange={(e) => setUbicacion(e.target.value)} />
+        {/* El recuadro cremita del formulario */}
+        <div className="form-modificar">
+          {mensajeExito && <p className="mensaje-exito">{mensajeExito}</p>}
+          {mensajeError && <p className="mensaje-error">{mensajeError}</p>}
+          
+          <form onSubmit={handleSubmit} className="modificar">
+            <label>Número de Cancha:</label>
+            <input type="number" value={nroCancha} onChange={(e) => setNroCancha(Number(e.target.value))} />
 
-          <label>Descripción:</label>
-          <input value={descripcion} onChange={(e) => setDescripcion(e.target.value)} />
+            <label>Ubicación:</label>
+            <input value={ubicacion} onChange={(e) => setUbicacion(e.target.value)} />
 
-          <label>Tamaño (m²):</label>
-          <input type="number" value={tamanio} onChange={(e) => setTamanio(Number(e.target.value))} />
+            <label>Descripción:</label>
+            <input value={descripcion} onChange={(e) => setDescripcion(e.target.value)} />
 
-          <label>Estado:</label>
-          <select value={estado ? 'true' : 'false'} onChange={(e) => setEstado(e.target.value === 'true')}>
-            <option value="true">Disponible</option>
-            <option value="false">No disponible</option>
-          </select>
+            <label>Tamaño (m²):</label>
+            <input type="number" value={tamanio} onChange={(e) => setTamanio(Number(e.target.value))} />
 
-          <div className="botones-container">
-            <button type="submit">Guardar cambios</button>
-            <button type="button" onClick={() => navigate('/canchas-admin')} className="btn-cancel">
-              Cancelar
-            </button>
-          </div>
-        </form>
+            <label>Estado:</label>
+            <select value={estado ? 'true' : 'false'} onChange={(e) => setEstado(e.target.value === 'true')}>
+              <option value="true">Disponible</option>
+              <option value="false">No disponible</option>
+            </select>
+
+            <div className="botones-container">
+              <button type="submit">Guardar cambios</button>
+              <button type="button" onClick={() => navigate('/canchas-admin')} className="btn-cancel">
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

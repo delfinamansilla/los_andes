@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
 import NavbarSocio from './NavbarSocio';
+import '../styles/MiCuenta.css';
 
 
 const MiCuenta: React.FC = () => {
@@ -136,54 +137,47 @@ const MiCuenta: React.FC = () => {
   return (
     <div className="pag-modificar">
       <Navbar />
-      <div className="form-modificar">
-        <h1>Datos de la cuenta</h1>
-        {mensajeExito && <p className="mensaje-exito">{mensajeExito}</p>}
-        {mensajeError && <p className="mensaje-error">{mensajeError}</p>}
-
-		{!mostrarFormulario ? (
-		  <form onSubmit={handleSubmit} className="modificar">
-		    <label>Nombre Completo:</label>
-		    <input value={nombreCompleto} onChange={(e) => setNombreCompleto(e.target.value)} />
-
-		    <label>DNI:</label>
-		    <input value={dni} onChange={(e) => setDni(e.target.value)} />
-
-		    <label>Teléfono:</label>
-		    <input value={telefono} onChange={(e) => setTelefono(e.target.value)} />
-
-		    <label>Email:</label>
-		    <input type="email" value={mail} onChange={(e) => setMail(e.target.value)} />
-
-		    <label>Fecha de Nacimiento:</label>
-		    <input type="date" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)} />
-
-		    <div className="botones-container">
-		      <button type="submit">Modificar datos</button>
-		      <button type="button" onClick={() => setMostrarFormulario(true)} className="btn-cambiar-contrasena">
-		        Cambiar contraseña
-		      </button>
-		    </div>
-		  </form>
-		) : (
-		  <form onSubmit={handleCambiarContrasenia} className="modificar">
-		    <label>Contraseña actual:</label>
-		    <input type="text" value={contraseñaActual} onChange={(e) => setContraseñaActual(e.target.value)} />
-
-		    <label>Nueva contraseña:</label>
-		    <input type="text" value={nuevaContraseña} onChange={(e) => setNuevaContraseña(e.target.value)} />
-
-		    <label>Confirmar nueva contraseña:</label>
-		    <input type="text" value={confirmarNuevaContraseña} onChange={(e) => setConfirmarNuevaContraseña(e.target.value)} />
-
-		    <div className="botones-container">
-		      <button type="submit">Guardar nueva contraseña</button>
-		      <button type="button" onClick={() => setMostrarFormulario(false)} className="btn-cambiar-contrasena">
-		        Cancelar
-		      </button>
-		    </div>
-		  </form>
-		)}
+      <div className="contenido-centrado">
+        <div className="form-modificar">
+          <h1>Datos de la cuenta</h1>
+          {mensajeExito && <p className="mensaje-exito">{mensajeExito}</p>}
+          {mensajeError && <p className="mensaje-error">{mensajeError}</p>}
+          {!mostrarFormulario ? (
+            <form onSubmit={handleSubmit} className="modificar">
+              <label>Nombre Completo:</label>
+              <input value={nombreCompleto} onChange={(e) => setNombreCompleto(e.target.value)} />
+              <label>DNI:</label>
+              <input value={dni} onChange={(e) => setDni(e.target.value)} />
+              <label>Teléfono:</label>
+              <input value={telefono} onChange={(e) => setTelefono(e.target.value)} />
+              <label>Email:</label>
+              <input type="email" value={mail} onChange={(e) => setMail(e.target.value)} />
+              <label>Fecha de Nacimiento:</label>
+              <input type="date" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)} />
+              <div className="botones-container">
+                <button type="submit">Modificar datos</button>
+                <button type="button" onClick={() => setMostrarFormulario(true)} className="btn-cambiar-contrasena">
+                  Cambiar contraseña
+                </button>
+              </div>
+            </form>
+          ) : (
+            <form onSubmit={handleCambiarContrasenia} className="modificar">
+              <label>Contraseña actual:</label>
+              <input type="text" value={contraseñaActual} onChange={(e) => setContraseñaActual(e.target.value)} />
+              <label>Nueva contraseña:</label>
+              <input type="text" value={nuevaContraseña} onChange={(e) => setNuevaContraseña(e.target.value)} />
+              <label>Confirmar nueva contraseña:</label>
+              <input type="text" value={confirmarNuevaContraseña} onChange={(e) => setConfirmarNuevaContraseña(e.target.value)} />
+              <div className="botones-container">
+                <button type="submit">Guardar nueva contraseña</button>
+                <button type="button" onClick={() => setMostrarFormulario(false)} className="btn-cambiar-contrasena">
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   );

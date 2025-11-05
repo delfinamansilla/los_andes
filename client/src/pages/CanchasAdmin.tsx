@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import NavbarAdmin from './NavbarAdmin';
+import '../styles/CanchasAdmin.css';
 
 interface Cancha {
   id: number;
@@ -64,34 +65,36 @@ const CanchasAdmin = () => {
   };
 
   return (
-    <div>
+    <div className="canchas-admin-page">
       <NavbarAdmin />
       <div className="contenido-admin">
         <h2>Todas las Canchas</h2>
         {mensajeError && <p style={{ color: 'red' }}>{mensajeError}</p>}
         <ul>
           {canchas.map((c) => (
-            <li key={c.id} style={{ border: '1px solid #ccc', marginBottom: '10px', padding: '10px' }}>
+            <li key={c.id}>
               <h3>Cancha {c.nro_cancha}</h3>
+              
+              {/* --- ESTA ES LA PARTE CORREGIDA --- */}
               <p>Ubicación: {c.ubicacion}</p>
               <p>Descripción: {c.descripcion}</p>
               <p>Tamaño: {c.tamanio} m²</p>
               <p>Estado: {c.estado ? 'Disponible' : 'No disponible'}</p>
-              <button onClick={() => handleModificar(c)} style={{ marginRight: '10px' }}>
-                Modificar datos
-              </button>
-              <button
-                onClick={() => handleEliminar(c)}
-                style={{ backgroundColor: '#dc2626', color: 'white' }}
-              >
-                Eliminar
-              </button>
+
+              <div className="cancha-buttons">
+                <button onClick={() => handleModificar(c)} className="btn-modificar">
+                  Modificar datos
+                </button>
+                <button onClick={() => handleEliminar(c)} className="btn-eliminar">
+                  Eliminar
+                </button>
+              </div>
             </li>
           ))}
         </ul>
       </div>
-
-      {/* Modal de confirmación de eliminación */}
+      
+      {/* El modal se queda igual */}
       {showModalEliminar && canchaAEliminar && (
         <div className="modal-backdrop">
           <div className="modal">
