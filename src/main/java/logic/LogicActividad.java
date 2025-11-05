@@ -1,8 +1,11 @@
 package logic;
 
 import java.time.LocalDate;
+
+import java.util.Map;
 import data.*;
 import entities.*;
+import java.util.LinkedList;
 
 public class LogicActividad {
     private DataActividad dataActividad;
@@ -19,6 +22,11 @@ public class LogicActividad {
         validarActividad(act);
         dataActividad.add(act);
     }
+    
+    public LinkedList<Map<String, Object>> getActividadesConDetalles() throws Exception {
+        return dataActividad.getActividadesConDetalles();
+    }
+
 
     public void update(Actividad act) throws Exception {
         validarActividad(act);

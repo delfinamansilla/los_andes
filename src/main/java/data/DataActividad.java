@@ -1,6 +1,10 @@
 package data;
 
 import entities.Actividad;
+
+import java.util.Map;
+import java.util.HashMap;
+
 import java.sql.*;
 import java.util.LinkedList;
 
@@ -45,6 +49,72 @@ public class DataActividad {
 
         return actividades;
     }
+    
+    public LinkedList<Map<String, Object>> getActividadesConDetalles() {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        LinkedList<Map<String, Object>> actividades = new LinkedList<>();
+
+        try {
+            String sql = 
+                "SELECT " +
+                "    a.id as actividad_id, " +
+                "    a.nombre as actividad_nombre, " +
+                "    a.descripcion as actividad_descripcion, " +
+                "    a.cupo, " +
+                "    a.inscripcion_desde, " +
+                "    a.inscripcion_hasta, " +
+                "    u.nombre_completo as profesor_nombre, " +
+                "    c.descripcion as cancha_descripcion, " +
+                "    h.dia, " +
+                "    h.hora_desde, " +
+                "    h.hora_hasta " +
+                "FROM actividad a " +
+                "LEFT JOIN usuario u ON a.id_profesor = u.id " +
+                "LEFT JOIN cancha c ON a.id_cancha = c.id " +
+                "LEFT JOIN horario h ON h.id_actividad = a.id " +
+                "ORDER BY a.nombre";
+
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(sql);
+            rs = stmt.executeQuery();
+            
+            while (rs != null && rs.next()) {
+                Map<String, Object> actividad = new HashMap<>();
+                actividad.put("id", rs.getInt("actividad_id"));
+                actividad.put("nombre", rs.getString("actividad_nombre"));
+                actividad.put("descripcion", rs.getString("actividad_descripcion"));
+                actividad.put("cupo", rs.getInt("cupo"));
+                actividad.put("inscripcion_desde", rs.getDate("inscripcion_desde").toLocalDate().toString());
+                actividad.put("inscripcion_hasta", rs.getDate("inscripcion_hasta").toLocalDate().toString());
+                actividad.put("profesor_nombre", rs.getString("profesor_nombre"));
+                actividad.put("cancha_descripcion", rs.getString("cancha_descripcion"));
+                actividad.put("dia", rs.getString("dia"));
+                
+                Time horaDesde = rs.getTime("hora_desde");
+                Time horaHasta = rs.getTime("hora_hasta");
+                actividad.put("hora_desde", horaDesde != null ? horaDesde.toLocalTime().toString() : null);
+                actividad.put("hora_hasta", horaHasta != null ? horaHasta.toLocalTime().toString() : null);
+                
+                actividades.add(actividad);
+            }
+
+        }catch (SQLException e) {
+            System.err.println("Error al obtener actividades con detalles: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return actividades;
+    }
+
+
 
     public Actividad getOne(int id) {
         Actividad a = null;

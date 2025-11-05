@@ -12,9 +12,9 @@ public class Usuario {
     private String contrasenia;
     private boolean estado;
     private String rol;
-    private Integer nro_socio; // puede ser nulo
 
-    // Constructor sin ID (para nuevos usuarios)
+
+
     public Usuario(String nombre_completo, String dni, String telefono, String mail,
                    LocalDate fecha_nacimiento, String contrasenia, boolean estado, String rol) {
         this.nombre_completo = nombre_completo;
@@ -30,7 +30,7 @@ public class Usuario {
     public Usuario() {
 	}
 
-    // Constructor con ID (para usuarios ya cargados en la BD)
+
     public Usuario(int id, String nombre_completo, String dni, String telefono, String mail,
                    LocalDate fecha_nacimiento, String contrasenia, boolean estado, String rol) {
         this.id = id;

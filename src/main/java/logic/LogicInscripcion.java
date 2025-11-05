@@ -1,9 +1,12 @@
 package logic;
 
 import java.time.LocalDate;
+
+import java.util.LinkedList;
 import java.util.List;
 import data.*;
 import entities.*;
+import java.util.Map;
 
 public class LogicInscripcion {
     private DataInscripcion dataInscripcion;
@@ -25,6 +28,15 @@ public class LogicInscripcion {
         validarInscripcion(insc);
         dataInscripcion.update(insc);
     }
+    
+    public LinkedList<Inscripcion> getByUsuario(int id_usuario) throws Exception {
+        return dataInscripcion.getByUsuario(id_usuario);
+    }
+
+    public LinkedList<Map<String, Object>> getInscripcionesConDetalles(int idUsuario) throws Exception {
+        return dataInscripcion.getInscripcionesConDetalles(idUsuario);
+    }
+
 
     public Inscripcion getOne(int id) throws Exception {
         return dataInscripcion.getOne(id);

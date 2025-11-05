@@ -14,6 +14,9 @@ import ListadoProfesor from './pages/ListadoProfesor';
 import ModificarProfesor from './pages/ModificarProfesor';
 import ListaActividades from './pages/ListaActividades';
 import AgregarActividad from './pages/AgregarActividad';
+import MisActividades from './pages/MisActividades';
+import InscripcionActividad from './pages/InscripcionActividad';
+
 function App() {
   return (
     <Router>
@@ -34,6 +37,8 @@ function App() {
 		<Route path="/actividades" element={<ListaActividades />} />
 		<Route path="/actividades/nueva" element={<AgregarActividad />} />
 		<Route path="/modificar-usuario" element={<MiCuenta />} />
+		<Route path="/mis-actividades" element={<MisActividades />} />
+		<Route path="/inscripcion-actividad" element={<InscripcionActividad />} />
 		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>

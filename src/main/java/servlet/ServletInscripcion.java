@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+
 import java.time.LocalDate;
 import java.util.LinkedList;
 
@@ -11,6 +12,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.util.Map;
 
 /**
  * Servlet para gestionar las operaciones CRUD de Inscripcion.
@@ -20,32 +24,46 @@ import jakarta.servlet.http.HttpServletResponse;
 public class ServletInscripcion extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private LogicInscripcion logicInscripcion;
+    private Gson gson;
 
     public ServletInscripcion() {
         super();
         logicInscripcion = new LogicInscripcion();
+        
+        // ✅ Registrá el adaptador para LocalDate
+        gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class,
+                        (com.google.gson.JsonSerializer<LocalDate>) (src, typeOfSrc, context) ->
+                                new com.google.gson.JsonPrimitive(src.toString()))
+                .registerTypeAdapter(LocalDate.class,
+                        (com.google.gson.JsonDeserializer<LocalDate>) (json, typeOfT, context) ->
+                                LocalDate.parse(json.getAsString()))
+                .create();
     }
-
-    // -------------------------------------------------
-    // MÉTODO GET → listar, buscar o eliminar inscripciones
-    // -------------------------------------------------
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        System.out.println("entro al doget");
+        
         String action = request.getParameter("action");
-
+        response.setContentType("application/json;charset=UTF-8");
+        
         try {
             if (action == null) {
-                response.getWriter().append("Debe especificar una acción (listar, buscar, eliminar).");
+                response.getWriter().write("{\"error\":\"Debe especificar una acción (listar, buscar, eliminar).\"}");
                 return;
             }
+            
+            // ✅ Limpiá espacios y convertí a minúsculas
+            action = action.trim().toLowerCase();
+            
+            System.out.println("🔹 Acción procesada: '" + action + "'");
 
-            switch (action.toLowerCase()) {
+            switch (action) {
+            
                 case "listar": {
                     LinkedList<Inscripcion> inscripciones = new LinkedList<>(logicInscripcion.getAll());
-                    request.setAttribute("listaInscripciones", inscripciones);
-                    request.getRequestDispatcher("WEB-INF/listaInscripciones.jsp").forward(request, response);
+                    response.getWriter().write(gson.toJson(inscripciones));
                     break;
                 }
 
@@ -53,30 +71,56 @@ public class ServletInscripcion extends HttpServlet {
                     int id = Integer.parseInt(request.getParameter("id"));
                     Inscripcion i = logicInscripcion.getOne(id);
                     if (i != null) {
-                        request.setAttribute("inscripcion", i);
-                        request.getRequestDispatcher("WEB-INF/detalleInscripcion.jsp").forward(request, response);
+                        response.getWriter().write(gson.toJson(i));
                     } else {
-                        request.setAttribute("error", "No se encontró la inscripción con ID " + id);
-                        request.getRequestDispatcher("error.jsp").forward(request, response);
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        response.getWriter().write("{\"error\":\"No se encontró la inscripción con ID " + id + "\"}");
                     }
+                    break;
+                }
+                
+                case "porusuario": {
+                    System.out.println("✅ Entró al case porusuario");
+
+                    String idParam = request.getParameter("id_usuario");
+                    System.out.println("🔹 Parámetro id_usuario recibido: " + idParam);
+
+                    if (idParam == null || idParam.isEmpty()) {
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        response.getWriter().write("{\"error\":\"Falta el parámetro id_usuario\"}");
+                        return;
+                    }
+
+                    int idUsuario = Integer.parseInt(idParam);
+                    System.out.println("🔹 Buscando inscripciones para usuario: " + idUsuario);
+
+                    // ✅ Usá el nuevo método que trae los detalles
+                    LinkedList<Map<String, Object>> inscripciones = logicInscripcion.getInscripcionesConDetalles(idUsuario);
+                    System.out.println("🔹 Inscripciones encontradas: " + inscripciones.size());
+
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+
+                    gson.toJson(inscripciones, response.getWriter());
                     break;
                 }
 
                 case "eliminar": {
                     int id = Integer.parseInt(request.getParameter("id"));
                     logicInscripcion.delete(id);
-                    response.sendRedirect("inscripcion?action=listar");
+                    response.getWriter().write("{\"mensaje\":\"Inscripción eliminada correctamente\"}");
                     break;
                 }
 
                 default:
-                    response.getWriter().append("Acción GET no reconocida: ").append(action);
+                    System.out.println("❌ Acción no reconocida: '" + action + "'");
+                    response.getWriter().write("{\"error\":\"Acción GET no reconocida: " + action + "\"}");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "Error al procesar GET: " + e.getMessage());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\":\"Error al procesar GET: " + e.getMessage() + "\"}");
         }
     }
 
@@ -87,13 +131,15 @@ public class ServletInscripcion extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String action = request.getParameter("action");
+    	String action = request.getParameter("action");
+        response.setContentType("application/json;charset=UTF-8");
 
         try {
-            if (action == null) {
-                response.getWriter().append("Debe especificar una acción en el parámetro 'action'.");
+        	if (action == null) {
+                response.getWriter().write("{\"error\":\"Debe especificar una acción en el parámetro 'action'.\"}");
                 return;
             }
+
 
             switch (action.toLowerCase()) {
                 case "crear": {
@@ -103,8 +149,7 @@ public class ServletInscripcion extends HttpServlet {
                     nueva.setIdActividad(Integer.parseInt(request.getParameter("id_actividad")));
 
                     logicInscripcion.add(nueva);
-                    request.setAttribute("mensaje", "Inscripción creada correctamente.");
-                    request.getRequestDispatcher("WEB-INF/listaInscripciones.jsp").forward(request, response);
+                    response.getWriter().write("{\"mensaje\":\"Inscripción creada correctamente\"}");
                     break;
                 }
 
@@ -116,19 +161,18 @@ public class ServletInscripcion extends HttpServlet {
                     i.setIdActividad(Integer.parseInt(request.getParameter("id_actividad")));
 
                     logicInscripcion.update(i);
-                    response.sendRedirect("inscripcion?action=listar");
+                    response.getWriter().write("{\"mensaje\":\"Inscripción actualizada correctamente\"}");
                     break;
                 }
 
                 default:
-                    response.getWriter().append("Acción POST no reconocida: ").append(action);
+                	response.getWriter().write("{\"error\":\"Acción POST no reconocida: " + action + "\"}");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "Error al procesar POST: " + e.getMessage());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\":\"Error al procesar POST: " + e.getMessage() + "\"}");
         }
     }
 }
-

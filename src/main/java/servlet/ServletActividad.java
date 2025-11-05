@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import entities.Actividad;
 import logic.LogicActividad;
+import java.util.Map;
 
 /**
  * Servlet para gestionar las operaciones CRUD de Actividad.
@@ -25,14 +26,20 @@ public class ServletActividad extends HttpServlet {
         logicActividad = new LogicActividad();
     }
 
-    // -------------------------------------
-    // MÉTODOS GET → Listar, Buscar, Eliminar
-    // -------------------------------------
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
+        String format = request.getParameter("format");
+        
+        com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
+                .registerTypeAdapter(java.time.LocalDate.class,
+                        (com.google.gson.JsonSerializer<java.time.LocalDate>)
+                        (src, typeOfSrc, context) -> new com.google.gson.JsonPrimitive(src.toString()))
+                .setPrettyPrinting()
+                .create();
 
         try {
             if (action == null) {
@@ -43,20 +50,43 @@ public class ServletActividad extends HttpServlet {
             switch (action.toLowerCase()) {
                 case "listar": {
                     LinkedList<Actividad> actividades = new LinkedList<>(logicActividad.getAll());
-                    request.setAttribute("listaActividades", actividades);
-                    request.getRequestDispatcher("WEB-INF/listaActividades.jsp").forward(request, response);
+                    if ("json".equalsIgnoreCase(format)) {
+                        response.setContentType("application/json;charset=UTF-8");
+                        response.getWriter().write(gson.toJson(actividades));
+                    } else {
+                       
+                        request.setAttribute("listaActividades", actividades);
+                        request.getRequestDispatcher("WEB-INF/listaActividades.jsp").forward(request, response);
+                    }
+                    break;
+                }
+                
+                case "listarcondetalles": {
+                    LinkedList<Map<String, Object>> actividades = logicActividad.getActividadesConDetalles();
+                    response.setContentType("application/json;charset=UTF-8");
+                    response.getWriter().write(gson.toJson(actividades));
                     break;
                 }
 
                 case "buscar": {
                     int id = Integer.parseInt(request.getParameter("id"));
                     Actividad a = logicActividad.getOne(id);
-                    if (a != null) {
-                        request.setAttribute("actividad", a);
-                        request.getRequestDispatcher("WEB-INF/detalleActividad.jsp").forward(request, response);
+                    if ("json".equalsIgnoreCase(format)) {
+                        response.setContentType("application/json;charset=UTF-8");
+                        if (a != null) {
+                            response.getWriter().write(gson.toJson(a));
+                        } else {
+                            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                            response.getWriter().write("{\"error\":\"Actividad no encontrada\"}");
+                        }
                     } else {
-                        request.setAttribute("error", "No se encontró la actividad con ID " + id);
-                        request.getRequestDispatcher("error.jsp").forward(request, response);
+                        if (a != null) {
+                            request.setAttribute("actividad", a);
+                            request.getRequestDispatcher("WEB-INF/detalleActividad.jsp").forward(request, response);
+                        } else {
+                            request.setAttribute("error", "No se encontró la actividad con ID " + id);
+                            request.getRequestDispatcher("error.jsp").forward(request, response);
+                        }
                     }
                     break;
                 }
@@ -64,7 +94,12 @@ public class ServletActividad extends HttpServlet {
                 case "eliminar": {
                     int id = Integer.parseInt(request.getParameter("id"));
                     logicActividad.delete(id);
-                    response.sendRedirect("actividad?action=listar");
+                    if ("json".equalsIgnoreCase(format)) {
+                        response.setContentType("application/json;charset=UTF-8");
+                        response.getWriter().write("{\"status\":\"ok\",\"message\":\"Actividad eliminada correctamente\"}");
+                    } else {
+                        response.sendRedirect("actividad?action=listar");
+                    }
                     break;
                 }
 
@@ -74,8 +109,14 @@ public class ServletActividad extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "Error al procesar: " + e.getMessage());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            if ("json".equalsIgnoreCase(format)) {
+                response.setContentType("application/json;charset=UTF-8");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("{\"error\":\"Error al procesar: " + e.getMessage() + "\"}");
+            } else {
+                request.setAttribute("error", "Error al procesar: " + e.getMessage());
+                request.getRequestDispatcher("error.jsp").forward(request, response);
+            }
         }
     }
 
@@ -87,6 +128,8 @@ public class ServletActividad extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
+        String format = request.getParameter("format");
+        com.google.gson.Gson gson = new com.google.gson.GsonBuilder().create();
 
         try {
             if (action == null) {
@@ -106,8 +149,13 @@ public class ServletActividad extends HttpServlet {
                     nueva.setIdCancha(Integer.parseInt(request.getParameter("id_cancha")));
 
                     logicActividad.add(nueva);
-                    request.setAttribute("mensaje", "Actividad creada correctamente.");
-                    request.getRequestDispatcher("WEB-INF/listaActividades.jsp").forward(request, response);
+                    if ("json".equalsIgnoreCase(format)) {
+                        response.setContentType("application/json;charset=UTF-8");
+                        response.getWriter().write("{\"status\":\"ok\",\"message\":\"Actividad creada correctamente\"}");
+                    } else {
+                        request.setAttribute("mensaje", "Actividad creada correctamente.");
+                        request.getRequestDispatcher("WEB-INF/listaActividades.jsp").forward(request, response);
+                    }
                     break;
                 }
 
@@ -123,7 +171,12 @@ public class ServletActividad extends HttpServlet {
                     a.setIdCancha(Integer.parseInt(request.getParameter("id_cancha")));
 
                     logicActividad.update(a);
-                    response.sendRedirect("actividad?action=listar");
+                    if ("json".equalsIgnoreCase(format)) {
+                        response.setContentType("application/json;charset=UTF-8");
+                        response.getWriter().write("{\"status\":\"ok\",\"message\":\"Actividad actualizada correctamente\"}");
+                    } else {
+                        response.sendRedirect("actividad?action=listar");
+                    }
                     break;
                 }
 
@@ -133,8 +186,14 @@ public class ServletActividad extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "Error al procesar la actividad: " + e.getMessage());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            if ("json".equalsIgnoreCase(format)) {
+                response.setContentType("application/json;charset=UTF-8");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("{\"error\":\"Error al procesar la actividad: " + e.getMessage() + "\"}");
+            } else {
+                request.setAttribute("error", "Error al procesar la actividad: " + e.getMessage());
+                request.getRequestDispatcher("error.jsp").forward(request, response);
+            }
         }
     }
 }

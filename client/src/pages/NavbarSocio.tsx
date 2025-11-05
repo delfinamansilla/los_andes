@@ -63,7 +63,7 @@ const NavbarSocio: React.FC = () => {
             Actividades
             {activeMenu === 'actividades' && (
               <ul className="dropdown">
-                <li><button onClick={() => navigate('/actividades')}>Ver todas</button></li>
+                <li><button onClick={() => navigate('/inscripcion-actividad')}>Ver todas</button></li>
                 <li><button onClick={() => navigate('/actividades/mis-actividades')}>Ver mis actividades</button></li>
               </ul>
             )}

@@ -1,6 +1,10 @@
 package data;
 
 import entities.Inscripcion;
+
+import java.util.Map;
+import java.util.HashMap;
+import java.sql.Time;
 import java.sql.*;
 import java.util.LinkedList;
 
@@ -42,6 +46,109 @@ public class DataInscripcion {
         return inscripciones;
     }
 
+    public LinkedList<Inscripcion> getByUsuario(int id_usuario) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        LinkedList<Inscripcion> inscripciones = new LinkedList<>();
+
+        try {
+            stmt = DbConnector.getInstancia().getConn()
+                    .prepareStatement("SELECT * FROM inscripcion WHERE id_usuario = ?");
+            stmt.setInt(1, id_usuario);
+            rs = stmt.executeQuery();
+
+            if (rs != null) {
+                while (rs.next()) {
+                    Inscripcion i = new Inscripcion();
+                    i.setIdInscripcion(rs.getInt("id"));
+                    i.setFechaInscripcion(rs.getDate("fecha_inscripcion").toLocalDate());
+                    i.setIdUsuario(rs.getInt("id_usuario"));
+                    i.setIdActividad(rs.getInt("id_actividad"));
+
+                    inscripciones.add(i);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return inscripciones;
+    }
+
+    public LinkedList<Map<String, Object>> getInscripcionesConDetalles(int idUsuario) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        LinkedList<Map<String, Object>> inscripciones = new LinkedList<>();
+
+        try {
+            String sql = 
+                "SELECT " +
+                "    i.id as inscripcion_id, " +
+                "    i.fecha_inscripcion, " +
+                "    a.id as actividad_id, " +
+                "    a.nombre as actividad_nombre, " +
+                "    a.descripcion as actividad_descripcion, " +
+                "    u.nombre_completo as profesor_nombre, " +
+                "    c.descripcion as cancha_descripcion, " +
+                "    h.dia, " +
+                "    h.hora_desde, " +
+                "    h.hora_hasta " +
+                "FROM inscripcion i " +
+                "INNER JOIN actividad a ON i.id_actividad = a.id " +
+                "LEFT JOIN usuario u ON a.id_profesor = u.id " +
+                "LEFT JOIN cancha c ON a.id_cancha = c.id " +
+                "LEFT JOIN horario h ON h.id_actividad = a.id " +  
+                "WHERE i.id_usuario = ? " +
+                "ORDER BY i.fecha_inscripcion DESC";
+
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(sql);
+            stmt.setInt(1, idUsuario);
+            rs = stmt.executeQuery();
+
+            while (rs != null && rs.next()) {
+                Map<String, Object> inscripcion = new HashMap<>();
+                inscripcion.put("inscripcion_id", rs.getInt("inscripcion_id"));
+                inscripcion.put("fecha_inscripcion", rs.getDate("fecha_inscripcion").toLocalDate().toString());
+                inscripcion.put("actividad_id", rs.getInt("actividad_id"));
+                inscripcion.put("actividad_nombre", rs.getString("actividad_nombre"));
+                inscripcion.put("actividad_descripcion", rs.getString("actividad_descripcion"));
+                inscripcion.put("profesor_nombre", rs.getString("profesor_nombre"));
+                inscripcion.put("cancha_descripcion", rs.getString("cancha_descripcion")); // ✅ Cambié nombre
+                inscripcion.put("dia", rs.getString("dia"));
+                
+                Time horaDesde = rs.getTime("hora_desde");
+                Time horaHasta = rs.getTime("hora_hasta");
+                inscripcion.put("hora_desde", horaDesde != null ? horaDesde.toLocalTime().toString() : null);
+                inscripcion.put("hora_hasta", horaHasta != null ? horaHasta.toLocalTime().toString() : null);
+                
+                inscripciones.add(inscripcion);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener inscripciones con detalles: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return inscripciones;
+    }
+    
     public Inscripcion getOne(int id) {
         Inscripcion i = null;
         PreparedStatement stmt = null;
@@ -197,4 +304,3 @@ public class DataInscripcion {
     }
 
 }
-

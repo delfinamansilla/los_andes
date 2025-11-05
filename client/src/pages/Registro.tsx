@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavbarAdmin from '../pages/NavbarAdmin';
 import '../styles/Registro.css';
 
 const Registro: React.FC = () => {
@@ -77,7 +76,7 @@ const Registro: React.FC = () => {
     // 1. Añadimos el contenedor principal de la página
 	
     <div className="registro-page">
-	<NavbarAdmin />
+
       {/* 2. Añadimos el contenedor que centra el contenido */}
       <div className="content-area">
         {/* El .form-container ahora es el recuadro cremita */}
