@@ -50,42 +50,57 @@ public class DataActividad {
         return actividades;
     }
     
-    public LinkedList<Map<String, Object>> getActividadesConDetalles() {
+    public LinkedList<Map<String, Object>> getActividadesConDetalles(int idUsuario) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         LinkedList<Map<String, Object>> actividades = new LinkedList<>();
 
-        try {
-            String sql = 
-                "SELECT " +
-                "    a.id as actividad_id, " +
-                "    a.nombre as actividad_nombre, " +
-                "    a.descripcion as actividad_descripcion, " +
-                "    a.cupo, " +
-                "    a.inscripcion_desde, " +
-                "    a.inscripcion_hasta, " +
-                "    u.nombre_completo as profesor_nombre, " +
-                "    c.descripcion as cancha_descripcion, " +
-                "    h.dia, " +
-                "    h.hora_desde, " +
-                "    h.hora_hasta " +
-                "FROM actividad a " +
-                "LEFT JOIN usuario u ON a.id_profesor = u.id " +
-                "LEFT JOIN cancha c ON a.id_cancha = c.id " +
-                "LEFT JOIN horario h ON h.id_actividad = a.id " +
-                "ORDER BY a.nombre";
+        // --- SQL CORREGIDO Y MÁS LEGIBLE ---
+        String sql = 
+            "SELECT " +
+            "    a.*, " + // a.* trae todas las columnas de la tabla actividad
+            "    p.nombre_completo as profesor_nombre, " +
+            "    c.descripcion as cancha_descripcion, " +
+            "    h.dia, " +
+            "    h.hora_desde, " +
+            "    h.hora_hasta, " +
+            "    (a.cupo - (SELECT COUNT(*) FROM inscripcion WHERE id_actividad = a.id)) as cupo_restante, " +
+            "    EXISTS ( " +
+            "        SELECT 1 " +
+            "        FROM inscripcion " +
+            "        WHERE id_actividad = a.id AND id_usuario = ? " +
+            "    ) as ya_inscripto " + // ¡OJO! Faltaba un espacio aquí
+            "FROM " +
+            "    actividad a " +
+            "LEFT JOIN " +
+            "    profesor p ON a.id_profesor = p.id " +
+            "LEFT JOIN " +
+            "    cancha c ON a.id_cancha = c.id " +
+            "LEFT JOIN " +
+            "    horario h ON a.id = h.id_actividad";
 
+        try {
             stmt = DbConnector.getInstancia().getConn().prepareStatement(sql);
+            
+            // --- 1. ERROR CRÍTICO CORREGIDO: Faltaba pasar el parámetro ---
+            // Le decimos a la consulta qué valor debe reemplazar en el '?'
+            stmt.setInt(1, idUsuario); 
+            
             rs = stmt.executeQuery();
             
             while (rs != null && rs.next()) {
                 Map<String, Object> actividad = new HashMap<>();
-                actividad.put("id", rs.getInt("actividad_id"));
-                actividad.put("nombre", rs.getString("actividad_nombre"));
-                actividad.put("descripcion", rs.getString("actividad_descripcion"));
+                
+                // --- 2. MAPEADO CORREGIDO Y COMPLETO ---
+                // Usamos los nombres de columna directamente de la tabla 'actividad' (gracias a 'a.*')
+                actividad.put("id", rs.getInt("id")); 
+                actividad.put("nombre", rs.getString("nombre"));
+                actividad.put("descripcion", rs.getString("descripcion"));
                 actividad.put("cupo", rs.getInt("cupo"));
                 actividad.put("inscripcion_desde", rs.getDate("inscripcion_desde").toLocalDate().toString());
                 actividad.put("inscripcion_hasta", rs.getDate("inscripcion_hasta").toLocalDate().toString());
+                
+                // Campos de las tablas unidas (JOINs)
                 actividad.put("profesor_nombre", rs.getString("profesor_nombre"));
                 actividad.put("cancha_descripcion", rs.getString("cancha_descripcion"));
                 actividad.put("dia", rs.getString("dia"));
@@ -95,10 +110,14 @@ public class DataActividad {
                 actividad.put("hora_desde", horaDesde != null ? horaDesde.toLocalTime().toString() : null);
                 actividad.put("hora_hasta", horaHasta != null ? horaHasta.toLocalTime().toString() : null);
                 
+                // --- 3. AÑADIMOS LOS NUEVOS CAMPOS CALCULADOS ---
+                actividad.put("cupo_restante", rs.getInt("cupo_restante"));
+                actividad.put("yaInscripto", rs.getBoolean("ya_inscripto"));
+                
                 actividades.add(actividad);
             }
 
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.println("Error al obtener actividades con detalles: " + e.getMessage());
             e.printStackTrace();
         } finally {

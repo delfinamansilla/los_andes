@@ -1,0 +1,145 @@
+/* --- MisActividades.css --- */
+
+/* 1. Contenedor principal de la página */
+.mis-actividades-page {
+  background-color: #20321E; /* Fondo verde oscuro, como en el login */
+  color: #DDD8CA; /* Texto color crema por defecto */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh; /* Asegura que el fondo cubra toda la pantalla */
+  padding-bottom: 50px; /* Espacio extra al final */
+}
+
+/* 2. Contenedor del contenido (título y tabla) */
+.mis-actividades-content {
+  max-width: 1200px; /* Ancho máximo para la tabla */
+  margin: 0 auto; /* Centrar el contenido en la página */
+  padding: 40px 20px; /* Espaciado interno */
+}
+
+/* Título principal "Mis Actividades" */
+.mis-actividades-content h2 {
+  text-align: center;
+  font-size: 2.8rem;
+  color: #DDD8CA;
+  margin-bottom: 40px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* 3. Estilo de la tabla */
+.activities-table {
+  width: 100%;
+  border-collapse: collapse; /* Bordes limpios */
+  background-color: #DDD8CA; /* Fondo crema para la tabla */
+  color: #20321E; /* Texto verde oscuro */
+  border-radius: 10px; /* Esquinas redondeadas */
+  overflow: hidden; /* Necesario para que el border-radius afecte a los hijos */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Sombra como la del login */
+}
+
+/* Encabezado de la tabla */
+.activities-table thead tr {
+  background-color: #20321E; /* Fondo verde oscuro */
+  color: #DDD8CA; /* Texto crema */
+  text-align: left;
+}
+
+.activities-table th {
+  padding: 18px 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Cuerpo de la tabla */
+.activities-table tbody td {
+  padding: 15px 20px;
+  border-top: 1px solid #c9c4b5; /* Línea separadora sutil */
+  vertical-align: middle; /* Alineación vertical */
+}
+
+/* Efecto hover en las filas */
+.activities-table tbody tr:hover {
+  background-color: #d1ccbc; /* Un tono de crema ligeramente más oscuro */
+}
+
+.btn-eliminar {
+  background-color: #466245; /* Verde secundario (más suave) */
+  color: #DDD8CA; /* Texto color crema */
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.btn-eliminar:hover {
+  background-color: #20321E; /* Verde principal (más oscuro) al pasar el mouse */
+  transform: translateY(-2px); /* Un pequeño efecto de elevación */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 5. Mensajes de estado (Cargando, Error, Sin Actividades) */
+.status-message {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 80px 20px;
+  color: #DDD8CA;
+}
+
+.status-message.error {
+  color: #ff8a80; /* Un rojo claro que resalta en el fondo oscuro */
+  font-weight: bold;
+}
+
+/* 6. Estilos para pantallas pequeñas (Responsividad) */
+@media (max-width: 768px) {
+  .mis-actividades-content {
+    padding: 20px 10px;
+  }
+
+  .mis-actividades-content h2 {
+    font-size: 2rem;
+  }
+
+  /* Transformamos la tabla para que sea legible en móviles */
+  .activities-table thead {
+    display: none; /* Ocultamos el encabezado original */
+  }
+
+  .activities-table, .activities-table tbody, .activities-table tr, .activities-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .activities-table tr {
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #466245;
+  }
+  
+  .activities-table td {
+    text-align: right; /* Alineamos el valor a la derecha */
+    padding-left: 50%; /* Dejamos espacio para el "título" */
+    position: relative;
+    border-top: none;
+    border-bottom: 1px solid #c9c4b5;
+  }
+  
+  .activities-table td:last-child {
+    border-bottom: none;
+  }
+
+  /* Usamos un pseudo-elemento para mostrar el título de la columna */
+  .activities-table td::before {
+    content: attr(data-label); /* Usaremos un atributo 'data-label' que añadiremos en el TSX */
+    position: absolute;
+    left: 15px;
+    width: 45%;
+    padding-right: 10px;
+    text-align: left;
+    font-weight: bold;
+    color: #20321E;
+  }
+}

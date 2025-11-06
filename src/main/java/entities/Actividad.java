@@ -11,6 +11,8 @@ public class Actividad {
     private LocalDate inscripcion_hasta;
     private int id_profesor;
     private int id_cancha;
+    private int cupo_restante;
+    private boolean yaInscripto;
 
   
     public Actividad(String nombre, int cupo, String descripcion, LocalDate inscripcion_desde,
@@ -105,5 +107,21 @@ public class Actividad {
 
     public void setIdCancha(int id_cancha) {
         this.id_cancha = id_cancha;
+    }
+    
+    public int getCupo_restante() {
+        return cupo_restante;
+    }
+
+    public void setCupo_restante(int cupo_restante) {
+        this.cupo_restante = cupo_restante;
+    }
+
+    public boolean isYaInscripto() {
+        return yaInscripto;
+    }
+
+    public void setYaInscripto(boolean yaInscripto) {
+        this.yaInscripto = yaInscripto;
     }
 }

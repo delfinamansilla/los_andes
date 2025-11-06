@@ -1,0 +1,165 @@
+/* --- InscripcionActividad.css --- */
+
+/* 1. Contenedor principal de la página (El "lienzo") */
+.inscripcion-page {
+  background-color: #20321E;
+  color: #DDD8CA;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  padding-bottom: 50px;
+}
+
+/* 2. Contenedor del contenido (El "cuadro") */
+.inscripcion-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Título "Actividades Disponibles" */
+.inscripcion-content h2 {
+  text-align: center;
+  font-size: 2.8rem;
+  color: #DDD8CA;
+  margin-bottom: 40px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* 3. Estilo de la tabla de actividades */
+/* Reutilizamos el mismo estilo de la tabla anterior para consistencia */
+.inscripcion-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #DDD8CA;
+  color: #20321E;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.inscripcion-table thead tr {
+  background-color: #20321E;
+  color: #DDD8CA;
+  text-align: left;
+}
+
+.inscripcion-table th {
+  padding: 18px 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.inscripcion-table tbody td {
+  padding: 15px 20px;
+  border-top: 1px solid #c9c4b5;
+  vertical-align: middle;
+}
+
+.inscripcion-table tbody tr:hover {
+  background-color: #d1ccbc;
+}
+
+/* 4. Botón de Inscribirse (Botón de acción principal) */
+.btn-inscribir {
+  background-color: #20321E; /* Verde principal */
+  color: #DDD8CA; /* Texto crema */
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.btn-inscribir:hover {
+  background-color: #466245; /* Verde secundario al pasar el mouse */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para cuando el cupo está lleno (opcional, pero muy útil) */
+.btn-inscribir:disabled {
+  background-color: #6c757d; /* Gris neutro */
+  color: #c9c4b5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 5. Mensajes de estado (Cargando, Error, etc.) */
+.status-message {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 80px 20px;
+  color: #DDD8CA;
+}
+
+.status-message.error {
+  color: #ff8a80;
+  font-weight: bold;
+}
+
+/* 6. Estilos para pantallas pequeñas (Responsividad) */
+@media (max-width: 768px) {
+  .inscripcion-content {
+    padding: 20px 10px;
+  }
+
+  .inscripcion-content h2 {
+    font-size: 2rem;
+  }
+
+  /* Adaptación de la tabla a formato de "tarjetas" */
+  .inscripcion-table thead {
+    display: none;
+  }
+
+  .inscripcion-table, .inscripcion-table tbody, .inscripcion-table tr, .inscripcion-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .inscripcion-table tr {
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #466245;
+  }
+  
+  .inscripcion-table td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+    border-top: none;
+    border-bottom: 1px solid #c9c4b5;
+  }
+  
+  .inscripcion-table td:last-child {
+    border-bottom: none;
+  }
+
+  .inscripcion-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 15px;
+    width: 45%;
+    padding-right: 10px;
+    text-align: left;
+    font-weight: bold;
+    color: #20321E;
+  }
+  
+  /* --- Añade esto al final de tu InscripcionActividad.css --- */
+}
+.btn-inscripto {
+  background-color: transparent; /* Fondo transparente */
+  color: #466245; /* Color del texto (verde secundario) */
+  border: 2px solid #466245; /* Borde del mismo color */
+  padding: 6px 16px; /* Ajustamos el padding para que no se vea flaco */
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: default; /* El cursor no cambia, indicando que no se puede hacer clic */
+  opacity: 0.8; /* Un poco de transparencia para que se vea "desactivado" */
+}

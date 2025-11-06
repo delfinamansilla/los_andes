@@ -43,7 +43,10 @@ public class ServletInscripcion extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("entro al doget");
+    	
+    	response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         
         String action = request.getParameter("action");
         response.setContentType("application/json;charset=UTF-8");

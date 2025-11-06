@@ -38,7 +38,7 @@ const Canchas = () => {
     <div>
       <NavbarSocio />
       <div className="contenido-socio">
-        <h2>Todas las Canchas</h2>
+        <h2>Todas las canchas</h2>
         {mensajeError && <p>{mensajeError}</p>}
         <ul>
           {canchas.map((c) => (

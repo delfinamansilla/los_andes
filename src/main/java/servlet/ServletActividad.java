@@ -62,9 +62,27 @@ public class ServletActividad extends HttpServlet {
                 }
                 
                 case "listarcondetalles": {
-                    LinkedList<Map<String, Object>> actividades = logicActividad.getActividadesConDetalles();
-                    response.setContentType("application/json;charset=UTF-8");
-                    response.getWriter().write(gson.toJson(actividades));
+                    String idUsuarioStr = request.getParameter("id_usuario");
+
+                    if (idUsuarioStr == null || idUsuarioStr.trim().isEmpty()) {
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        response.getWriter().write("{\"error\":\"Falta el parámetro id_usuario\"}");
+                        return; 
+                    }
+
+                    try {
+                        int idUsuario = Integer.parseInt(idUsuarioStr);
+                        
+                        LinkedList<Map<String, Object>> actividades = logicActividad.getActividadesConDetalles(idUsuario); // <-- ¡AQUÍ ESTÁ LA CORRECCIÓN!
+                        
+                        response.setContentType("application/json;charset=UTF-8");
+                        response.getWriter().write(gson.toJson(actividades));
+
+                    } catch (NumberFormatException e) {
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        response.getWriter().write("{\"error\":\"El parámetro id_usuario debe ser un número entero.\"}");
+                    }
+                    
                     break;
                 }
 

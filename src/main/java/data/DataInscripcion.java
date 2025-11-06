@@ -97,14 +97,14 @@ public class DataInscripcion {
                 "    a.id as actividad_id, " +
                 "    a.nombre as actividad_nombre, " +
                 "    a.descripcion as actividad_descripcion, " +
-                "    u.nombre_completo as profesor_nombre, " +
+                "    p.nombre_completo as profesor_nombre, " +
                 "    c.descripcion as cancha_descripcion, " +
                 "    h.dia, " +
                 "    h.hora_desde, " +
                 "    h.hora_hasta " +
                 "FROM inscripcion i " +
                 "INNER JOIN actividad a ON i.id_actividad = a.id " +
-                "LEFT JOIN usuario u ON a.id_profesor = u.id " +
+                "LEFT JOIN profesor p ON a.id_profesor = p.id " +
                 "LEFT JOIN cancha c ON a.id_cancha = c.id " +
                 "LEFT JOIN horario h ON h.id_actividad = a.id " +  
                 "WHERE i.id_usuario = ? " +
@@ -122,7 +122,7 @@ public class DataInscripcion {
                 inscripcion.put("actividad_nombre", rs.getString("actividad_nombre"));
                 inscripcion.put("actividad_descripcion", rs.getString("actividad_descripcion"));
                 inscripcion.put("profesor_nombre", rs.getString("profesor_nombre"));
-                inscripcion.put("cancha_descripcion", rs.getString("cancha_descripcion")); // ✅ Cambié nombre
+                inscripcion.put("cancha_descripcion", rs.getString("cancha_descripcion"));
                 inscripcion.put("dia", rs.getString("dia"));
                 
                 Time horaDesde = rs.getTime("hora_desde");

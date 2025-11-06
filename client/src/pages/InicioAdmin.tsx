@@ -1,22 +1,41 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import NavbarAdmin from './NavbarAdmin';
 import '../styles/InicioAdmin.css';
 
+interface Usuario {
+  nombre_completo: string;
+  }
+  
+
 const InicioAdmin: React.FC = () => {
-  return (
+	
+	const [nombreAdmin, setNombreAdmin] = useState<string>('Administrador');
+  
+	useEffect(() => {
+	    const rawUsuario = localStorage.getItem('usuario');
+	    
+	    if (rawUsuario) {
+	      const usuario: Usuario = JSON.parse(rawUsuario);
+	      
+	      setNombreAdmin(usuario.nombre_completo.split(' ')[0]);
+	    }
+	  }, []);
+	
+	return (
     <div className="admin-home-page">
       <NavbarAdmin />
       
       <div className="contenido-admin">
         {/* Bienvenida */}
         <div className="bienvenida-admin">
-          <h2>Bienvenido, Administrador 👋</h2>
-          <p>Panel de gestión del Club Deportivo Rosario</p>
+          <h2>Bienvenido, {nombreAdmin}</h2>
+          <p>Panel de gestión del club Los Andes Rosario</p>
         </div>
 
         {/* Guía Rápida */}
         <div className="seccion-admin">
-          <h3 className="titulo-seccion">💡 ¿Qué puedes hacer hoy?</h3>
+          <h3 className="titulo-seccion">¿Qué puedes hacer hoy?</h3>
           <div className="grid-guia">
             <div className="item-guia">
               <span className="numero-guia">1</span>
@@ -52,7 +71,7 @@ const InicioAdmin: React.FC = () => {
         <div className="grid-dos-columnas">
           {/* Recordatorios */}
           <div className="seccion-admin">
-            <h3 className="titulo-seccion">📌 Recordatorios de Gestión</h3>
+            <h3 className="titulo-seccion">Recordatorios de gestión</h3>
             <div className="lista-recordatorios">
               <div className="recordatorio-item">
                 <span className="icono-recordatorio">📅</span>
@@ -112,7 +131,7 @@ const InicioAdmin: React.FC = () => {
 
         {/* Estadísticas Visuales */}
         <div className="seccion-admin">
-          <h3 className="titulo-seccion">📊 Áreas de Gestión</h3>
+          <h3 className="titulo-seccion">📊 Áreas de gestión</h3>
           <div className="grid-estadisticas">
             <div className="stat-card">
               <div className="stat-icono">👥</div>
@@ -159,7 +178,7 @@ const InicioAdmin: React.FC = () => {
 
         {/* Footer */}
         <div className="footer-admin">
-          <p>Sistema de Gestión - Club Deportivo Rosario</p>
+          <p>Sistema de Gestión - Club Los Andes Rosario</p>
           <p className="footer-copy">© 2024 Todos los derechos reservados</p>
         </div>
       </div>

@@ -34,71 +34,71 @@ const NavbarSocio: React.FC = () => {
   const handleInicio = () => navigate('/inicio-socio');
 
   return (
-    <>
-      <nav className="navbar-socio">
-        <div className="navbar-left">
-          <button className="btn-usuario" onClick={() => navigate('/modificar-usuario')}>
-            {nombreUsuario}
-          </button>
+      <>
+        <nav className="navbar-socio">
+          <div className="navbar-left">
+            <button className="btn-usuario" onClick={() => navigate('/modificar-usuario')}>
+              <i className="fa-solid fa-user"></i> {nombreUsuario}
+            </button>
 
-          <button className="btn-usuario" style={{ marginLeft: '10px' }} onClick={handleInicio}>
-            Inicio
-          </button>
+            <button className="btn-usuario" style={{ marginLeft: '10px' }} onClick={handleInicio}>
+              <i className="fa-solid fa-house-user"></i> Inicio
+            </button>
 
-		  <button
-		    className="btn-usuario"
-		    style={{ marginLeft: '10px' }}  // <-- QUITA el backgroundColor y borderColor
-		    onClick={() => setShowModal(true)}
-		  >
-		    Cerrar sesión
-		  </button>
-        </div>
+  		  <button
+  		    className="btn-usuario"
+  		    style={{ marginLeft: '10px' }}
+  		    onClick={() => setShowModal(true)}
+  		  >
+  		    <i className="fa-solid fa-lock"></i> Cerrar sesión
+  		  </button>
+          </div>
 
-        <ul className="navbar-menu">
-          <li
-            className="menu-item"
-            onMouseOver={() => handleMouseEnter('actividades')}
-            onMouseOut={handleMouseLeave}
-          >
-            Actividades
-            {activeMenu === 'actividades' && (
-              <ul className="dropdown">
-                <li><button onClick={() => navigate('/inscripcion-actividad')}>Ver todas</button></li>
-                <li><button onClick={() => navigate('/actividades/mis-actividades')}>Ver mis actividades</button></li>
-              </ul>
-            )}
-          </li>
+          <ul className="navbar-menu">
+            <li
+              className="menu-item"
+              onMouseOver={() => handleMouseEnter('actividades')}
+              onMouseOut={handleMouseLeave}
+            >
+              <i className="fa-solid fa-person-walking"></i> Actividades
+              {activeMenu === 'actividades' && (
+                <ul className="dropdown">
+                  <li><button onClick={() => navigate('/inscripcion-actividad')}>Ver todas</button></li>
+                  <li><button onClick={() => navigate('/mis-actividades')}>Ver mis actividades</button></li>
+                </ul>
+              )}
+            </li>
 
-          <li
-            className="menu-item"
-            onMouseOver={() => handleMouseEnter('canchas')}
-            onMouseOut={handleMouseLeave}
-          >
-            Canchas
-            {activeMenu === 'canchas' && (
-              <ul className="dropdown">
-                <li><button onClick={() => navigate('/canchas')}>Ver todas</button></li>
-              </ul>
-            )}
-          </li>
-        </ul>
-      </nav>
+            <li
+              className="menu-item"
+              onMouseOver={() => handleMouseEnter('canchas')}
+              onMouseOut={handleMouseLeave}
+            >
+              <i className="fa-solid fa-volleyball"></i> Canchas
+              {activeMenu === 'canchas' && (
+                <ul className="dropdown">
+                  <li><button onClick={() => navigate('/canchas')}>Ver todas</button></li>
+                </ul>
+              )}
+            </li>
+          </ul>
+        </nav>
 
-      {/* Modal de confirmación */}
-      {showModal && (
-        <div className="modal-backdrop">
-          <div className="modal">
-            <h3>¿Estás seguro que quieres cerrar sesión?</h3>
-            <div className="modal-buttons">
-              <button onClick={handleCerrarSesion} className="btn-confirm">Sí</button>
-              <button onClick={() => setShowModal(false)} className="btn-cancel">No</button>
+        {/* Modal de confirmación */}
+        {showModal && (
+          <div className="modal-backdrop">
+            <div className="modal">
+              <h3>¿Estás seguro que quieres cerrar sesión?</h3>
+              <div className="modal-buttons">
+                <button onClick={handleCerrarSesion} className="btn-confirm">Sí</button>
+                <button onClick={() => setShowModal(false)} className="btn-cancel">No</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </>
-  );
-};
+        )}
+      </>
+    );
+  };
 
 export default NavbarSocio;
 

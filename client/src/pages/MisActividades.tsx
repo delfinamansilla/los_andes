@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NavbarSocio from './NavbarSocio';
+import '../styles/MisActividades.css'
 
 interface Inscripcion {
   inscripcion_id: number;
@@ -29,13 +30,13 @@ const MisActividades: React.FC = () => {
       return;
     }
 
-    const url = 'http://localhost:8080/club/inscripcion?action=porusuario&id_usuario=${usuario.id}';
+    const url = `http://localhost:8080/club/inscripcion?action=porusuario&id_usuario=${usuario.id}`;
 
     try {
       const res = await fetch(url);
 
       if (!res.ok) {
-        throw new Error('Error del servidor: ${res.status}');
+        throw new Error(`Error del servidor: ${res.status}`);
       }
 
       const data: Inscripcion[] = await res.json();
@@ -49,18 +50,18 @@ const MisActividades: React.FC = () => {
   };
 
   const handleEliminar = async (inscripcionId: number, actividadNombre: string) => {
-    if (!window.confirm('¿Estás seguro de que deseas eliminar la inscripción a "${actividadNombre}"?')) {
+    if (!window.confirm(`¿Estás seguro de que deseas eliminar la inscripción a "${actividadNombre}"?`)) {
       return;
     }
 
     try {
-      const url = 'http://localhost:8080/club/inscripcion?action=eliminar&id=${inscripcionId}';
+      const url = `http://localhost:8080/club/inscripcion?action=eliminar&id=${inscripcionId}`;
       const res = await fetch(url, {
         method: 'GET'
       });
 
       if (!res.ok) {
-        throw new Error('Error al eliminar: ${res.status}');
+        throw new Error(`Error al eliminar: ${res.status}`);
       }
 
       const result = await res.json();
@@ -78,61 +79,57 @@ const MisActividades: React.FC = () => {
     fetchInscripciones();
   }, []);
 
-  if (loading) return <p>Cargando actividades...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
-  if (inscripciones.length === 0) return <p>No hay actividades inscriptas.</p>;
+  if (loading) return <div className="mis-actividades"><p className="status-message">Cargando actividades...</p></div>;
+    if (error) return <div className="mis-actividades"><p className="status-message error">{error}</p></div>;
 
-  return (
-    <div className="mis-actividades">
-	<NavbarSocio />
-      <h2>Mis Actividades</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Actividad</th>
-            <th>Descripción</th>
-            <th>Profesor</th>
-            <th>Cancha</th>
-            <th>Horario</th>
-            <th>Fecha Inscripción</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {inscripciones.map((i) => (
-            <tr key={i.inscripcion_id}>
-              <td>{i.actividad_nombre}</td>
-              <td>{i.actividad_descripcion}</td>
-              <td>{i.profesor_nombre || 'Sin asignar'}</td>
-              <td>{i.cancha_descripcion || 'Sin asignar'}</td>
-              <td>
-                {i.dia && i.hora_desde && i.hora_hasta
-                  ? `${i.dia} ${i.hora_desde} - ${i.hora_hasta}`
-                  : 'Sin horario'}
-              </td>
-              <td>{i.fecha_inscripcion}</td>
-              <td>
-                <button
-                  onClick={() => handleEliminar(i.inscripcion_id, i.actividad_nombre)}
-                  style={{
-                    backgroundColor: '#dc3545',
-                    color: 'white',
-                    border: 'none',
-                    padding: '8px 16px',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    fontSize: '14px'
-                  }}
-                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#c82333'}
-                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#dc3545'}
-                >
-                  Eliminar
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+return (
+    <div className="mis-actividades-page">
+      <NavbarSocio />
+      <div className="mis-actividades-content">
+        <h2>Mis Actividades</h2>
+
+        {inscripciones.length === 0 ? (
+          <p className="status-message">No estás inscripto a ninguna actividad.</p>
+        ) : (
+          <table className="activities-table">
+            <thead>
+              <tr>
+                <th>Actividad</th>
+                <th>Descripción</th>
+                <th>Profesor</th>
+                <th>Cancha</th>
+                <th>Horario</th>
+                <th>Fecha Inscripción</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {inscripciones.map((i) => (
+                <tr key={i.inscripcion_id}>
+                  <td data-label="Actividad">{i.actividad_nombre}</td>
+                  <td data-label="Descripción">{i.actividad_descripcion}</td>
+                  <td data-label="Profesor">{i.profesor_nombre || 'Sin asignar'}</td>
+                  <td data-label="Cancha">{i.cancha_descripcion || 'Sin asignar'}</td>
+                  <td data-label="Horario">
+                    {i.dia && i.hora_desde && i.hora_hasta
+                      ? `${i.dia} ${i.hora_desde} - ${i.hora_hasta}`
+                      : 'Sin horario'}
+                  </td>
+                  <td data-label="Fecha Inscripción">{i.fecha_inscripcion}</td>
+                  <td data-label="Acciones">
+                    <button
+                      onClick={() => handleEliminar(i.inscripcion_id, i.actividad_nombre)}
+                      className="btn-eliminar" 
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 };

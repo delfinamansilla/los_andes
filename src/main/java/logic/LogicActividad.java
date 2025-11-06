@@ -23,8 +23,8 @@ public class LogicActividad {
         dataActividad.add(act);
     }
     
-    public LinkedList<Map<String, Object>> getActividadesConDetalles() throws Exception {
-        return dataActividad.getActividadesConDetalles();
+    public LinkedList<Map<String, Object>> getActividadesConDetalles(int idUsuario) throws Exception {
+        return dataActividad.getActividadesConDetalles(idUsuario);
     }
 
 
