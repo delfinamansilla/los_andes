@@ -48,8 +48,7 @@ const CrearCancha: React.FC = () => {
   return (
     <div className="pag-crear">
       <NavbarAdmin />
-      
-      {/* --- AÑADE ESTE CONTENEDOR --- */}
+
       <div className="contenido-crear">
         <div className="form-crear">
           <h1>Crear Nueva Cancha</h1>

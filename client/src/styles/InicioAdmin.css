@@ -1,6 +1,4 @@
-/* --- InicioAdmin.css (Centro de Ayuda Corregido) --- */
 
-/* 1. Contenedor principal de la página */
 .admin-home-page {
   display: flex;
   flex-direction: column;
@@ -9,7 +7,6 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* 2. Contenedor del contenido principal */
 .contenido-admin {
   width: 90%;
   max-width: 1600px;
@@ -22,7 +19,6 @@
   align-items: stretch;
 }
 
-/* 3. Bienvenida */
 .bienvenida-admin {
   text-align: center;
   margin-bottom: 3rem;
@@ -43,7 +39,6 @@
   color: #c9c4b5;
 }
 
-/* 4. Secciones generales */
 .seccion-admin {
   background: #DDD8CA;
   border-radius: 1rem;
@@ -64,7 +59,6 @@
   border-bottom: 2px solid #a69d85;
 }
 
-/* 5. Guía Rápida */
 .grid-guia {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -114,7 +108,6 @@
   line-height: 1.4;
 }
 
-/* 6. Grid de dos columnas */
 .grid-dos-columnas {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -122,7 +115,6 @@
   align-items: stretch;
 }
 
-/* Recordatorios */
 .lista-recordatorios {
   display: flex;
   flex-direction: column;
@@ -158,7 +150,6 @@
   margin: 0;
 }
 
-/* Información del Sistema */
 .info-sistema {
   display: flex;
   flex-direction: column;
@@ -213,19 +204,18 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  display: flex; /* Añadido para controlar el espaciado */
+  display: flex; 
   flex-direction: column;
-  gap: 0.75rem; /* Espacio entre los botones/links */
+  gap: 0.75rem;
 }
 
-/* --- CAMBIO FINAL AQUÍ --- */
 .ayuda-sistema a {
-  display: block; /* Hace que el link ocupe todo el ancho */
+  display: block;
   padding: 0.75rem 1rem;
-  background-color: #f0ede6; /* Fondo cremita claro */
+  background-color: #f0ede6; 
   border-radius: 0.5rem;
   
-  color: #20321E; /* Letras verde oscuro */
+  color: #20321E; 
   font-weight: 600;
 
   text-decoration: none;
@@ -234,13 +224,11 @@
 }
 
 .ayuda-sistema a:hover {
-  background-color: #e0dbd1; /* Un poco más oscuro al pasar el mouse */
-  transform: translateY(-2px); /* Pequeño efecto de elevación */
+  background-color: #e0dbd1;
+  transform: translateY(-2px); 
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-
-/* 7. Estadísticas */
 .grid-estadisticas {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -299,7 +287,6 @@
   margin: 0;
 }
 
-/* 8. Footer */
 .footer-admin {
   margin-top: 3rem;
   text-align: center;
@@ -319,7 +306,34 @@
   font-size: 0.85rem;
 }
 
-/* Responsive */
+.titulo-seccion i.fa-solid {
+  margin-right: 12px;
+  color: #20321E;
+}
+
+.recordatorio-item .icono-recordatorio {
+  font-size: 1.5rem;  
+  color: #20321E;  
+  margin-right: 15px;
+  width: 30px; 
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.stat-card .stat-icono {
+  font-size: 2.5rem;   
+  color: #20321E;  
+  margin-bottom: 15px;
+
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e9e6dd;
+  border-radius: 50%;
+}
+
 @media (max-width: 768px) {
   .contenido-admin {
     padding: 1rem;

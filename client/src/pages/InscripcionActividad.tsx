@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import NavbarSocio from './NavbarSocio';
-import '../styles/InscripcionActividad.css'
+import Modal from './Modal';
+import '../styles/InscripcionActividad.css';
 
 interface Actividad {
   id: number;
@@ -25,25 +26,24 @@ const InscripcionActividad: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchActividades = async () => {
-	
-	const rawUsuario = localStorage.getItem('usuario');
-	const usuario = JSON.parse(rawUsuario || '{}');
-	
-	if (!usuario.id) {
-	      setError('Debes iniciar sesión para ver las actividades.');
-	      setLoading(false);
-	      return;
-	    }
-    const url = `http://localhost:8080/club/actividad?action=listarcondetalles&format=json&id_usuario=${usuario.id}`;
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [actividadAInscribir, setActividadAInscribir] = useState<Actividad | null>(null);
 
+  const [showInfoModal, setShowInfoModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+
+  const fetchActividades = async () => {
+    const rawUsuario = localStorage.getItem('usuario');
+    const usuario = JSON.parse(rawUsuario || '{}');
+    if (!usuario.id) {
+      setError('Debes iniciar sesión para ver las actividades.');
+      setLoading(false);
+      return;
+    }
+    const url = `http://localhost:8080/club/actividad?action=listarcondetalles&format=json&id_usuario=${usuario.id}`;
     try {
       const res = await fetch(url);
-
-      if (!res.ok) {
-        throw new Error(`Error del servidor: ${res.status}`);
-      }
- 
+      if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
       const data: Actividad[] = await res.json();
       setActividades(data);
     } catch (err: any) {
@@ -54,41 +54,50 @@ const InscripcionActividad: React.FC = () => {
     }
   };
 
-  const handleInscribir = async (actividadId: number, actividadNombre: string) => {
+  const handleInscribir = (actividad: Actividad) => {
+    setActividadAInscribir(actividad);
+    setMostrarModal(true);
+  };
+
+  const confirmarInscripcion = async () => {
+    if (!actividadAInscribir) return;
+
     const rawUsuario = localStorage.getItem('usuario');
     const usuario = JSON.parse(rawUsuario || '{}');
-
     if (!usuario.id) {
-      alert('No hay usuario logueado.');
-      return;
-    }
-
-    if (!window.confirm(`¿Deseas inscribirte a "${actividadNombre}"?`)) {
+      setModalMessage('Error: No se encontró usuario logueado.');
+      setShowInfoModal(true);
       return;
     }
 
     try {
       const fechaHoy = new Date().toISOString().split('T')[0];
-      const url = `http://localhost:8080/club/inscripcion?action=crear&fecha_inscripcion=${fechaHoy}&id_usuario=${usuario.id}&id_actividad=${actividadId}`;
+      const url = `http://localhost:8080/club/inscripcion?action=crear&fecha_inscripcion=${fechaHoy}&id_usuario=${usuario.id}&id_actividad=${actividadAInscribir.id}`;
       
-      const res = await fetch(url, {
-        method: 'POST'
-      });
+      const res = await fetch(url, { method: 'POST' });
+      const result = await res.json();
 
       if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || 'Error al inscribirse');
+        throw new Error(result.error || 'Error al inscribirse');
       }
 
-      const result = await res.json();
-      alert(result.mensaje || 'Inscripción creada correctamente');
-      
-      fetchActividades();
+      setModalMessage(result.mensaje || 'Inscripción creada correctamente');
+      setShowInfoModal(true);
+      fetchActividades(); 
       
     } catch (err: any) {
       console.error('Error al inscribir:', err);
-      alert(err.message || 'No se pudo completar la inscripción. Intenta nuevamente.');
+      setModalMessage(err.message || 'No se pudo completar la inscripción.');
+      setShowInfoModal(true);
+    } finally {
+      setMostrarModal(false);
+      setActividadAInscribir(null);
     }
+  };
+
+  const cancelarInscripcion = () => {
+    setMostrarModal(false);
+    setActividadAInscribir(null);
   };
 
   useEffect(() => {
@@ -96,78 +105,98 @@ const InscripcionActividad: React.FC = () => {
   }, []);
 
   if (loading) return <div className="inscripcion-page"><p className="status-message">Cargando actividades...</p></div>;
-    if (error) return <div className="inscripcion-page"><p className="status-message error">{error}</p></div>;
+  if (error) return <div className="inscripcion-page"><p className="status-message error">{error}</p></div>;
 
-	return (
-	    <div className="inscripcion-page">
-	      <NavbarSocio />
-	      <div className="inscripcion-content">
-	        <h2>Actividades Disponibles</h2>
-	        {actividades.length === 0 ? (
-	          <p className="status-message">No hay actividades disponibles en este momento.</p>
-	        ) : (
-	          <table className="inscripcion-table">
-	            <thead>
-	              <tr>
-	                <th>Actividad</th>
-	                <th>Descripción</th>
-	                <th>Profesor</th>
-	                <th>Cancha</th>
-	                <th>Horario</th>
-	                <th>Período Inscripción</th>
-	                <th>Lugares Disponibles</th> 
-	                <th>Acciones</th>
-	              </tr>
-	            </thead>
-	            <tbody>
-	              {actividades.map((a) => (
-	                <tr key={a.id}>
-	                  <td data-label="Actividad">{a.nombre}</td>
-	                  <td data-label="Descripción">{a.descripcion}</td>
-	                  <td data-label="Profesor">{a.profesor_nombre || 'Sin asignar'}</td>
-	                  <td data-label="Cancha">{a.cancha_descripcion || 'Sin asignar'}</td>
-	                  <td data-label="Horario">
-	                    {a.dia && a.hora_desde && a.hora_hasta
-	                      ? `${a.dia} ${a.hora_desde} - ${a.hora_hasta}`
-	                      : 'Sin horario'}
-	                  </td>
-	                  <td data-label="Período Inscripción">
-	                    {a.inscripcion_desde && a.inscripcion_hasta
-	                      ? `${new Date(a.inscripcion_desde).toLocaleDateString()} - ${new Date(a.inscripcion_hasta).toLocaleDateString()}`
-	                      : 'Sin período'}
-	                  </td>
+  return (
+    <>
+      <div className="inscripcion-page">
+        <NavbarSocio />
+        <div className="inscripcion-content">
+          <h2>Actividades Disponibles</h2>
+          {actividades.length === 0 ? (
+            <p className="status-message">No hay actividades disponibles en este momento.</p>
+          ) : (
+            <table className="inscripcion-table">
+              <thead>
+                <tr>
+                  <th>Actividad</th>
+                  <th>Descripción</th>
+                  <th>Profesor</th>
+                  <th>Cancha</th>
+                  <th>Horario</th>
+                  <th>Período Inscripción</th>
+                  <th>Lugares Disponibles</th> 
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {actividades.map((a) => (
+                  <tr key={a.id}>
+                    <td data-label="Actividad">{a.nombre}</td>
+                    <td data-label="Descripción">{a.descripcion}</td>
+                    <td data-label="Profesor">{a.profesor_nombre || 'Sin asignar'}</td>
+                    <td data-label="Cancha">{a.cancha_descripcion || 'Sin asignar'}</td>
+                    <td data-label="Horario">
+                      {a.dia && a.hora_desde && a.hora_hasta
+                        ? `${a.dia} ${a.hora_desde} - ${a.hora_hasta}`
+                        : 'Sin horario'}
+                    </td>
+                    <td data-label="Período Inscripción">
+                      {a.inscripcion_desde && a.inscripcion_hasta
+                        ? `${new Date(a.inscripcion_desde).toLocaleDateString()} - ${new Date(a.inscripcion_hasta).toLocaleDateString()}`
+                        : 'Sin período'}
+                    </td>
+                    <td data-label="Lugares Disponibles">{a.cupo_restante}</td> 
+                    <td data-label="Acciones">
+                      {a.yaInscripto ? (
+                        <button className="btn-inscripto" disabled>
+                          Inscripto
+                        </button>
+                      ) : a.cupo_restante > 0 ? (
+                        <button
+                          onClick={() => handleInscribir(a)}
+                          className="btn-inscribir"
+                        >
+                          Inscribirse
+                        </button>
+                      ) : (
+                        <button className="btn-inscribir" disabled>
+                          Sin Lugares
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </div>
 
-	                  <td data-label="Lugares Disponibles">{a.cupo_restante}</td> 
-	                  <td data-label="Acciones">
+      {mostrarModal && actividadAInscribir && (
+        <Modal
+          titulo="Confirmar Inscripción"
+          mensaje={`¿Deseas inscribirte a "${actividadAInscribir.nombre}"?`}
+          textoConfirmar="Sí, inscribirme"
+          textoCancelar="Cancelar"
+          onConfirmar={confirmarInscripcion}
+          onCancelar={cancelarInscripcion}
+        />
+      )}
 
-	                    {a.yaInscripto ? (
-	                      // El usuario YA está inscripto
-	                      <button className="btn-inscripto" disabled>
-	                        Inscripto
-	                      </button>
-	                    ) : a.cupo_restante > 0 ? (
-	                      // NO está inscripto Y HAY LUGAR
-	                      <button
-	                        onClick={() => handleInscribir(a.id, a.nombre)}
-	                        className="btn-inscribir"
-	                      >
-	                        Inscribirse
-	                      </button>
-	                    ) : (
-	                      // NO está inscripto Y NO HAY LUGAR
-	                      <button className="btn-inscribir" disabled>
-	                        Sin Lugares
-	                      </button>
-	                    )}
-	                  </td>
-	                </tr>
-	              ))}
-	            </tbody>
-	          </table>
-	        )}
-	      </div>
-	    </div>
-	  );
-	};
+      {showInfoModal && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <h3>Aviso</h3>
+            <p>{modalMessage}</p>
+            <div className="modal-buttons">
+              <button onClick={() => setShowInfoModal(false)} className="btn-confirm">Aceptar</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
 
 export default InscripcionActividad;

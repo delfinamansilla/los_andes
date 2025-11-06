@@ -29,7 +29,6 @@ const ListaActividades: React.FC = () => {
         });
 
         const text = await res.text();
-        console.log('Respuesta cruda de /actividad:', text);
 
         let data: any = null;
         try {
@@ -65,51 +64,50 @@ const ListaActividades: React.FC = () => {
   };
 
   return (
-    <div>
-      <NavbarAdmin />
-      <div className="page-container">
-        <h2>Lista de Actividades</h2>
+      <div>
+        <NavbarAdmin />
+        <div className="page-container">
+          <h2>Lista de Actividades</h2>
 
-        {loading && <p>Cargando actividades...</p>}
-        {error && <p className="error-box">{error}</p>}
+          {loading && <p>Cargando actividades...</p>}
+          {error && <p className="error-box">{error}</p>}
 
-		{!loading && !error && (
-		  <>
-		    {actividades.length > 0 ? (
-		      <div className="actividad-lista">
-		        {/* Botón de agregar como primer “actividad” */}
-		        <button className="actividad-btn agregar-btn" onClick={handleAgregar}>
-		          <strong>➕ Agregar actividad</strong>
-		        </button>
+          {!loading && !error && (
+            <>
+              {actividades.length > 0 ? (
+                <div className="actividad-lista">
+                  <button className="actividad-btn agregar-btn" onClick={handleAgregar}>
+                    <strong><i className="fa-solid fa-plus"></i> Agregar actividad</strong>
+                  </button>
 
-		        {actividades.map((act) => (
-		          <button
-		            key={act.id}
-		            className="actividad-btn"
-		            onClick={() => handleVerDetalle(act)}
-		          >
-		            <strong>{act.nombre}</strong>
-		            <p style={{ fontSize: '0.9rem', color: '#555' }}>
-		              {act.descripcion || 'Sin descripción'}
-		            </p>
-		          </button>
-		        ))}
-		      </div>
-		    ) : (
-		      <>
-		        <div className="actividad-lista">
-		          <button className="actividad-btn agregar-btn" onClick={handleAgregar}>
-		            <strong>➕ Agregar actividad</strong>
-		          </button>
-		        </div>
-		        <p>No hay actividades registradas.</p>
-		      </>
-		    )}
-		  </>
-		)}
+                  {actividades.map((act) => (
+                    <button
+                      key={act.id}
+                      className="actividad-btn"
+                      onClick={() => handleVerDetalle(act)}
+                    >
+                      <strong>{act.nombre}</strong>
+                      <p style={{ fontSize: '0.9rem', color: '#555' }}>
+                        {act.descripcion || 'Sin descripción'}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <div className="actividad-lista">
+                    <button className="actividad-btn agregar-btn" onClick={handleAgregar}>
+                      <strong><i className="fa-solid fa-plus"></i> Agregar actividad</strong>
+                    </button>
+                  </div>
+                  <p>No hay actividades registradas.</p>
+                </>
+              )}
+            </>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default ListaActividades;

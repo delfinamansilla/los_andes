@@ -1,7 +1,7 @@
-/* Contenedor principal */
+
 .inicio-socio-page {
   min-height: 100vh;
-  background-color: #20321E; /* Verde oscuro igual que admin */
+  background-color: #20321E; 
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -11,7 +11,6 @@
   padding: 2rem 1rem;
 }
 
-/* Bienvenida Header */
 .bienvenida-header {
   background: rgba(221, 216, 202, 0.95); /* Cremita con transparencia */
   backdrop-filter: blur(10px);
@@ -35,7 +34,6 @@
   font-size: 1.125rem;
 }
 
-/* Cards de secciones */
 .seccion-card {
   background: rgba(221, 216, 202, 0.95); /* Cremita */
   backdrop-filter: blur(10px);
@@ -79,8 +77,8 @@
 /* Grid de Horarios */
 .grid-horarios {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
 .horario-card {
@@ -232,30 +230,10 @@
 }
 
 /* Grid de Contacto */
-/* El grid que contiene la info y el mapa */
-.grid-contacto-mapa {
+.grid-contacto {
   display: grid;
-  grid-template-columns: 1.5fr 1fr; 
-  gap: 40px; 
-  align-items: start; 
-}
-
-
-.map-container {
-  width: 100%;
-  aspect-ratio: 3 / 4; 
-  max-width: 400px;
-  margin-left: auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-
-.contacto-info {
-  display: flex;
-  flex-direction: column;
-  gap: 25px; 
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
 }
 
 .contacto-info {
@@ -340,7 +318,6 @@
   color: #c9c4b5;
 }
 
-/* Footer */
 .footer-socio {
   margin-top: 3rem;
   text-align: center;
@@ -362,7 +339,6 @@
   font-size: 1.125rem;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .contenido-socio {
     padding: 1rem;
@@ -386,7 +362,13 @@
 
   .grid-horarios,
   .grid-beneficios,
-  .grid-contacto {
+  .grid-contacto,
+  .grid-contacto-mapa {
     grid-template-columns: 1fr;
+  }
+
+  .map-container {
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
   }
 }

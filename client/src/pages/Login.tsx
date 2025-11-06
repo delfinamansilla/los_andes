@@ -30,7 +30,6 @@ const Login: React.FC = () => {
       });
 
       const text = await res.text();
-      console.log('Respuesta cruda del servidor:', text);
 
       let data: any = null;
       try {
@@ -40,13 +39,9 @@ const Login: React.FC = () => {
       }
 
       if (data && data.status === 'ok') {
-        // ✅ Guardar usuario en localStorage
         localStorage.setItem('usuario', JSON.stringify(data.usuario));
 
-        // ✅ Mostrar mensaje en pantalla
         setSuccess(`✅ Bienvenido ${data.usuario.nombre_completo}`);
-
-        // ✅ Redirigir después de 2 segundos
 		setTimeout(() => {
 		  if (data.usuario.rol === 'socio') {
 		    navigate('/inicio-socio');

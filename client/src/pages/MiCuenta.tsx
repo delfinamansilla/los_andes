@@ -9,24 +9,20 @@ const MiCuenta: React.FC = () => {
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState<any>(null);
 
-  // Datos del usuario
   const [nombreCompleto, setNombreCompleto] = useState('');
   const [dni, setDni] = useState('');
   const [telefono, setTelefono] = useState('');
   const [mail, setMail] = useState('');
   const [fechaNacimiento, setFechaNacimiento] = useState('');
 
-  // Formulario de contraseña
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [contraseñaActual, setContraseñaActual] = useState('');
   const [nuevaContraseña, setNuevaContraseña] = useState('');
   const [confirmarNuevaContraseña, setConfirmarNuevaContraseña] = useState('');
 
-  // Mensajes
   const [mensajeExito, setMensajeExito] = useState('');
   const [mensajeError, setMensajeError] = useState('');
 
-  // Cargar usuario desde localStorage
   useEffect(() => {
     const usr = JSON.parse(localStorage.getItem('usuario') || '{}');
     if (!usr || !usr.id) {
@@ -41,7 +37,6 @@ const MiCuenta: React.FC = () => {
     }
   }, [navigate]);
 
-  // Actualizar datos del usuario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!usuario) return;
@@ -53,7 +48,7 @@ const MiCuenta: React.FC = () => {
     params.append('dni', dni);
     params.append('telefono', telefono);
     params.append('mail', mail);
-    params.append('contrasenia', usuario.contrasenia); // mantener contraseña actual
+    params.append('contrasenia', usuario.contrasenia); 
     params.append('rol', usuario.rol);
     params.append('estado', 'true');
     if (fechaNacimiento) params.append('fecha_nacimiento', fechaNacimiento);
@@ -83,7 +78,6 @@ const MiCuenta: React.FC = () => {
     }
   };
 
-  // Cambiar contraseña
   const handleCambiarContrasenia = async (e: React.FormEvent) => {
     e.preventDefault();
     if (nuevaContraseña !== confirmarNuevaContraseña) {

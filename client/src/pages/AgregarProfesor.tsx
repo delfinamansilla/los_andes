@@ -15,13 +15,10 @@ const AgregarProfesor: React.FC = () => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
-
-    // Validación simple de campos
     if (!nombreCompleto || !telefono || !mail) {
       setError('❌ Todos los campos son obligatorios.');
       return;
     }
-	console.log(" PASO 2: La validación de campos pasó correctamente.");
 
 
     try {
@@ -32,33 +29,22 @@ const AgregarProfesor: React.FC = () => {
       params.append('mail', mail);
 	  
 	  const url = 'http://localhost:8080/profesor';
-	  console.log(` PASO 3: Preparando para enviar petición POST a: ${url}`);
-	  console.log("          Con estos datos:", params.toString());
 
-      // La URL del endpoint para profesores
       const res = await fetch('http://localhost:8080/club/profesor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),
       });
 	  
-	  console.log(" PASO 4: Recibida respuesta del servidor.");
-	     console.log("          Status de la respuesta:", res.status, res.statusText);
-	     console.log("          Respuesta OK?:", res.ok);
-
-	     // Clonamos la respuesta para poder leerla dos veces (una como texto, otra como json)
 	     const responseClone = res.clone();
-	     
-	     // Intentamos leer la respuesta como texto para verla sin importar qué sea
+
 	     const rawText = await responseClone.text();
-	     console.log("          RESPUESTA CRUDA (TEXTO):", rawText);
 
       const data = await res.json();
 
       if (data && data.status === 'ok') {
         setSuccess('✅ ¡Profesor agregado exitosamente!');
-        
-        // Limpiar formulario
+
         setNombreCompleto('');
         setTelefono('');
         setMail('');
@@ -75,7 +61,7 @@ const AgregarProfesor: React.FC = () => {
 	
     <div className="agregar-profesor-page">
 	<NavbarAdmin />
-	<div className="content-area"> {/* <-- AÑADE ESTE DIV ENVOLVIENDO EL FORMULARIO */}
+	<div className="content-area"> 
       <div className="form-container">
 	 
         <h2>Agregar Nuevo Profesor</h2>

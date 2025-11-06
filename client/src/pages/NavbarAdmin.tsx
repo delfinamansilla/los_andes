@@ -18,7 +18,7 @@ const NavbarAdmin: React.FC = () => {
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setActiveMenu(null);
-    }, 300); // delay de 300ms antes de cerrar el dropdown
+    }, 300);
   };
 
   useEffect(() => {
@@ -34,86 +34,84 @@ const NavbarAdmin: React.FC = () => {
   const handleInicio = () => navigate('/inicio-admin');
 
   return (
-    <>
-      <nav className="navbar-admin">
-        <div className="navbar-left">
-          <button className="btn-usuario" onClick={() => navigate('/modificar-usuario')}>
-             {nombreUsuario}
-          </button>
+      <>
+        <nav className="navbar-admin">
+          <div className="navbar-left">
+            <button className="btn-usuario" onClick={() => navigate('/modificar-usuario')}>
+               <i className="fa-solid fa-user"></i> {nombreUsuario}
+            </button>
 
-          <button className="btn-usuario" style={{ marginLeft: '10px' }} onClick={handleInicio}>
-            Inicio
-          </button>
+            <button className="btn-usuario" style={{ marginLeft: '10px' }} onClick={handleInicio}>
+              <i className="fa-solid fa-house-user"></i> Inicio
+            </button>
 
+  		  <button
+  		    className="btn-usuario"
+  		    style={{ marginLeft: '10px' }}
+  		    onClick={() => setShowModal(true)}
+  		  >
+  		    <i className="fa-solid fa-lock"></i> Cerrar sesión
+  		  </button>
+          </div>
 
-		  <button
-		    className="btn-usuario" // <-- SOLO esta clase
-		    style={{ marginLeft: '10px' }}
-		    onClick={() => setShowModal(true)}
-		  >
-		    Cerrar sesión
-		  </button>
-        </div>
+          <ul className="navbar-menu">
+            <li
+              className="menu-item"
+              onMouseOver={() => handleMouseEnter('profesores')}
+              onMouseOut={handleMouseLeave}
+            >
+              <i className="fa-solid fa-chalkboard-user"></i> Profesores
+              {activeMenu === 'profesores' && (
+                <ul className="dropdown">
+                  <li><button onClick={() => navigate('/listado-profesor')}>Ver todos</button></li>
+                  <li><button onClick={() => navigate('/agregar-profesor')}>Agregar nuevo</button></li>
+                </ul>
+              )}
+            </li>
 
-        <ul className="navbar-menu">
-          <li
-            className="menu-item"
-            onMouseOver={() => handleMouseEnter('profesores')}
-            onMouseOut={handleMouseLeave}
-          >
-            Profesores
-            {activeMenu === 'profesores' && (
-              <ul className="dropdown">
-                <li><button onClick={() => navigate('/listado-profesor')}>Ver todos</button></li>
-                <li><button onClick={() => navigate('/agregar-profesor')}>Agregar nuevo</button></li>
-              </ul>
-            )}
-          </li>
+            <li
+              className="menu-item"
+              onMouseOver={() => handleMouseEnter('canchas')}
+              onMouseOut={handleMouseLeave}
+            >
+              <i className="fa-solid fa-volleyball"></i> Canchas
+              {activeMenu === 'canchas' && (
+                <ul className="dropdown">
+                  <li><button onClick={() => navigate('/canchas-admin')}>Ver todas</button></li>
+                  <li><button onClick={() => navigate('/crear')}>Agregar nueva</button></li>
+                </ul>
+              )}
+            </li>
 
-          <li
-            className="menu-item"
-            onMouseOver={() => handleMouseEnter('canchas')}
-            onMouseOut={handleMouseLeave}
-          >
-            Canchas
-            {activeMenu === 'canchas' && (
-              <ul className="dropdown">
-                <li><button onClick={() => navigate('/canchas-admin')}>Ver todas</button></li>
-                <li><button onClick={() => navigate('/crear')}>Agregar nueva</button></li>
-              </ul>
-            )}
-          </li>
+            <li
+              className="menu-item"
+              onMouseOver={() => handleMouseEnter('actividades')}
+              onMouseOut={handleMouseLeave}
+            >
+              <i className="fa-solid fa-person-walking"></i> Actividades
+              {activeMenu === 'actividades' && (
+                <ul className="dropdown">
+                  <li><button onClick={() => navigate('/actividades')}>Ver todas</button></li>
+                  <li><button onClick={() => navigate('/actividades/nueva')}>Agregar nueva</button></li>
+                </ul>
+              )}
+            </li>
+          </ul>
+        </nav>
 
-          <li
-            className="menu-item"
-            onMouseOver={() => handleMouseEnter('actividades')}
-            onMouseOut={handleMouseLeave}
-          >
-            Actividades
-            {activeMenu === 'actividades' && (
-              <ul className="dropdown">
-                <li><button onClick={() => navigate('/actividades')}>Ver todas</button></li>
-                <li><button onClick={() => navigate('/actividades/nueva')}>Agregar nueva</button></li>
-              </ul>
-            )}
-          </li>
-        </ul>
-      </nav>
-
-      {/* Modal de confirmación */}
-      {showModal && (
-        <div className="modal-backdrop">
-          <div className="modal">
-            <h3>¿Estás seguro que quieres cerrar sesión?</h3>
-            <div className="modal-buttons">
-              <button onClick={handleCerrarSesion} className="btn-confirm">Sí</button>
-              <button onClick={() => setShowModal(false)} className="btn-cancel">No</button>
+        {showModal && (
+          <div className="modal-backdrop">
+            <div className="modal">
+              <h3>¿Estás seguro que quieres cerrar sesión?</h3>
+              <div className="modal-buttons">
+                <button onClick={handleCerrarSesion} className="btn-confirm">Sí</button>
+                <button onClick={() => setShowModal(false)} className="btn-cancel">No</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </>
-  );
+        )}
+      </>
+    );
 };
 
 export default NavbarAdmin;

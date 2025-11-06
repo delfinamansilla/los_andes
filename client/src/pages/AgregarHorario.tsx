@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavbarAdmin from "./NavbarAdmin";
+import Modal from "./Modal";
 import "../styles/AgregarHorario.css";
 
 interface Horario {
@@ -22,6 +23,10 @@ const AgregarHorario: React.FC = () => {
   const [editandoId, setEditandoId] = useState<number | null>(null);
   const [horarioEditado, setHorarioEditado] = useState<Horario | null>(null);
   const [mensaje, setMensaje] = useState<string>("");
+
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [horarioAEliminar, setHorarioAEliminar] = useState<Horario | null>(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,7 +41,7 @@ const AgregarHorario: React.FC = () => {
   const cargarHorarios = async (id_actividad: number) => {
     try {
       const response = await fetch(
-        http://localhost:8080/club/horario?action=buscar_por_actividad&id_actividad=${id_actividad}
+        `http://localhost:8080/club/horario?action=buscar_por_actividad&id_actividad=${id_actividad}`
       );
       if (!response.ok) throw new Error("Error al obtener horarios");
       const data = await response.json();
@@ -73,22 +78,35 @@ const AgregarHorario: React.FC = () => {
     }
   };
 
-  const handleEliminar = async (id: number) => {
-    if (!window.confirm("¿Estás seguro de que querés eliminar este horario?")) return;
+  const handleEliminar = (horario: Horario) => {
+    setHorarioAEliminar(horario);
+    setMostrarModal(true);
+  };
+
+  const confirmarEliminar = async () => {
+    if (!horarioAEliminar?.id) return;
     try {
-      await fetch(http://localhost:8080/club/horario?action=eliminar&id=${id}, {
-        method: "GET",
-      });
-      setHorarios((prev) => prev.filter((h) => h.id !== id));
+      await fetch(
+        `http://localhost:8080/club/horario?action=eliminar&id=${horarioAEliminar.id}`,
+        { method: "GET" }
+      );
+      setHorarios((prev) => prev.filter((h) => h.id !== horarioAEliminar.id));
     } catch (error) {
       console.error("❌ Error eliminando horario:", error);
+    } finally {
+      setMostrarModal(false);
+      setHorarioAEliminar(null);
     }
+  };
+
+  const cancelarEliminar = () => {
+    setMostrarModal(false);
+    setHorarioAEliminar(null);
   };
 
   const handleEditarClick = (horario: Horario) => {
     setEditandoId(horario.id!);
     setHorarioEditado({ ...horario });
-    setMensaje("");
   };
 
   const handleEditarChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -97,38 +115,19 @@ const AgregarHorario: React.FC = () => {
     }
   };
 
-  const handleGuardarCambios = async (horarioEditado: any) => {
-    if (!horarioEditado?.id) {
-      alert("Error: No se puede actualizar este horario (ID no encontrado).");
-      return;
-    }
-
-    const stored = localStorage.getItem("actividad");
-    const actividad = stored ? JSON.parse(stored) : null;
-    const idActividad = actividad?.id || horarioEditado.id_actividad;
-
+  const handleGuardarCambios = async (horarioEditado: Horario | null) => {
+    if (!horarioEditado?.id) return;
     try {
-      const response = await fetch(http://localhost:8080/club/horario?action=actualizar, {
+      const response = await fetch("http://localhost:8080/club/horario?action=actualizar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: horarioEditado.id,
-          dia: horarioEditado.dia,
-          hora_desde: horarioEditado.horaDesde,
-          hora_hasta: horarioEditado.horaHasta,
-          id_actividad: idActividad,
-        }),
+        body: JSON.stringify(horarioEditado),
       });
-
       if (!response.ok) throw new Error("Error al actualizar horario");
-
-      setMensaje("✅ Horario actualizado correctamente.");
+      await cargarHorarios(horarioEditado.id_actividad);
       setEditandoId(null);
-      await cargarHorarios(idActividad);
-      setTimeout(() => setMensaje(""), 3000);
     } catch (error) {
       console.error("❌ Error actualizando horario:", error);
-      alert("Error al actualizar el horario.");
     }
   };
 
@@ -139,14 +138,9 @@ const AgregarHorario: React.FC = () => {
       <div className="page-container-horario">
         <h2>Horarios de la Actividad</h2>
 
-        {mensaje && <div className="mensaje-exito">{mensaje}</div>}
-
-        {/* 🔹 Contenedor general de todas las tarjetas */}
         <div className="horario-contenedor">
-          {/* 💚 Tarjeta de agregar horario */}
           <div className="horario-card horario-form">
-            <h3 style={{ color: "#20321E", marginBottom: "10px" }}>Agregar horario</h3>
-
+            <h3>Agregar horario</h3>
             <select name="dia" value={nuevoHorario.dia} onChange={handleChange}>
               <option value="">Seleccionar día</option>
               <option value="Lunes">Lunes</option>
@@ -157,34 +151,16 @@ const AgregarHorario: React.FC = () => {
               <option value="Sábado">Sábado</option>
               <option value="Domingo">Domingo</option>
             </select>
-
-            <input
-              type="time"
-              name="horaDesde"
-              value={nuevoHorario.horaDesde}
-              onChange={handleChange}
-            />
-
-            <input
-              type="time"
-              name="horaHasta"
-              value={nuevoHorario.horaHasta}
-              onChange={handleChange}
-            />
-
+            <input type="time" name="horaDesde" value={nuevoHorario.horaDesde} onChange={handleChange} />
+            <input type="time" name="horaHasta" value={nuevoHorario.horaHasta} onChange={handleChange} />
             <button onClick={handleAgregar}>Agregar horario</button>
           </div>
 
-          {/* 💛 Lista de horarios existentes */}
           {horarios.map((h) => (
             <div key={h.id} className="horario-card horario-item">
               {editandoId === h.id ? (
-                <div className="flex flex-col gap-2">
-                  <select
-                    name="dia"
-                    value={horarioEditado?.dia || ""}
-                    onChange={handleEditarChange}
-                  >
+                <>
+                  <select name="dia" value={horarioEditado?.dia || ""} onChange={handleEditarChange}>
                     <option value="Lunes">Lunes</option>
                     <option value="Martes">Martes</option>
                     <option value="Miércoles">Miércoles</option>
@@ -193,65 +169,36 @@ const AgregarHorario: React.FC = () => {
                     <option value="Sábado">Sábado</option>
                     <option value="Domingo">Domingo</option>
                   </select>
-
-                  <input
-                    type="time"
-                    name="horaDesde"
-                    value={horarioEditado?.horaDesde || ""}
-                    onChange={handleEditarChange}
-                  />
-                  <input
-                    type="time"
-                    name="horaHasta"
-                    value={horarioEditado?.horaHasta || ""}
-                    onChange={handleEditarChange}
-                  />
-                </div>
+                  <input type="time" name="horaDesde" value={horarioEditado?.horaDesde || ""} onChange={handleEditarChange} />
+                  <input type="time" name="horaHasta" value={horarioEditado?.horaHasta || ""} onChange={handleEditarChange} />
+                  <button onClick={() => handleGuardarCambios(horarioEditado)}>Guardar</button>
+                </>
               ) : (
-                <div>
-                  <p className="font-semibold">{h.dia}</p>
-                  <p>
-                    {h.horaDesde} - {h.horaHasta}
-                  </p>
-                </div>
+                <>
+                  <p>{h.dia}</p>
+                  <p>{h.horaDesde} - {h.horaHasta}</p>
+                  <button onClick={() => handleEditarClick(h)}>Modificar</button>
+                  <button onClick={() => handleEliminar(h)}>Eliminar</button>
+                </>
               )}
-
-              <div className="flex gap-2">
-                {editandoId === h.id ? (
-                  <button
-                    onClick={() => handleGuardarCambios(horarioEditado)}
-                    className="modificar"
-                  >
-                    Guardar cambios
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => handleEditarClick(h)}
-                    className="modificar"
-                  >
-                    Modificar
-                  </button>
-                )}
-                <button
-                  onClick={() => h.id && handleEliminar(h.id)}
-                  className="eliminar"
-                >
-                  Eliminar
-                </button>
-              </div>
             </div>
           ))}
         </div>
 
-        {/* 🔻 Botón volver al final */}
-        <button onClick={() => navigate("/actividades")} className="btn-volver">
-          ← Volver
-        </button>
+        <button onClick={() => navigate("/actividades")} className="btn-volver">← Volver</button>
       </div>
+      {mostrarModal && (
+        <Modal
+          titulo="Confirmar eliminación"
+          mensaje="¿Seguro que querés eliminar este horario?"
+          textoConfirmar="Eliminar"
+          textoCancelar="Cancelar"
+          onConfirmar={confirmarEliminar}
+          onCancelar={cancelarEliminar}
+        />
+      )}
     </div>
   );
-
-
 };
 
 export default AgregarHorario;

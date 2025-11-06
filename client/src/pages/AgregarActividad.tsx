@@ -22,8 +22,6 @@ const AgregarActividad: React.FC = () => {
   const [actividadCreada, setActividadCreada] = useState(false);
   const [actividad, setActividad] = useState<any | null>(null);
 
-
-  // 🔹 Cargar profesores y canchas al montar el componente
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -100,82 +98,84 @@ const AgregarActividad: React.FC = () => {
 
 
   return (
-    <div>
-      <NavbarAdmin />
-      <div className="page-container">
-        <h2>Nueva Actividad</h2>
-        <form className="form-actividad" onSubmit={handleSubmit}>
-          <label>
-            Nombre:
-            <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required />
-          </label>
+      <div>
+        <NavbarAdmin />
+        <div className="page-container">
+          <h2>Nueva Actividad</h2>
+          <form className="form-actividad" onSubmit={handleSubmit}>
+            <label>
+              Nombre:
+              <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required />
+            </label>
 
-          <label>
-            Cupo:
-            <input type="number" name="cupo" value={formData.cupo} onChange={handleChange} required />
-          </label>
+            <label>
+              Cupo:
+              <input type="number" name="cupo" value={formData.cupo} onChange={handleChange} required />
+            </label>
 
-          <label>
-            Descripción:
-            <textarea name="descripcion" value={formData.descripcion} onChange={handleChange} />
-          </label>
+            <label>
+              Descripción:
+              <textarea name="descripcion" value={formData.descripcion} onChange={handleChange} />
+            </label>
 
-          <label>
-            Inscripción Desde:
-            <input type="date" name="inscripcion_desde" value={formData.inscripcion_desde} onChange={handleChange} required />
-          </label>
+            <label>
+              Inscripción Desde:
+              <input type="date" name="inscripcion_desde" value={formData.inscripcion_desde} onChange={handleChange} required />
+            </label>
 
-          <label>
-            Inscripción Hasta:
-            <input type="date" name="inscripcion_hasta" value={formData.inscripcion_hasta} onChange={handleChange} required />
-          </label>
+            <label>
+              Inscripción Hasta:
+              <input type="date" name="inscripcion_hasta" value={formData.inscripcion_hasta} onChange={handleChange} required />
+            </label>
 
-          {/* 🔽 Selector de profesor */}
-          <label>
-            Profesor:
-            <select name="id_profesor" value={formData.id_profesor} onChange={handleChange} required>
-              <option value="">Seleccionar profesor</option>
-              {profesores.map(p => (
-                <option key={p.id} value={p.id}>
-                  {p.nombre_completo}
-                </option>
-              ))}
-            </select>
-          </label>
+            <label>
+              Profesor:
+              <select name="id_profesor" value={formData.id_profesor} onChange={handleChange} required>
+                <option value="">Seleccionar profesor</option>
+                {profesores.map(p => (
+                  <option key={p.id} value={p.id}>
+                    {p.nombre_completo}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-          {/* 🔽 Selector de cancha */}
-          <label>
-            Cancha:
-            <select name="id_cancha" value={formData.id_cancha} onChange={handleChange} required>
-              <option value="">Seleccionar cancha</option>
-              {canchas.map(c => (
-                <option key={c.id} value={c.id}>
-                  {c.descripcion} (N° {c.nro_cancha})
-                </option>
-              ))}
-            </select>
-          </label>
+            <label>
+              Cancha:
+              <select name="id_cancha" value={formData.id_cancha} onChange={handleChange} required>
+                <option value="">Seleccionar cancha</option>
+                {canchas.map(c => (
+                  <option key={c.id} value={c.id}>
+                    {c.descripcion} (N° {c.nro_cancha})
+                  </option>
+                ))}
+              </select>
+            </label>
 
-          <div className="form-actions">
-            <button type="submit" disabled={loading}>
-              {loading ? 'Creando...' : 'Crear Actividad'}
-            </button>
-            <button type="button" onClick={() => navigate('/actividades')}>
-              Cancelar
-            </button>
+            <div className="form-actions">
+              <button type="submit" disabled={loading}>
+                {loading ? 'Creando...' : 
+                  <>
+                    <i className="fa-solid fa-plus"></i> Crear Actividad
+                  </>
+                }
+              </button>
+              <button type="button" onClick={() => navigate('/actividades')}>
+                Cancelar
+              </button>
 
-			<button
-			  type="button"
-			  onClick={handleAgregarHorario}
-			  disabled={!actividadCreada}
-			>
-			  ➕ Agregar Horario
-			</button>
-          </div>
-        </form>
+              <button
+                type="button"
+                onClick={handleAgregarHorario}
+                disabled={!actividadCreada}
+              >
+                <i className="fa-solid fa-plus"></i> Agregar Horario
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default AgregarActividad;

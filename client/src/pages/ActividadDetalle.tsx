@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavbarAdmin from "./NavbarAdmin";
+import Modal from "./Modal";
 import "../styles/ActividadDetalle.css";
 
 interface Actividad {
@@ -19,18 +20,20 @@ const ActividadDetalle: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [editando, setEditando] = useState(false);
-  const [mensajeExito, setMensajeExito] = useState<string | null>(null); 
+  const [mensajeExito, setMensajeExito] = useState<string | null>(null);
   const [profesores, setProfesores] = useState<any[]>([]);
   const [canchas, setCanchas] = useState<any[]>([]);
   const [nombreProfesor, setNombreProfesor] = useState<string>("");
   const [nombreCancha, setNombreCancha] = useState<string>("");
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState("");
+  const [modalAccion, setModalAccion] = useState<(() => void) | null>(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
     setError(null);
-
     const storedActividad = localStorage.getItem("actividadSeleccionada");
     if (storedActividad) {
       try {
@@ -42,26 +45,22 @@ const ActividadDetalle: React.FC = () => {
     } else {
       setError("No se encontró información de la actividad.");
     }
-
     const fetchData = async () => {
       try {
         const [profRes, canchaRes] = await Promise.all([
           fetch("http://localhost:8080/club/profesor?action=listar"),
           fetch("http://localhost:8080/club/cancha?action=listar"),
         ]);
-
         const profesoresData = await profRes.json();
         const canchasData = await canchaRes.json();
-
         setProfesores(profesoresData);
         setCanchas(canchasData);
-      } catch (err) {
-        console.error("❌ Error al cargar listas:", err);
+      } catch {
+        console.error("Error al cargar listas");
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
@@ -71,30 +70,27 @@ const ActividadDetalle: React.FC = () => {
       try {
         if (actividad.id_profesor) {
           const resProf = await fetch(
-            http://localhost:8080/club/profesor?action=buscar&id=${actividad.id_profesor}
+            `http://localhost:8080/club/profesor?action=buscar&id=${actividad.id_profesor}`
           );
           const dataProf = await resProf.json();
           setNombreProfesor(dataProf?.nombre_completo || "Profesor no encontrado");
         }
-
         if (actividad.id_cancha) {
           const resCancha = await fetch(
-            http://localhost:8080/club/cancha?action=buscar&id=${actividad.id_cancha}
+            `http://localhost:8080/club/cancha?action=buscar&id=${actividad.id_cancha}`
           );
-          if (!resCancha.ok) throw new Error(Error HTTP ${resCancha.status});
           const text = await resCancha.text();
-          if (!text) throw new Error("Respuesta vacía");
-          const dataCancha = JSON.parse(text);
-          setNombreCancha(dataCancha?.descripcion || "Cancha no encontrada");
+          if (text) {
+            const dataCancha = JSON.parse(text);
+            setNombreCancha(dataCancha?.descripcion || "Cancha no encontrada");
+          }
         }
-      } catch (err) {
-        console.error("❌ Error al obtener profesor/cancha:", err);
+      } catch {
+        console.error("Error al obtener profesor/cancha");
       }
     };
-
     fetchDetalles();
   }, [actividad]);
-
 
   useEffect(() => {
     if (mensajeExito) {
@@ -118,9 +114,8 @@ const ActividadDetalle: React.FC = () => {
 
   const handleGuardarCambios = async () => {
     if (!actividad) return;
-
     try {
-      const res = await fetch(http://localhost:8080/club/actividad?action=actualizar, {
+      const res = await fetch(`http://localhost:8080/club/actividad?action=actualizar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -134,48 +129,49 @@ const ActividadDetalle: React.FC = () => {
           id_cancha: Number(actividad.id_cancha),
         }),
       });
-
       const text = await res.text();
-      console.log("Respuesta actualización:", text);
-
       const data = JSON.parse(text);
       if (data.status === "ok") {
         setMensajeExito("✅ Actividad actualizada correctamente");
         localStorage.setItem("actividadSeleccionada", JSON.stringify(actividad));
         setEditando(false);
       } else {
-        setError(data.error || "Error desconocido al actualizar.");
+        setModalMensaje(data.error || "Error al actualizar la actividad");
+        setModalAbierto(true);
       }
-    } catch (err) {
-      console.error(err);
-      setError("Error al actualizar la actividad.");
+    } catch {
+      setModalMensaje("Error al actualizar la actividad");
+      setModalAbierto(true);
     }
   };
 
-  const handleEliminar = async () => {
+  const handleEliminar = () => {
     if (!actividad) return;
+    setModalMensaje(`¿Estás seguro de que querés eliminar la actividad "${actividad.nombre}"?`);
+    setModalAccion(() => eliminarConfirmado);
+    setModalAbierto(true);
+  };
 
-    const confirmar = window.confirm(
-      ¿Estás seguro de que querés eliminar la actividad "${actividad.nombre}"?
-    );
-    if (!confirmar) return;
-
+  const eliminarConfirmado = async () => {
+    if (!actividad) return;
     try {
       const res = await fetch(
-        http://localhost:8080/club/actividad?action=eliminar&id=${actividad.id},
+        `http://localhost:8080/club/actividad?action=eliminar&id=${actividad.id}`,
         { method: "GET", credentials: "include" }
       );
-
       const text = await res.text();
       const data = JSON.parse(text);
       if (data.status === "ok") {
         navigate("/actividades");
       } else {
-        alert("⚠ " + (data.error || "Error al eliminar la actividad"));
+        setModalMensaje(data.error || "Error al eliminar la actividad");
+        setModalAccion(null);
+        setModalAbierto(true);
       }
-    } catch (err) {
-      console.error("Error al eliminar:", err);
-      alert("🚫 Error al eliminar la actividad");
+    } catch {
+      setModalMensaje("Error al eliminar la actividad");
+      setModalAccion(null);
+      setModalAbierto(true);
     }
   };
 
@@ -191,102 +187,51 @@ const ActividadDetalle: React.FC = () => {
       <div className="page-container">
         {loading && <p>Cargando detalles...</p>}
         {error && <p className="error-box">{error}</p>}
-
-     
         {mensajeExito && <div className="mensaje-exito">{mensajeExito}</div>}
-
         {actividad && (
           <>
             <h2>{editando ? "Editando Actividad" : actividad.nombre}</h2>
-
             <div className="detalle-actividad">
               <label>
                 Nombre:
-                <input
-                  type="text"
-                  name="nombre"
-                  value={actividad.nombre}
-                  onChange={handleChange}
-                  disabled={!editando}
-                />
+                <input type="text" name="nombre" value={actividad.nombre} onChange={handleChange} disabled={!editando} />
               </label>
-
               <label>
                 Descripción:
-                <textarea
-                  name="descripcion"
-                  value={actividad.descripcion}
-                  onChange={handleChange}
-                  disabled={!editando}
-                />
+                <textarea name="descripcion" value={actividad.descripcion} onChange={handleChange} disabled={!editando} />
               </label>
-
               <label>
                 Cupo:
-                <input
-                  type="number"
-                  name="cupo"
-                  value={actividad.cupo}
-                  onChange={handleChange}
-                  disabled={!editando}
-                />
+                <input type="number" name="cupo" value={actividad.cupo} onChange={handleChange} disabled={!editando} />
               </label>
-
               <label>
                 Inscripción desde:
-                <input
-                  type="date"
-                  name="inscripcion_desde"
-                  value={actividad.inscripcion_desde}
-                  onChange={handleChange}
-                  disabled={!editando}
-                />
+                <input type="date" name="inscripcion_desde" value={actividad.inscripcion_desde.slice(0, 10)} onChange={handleChange} disabled={!editando} />
               </label>
-
               <label>
                 Inscripción hasta:
-                <input
-                  type="date"
-                  name="inscripcion_hasta"
-                  value={actividad.inscripcion_hasta}
-                  onChange={handleChange}
-                  disabled={!editando}
-                />
+                <input type="date" name="inscripcion_hasta" value={actividad.inscripcion_hasta.slice(0, 10)} onChange={handleChange} disabled={!editando} />
               </label>
-
               <label>
                 Profesor:
                 {editando ? (
-                  <select
-                    name="id_profesor"
-                    value={actividad.id_profesor}
-                    onChange={handleChange}
-                  >
+                  <select name="id_profesor" value={actividad.id_profesor} onChange={handleChange}>
                     <option value="">Seleccionar profesor</option>
                     {profesores.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.nombre_completo}
-                      </option>
+                      <option key={p.id} value={p.id}>{p.nombre_completo}</option>
                     ))}
                   </select>
                 ) : (
                   <span>{nombreProfesor}</span>
                 )}
               </label>
-
               <label>
                 Cancha:
                 {editando ? (
-                  <select
-                    name="id_cancha"
-                    value={actividad.id_cancha}
-                    onChange={handleChange}
-                  >
+                  <select name="id_cancha" value={actividad.id_cancha} onChange={handleChange}>
                     <option value="">Seleccionar cancha</option>
                     {canchas.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.descripcion} (N° {c.nro_cancha})
-                      </option>
+                      <option key={c.id} value={c.id}>{c.descripcion} (N° {c.nro_cancha})</option>
                     ))}
                   </select>
                 ) : (
@@ -294,29 +239,28 @@ const ActividadDetalle: React.FC = () => {
                 )}
               </label>
             </div>
-
-            <div className="form-actions">
-              <button onClick={handleVolver}>⬅ Volver</button>
-              <button className="horarios" onClick={handleVerHorarios}>
-                📅 Ver horarios
-              </button>
-
+            <div>
+              <button onClick={handleVolver}><i className="fa-solid fa-right-left"></i> Volver</button>
+              <button className="horarios" onClick={handleVerHorarios}><i className="fa-solid fa-calendar-days"></i> Ver horarios</button>
               {!editando ? (
                 <>
-                  <button onClick={() => setEditando(true)}>✏ Modificar</button>
-                  <button className="eliminar" onClick={handleEliminar}>
-                    🗑 Eliminar
-                  </button>
+                  <button onClick={() => setEditando(true)}><i className="fa-solid fa-pen"></i> Modificar</button>
+                  <button className="eliminar" onClick={handleEliminar}><i className="fa-solid fa-trash"></i> Eliminar</button>
                 </>
               ) : (
-                <button className="guardar" onClick={handleGuardarCambios}>
-                  💾 Guardar cambios
-                </button>
+                <button className="guardar" onClick={handleGuardarCambios}><i className="fa-solid fa-floppy-disk"></i> Guardar cambios</button>
               )}
             </div>
           </>
         )}
       </div>
+	  {modalAbierto && (
+	    <Modal
+	      mensaje={modalMensaje}
+	      onCancelar={() => setModalAbierto(false)}
+	      onConfirmar={modalAccion || (() => setModalAbierto(false))}
+	    />
+	  )}
     </div>
   );
 };

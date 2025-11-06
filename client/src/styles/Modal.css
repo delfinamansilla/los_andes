@@ -1,0 +1,116 @@
+/* --- Modal.css --- */
+
+/* 1. El fondo oscuro semi-transparente que cubre toda la pantalla */
+.modal-backdrop {
+  position: fixed; /* Se queda fijo incluso si haces scroll */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(32, 50, 30, 0.7); /* Usamos tu verde oscuro con 70% de opacidad */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; /* Asegura que esté por encima de todo lo demás */
+  backdrop-filter: blur(4px); /* Efecto "vidrio esmerilado" en el fondo, queda genial */
+  animation: fadeInBackdrop 0.3s ease; /* Animación sutil de entrada */
+}
+
+/* 2. La ventana del modal en sí */
+.modal {
+  background-color: #DDD8CA; /* Color crema */
+  color: #20321E; /* Texto verde oscuro */
+  padding: 30px 40px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  max-width: 500px;
+  width: 90%;
+  border-top: 5px solid #466245; /* Detalle de color con tu verde secundario */
+  animation: slideInModal 0.4s ease-out; /* Animación de entrada más divertida */
+}
+
+/* Título del modal */
+.modal h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.6rem;
+}
+
+/* Mensaje del modal */
+.modal p {
+  margin-bottom: 30px; /* Más espacio antes de los botones */
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* 3. El contenedor de los botones de acción */
+.modal-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+/* Estilo común para los botones del modal */
+.modal-buttons button {
+  padding: 12px 35px; /* Botones un poco más grandes */
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+/* Botón de Confirmar (Sí, Eliminar, etc.) */
+/* Por defecto, lo haremos con el verde principal para confirmar */
+.btn-confirm {
+  background-color: #20321E;
+  color: #DDD8CA;
+}
+
+.btn-confirm:hover {
+  background-color: #466245;
+  transform: translateY(-2px); /* Efecto de elevación */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Botón de Cancelar (No, etc.) */
+.btn-cancel {
+  background-color: transparent;
+  color: #20321E;
+  border: 2px solid #20321E;
+}
+
+.btn-cancel:hover {
+  background-color: #c9c4b5; /* Crema más oscuro al pasar el mouse */
+  border-color: #466245;
+}
+
+/* --- Opcional: Estilo para un botón de confirmación "peligroso" (rojo) --- */
+/* Puedes usarlo así: <button className="btn-confirm danger" ... > */
+.btn-confirm.danger {
+  background-color: #dc2626;
+  color: white;
+}
+.btn-confirm.danger:hover {
+  background-color: #b91c1c;
+}
+
+
+/* 4. Animaciones de entrada */
+@keyframes fadeInBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInModal {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

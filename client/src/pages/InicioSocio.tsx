@@ -9,13 +9,12 @@ const InicioSocio: React.FC = () => {
       <NavbarSocio />
       
       <div className="contenido-socio">
-        {/* Bienvenida */}
+
         <div className="bienvenida-header">
           <h2>Los Andes</h2>
           <p>Tu espacio deportivo en el corazón de Rosario</p>
         </div>
 
-        {/* Horarios Generales */}
         <div className="seccion-card">
           <div className="seccion-titulo">
             <Clock className="icono-titulo" size={28} />
@@ -41,7 +40,6 @@ const InicioSocio: React.FC = () => {
           </div>
         </div>
 
-        {/* Beneficios de ser socio */}
         <div className="seccion-card">
           <div className="seccion-titulo">
             <Award className="icono-titulo" size={28} />
@@ -90,7 +88,6 @@ const InicioSocio: React.FC = () => {
           </div>
         </div>
 
-        {/* Reglamento */}
         <div className="seccion-card">
           <div className="seccion-titulo">
             <Shield className="icono-titulo" size={28} />
@@ -120,7 +117,6 @@ const InicioSocio: React.FC = () => {
           </div>
         </div>
 
-		{/* Contacto */}
 		<div className="seccion-card">
 		  <div className="seccion-titulo">
 		    <Phone className="icono-titulo" size={28} />
@@ -172,7 +168,6 @@ const InicioSocio: React.FC = () => {
 		  </div>
 		</div>
 
-        {/* Footer */}
         <div className="footer-socio">
           <p>¿Dudas o consultas? Comunicate con secretaría o acercate personalmente.</p>
           <p className="footer-emoji">¡Disfrutá tu experiencia deportiva! 🎾⚽🏋</p>

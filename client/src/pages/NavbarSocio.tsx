@@ -18,7 +18,7 @@ const NavbarSocio: React.FC = () => {
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setActiveMenu(null);
-    }, 300); // delay de 300ms antes de cerrar el dropdown
+    }, 300); 
   };
 
   useEffect(() => {
@@ -84,7 +84,6 @@ const NavbarSocio: React.FC = () => {
           </ul>
         </nav>
 
-        {/* Modal de confirmación */}
         {showModal && (
           <div className="modal-backdrop">
             <div className="modal">

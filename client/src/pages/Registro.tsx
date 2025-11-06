@@ -57,7 +57,6 @@ const Registro: React.FC = () => {
 	  });
 
 	  const text = await res.text();
-	  console.log('Respuesta del servidor:', text);
 
 	  if (res.ok) {
 	    setSuccess('✅ Usuario registrado correctamente. Redirigiendo...');
@@ -73,17 +72,11 @@ const Registro: React.FC = () => {
   };
 
   return (
-    // 1. Añadimos el contenedor principal de la página
-	
     <div className="registro-page">
 
-      {/* 2. Añadimos el contenedor que centra el contenido */}
       <div className="content-area">
-        {/* El .form-container ahora es el recuadro cremita */}
         <div className="form-container">
           <h2>Registro de {rol === 'socio' ? 'Socio' : 'Administrador'}</h2>
-
-          {/* Mensajes */}
           {error && <p className="error-box">{error}</p>}
           {success && <p className="success-box">{success}</p>}
 
@@ -132,7 +125,6 @@ const Registro: React.FC = () => {
               required
             />
 
-            {/* El div de la contraseña ya tiene la clase correcta */}
             <div className="password-field">
               <input
                 type={isPasswordVisible ? 'text' : 'password'}
@@ -147,12 +139,10 @@ const Registro: React.FC = () => {
               </button>
             </div>
 
-            {/* 3. Cambiamos la clase del botón principal */}
             <button type="submit" className="btn-primary">Registrarse</button>
           </form>
 
           <div className="separador">
-            {/* 4. Cambiamos la clase del botón de cambio de rol */}
             <button onClick={toggleRol} className="btn-toggle-role">
               {rol === 'socio'
                 ? 'Registrarme como Administrador'

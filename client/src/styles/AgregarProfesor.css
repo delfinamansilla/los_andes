@@ -1,6 +1,4 @@
-/* --- AgregarProfesor.css (DISEÑO CREMITA CON BOTÓN VERDE OSCURO) --- */
 
-/* 1. Contenedor de TODA la página (sin cambios) */
 .agregar-profesor-page {
   display: flex;
   flex-direction: column;
@@ -8,7 +6,6 @@
   background-color: #20321E;
 }
 
-/* 2. Contenedor para el área de contenido (sin cambios) */
 .content-area {
   flex-grow: 1;
   display: flex;
@@ -18,7 +15,6 @@
   box-sizing: border-box;
 }
 
-/* 3. Contenedor del formulario (se mantiene cremita) */
 .form-container {
   background-color: #DDD8CA;
   color: #20321E;
@@ -30,7 +26,6 @@
   text-align: center;
 }
 
-/* Títulos y textos del formulario */
 .form-container h2 {
   margin-top: 0;
   margin-bottom: 15px;
@@ -40,7 +35,6 @@
   margin-bottom: 25px;
 }
 
-/* Estructura interna del formulario */
 .form-container form {
   display: flex;
   flex-direction: column;
@@ -55,7 +49,6 @@
   font-weight: bold;
 }
 
-/* Inputs (campos de texto) */
 .inp {
   width: 100%;
   padding: 10px 12px;
@@ -74,7 +67,6 @@
   box-shadow: 0 0 5px rgba(32, 50, 30, 0.5);
 }
 
-/* Botón de enviar */
 .btn_agregar {
   width: 100%;
   padding: 12px 0;
@@ -85,17 +77,14 @@
   font-weight: bold;
   transition: all 0.2s;
   border: none;
-  
-  /* --- CAMBIO FINAL AQUÍ --- */
-  background-color: #20321E; /* Verde oscuro del fondo */
-  color: #DDD8CA;            /* Letras color cremita para que se lean */
+  background-color: #20321E; 
+  color: #DDD8CA;   
 }
 
 .btn_agregar:hover {
-  background-color: #466245; /* Verde medio para el efecto hover */
+  background-color: #466245;
 }
 
-/* Mensajes de error/éxito (sin cambios) */
 .error-box, .success-box {
   margin-top: 15px;
   padding: 10px;

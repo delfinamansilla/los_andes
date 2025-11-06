@@ -1,5 +1,6 @@
 package servlet;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -13,6 +14,8 @@ import logic.LogicActividad;
 import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -65,17 +68,11 @@ public class ServletActividad extends HttpServlet {
             }
 
             switch (action.toLowerCase()) {
-                case "listar": {
-                    LinkedList<Actividad> actividades = new LinkedList<>(logicActividad.getAll());
-                    if ("json".equalsIgnoreCase(format)) {
-                        response.setContentType("application/json;charset=UTF-8");
-                        response.getWriter().write(gson.toJson(actividades));
-                    } else {
-                       
-                        request.setAttribute("listaActividades", actividades);
-                        request.getRequestDispatcher("WEB-INF/listaActividades.jsp").forward(request, response);
-                    }
-                    break;
+            case "listar": {
+                List<Actividad> actividades = logicActividad.getAll(); // ✅ usa List
+                String json = gson.toJson(actividades);
+                response.getWriter().write(json);
+                break;             
                 }
                 
                 case "listarcondetalles": {

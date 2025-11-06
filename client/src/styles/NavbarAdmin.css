@@ -8,8 +8,10 @@
   background-color: #DDD8CA;
   color: #20321E;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  position: relative;
+  position: sticky;  /* 🔹 CAMBIA ESTO */
+  top: 0;            /* 🔹 AGREGA ESTO */
   z-index: 1000;
+  width: 100%;       /* 🔹 AGREGA ESTO */
 }
 
 /* 2. Sección izquierda (Usuario, Inicio, Cerrar Sesión) */
@@ -149,4 +151,7 @@
 .btn-cancel:hover {
   background-color: #c9c4b5;
   border-color: #466245;
+}
+.navbar-admin i.fa-solid {
+  margin-right: 8px; /* Puedes ajustar este valor si quieres más o menos espacio */
 }

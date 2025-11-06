@@ -33,13 +33,11 @@ const CanchasAdmin = () => {
     fetchCanchas();
   }, []);
 
-  // Abrir modal de confirmación
   const handleEliminar = (cancha: Cancha) => {
     setCanchaAEliminar(cancha);
     setShowModalEliminar(true);
   };
 
-  // Confirmar eliminación
   const confirmarEliminar = async () => {
     if (!canchaAEliminar) return;
     try {
@@ -60,7 +58,6 @@ const CanchasAdmin = () => {
 
   const handleModificar = (cancha: Cancha) => {
     localStorage.setItem('canchaSeleccionada', JSON.stringify(cancha));
-    // Redirigir a la nueva ruta
     window.location.href = '/canchas-admin/modificar';
   };
 
@@ -74,8 +71,7 @@ const CanchasAdmin = () => {
           {canchas.map((c) => (
             <li key={c.id}>
               <h3>Cancha {c.nro_cancha}</h3>
-              
-              {/* --- ESTA ES LA PARTE CORREGIDA --- */}
+
               <p>Ubicación: {c.ubicacion}</p>
               <p>Descripción: {c.descripcion}</p>
               <p>Tamaño: {c.tamanio} m²</p>
@@ -93,8 +89,7 @@ const CanchasAdmin = () => {
           ))}
         </ul>
       </div>
-      
-      {/* El modal se queda igual */}
+
       {showModalEliminar && canchaAEliminar && (
         <div className="modal-backdrop">
           <div className="modal">

@@ -27,7 +27,7 @@ const ModificarCancha: React.FC = () => {
   useEffect(() => {
     const stored = localStorage.getItem('canchaSeleccionada');
     if (!stored) {
-      navigate('/canchas'); // si no hay cancha seleccionada, volver
+      navigate('/canchas'); 
       return;
     }
     const c = JSON.parse(stored) as Cancha;
@@ -79,14 +79,11 @@ const ModificarCancha: React.FC = () => {
   return (
     <div className="pag-modificar">
       <NavbarAdmin />
-      
-      {/* Este es el contenedor principal que centra todo verticalmente */}
+
       <div className="contenido-cancha">
-        
-        {/* Título principal de la página */}
+
         <h1>Modificar Cancha {cancha.nro_cancha}</h1>
 
-        {/* El recuadro cremita del formulario */}
         <div className="form-modificar">
           {mensajeExito && <p className="mensaje-exito">{mensajeExito}</p>}
           {mensajeError && <p className="mensaje-error">{mensajeError}</p>}

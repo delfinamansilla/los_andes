@@ -16,10 +16,9 @@ import ListaActividades from './pages/ListaActividades';
 import AgregarActividad from './pages/AgregarActividad';
 import MisActividades from './pages/MisActividades';
 import InscripcionActividad from './pages/InscripcionActividad';
-import ListaActividades from './pages/ListaActividades';
-import AgregarActividad from './pages/AgregarActividad';
 import ActividadDetalle from './pages/ActividadDetalle';
 import AgregarHorario from './pages/AgregarHorario';
+
 
 
 function App() {
@@ -39,13 +38,11 @@ function App() {
 		<Route path="/modificar-usuario" element={<MiCuenta />} />
 		<Route path="/modificar-profesor" element={<ModificarProfesor />} />
 		<Route path="/listado-profesor" element={<ListadoProfesor />} />
-		<Route path="/actividades" element={<ListaActividades />} />
 		<Route path="/actividades/nueva" element={<AgregarActividad />} />
 		<Route path="/modificar-usuario" element={<MiCuenta />} />
 		<Route path="/mis-actividades" element={<MisActividades />} />
 		<Route path="/inscripcion-actividad" element={<InscripcionActividad />} />
 		<Route path="/actividades" element={<ListaActividades />} />
-		<Route path="/actividades/nueva" element={<AgregarActividad />} />
 		<Route path="/actividad-detalle" element={<ActividadDetalle />} />
 		<Route path="/agregar-horario" element={<AgregarHorario />} />
 		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
