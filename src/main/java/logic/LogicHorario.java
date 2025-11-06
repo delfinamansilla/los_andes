@@ -1,6 +1,9 @@
 package logic;
 
+import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.List;
+
 import data.DataHorario;
 import entities.Horario;
 
@@ -14,6 +17,11 @@ public class LogicHorario {
     public LinkedList<Horario> getAll() {
         return dh.getAll();
     }
+    
+    public List<Horario> getByActividad(int idActividad) throws SQLException {
+        return dh.getByActividad(idActividad);
+    }
+
 
     public Horario getById(int id) throws Exception {
         if (id <= 0) {
@@ -95,4 +103,3 @@ public class LogicHorario {
         }
     }
     }
-

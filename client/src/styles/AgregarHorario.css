@@ -1,0 +1,149 @@
+.page-container-horario {
+  min-height: 100vh;
+  background-color: #20321E; /* verde oscuro */
+  color: #20321E;
+  padding: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Título */
+.page-container-horario h2 {
+  text-align: center;
+  color: #DDD8CA;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+}
+
+/* Contenedor general de tarjetas */
+.horario-contenedor {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* Tarjeta base */
+.horario-card {
+  background-color: #DDD8CA; /* cremita */
+  border-radius: 14px;
+  padding: 25px 30px;
+  width: 300px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.horario-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+}
+
+/* Inputs y selects */
+.horario-card input,
+.horario-card select {
+  background-color: #ffffff;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 1rem;
+  color: #20321E;
+}
+
+/* Texto dentro de cada horario */
+.horario-item p {
+  color: #20321E;
+  margin: 6px 0;
+  font-size: 1.25rem; /* 🔹 Más grande */
+  font-weight: 600;
+}
+
+.horario-item .font-semibold {
+  font-size: 1.5rem; /* 🔹 Día aún más grande */
+  font-weight: 700;
+}
+
+.horario-item > .flex.gap-2 {
+  display: flex;
+  gap: 10px;       /* separa los botones horizontalmente */
+ 
+}
+
+/* Botones dentro de la tarjeta */
+.horario-item button,
+.horario-form button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+ 
+}
+
+.horario-item button.modificar {
+  background-color: #20321E;
+  color: white;
+}
+
+.horario-item button.modificar:hover {
+  background-color: #466245;
+}
+
+.horario-item button.eliminar {
+  background-color: #20321E;
+  color: white;
+}
+
+.horario-item button.eliminar:hover {
+  background-color: #466245;
+}
+
+.horario-form button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.horario-form button:hover {
+  background-color: #3e8e41;
+}
+
+/* Mensaje de éxito */
+.mensaje-exito {
+  background-color: #dff0d8;
+  color: #3c763d;
+  border: 1px solid #c3e6cb;
+  border-radius: 8px;
+  padding: 10px 15px;
+  width: fit-content;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Botón volver */
+.btn-volver {
+  background-color: #20321E;
+  color: #DDD8CA;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 30px;
+  transition: background-color 0.2s ease;
+  align-self: center;
+}
+
+.btn-volver:hover {
+  background-color: #466245;
+}

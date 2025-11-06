@@ -2,98 +2,124 @@ package servlet;
 
 import java.io.IOException;
 import java.time.LocalTime;
-import java.util.LinkedList;
+import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import entities.Horario;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import entities.Horario;
 import logic.LogicHorario;
 
-/**
- * Servlet para gestionar las operaciones CRUD de Horario.
- * Acciones posibles: listar, buscar, agregar, actualizar, eliminar.
- */
 @WebServlet({"/horario", "/Horario", "/HORARIO"})
 public class ServletHorario extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private LogicHorario logicHorario;
+    private Gson gson;
 
     public ServletHorario() {
         super();
         logicHorario = new LogicHorario();
+
+        // Configuración de Gson con soporte para LocalTime
+        gson = new GsonBuilder()
+                .registerTypeAdapter(LocalTime.class,
+                        (com.google.gson.JsonSerializer<LocalTime>)
+                                (src, typeOfSrc, context) ->
+                                        new com.google.gson.JsonPrimitive(src.toString()))
+                .setPrettyPrinting()
+                .create();
     }
 
-    /**
-     * Maneja peticiones GET:
-     *  - listar: muestra todos los horarios
-     *  - buscar: obtiene un horario por ID
-     *  - eliminar: elimina un horario por ID
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        response.setContentType("application/json;charset=UTF-8");
         String action = request.getParameter("action");
-        response.setContentType("text/html;charset=UTF-8");
 
         try {
             if (action == null) {
-                response.getWriter().append("Debe especificar una acción en el parámetro 'action'.");
+                response.getWriter().write("{\"error\":\"Debe especificar una acción (listar, buscar o eliminar).\"}");
                 return;
             }
 
             switch (action.toLowerCase()) {
 
                 case "listar": {
-                    LinkedList<Horario> horarios = logicHorario.getAll();
-                    request.setAttribute("listaHorarios", horarios);
-                    request.getRequestDispatcher("WEB-INF/listaHorarios.jsp").forward(request, response);
+                    List<Horario> horarios = logicHorario.getAll();
+                    String json = gson.toJson(horarios);
+                    response.getWriter().write(json);
                     break;
                 }
 
                 case "buscar": {
                     int id = Integer.parseInt(request.getParameter("id"));
                     Horario h = logicHorario.getById(id);
-                    request.setAttribute("horario", h);
-                    request.getRequestDispatcher("WEB-INF/detalleHorario.jsp").forward(request, response);
+
+                    if (h != null) {
+                        String json = gson.toJson(h);
+                        response.getWriter().write(json);
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        response.getWriter().write("{\"error\":\"No se encontró el horario con ID " + id + "\"}");
+                    }
                     break;
                 }
+                
+                case "buscar_por_actividad": {
+                    int idActividad = Integer.parseInt(request.getParameter("id_actividad"));
+                    List<Horario> horarios = logicHorario.getByActividad(idActividad);
+
+                    if (horarios != null && !horarios.isEmpty()) {
+                        String json = gson.toJson(horarios);
+                        response.getWriter().write(json);
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        response.getWriter().write("{\"error\":\"No se encontraron horarios para la actividad con ID " + idActividad + "\"}");
+                    }
+                    break;
+                }
+
 
                 case "eliminar": {
                     int id = Integer.parseInt(request.getParameter("id"));
                     logicHorario.delete(id);
-                    response.sendRedirect("horario?action=listar");
+                    response.getWriter().write("{\"status\":\"ok\", \"mensaje\":\"Horario eliminado correctamente.\"}");
                     break;
                 }
 
                 default:
-                    response.getWriter().append("Acción GET no reconocida: ").append(action);
+                    response.getWriter().write("{\"error\":\"Acción GET no reconocida: " + action + "\"}");
             }
 
+        } catch (NumberFormatException nfe) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"El parámetro ID debe ser un número válido.\"}");
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "Error en Horario: " + e.getMessage());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\":\"Error al procesar la solicitud: " + e.getMessage() + "\"}");
         }
     }
 
-    /**
-     * Maneja peticiones POST:
-     *  - agregar: crea un nuevo horario
-     *  - actualizar: modifica un horario existente
-     */
+    // -------------------------------
+    // MÉTODOS POST → Agregar o Actualizar
+    // -------------------------------
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        response.setContentType("application/json;charset=UTF-8");
         String action = request.getParameter("action");
 
         try {
             if (action == null) {
-                response.getWriter().append("Debe especificar una acción en el parámetro 'action'.");
+                response.getWriter().write("{\"error\":\"Debe especificar una acción (agregar o actualizar).\"}");
                 return;
             }
 
@@ -108,34 +134,45 @@ public class ServletHorario extends HttpServlet {
 
                     logicHorario.add(h);
 
-                    request.setAttribute("mensaje", "Horario agregado correctamente.");
-                    response.sendRedirect("horario?action=listar");
+                    String json = gson.toJson(h);
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                    response.getWriter().write("{\"status\":\"ok\", \"mensaje\":\"Horario agregado correctamente\", \"horario\":" + json + "}");
                     break;
                 }
 
                 case "actualizar": {
+                    com.google.gson.JsonObject json = (com.google.gson.JsonObject) request.getAttribute("jsonBody");
+                    if (json == null) {
+                        json = gson.fromJson(request.getReader(), com.google.gson.JsonObject.class);
+                    }
+
+                    System.out.println("📦 JSON recibido para actualizar horario: " + json);
+                    
                     Horario h = new Horario();
-                    h.setId(Integer.parseInt(request.getParameter("id")));
-                    h.setDia(request.getParameter("dia"));
-                    h.setHoraDesde(LocalTime.parse(request.getParameter("hora_desde")));
-                    h.setHoraHasta(LocalTime.parse(request.getParameter("hora_hasta")));
-                    h.setIdActividad(Integer.parseInt(request.getParameter("id_actividad")));
+                    h.setId(json.get("id").getAsInt());
+                    h.setDia(json.get("dia").getAsString());
+                    h.setHoraDesde(LocalTime.parse(json.get("hora_desde").getAsString()));
+                    h.setHoraHasta(LocalTime.parse(json.get("hora_hasta").getAsString()));
+                    h.setIdActividad(json.get("id_actividad").getAsInt());
 
                     logicHorario.update(h);
 
-                    response.sendRedirect("horario?action=listar");
+                    String result = gson.toJson(h);
+                    response.getWriter().write("{\"status\":\"ok\", \"mensaje\":\"Horario actualizado correctamente\", \"horario\":" + result + "}");
                     break;
                 }
 
                 default:
-                    response.getWriter().append("Acción POST no reconocida: ").append(action);
+                    response.getWriter().write("{\"error\":\"Acción POST no reconocida: " + action + "\"}");
             }
 
+        } catch (NumberFormatException nfe) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"Uno de los parámetros numéricos no es válido.\"}");
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "Error al procesar horario: " + e.getMessage());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\":\"Error al procesar el horario: " + e.getMessage() + "\"}");
         }
     }
 }
-

@@ -11,6 +11,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import entities.Actividad;
 import logic.LogicActividad;
 import java.util.Map;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Servlet para gestionar las operaciones CRUD de Actividad.
@@ -20,10 +24,23 @@ import java.util.Map;
 public class ServletActividad extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private LogicActividad logicActividad;
+    private Gson gson;
 
     public ServletActividad() {
         super();
         logicActividad = new LogicActividad();
+        gson = new GsonBuilder()
+        	    // cómo serializar LocalDate (para enviar JSON al frontend)
+        	    .registerTypeAdapter(LocalDate.class,
+        	        (com.google.gson.JsonSerializer<LocalDate>)
+        	            (src, typeOfSrc, context) -> new com.google.gson.JsonPrimitive(src.toString()))
+        	    // cómo deserializar LocalDate (para leer JSON del frontend)
+        	    .registerTypeAdapter(LocalDate.class,
+        	        (com.google.gson.JsonDeserializer<LocalDate>)
+        	            (json, typeOfT, context) -> LocalDate.parse(json.getAsString()))
+        	    .setPrettyPrinting()
+        	    .create();
+
     }
 
 
@@ -89,35 +106,22 @@ public class ServletActividad extends HttpServlet {
                 case "buscar": {
                     int id = Integer.parseInt(request.getParameter("id"));
                     Actividad a = logicActividad.getOne(id);
-                    if ("json".equalsIgnoreCase(format)) {
-                        response.setContentType("application/json;charset=UTF-8");
-                        if (a != null) {
-                            response.getWriter().write(gson.toJson(a));
-                        } else {
-                            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                            response.getWriter().write("{\"error\":\"Actividad no encontrada\"}");
-                        }
+
+                    if (a != null) {
+                        String json = gson.toJson(a);
+                        response.getWriter().write(json);
                     } else {
-                        if (a != null) {
-                            request.setAttribute("actividad", a);
-                            request.getRequestDispatcher("WEB-INF/detalleActividad.jsp").forward(request, response);
-                        } else {
-                            request.setAttribute("error", "No se encontró la actividad con ID " + id);
-                            request.getRequestDispatcher("error.jsp").forward(request, response);
-                        }
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        response.getWriter().write("{\"error\":\"No se encontró la actividad con ID " + id + "\"}");
                     }
                     break;
                 }
 
+
                 case "eliminar": {
                     int id = Integer.parseInt(request.getParameter("id"));
                     logicActividad.delete(id);
-                    if ("json".equalsIgnoreCase(format)) {
-                        response.setContentType("application/json;charset=UTF-8");
-                        response.getWriter().write("{\"status\":\"ok\",\"message\":\"Actividad eliminada correctamente\"}");
-                    } else {
-                        response.sendRedirect("actividad?action=listar");
-                    }
+                    response.getWriter().write("{\"status\":\"ok\", \"mensaje\":\"Actividad eliminada correctamente.\"}");
                     break;
                 }
 
@@ -145,73 +149,69 @@ public class ServletActividad extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String action = request.getParameter("action");
-        String format = request.getParameter("format");
-        com.google.gson.Gson gson = new com.google.gson.GsonBuilder().create();
+        response.setContentType("application/json;charset=UTF-8");
+        String action = request.getParameter("action"); // 👈 esto va a venir en la URL, está bien
 
         try {
             if (action == null) {
-                response.getWriter().append("Debe especificar una acción en el parámetro 'action'.");
+                response.getWriter().write("{\"error\":\"Debe especificar una acción (crear o actualizar).\"}");
                 return;
             }
+
+            // ✅ Leer el cuerpo JSON
+            BufferedReader reader = request.getReader();
+            JsonObject body = gson.fromJson(reader, JsonObject.class);
+            System.out.println("🟢 JSON recibido: " + body);// usa el gson de la clase
+
 
             switch (action.toLowerCase()) {
                 case "crear": {
                     Actividad nueva = new Actividad();
-                    nueva.setNombre(request.getParameter("nombre"));
-                    nueva.setDescripcion(request.getParameter("descripcion"));
-                    nueva.setCupo(Integer.parseInt(request.getParameter("cupo")));
-                    nueva.setInscripcionDesde(LocalDate.parse(request.getParameter("inscripcion_desde")));
-                    nueva.setInscripcionHasta(LocalDate.parse(request.getParameter("inscripcion_hasta")));
-                    nueva.setIdProfesor(Integer.parseInt(request.getParameter("id_profesor")));
-                    nueva.setIdCancha(Integer.parseInt(request.getParameter("id_cancha")));
+                    nueva.setNombre(body.get("nombre").getAsString());
+                    nueva.setDescripcion(body.get("descripcion").getAsString());
+                    nueva.setCupo(body.get("cupo").getAsInt());
+                    nueva.setInscripcionDesde(LocalDate.parse(body.get("inscripcion_desde").getAsString()));
+                    nueva.setInscripcionHasta(LocalDate.parse(body.get("inscripcion_hasta").getAsString()));
+                    nueva.setIdProfesor(body.get("id_profesor").getAsInt());
+                    nueva.setIdCancha(body.get("id_cancha").getAsInt());
 
                     logicActividad.add(nueva);
-                    if ("json".equalsIgnoreCase(format)) {
-                        response.setContentType("application/json;charset=UTF-8");
-                        response.getWriter().write("{\"status\":\"ok\",\"message\":\"Actividad creada correctamente\"}");
-                    } else {
-                        request.setAttribute("mensaje", "Actividad creada correctamente.");
-                        request.getRequestDispatcher("WEB-INF/listaActividades.jsp").forward(request, response);
-                    }
+
+                    String json = gson.toJson(nueva);
+                    response.getWriter().write("{\"status\":\"ok\",\"mensaje\":\"Actividad creada correctamente\",\"actividad\":" + json + "}");
                     break;
                 }
 
                 case "actualizar": {
                     Actividad a = new Actividad();
-                    a.setIdActividad(Integer.parseInt(request.getParameter("id")));
-                    a.setNombre(request.getParameter("nombre"));
-                    a.setDescripcion(request.getParameter("descripcion"));
-                    a.setCupo(Integer.parseInt(request.getParameter("cupo")));
-                    a.setInscripcionDesde(LocalDate.parse(request.getParameter("inscripcion_desde")));
-                    a.setInscripcionHasta(LocalDate.parse(request.getParameter("inscripcion_hasta")));
-                    a.setIdProfesor(Integer.parseInt(request.getParameter("id_profesor")));
-                    a.setIdCancha(Integer.parseInt(request.getParameter("id_cancha")));
+                    a.setIdActividad(body.get("id").getAsInt());
+                    a.setNombre(body.get("nombre").getAsString());
+                    a.setDescripcion(body.get("descripcion").getAsString());
+                    a.setCupo(body.get("cupo").getAsInt());
+                    a.setInscripcionDesde(LocalDate.parse(body.get("inscripcion_desde").getAsString()));
+                    a.setInscripcionHasta(LocalDate.parse(body.get("inscripcion_hasta").getAsString()));
+                    a.setIdProfesor(body.get("id_profesor").getAsInt());
+                    a.setIdCancha(body.get("id_cancha").getAsInt());
 
                     logicActividad.update(a);
-                    if ("json".equalsIgnoreCase(format)) {
-                        response.setContentType("application/json;charset=UTF-8");
-                        response.getWriter().write("{\"status\":\"ok\",\"message\":\"Actividad actualizada correctamente\"}");
-                    } else {
-                        response.sendRedirect("actividad?action=listar");
-                    }
+
+                    String json = gson.toJson(a);
+                    response.getWriter().write("{\"status\":\"ok\",\"mensaje\":\"Actividad actualizada correctamente\",\"actividad\":" + json + "}");
                     break;
                 }
 
                 default:
-                    response.getWriter().append("Acción POST no reconocida: ").append(action);
+                    response.getWriter().write("{\"error\":\"Acción POST no reconocida: " + action + "\"}");
             }
 
+        } catch (NumberFormatException nfe) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"Uno de los parámetros numéricos no es válido.\"}");
         } catch (Exception e) {
             e.printStackTrace();
-            if ("json".equalsIgnoreCase(format)) {
-                response.setContentType("application/json;charset=UTF-8");
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.getWriter().write("{\"error\":\"Error al procesar la actividad: " + e.getMessage() + "\"}");
-            } else {
-                request.setAttribute("error", "Error al procesar la actividad: " + e.getMessage());
-                request.getRequestDispatcher("error.jsp").forward(request, response);
-            }
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\":\"Error al procesar la actividad: " + e.getMessage() + "\"}");
         }
     }
+
 }

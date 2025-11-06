@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
+import '../styles/AgregarActividad.css';
+
 
 const AgregarActividad: React.FC = () => {
   const navigate = useNavigate();
@@ -14,60 +16,94 @@ const AgregarActividad: React.FC = () => {
     id_cancha: '',
   });
 
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [profesores, setProfesores] = useState<any[]>([]);
+  const [canchas, setCanchas] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [actividadCreada, setActividadCreada] = useState(false);
+  const [actividad, setActividad] = useState<any | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+
+  // 🔹 Cargar profesores y canchas al montar el componente
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [profRes, canchaRes] = await Promise.all([
+          fetch('http://localhost:8080/club/profesor?action=listar'),
+          fetch('http://localhost:8080/club/cancha?action=listar'),
+        ]);
+
+        const profesoresData = await profRes.json();
+        const canchasData = await canchaRes.json();
+
+        setProfesores(profesoresData);
+        setCanchas(canchasData);
+      } catch (err) {
+        console.error('❌ Error al cargar datos:', err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
     setLoading(true);
 
+    const payload = {
+      nombre: formData.nombre,
+      cupo: parseInt(formData.cupo),
+      descripcion: formData.descripcion,
+      inscripcion_desde: formData.inscripcion_desde?.slice(0, 10),
+      inscripcion_hasta: formData.inscripcion_hasta?.slice(0, 10),
+      id_profesor: parseInt(formData.id_profesor),
+      id_cancha: parseInt(formData.id_cancha),
+    };
+
     try {
-      const res = await fetch('http://localhost:8080/club/actividad?action=agregar', {
+      const res = await fetch('http://localhost:8080/club/actividad?action=crear', {
         method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          nombre: formData.nombre,
-          cupo: parseInt(formData.cupo),
-          descripcion: formData.descripcion,
-          inscripcion_desde: formData.inscripcion_desde,
-          inscripcion_hasta: formData.inscripcion_hasta,
-          id_profesor: parseInt(formData.id_profesor),
-          id_cancha: parseInt(formData.id_cancha),
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
 
-      if (res.ok) {
-        setSuccess('✅ Actividad creada correctamente');
-        setTimeout(() => navigate('/actividades'), 1500);
-      } else {
-        const txt = await res.text();
-        console.error('Error al crear actividad:', txt);
-        setError('❌ No se pudo crear la actividad');
-      }
+      const text = await res.text();
+      const data = JSON.parse(text);
+      if (!res.ok) throw new Error(data.message || 'Error al crear la actividad');
+	  
+	  const nuevaActividad = data.actividad || payload;
+	  setActividad(nuevaActividad);
+	  setActividadCreada(true);
+
+      alert('✅ Actividad creada correctamente');
+      
     } catch (err) {
-      console.error('Error de red:', err);
-      setError('🚫 Error de conexión con el servidor');
+      console.error('🚫 Error al crear actividad:', err);
+      alert('❌ Error al crear la actividad');
     } finally {
       setLoading(false);
     }
   };
+  
+  const handleAgregarHorario = () => {
+    if (actividadCreada && actividad) {
+      localStorage.setItem('actividad', JSON.stringify(actividad));
+      navigate('/agregar-horario');
+    } else {
+      alert('⚠ Primero debes crear la actividad antes de agregar horarios.');
+    }
+  };
+
 
   return (
     <div>
       <NavbarAdmin />
       <div className="page-container">
-        <h2>🆕 Nueva Actividad</h2>
+        <h2>Nueva Actividad</h2>
         <form className="form-actividad" onSubmit={handleSubmit}>
           <label>
             Nombre:
@@ -94,26 +130,49 @@ const AgregarActividad: React.FC = () => {
             <input type="date" name="inscripcion_hasta" value={formData.inscripcion_hasta} onChange={handleChange} required />
           </label>
 
+          {/* 🔽 Selector de profesor */}
           <label>
-            ID Profesor:
-            <input type="number" name="id_profesor" value={formData.id_profesor} onChange={handleChange} required />
+            Profesor:
+            <select name="id_profesor" value={formData.id_profesor} onChange={handleChange} required>
+              <option value="">Seleccionar profesor</option>
+              {profesores.map(p => (
+                <option key={p.id} value={p.id}>
+                  {p.nombre_completo}
+                </option>
+              ))}
+            </select>
           </label>
 
+          {/* 🔽 Selector de cancha */}
           <label>
-            ID Cancha:
-            <input type="number" name="id_cancha" value={formData.id_cancha} onChange={handleChange} required />
+            Cancha:
+            <select name="id_cancha" value={formData.id_cancha} onChange={handleChange} required>
+              <option value="">Seleccionar cancha</option>
+              {canchas.map(c => (
+                <option key={c.id} value={c.id}>
+                  {c.descripcion} (N° {c.nro_cancha})
+                </option>
+              ))}
+            </select>
           </label>
 
           <div className="form-actions">
             <button type="submit" disabled={loading}>
               {loading ? 'Creando...' : 'Crear Actividad'}
             </button>
-            <button type="button" onClick={() => navigate('/actividades')}>Cancelar</button>
+            <button type="button" onClick={() => navigate('/actividades')}>
+              Cancelar
+            </button>
+
+			<button
+			  type="button"
+			  onClick={handleAgregarHorario}
+			  disabled={!actividadCreada}
+			>
+			  ➕ Agregar Horario
+			</button>
           </div>
         </form>
-
-        {error && <p className="error-box">{error}</p>}
-        {success && <p className="success-box">{success}</p>}
       </div>
     </div>
   );

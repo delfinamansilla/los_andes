@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
+import '../styles/ListaActividades.css';
+
 
 interface Actividad {
-  idActividad: number;
+  id: number;
   nombre: string;
   descripcion?: string;
   cupo?: number;
@@ -53,8 +55,9 @@ const ListaActividades: React.FC = () => {
     fetchActividades();
   }, []);
 
-  const handleVerDetalle = (id: number) => {
-    navigate(`/actividad/${id}`); // 👈 lleva al detalle
+  const handleVerDetalle = (actividad: Actividad) => {
+    localStorage.setItem('actividadSeleccionada', JSON.stringify(actividad));
+    navigate('/actividad-detalle'); 
   };
 
   const handleAgregar = () => {
@@ -65,37 +68,45 @@ const ListaActividades: React.FC = () => {
     <div>
       <NavbarAdmin />
       <div className="page-container">
-        <h2>🗂️ Lista de Actividades</h2>
+        <h2>Lista de Actividades</h2>
 
         {loading && <p>Cargando actividades...</p>}
         {error && <p className="error-box">{error}</p>}
 
-        {!loading && !error && (
-          <>
-            {actividades.length > 0 ? (
-              <div className="actividad-lista">
-                {actividades.map((act) => (
-                  <button
-                    key={act.idActividad}
-                    className="actividad-btn"
-                    onClick={() => handleVerDetalle(act.idActividad)}
-                  >
-                    <strong>{act.nombre}</strong>
-                    <p style={{ fontSize: '0.9rem', color: '#555' }}>
-                      {act.descripcion || 'Sin descripción'}
-                    </p>
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <p>No hay actividades registradas.</p>
-            )}
+		{!loading && !error && (
+		  <>
+		    {actividades.length > 0 ? (
+		      <div className="actividad-lista">
+		        {/* Botón de agregar como primer “actividad” */}
+		        <button className="actividad-btn agregar-btn" onClick={handleAgregar}>
+		          <strong>➕ Agregar actividad</strong>
+		        </button>
 
-            <button className="btn_agregar" onClick={handleAgregar}>
-              ➕ Agregar nueva actividad
-            </button>
-          </>
-        )}
+		        {actividades.map((act) => (
+		          <button
+		            key={act.id}
+		            className="actividad-btn"
+		            onClick={() => handleVerDetalle(act)}
+		          >
+		            <strong>{act.nombre}</strong>
+		            <p style={{ fontSize: '0.9rem', color: '#555' }}>
+		              {act.descripcion || 'Sin descripción'}
+		            </p>
+		          </button>
+		        ))}
+		      </div>
+		    ) : (
+		      <>
+		        <div className="actividad-lista">
+		          <button className="actividad-btn agregar-btn" onClick={handleAgregar}>
+		            <strong>➕ Agregar actividad</strong>
+		          </button>
+		        </div>
+		        <p>No hay actividades registradas.</p>
+		      </>
+		    )}
+		  </>
+		)}
       </div>
     </div>
   );

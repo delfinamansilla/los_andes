@@ -47,7 +47,9 @@ public class ServletProfesor extends HttpServlet {
        
 
         String action = request.getParameter("action");
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
 
         try {
             if (action == null) {
@@ -220,4 +222,3 @@ public class ServletProfesor extends HttpServlet {
         }
     }
 }
-

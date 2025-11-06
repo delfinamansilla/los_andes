@@ -46,6 +46,36 @@ public class DataHorario {
         return horarios;
     }
 
+    public List<Horario> getByActividad(int idActividad) throws SQLException {
+        List<Horario> horarios = new ArrayList<>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT * FROM horario WHERE id_actividad = ?"
+            );
+            stmt.setInt(1, idActividad);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Horario h = new Horario();
+                h.setId(rs.getInt("id"));
+                h.setDia(rs.getString("dia"));
+                h.setHoraDesde(rs.getTime("hora_desde").toLocalTime());
+                h.setHoraHasta(rs.getTime("hora_hasta").toLocalTime());
+                h.setIdActividad(rs.getInt("id_actividad"));
+                horarios.add(h);
+            }
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            DbConnector.getInstancia().releaseConn();
+        }
+
+        return horarios;
+    }
+
     /**
      * Devuelve un horario por ID.
      * @param id ID del horario.
@@ -182,4 +212,3 @@ public class DataHorario {
         }
     }
 }
-

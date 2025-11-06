@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-
 import java.util.LinkedList;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,6 +10,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import entities.Cancha;
 import logic.LogicCancha;
+
+import java.util.Locale;
+
 
 @WebServlet("/cancha")
 public class ServletCancha extends HttpServlet {
@@ -66,10 +68,26 @@ public class ServletCancha extends HttpServlet {
                 case "buscar": {
                     int id = Integer.parseInt(request.getParameter("id"));
                     Cancha c = logicCancha.getOne(id);
-                    request.setAttribute("cancha", c);
-                    request.getRequestDispatcher("WEB-INF/detalleCancha.jsp").forward(request, response);
+
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+
+                    if (c != null) {
+                        // 🟢 CAMBIÁ ESTA LÍNEA:
+                        String json = String.format(Locale.US,
+                            "{\"id\":%d,\"nro_cancha\":%d,\"ubicacion\":\"%s\",\"descripcion\":\"%s\",\"tamanio\":%.2f,\"estado\":%b}",
+                            c.getId(), c.getNro_cancha(), c.getUbicacion(), c.getDescripcion(), c.getTamanio(), c.isEstado()
+                        );
+                        response.getWriter().write(json);
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        response.getWriter().write("{\"error\":\"Cancha no encontrada\"}");
+                    }
                     break;
                 }
+
+
+
                 case "eliminar": {
                     int id = Integer.parseInt(request.getParameter("id"));
                     logicCancha.delete(id);
@@ -167,4 +185,3 @@ public class ServletCancha extends HttpServlet {
         }
     }
 }
-

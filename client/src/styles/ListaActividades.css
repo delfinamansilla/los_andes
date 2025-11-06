@@ -1,0 +1,98 @@
+/* Fondo general */
+.page-container {
+  min-height: 100vh;
+  background-color: #20321E; /* verde oscuro */
+  padding: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Título */
+.page-container h2 {
+  text-align: center;
+  color: #DDD8CA;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+}
+
+/* Contenedor de tarjetas */
+.actividad-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* 🔸 Cada tarjeta individual */
+.actividad-btn {
+  background-color: #DDD8CA !important; /* cremita */
+  color: #20321E !important; /* texto verde oscuro */
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  padding: 20px;
+  width: 250px;
+  height: 180px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.actividad-btn strong {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.actividad-btn p {
+  font-size: 0.95rem;
+  color: #466245;
+  white-space: normal; /* permite que el texto salte de línea */
+  word-wrap: break-word; /* corta palabras largas si es necesario */
+  overflow: hidden; /* evita desbordes visuales */
+  text-overflow: ellipsis; /* opcional: agrega "..." si se pasa */
+  display: -webkit-box;
+  -webkit-line-clamp: 5; /* muestra hasta 5 líneas antes de cortar */
+  -webkit-box-orient: vertical;
+}
+
+
+/* Hover */
+.actividad-btn:hover {
+  background-color: #D3CCB9; /* un poco más oscuro al pasar el mouse */
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+}
+
+/* 🔹 Botón "Agregar actividad" (mismo estilo que los otros, pero con ícono) */
+.agregar-btn {
+  background-color: #DDD8CA; /* mismo cremita */
+  color: #20321E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  gap: 8px;
+}
+
+.agregar-btn:hover {
+  background-color: #D3CCB9;
+}
+
+/* Mensajes de error */
+.error-box {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  margin: 20px auto;
+  width: fit-content;
+}
