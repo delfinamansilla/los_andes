@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import NavbarSocio from './NavbarSocio';
 import Modal from './Modal'; 
+import Footer from './Footer';
 import '../styles/MisActividades.css';
 
 interface Inscripcion {
@@ -143,6 +144,7 @@ const MisActividades: React.FC = () => {
           )}
         </div>
       </div>
+	  <Footer />
 
       {mostrarModal && inscripcionAEliminar && (
         <Modal
@@ -164,6 +166,7 @@ const MisActividades: React.FC = () => {
               <button onClick={() => setShowInfoModal(false)} className="btn-confirm">Aceptar</button>
             </div>
           </div>
+		  
         </div>
       )}
     </>

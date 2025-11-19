@@ -80,7 +80,12 @@ const Registro: React.FC = () => {
           {error && <p className="error-box">{error}</p>}
           {success && <p className="success-box">{success}</p>}
 
-          <form onSubmit={handleSubmit}>
+		  <form onSubmit={handleSubmit} autoComplete="off">
+		  
+		  <input style={{ display: 'none' }} type="text" autoComplete="username" />
+		  <input style={{ display: 'none' }} type="password" autoComplete="new-password" />
+
+
             <input
               type="text"
               placeholder="Nombre Completo"

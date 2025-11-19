@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
 import NavbarSocio from './NavbarSocio';
+
 import '../styles/MiCuenta.css';
 
 

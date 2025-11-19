@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavbarSocio from './NavbarSocio';
 import '../styles/Canchas.css'; // <-- Importa el nuevo CSS
+import Footer from './Footer';
 
 interface Cancha {
   id: number;
@@ -60,6 +61,7 @@ const Canchas: React.FC = () => { // Usamos React.FC para consistencia
           </ul>
         )}
       </div>
+	  <Footer />
     </div>
   );
 };

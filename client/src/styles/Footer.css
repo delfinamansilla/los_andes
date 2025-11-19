@@ -1,0 +1,118 @@
+/* Footer principal */
+.footer-club {
+  background-color: #375133; /* Verde Oscuro */
+  color: #DDD8CA;
+  padding: 4rem 2rem 1rem 2rem;
+  margin-top: auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-top: 1px solid #466245; /* Borde más sutil */
+}
+
+.footer-contenido {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+/* Columnas */
+.footer-columna h3 {
+  color: #DDD8CA;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #466245;
+  padding-bottom: 10px;
+  display: inline-block;
+}
+
+.footer-columna ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-columna ul li {
+  margin-bottom: 0.8rem;
+}
+
+/* Botones de navegación limpios */
+.footer-columna ul li button {
+  background: none;
+  border: none;
+  color: #c9c4b5; /* Un poco más apagado que el blanco */
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  font-family: inherit;
+}
+
+.footer-columna ul li button:hover {
+  color: #fff;
+  transform: translateX(5px);
+}
+
+/* Información de contacto - ARREGLO DE CAJAS BLANCAS */
+.footer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #DDD8CA; /* Color crema */
+  font-size: 1rem;
+  line-height: 1.5;
+  
+  /* Esto elimina los cuadrados blancos que tenías */
+  background-color: transparent !important; 
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.info-item .icono {
+  font-size: 1.2rem;
+  min-width: 25px;
+  text-align: center;
+}
+
+/* Recuadro de horario (este sí queda bien con un fondito sutil) */
+.info-horario {
+  color: #c9c4b5;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  padding: 15px;
+  background: rgba(70, 98, 69, 0.2); /* Verde semitransparente */
+  border-radius: 8px;
+  border-left: 3px solid #DDD8CA;
+}
+
+.info-horario strong {
+  color: #fff;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Barra inferior */
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(221, 216, 202, 0.1);
+  color: #8a8170;
+  font-size: 0.85rem;
+}
+
+.footer-bottom p {
+  margin: 5px 0;
+}

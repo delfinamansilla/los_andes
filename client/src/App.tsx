@@ -18,6 +18,7 @@ import MisActividades from './pages/MisActividades';
 import InscripcionActividad from './pages/InscripcionActividad';
 import ActividadDetalle from './pages/ActividadDetalle';
 import AgregarHorario from './pages/AgregarHorario';
+import Info from './pages/Info';
 
 
 
@@ -25,6 +26,7 @@ function App() {
   return (
     <Router>
       <Routes>
+	  	<Route path="/info/:tipo" element={<Info />} />
         <Route path="/" element={<Navigate to="/login" />} />
 		<Route path="/canchas" element={<Canchas />} />
         <Route path="/login" element={<Login />} />

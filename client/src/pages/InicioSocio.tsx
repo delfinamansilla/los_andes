@@ -1,5 +1,6 @@
 import React from 'react';
 import NavbarSocio from './NavbarSocio';
+import Footer from './Footer';
 import { Clock, MapPin, Phone, Mail, Award, Shield, Users, Dumbbell } from 'lucide-react';
 import '../styles/InicioSocio.css';
 
@@ -167,12 +168,8 @@ const InicioSocio: React.FC = () => {
 
 		  </div>
 		</div>
-
-        <div className="footer-socio">
-          <p>¿Dudas o consultas? Comunicate con secretaría o acercate personalmente.</p>
-          <p className="footer-emoji">¡Disfrutá tu experiencia deportiva! 🎾⚽🏋</p>
-        </div>
       </div>
+	  <Footer />
     </div>
   );
 };
