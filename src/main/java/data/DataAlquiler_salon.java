@@ -233,18 +233,18 @@ public class DataAlquiler_salon {
     /**
      * Devuelve todos los alquileres de un salón específico.
      */
+
     public LinkedList<Alquiler_salon> getBySalon(int idSalon) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         LinkedList<Alquiler_salon> alquileres = new LinkedList<>();
-
         try {
+            // AGREGAMOS EL ORDER BY fecha ASC, hora_desde ASC
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
-                "SELECT * FROM alquiler_salon WHERE id_salon = ?"
+                "SELECT * FROM alquiler_salon WHERE id_salon = ? ORDER BY fecha ASC, hora_desde ASC"
             );
             stmt.setInt(1, idSalon);
             rs = stmt.executeQuery();
-
             while (rs != null && rs.next()) {
                 Alquiler_salon a = new Alquiler_salon();
                 a.setId(rs.getInt("id"));
@@ -253,10 +253,8 @@ public class DataAlquiler_salon {
                 a.setHoraHasta(rs.getTime("hora_hasta").toLocalTime());
                 a.setIdSalon(rs.getInt("id_salon"));
                 a.setIdUsuario(rs.getInt("id_usuario"));
-
                 alquileres.add(a);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -268,10 +266,8 @@ public class DataAlquiler_salon {
                 e.printStackTrace();
             }
         }
-
         return alquileres;
-    }
-    
+    }    
     public boolean tieneReservasActivas(int idSalon) {
         PreparedStatement stmt = null;
         ResultSet rs = null;

@@ -15,7 +15,11 @@ import com.google.gson.GsonBuilder;
 import entities.Alquiler_salon;
 import entities.PreReserva;
 import entities.MailSender;
-
+import logic.GeneradorArchivos;
+import java.io.OutputStream;
+import logic.LogicUsuario;
+import entities.Usuario;
+import logic.LogicSalon;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -28,15 +32,16 @@ import logic.LogicPreReserva;
 @WebServlet({"/alquiler_salon"})
 public class ServletAlquiler_salon extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
+    private LogicSalon logicSalon;
     private LogicAlquiler_salon logic;
     private LogicPreReserva logicPre;
     private Gson gson;
-
+    private LogicUsuario logicUser;
     public ServletAlquiler_salon() {
         logic = new LogicAlquiler_salon();
         logicPre = new LogicPreReserva();
-
+        logicUser = new LogicUsuario();
+        logicSalon = new LogicSalon();
         gson = new GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDate.class,
@@ -71,6 +76,82 @@ public class ServletAlquiler_salon extends HttpServlet {
                 // ============================================================
                 case "listar": {
                     resp.getWriter().write(gson.toJson(logic.getAll()));
+                    break;
+                }
+                case "listar_por_salon": {
+                    try {
+                        int idSalon = Integer.parseInt(req.getParameter("id_salon"));
+                        
+                        // 1. Obtener alquileres del salón (ya ordenados por Data)
+                        LinkedList<Alquiler_salon> lista = logic.getBySalon(idSalon);
+                        
+                        // 2. Crear una estructura de respuesta que incluya el nombre del usuario
+                        List<java.util.Map<String, Object>> respuesta = new ArrayList<>();
+                        
+                        for (Alquiler_salon a : lista) {
+                            java.util.Map<String, Object> item = new java.util.HashMap<>();
+                            item.put("alquiler", a); // Datos del alquiler
+                            
+                            // Buscar usuario para obtener el nombre
+                            Usuario u = logicUser.getById(a.getIdUsuario());
+                            if (u != null) {
+                                item.put("nombreUsuario", u.getNombreCompleto());
+                                item.put("mailUsuario", u.getMail());
+                            } else {
+                                item.put("nombreUsuario", "Usuario Eliminado/Desconocido");
+                            }
+                            
+                            respuesta.add(item);
+                        }
+                        
+                        resp.getWriter().write(gson.toJson(respuesta));
+                        
+                    } catch (Exception e) {
+                        resp.setStatus(500);
+                        resp.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
+                    }
+                    break;
+                }
+
+             // ============================================================
+             // DESCARGAR CONSTANCIA (HTML descargable)
+             // ============================================================
+                case "descargar_constancia": {
+                    try {
+                        // 1. Obtener parámetros
+                        int idSalon = Integer.parseInt(req.getParameter("id_salon"));
+                        int idUser = Integer.parseInt(req.getParameter("id_usuario"));
+                        LocalDate fecha = LocalDate.parse(req.getParameter("fecha"));
+                        LocalTime desde = LocalTime.parse(req.getParameter("hora_desde"));
+                        LocalTime hasta = LocalTime.parse(req.getParameter("hora_hasta"));
+
+                        // 2. Buscar los objetos completos (Usuario y Salon)
+                        Usuario u = logicUser.getById(idUser);
+                        entities.Salon s = logicSalon.getById(idSalon);
+
+                        if (u == null || s == null) {
+                            throw new Exception("Datos de usuario o salón no encontrados.");
+                        }
+
+                        // 3. Generar PDF pasando los objetos
+                        GeneradorArchivos gen = new GeneradorArchivos();
+                        // NOTA: He cambiado la firma del método para aceptar (Salon, Usuario, ...)
+                        byte[] archivo = gen.generarConstanciaPDF(s, u, fecha, desde, hasta);
+
+                        // 4. Enviar respuesta
+                        resp.setContentType("application/pdf");
+                        resp.setHeader("Content-Disposition", "attachment; filename=\"Constancia_" + u.getDni() + ".pdf\"");
+                        resp.setContentLength(archivo.length);
+
+                        try (OutputStream os = resp.getOutputStream()) {
+                            os.write(archivo);
+                            os.flush();
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        resp.getWriter().write("Error al generar constancia: " + e.getMessage());
+                    }
                     break;
                 }
 
@@ -184,66 +265,70 @@ public class ServletAlquiler_salon extends HttpServlet {
                     String token = req.getParameter("token");
                     PreReserva pr = logicPre.obtenerPorToken(token);
 
-                    // Configurar respuesta como HTML
+                    // Configurar respuesta visual HTML
                     resp.setContentType("text/html;charset=UTF-8");
+                    String estiloCss = "<style>body{font-family:sans-serif;background:#20321E;color:white;display:flex;justify-content:center;align-items:center;height:100vh}.card{background:#DDD8CA;padding:40px;border-radius:10px;color:#333;text-align:center}.btn{background:#466245;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;display:inline-block;margin-top:10px}</style>";
 
-                    // Estilos CSS compartidos para la página de respuesta
-                    String estiloCss = "<style>"
-                            + "body { font-family: 'Segoe UI', sans-serif; background-color: #20321E; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }"
-                            + ".card { background-color: #DDD8CA; padding: 40px; border-radius: 15px; text-align: center; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }"
-                            + "h1 { color: #20321E; margin-bottom: 20px; }"
-                            + "p { color: #333; font-size: 18px; margin-bottom: 30px; }"
-                            + ".btn { background-color: #466245; color: #DDD8CA; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; display: inline-block; }"
-                            + ".btn:hover { background-color: #20321E; color: #fff; }"
-                            + ".icon { font-size: 50px; color: #466245; margin-bottom: 20px; }"
-                            + ".error { color: #b91c1c; }"
-                            + "</style>";
-
-                    if (pr == null) {
-                        resp.getWriter().write("<html><head><title>Error</title>" + estiloCss + "</head><body>");
-                        resp.getWriter().write("<div class='card'>");
-                        resp.getWriter().write("<div class='icon' style='color:#b91c1c'>✖</div>");
-                        resp.getWriter().write("<h1 class='error'>Enlace inválido</h1>");
-                        resp.getWriter().write("<p>La reserva no pudo ser confirmada. El enlace es incorrecto o ya fue utilizado.</p>");
-                        resp.getWriter().write("<a href='http://localhost:3000/salones' class='btn'>Volver al Club</a>");
-                        resp.getWriter().write("</div></body></html>");
+                    if (pr == null || pr.getExpiracion().isBefore(LocalDateTime.now())) {
+                        resp.getWriter().write("<html><head>" + estiloCss + "</head><body><div class='card'><h1>Enlace inválido o expirado</h1><a href='http://localhost:3000' class='btn'>Volver</a></div></body></html>");
                         return;
                     }
 
-                    if (pr.getExpiracion().isBefore(LocalDateTime.now())) {
-                        resp.getWriter().write("<html><head><title>Expirado</title>" + estiloCss + "</head><body>");
-                        resp.getWriter().write("<div class='card'>");
-                        resp.getWriter().write("<div class='icon' style='color:#b91c1c'>⏳</div>");
-                        resp.getWriter().write("<h1 class='error'>Enlace expirado</h1>");
-                        resp.getWriter().write("<p>Lo sentimos, el tiempo para confirmar la reserva ha finalizado (30 minutos).</p>");
-                        resp.getWriter().write("<a href='http://localhost:3000/salones' class='btn'>Intentar de nuevo</a>");
-                        resp.getWriter().write("</div></body></html>");
-                        return;
-                    }
-
-                    // --- CONFIRMACIÓN EXITOSA ---
-                    
-                    // Crear la reserva DEFINITIVA
+                    // 1. Guardar la reserva definitiva
                     Alquiler_salon a = new Alquiler_salon();
                     a.setIdSalon(pr.getIdSalon());
                     a.setIdUsuario(pr.getIdUsuario());
                     a.setFecha(pr.getFecha());
                     a.setHoraDesde(pr.getHoraDesde());
                     a.setHoraHasta(pr.getHoraHasta());
-
+                    
                     logic.add(a);
 
-                    // Eliminar la pre-reserva
+                    // 2. Obtener datos del usuario para el mail (SIN USAR LOCALSTORAGE)
+                    Usuario u = null;
+                    try {
+                        u = logicUser.getById(pr.getIdUsuario());
+                    } catch (Exception e) {
+                        e.printStackTrace(); 
+                    }
+
+                    // 3. Mandar mail con los LINKS de descarga
+                    if (u != null && u.getMail() != null) {
+                        // Construimos los links apuntando a este mismo servlet
+                        String baseUrl = "http://localhost:8080/club/alquiler_salon"; // AJUSTA TU PUERTO/PROYECTO SI ES NECESARIO
+                        String params = "&id_salon=" + pr.getIdSalon() + 
+                                        "&id_usuario=" + pr.getIdUsuario() +
+                                        "&fecha=" + pr.getFecha() +
+                                        "&hora_desde=" + pr.getHoraDesde() +
+                                        "&hora_hasta=" + pr.getHoraHasta();
+
+                        String linkPDF = baseUrl + "?action=descargar_constancia" + params;
+
+                        String cuerpoMail = "<div style='background-color: #f4f4f4; padding: 40px; font-family: Arial, sans-serif;'>"
+                                + "<div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);'>"
+                                + "<div style='background-color: #20321E; padding: 30px; text-align: center;'>"
+                                + "<h1 style='color: #DDD8CA; margin: 0; font-size: 24px;'>Reserva Confirmada</h1>"
+                                + "</div>"
+                                + "<div style='padding: 30px; color: #333;'>"
+                                + "<p>Hola " + u.getNombreCompleto() + ",</p>"
+                                + "<p>Tu reserva para el " + pr.getFecha() + " está confirmada. Presente el comprobante en la puerta del club el día de la reserva.</p>"
+                                + "<p>¡Te esperamos!</p>"
+                                + "<p><a href='" + linkPDF + "' style='background-color:#b91c1c;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;'>Descargar Constancia</a></p>"
+                               
+                                + "</div></div></div>";
+
+                        
+                        MailSender.enviarCorreo(u.getMail(), "Reserva Confirmada - Acciones disponibles", cuerpoMail);
+                    }
+
+                    // 4. Limpiar y responder al navegador
                     logicPre.eliminarPorToken(token);
 
-                    // Respuesta Visual Linda
                     resp.getWriter().write("<html><head><title>Confirmada</title>" + estiloCss + "</head><body>");
                     resp.getWriter().write("<div class='card'>");
-                    resp.getWriter().write("<div class='icon'>✔</div>");
                     resp.getWriter().write("<h1>¡Reserva Confirmada!</h1>");
-                    resp.getWriter().write("<p>Tu turno ha sido registrado exitosamente. Te esperamos en el club.</p>");
-                    // Botón que redirige a tu React Frontend
-                    
+                    resp.getWriter().write("<p>Hemos enviado un correo a <b>" + (u != null ? u.getMail() : "tu casilla") + "</b> con las opciones de descarga.</p>");
+                    resp.getWriter().write("<a href='http://localhost:3000/mis-reservas' class='btn'>Ir a Mis Reservas</a>");
                     resp.getWriter().write("</div></body></html>");
                     break;
                 }

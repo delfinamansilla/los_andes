@@ -7,7 +7,7 @@ interface Salon {
   nombre: string;
   capacidad: number;
   descripcion: string;
-  imagen: string | null; // base64 o null
+  imagen: string | null; 
 }
 
 const SalonesAdmin = () => {
@@ -62,6 +62,10 @@ const SalonesAdmin = () => {
     window.location.href = '/modificar-salon';
   };
 
+  const handleVerAlquileres = (salon: Salon) => {
+      localStorage.setItem('salonVerAlquileres', JSON.stringify(salon));
+      window.location.href = '/ver-alquileres-salon';
+  };
 
   return (
     <div className="salones-admin-page">
@@ -93,12 +97,26 @@ const SalonesAdmin = () => {
               <p><strong>Capacidad:</strong> {s.capacidad} personas</p>
               <p><strong>Descripción:</strong> {s.descripcion}</p>
 
+              {/* BOTONES AHORA UNIFICADOS */}
               <div className="salon-buttons">
-                <button onClick={() => handleModificar(s)} className="btn-modificar">
-                  Modificar datos
+                <button 
+                  onClick={() => handleVerAlquileres(s)} 
+                  className="btn-ver-alquileres"
+                >
+                  Ver alquileres
                 </button>
 
-                <button onClick={() => handleEliminar(s)} className="btn-eliminar">
+                <button 
+                  onClick={() => handleModificar(s)} 
+                  className="btn-modificar"
+                >
+                  Modificar
+                </button>
+
+                <button 
+                  onClick={() => handleEliminar(s)} 
+                  className="btn-eliminar"
+                >
                   Eliminar
                 </button>
               </div>

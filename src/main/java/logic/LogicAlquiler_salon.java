@@ -96,6 +96,10 @@ public class LogicAlquiler_salon {
 
         return false;
     }
+ // En LogicAlquiler_salon.java, agrega este método:
+    public LinkedList<Alquiler_salon> getBySalon(int idSalon) {
+        return da.getBySalon(idSalon);
+    }
     
  // Agrega este método en LogicAlquiler_salon.java
 

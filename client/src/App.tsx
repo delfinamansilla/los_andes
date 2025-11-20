@@ -11,6 +11,7 @@ import ModificarSalon from './pages/ModificarSalon';
 import Salones from './pages/Salones';
 import AlquilarSalon from './pages/AlquilarSalon';
 import MisAlquileresSalon from './pages/MisAlquileresSalon';
+import VerAlquileresSalon from './pages/VerAlquileresSalon';
 import ModificarCancha from './pages/ModificarCancha';
 import CrearCancha from './pages/CrearCancha';
 import InicioSocio from './pages/InicioSocio';
@@ -50,6 +51,7 @@ function App() {
 		<Route path="/salones" element={<Salones />} />
 		<Route path="/alquiler_salon/:idSalon" element={<AlquilarSalon />} />
 		<Route path="/mis-alquileres-salon" element={<MisAlquileresSalon />} />
+		<Route path="/ver-alquileres-salon" element={<VerAlquileresSalon />} />
 		<Route path="/crear" element={<CrearCancha />} />
 		<Route path="/inicio-socio" element={<InicioSocio />} />
 		<Route path="/modificar-usuario" element={<MiCuenta />} />

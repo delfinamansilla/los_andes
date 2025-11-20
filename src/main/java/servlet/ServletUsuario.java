@@ -65,25 +65,26 @@ public class ServletUsuario extends HttpServlet {
                 response.getWriter().write(json);
                 break;
             }
-                case "buscar": {
-                	System.out.println("➡️ Entró al case 'buscar'");
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    System.out.println("este es el id"+id);
-                    Usuario u = logicUsuario.getAll().stream()
-                            .filter(x -> x.getIdUsuario() == id)
-                            .findFirst().orElse(null);
-                    System.out.println("este es el usuario"+u);
-                    response.setContentType("application/json;charset=UTF-8");
-                    if (u != null) {
-                        response.getWriter().write("{\"id\":" + u.getIdUsuario() + 
-                            ", \"nombre\":\"" + u.getNombreCompleto() + 
-                            "\", \"mail\":\"" + u.getMail() + "\"}");
-                    } else {
-                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                        response.getWriter().write("{\"error\":\"Usuario no encontrado\"}");
-                    }
-                    break;
+            case "buscar": {
+            	// System.out.println("➡️ Entró al case 'buscar'"); // Opcional
+                int id = Integer.parseInt(request.getParameter("id"));
+                
+                // --- CAMBIO AQUÍ: Búsqueda directa y rápida ---
+                Usuario u = logicUsuario.getById(id);
+                // ----------------------------------------------
+
+                response.setContentType("application/json;charset=UTF-8");
+                if (u != null) {
+                    // OJO: Asegúrate que el JSON coincida con lo que espera tu Front
+                    response.getWriter().write("{\"id\":" + u.getIdUsuario() + 
+                        ", \"nombre\":\"" + u.getNombreCompleto() + 
+                        "\", \"mail\":\"" + u.getMail() + "\"}");
+                } else {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    response.getWriter().write("{\"error\":\"Usuario no encontrado\"}");
                 }
+                break;
+            }
 
                 case "eliminar": {
                     int id = Integer.parseInt(request.getParameter("id"));
