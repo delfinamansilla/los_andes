@@ -25,6 +25,7 @@ import InscripcionActividad from './pages/InscripcionActividad';
 import ActividadDetalle from './pages/ActividadDetalle';
 import AgregarHorario from './pages/AgregarHorario';
 import Info from './pages/Info';
+import AgregarCuota from './pages/AgregarCuota';
 
 
 
@@ -59,6 +60,7 @@ function App() {
 		<Route path="/actividades" element={<ListaActividades />} />
 		<Route path="/actividad-detalle" element={<ActividadDetalle />} />
 		<Route path="/agregar-horario" element={<AgregarHorario />} />
+		<Route path="/agregar-cuota" element={<AgregarCuota />} />
 		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>

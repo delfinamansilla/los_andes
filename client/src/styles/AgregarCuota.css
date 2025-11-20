@@ -1,0 +1,149 @@
+/* --- AgregarCuota.css --- */
+
+/* 1. Configuración general de la página */
+.agregar-cuota-page {
+  background-color: #20321E; /* Fondo verde oscuro */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 2. Área de contenido centrada */
+.content-area {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centra verticalmente */
+  padding: 40px 20px;
+}
+
+/* 3. Tarjeta del formulario (Estilo "Card" beige) */
+.form-container {
+  background-color: #E8E4D9; /* Beige claro, similar a tu captura */
+  color: #20321E; /* Texto oscuro para contraste */
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 500px; /* Ancho máximo elegante */
+  text-align: center;
+  border: 1px solid #DDD8CA;
+}
+
+/* Títulos y textos dentro de la tarjeta */
+.form-container h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.8rem;
+  color: #20321E;
+  font-weight: bold;
+}
+
+.form-container p {
+  margin-bottom: 30px;
+  color: #466245;
+  font-size: 0.95rem;
+}
+
+/* 4. Grupos del formulario */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left; /* Etiquetas alineadas a la izquierda */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #20321E;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+/* 5. Inputs (Clase .inp del TSX) */
+.inp {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #466245;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  color: #20321E;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Evita que el padding rompa el ancho */
+}
+
+.inp:focus {
+  outline: none;
+  border-color: #20321E;
+  background-color: #ffffff;
+  box-shadow: 0 0 8px rgba(70, 98, 69, 0.3);
+}
+
+/* 6. Botón de Agregar (Clase .btn_agregar del TSX) */
+.btn_agregar {
+  width: 100%;
+  background-color: #20321E;
+  color: #DDD8CA;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.btn_agregar:hover {
+  background-color: #2C4229;
+  transform: translateY(-2px);
+}
+
+.btn_agregar:active {
+  transform: translateY(0);
+}
+
+/* 7. Mensajes de Estado (Error y Éxito) */
+.error-box {
+  background-color: #ffcccc; /* Rojo claro */
+  color: #cc0000;
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 20px;
+  border: 1px solid #ff9999;
+  font-weight: bold;
+  font-size: 0.9rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.success-box {
+  background-color: #d4edda; /* Verde claro */
+  color: #155724;
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 20px;
+  border: 1px solid #c3e6cb;
+  font-weight: bold;
+  font-size: 0.9rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Animación suave para los mensajes */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 8. Responsive */
+@media (max-width: 600px) {
+  .form-container {
+    padding: 25px 20px;
+    width: 95%;
+  }
+
+  .form-container h2 {
+    font-size: 1.5rem;
+  }
+}

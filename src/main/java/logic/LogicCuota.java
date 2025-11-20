@@ -28,8 +28,21 @@ public class LogicCuota {
         return dc.getById(id);
     }
 
+ // En LogicCuota.java
+
     public void add(Cuota c) throws Exception {
+        // 1. Validaciones básicas (que ya tenías)
         validarCuota(c);
+
+        // 2. NUEVA VALIDACIÓN: Verificar si ya existe el mes
+        Cuota existente = dc.getByNroCuota(c.getNro_cuota());
+        
+        if (existente != null) {
+            // Si entra aquí, es porque YA existe una cuota con ese número
+            throw new Exception("⚠️ Ya existe una cuota registrada para el mes " + c.getNro_cuota());
+        }
+
+        // 3. Si pasa la validación, guarda
         dc.add(c);
     }
 
@@ -42,6 +55,7 @@ public class LogicCuota {
         dc.delete(id);
     }
 
+    
     /**
      * Método centralizado para validar las reglas de negocio de una cuota.
      * @param c La cuota a validar.
@@ -58,22 +72,10 @@ public class LogicCuota {
         if (c.getFecha_vencimiento() == null) {
             throw new Exception("La fecha de vencimiento no puede estar vacía.");
         }
-
+        
         // 2. Validación de lógica de fechas
         if (c.getFecha_vencimiento().isBefore(c.getFecha_cuota())) {
             throw new Exception("La fecha de vencimiento no puede ser anterior a la fecha de la cuota.");
-        }
-
-        // 3. Validación de existencia del usuario asociado (tu requisito)
-        // ASUNCIÓN: Tu DataUsuario tiene un método getById(id)
-        if (du.getById(c.getId_usuario()) == null) {
-            throw new Exception("El usuario con ID " + c.getId_usuario() + " no existe.");
-        }
-        
-        // 4. Validación de duplicados: un usuario no puede tener dos veces la misma cuota
-        Cuota cuotaExistente = dc.getByUserAndNroCuota(c.getId_usuario(), c.getNro_cuota());
-        if (cuotaExistente != null && cuotaExistente.getId() != c.getId()) {
-            throw new Exception("El usuario ya tiene registrada la cuota número " + c.getNro_cuota() + ".");
         }
     }
 }

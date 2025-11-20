@@ -13,11 +13,11 @@ public class DataCuota {
         LinkedList<Cuota> cuotas = new LinkedList<>();
         try {
             stmt = DbConnector.getInstancia().getConn().createStatement();
-            rs = stmt.executeQuery("SELECT id, nro_cuota, fecha_cuota, fecha_vencimiento, id_usuario FROM cuota");
+            // SE QUITÓ id_usuario
+            rs = stmt.executeQuery("SELECT id, nro_cuota, fecha_cuota, fecha_vencimiento FROM cuota");
             while (rs != null && rs.next()) {
                 Cuota c = new Cuota();
                 c.setId(rs.getInt("id"));
-                c.setId_usuario(rs.getInt("id_usuario")); 
                 c.setNro_cuota(rs.getInt("nro_cuota"));
                 c.setFecha_cuota(rs.getObject("fecha_cuota", LocalDate.class));
                 c.setFecha_vencimiento(rs.getObject("fecha_vencimiento", LocalDate.class));
@@ -42,60 +42,20 @@ public class DataCuota {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-        	stmt = DbConnector.getInstancia().getConn().prepareStatement("SELECT id, nro_cuota, fecha_cuota, fecha_vencimiento, id_usuario FROM cuota WHERE id=?");
+            // SE QUITÓ id_usuario
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT id, nro_cuota, fecha_cuota, fecha_vencimiento FROM cuota WHERE id=?");
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
             if (rs != null && rs.next()) {
                 c = new Cuota();
                 c.setId(rs.getInt("id"));
-                c.setId_usuario(rs.getInt("id_usuario")); 
                 c.setNro_cuota(rs.getInt("nro_cuota"));
                 c.setFecha_cuota(rs.getObject("fecha_cuota", LocalDate.class));
                 c.setFecha_vencimiento(rs.getObject("fecha_vencimiento", LocalDate.class));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-
-            try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-                DbConnector.getInstancia().releaseConn();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return c;
-    }
-    
- // Pega este método DENTRO de la clase DataCuota
-
-    /**
-     * Busca si ya existe una cuota con un número específico para un usuario.
-     * @param idUsuario El ID del usuario.
-     * @param nroCuota El número de la cuota.
-     * @return El objeto Cuota si existe, sino null.
-     */
-    public Cuota getByUserAndNroCuota(int idUsuario, int nroCuota) {
-        Cuota c = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try {
-            stmt = DbConnector.getInstancia().getConn().prepareStatement(
-                "SELECT * FROM cuota WHERE id_usuario = ? AND nro_cuota = ?");
-            stmt.setInt(1, idUsuario);
-            stmt.setInt(2, nroCuota);
-            rs = stmt.executeQuery();
-            if (rs != null && rs.next()) {
-                c = new Cuota();
-                c.setId(rs.getInt("id"));
-                c.setNro_cuota(rs.getInt("nro_cuota"));
-                c.setFecha_cuota(rs.getObject("fecha_cuota", LocalDate.class));
-                c.setFecha_vencimiento(rs.getObject("fecha_vencimiento", LocalDate.class));
-                c.setId_usuario(rs.getInt("id_usuario"));
-            }
-        } catch (SQLException e) { 
-            e.printStackTrace(); 
         } finally {
             try {
                 if (rs != null) rs.close();
@@ -112,15 +72,18 @@ public class DataCuota {
         PreparedStatement stmt = null;
         ResultSet keyResultSet = null;
         try {
-        	stmt = DbConnector.getInstancia().getConn().prepareStatement(
-        		    "INSERT INTO cuota(nro_cuota, fecha_cuota, fecha_vencimiento, id_usuario) VALUES(?,?,?,?)",
-        		    PreparedStatement.RETURN_GENERATED_KEYS
-        		);
+            // SE QUITÓ id_usuario DEL INSERT
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "INSERT INTO cuota(nro_cuota, fecha_cuota, fecha_vencimiento) VALUES(?,?,?)",
+                PreparedStatement.RETURN_GENERATED_KEYS
+            );
             stmt.setInt(1, c.getNro_cuota());
             stmt.setObject(2, c.getFecha_cuota());
             stmt.setObject(3, c.getFecha_vencimiento());
-            stmt.setInt(4, c.getId_usuario());
+            
             stmt.executeUpdate();
+            
+            // ESTO ES CLAVE PARA QUE FUNCIONE EL FRONTEND: RECUPERAR EL ID GENERADO
             keyResultSet = stmt.getGeneratedKeys();
             if (keyResultSet != null && keyResultSet.next()) {
                 c.setId(keyResultSet.getInt(1));
@@ -128,7 +91,6 @@ public class DataCuota {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-
             try {
                 if (keyResultSet != null) keyResultSet.close();
                 if (stmt != null) stmt.close();
@@ -142,14 +104,14 @@ public class DataCuota {
     public void update(Cuota c) {
         PreparedStatement stmt = null;
         try {
-        	stmt = DbConnector.getInstancia().getConn().prepareStatement(
-        		    "UPDATE cuota SET nro_cuota=?, fecha_cuota=?, fecha_vencimiento=?, id_usuario=? WHERE id=?"
-        		);
+            // SE QUITÓ id_usuario DEL UPDATE
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "UPDATE cuota SET nro_cuota=?, fecha_cuota=?, fecha_vencimiento=? WHERE id=?"
+            );
             stmt.setInt(1, c.getNro_cuota());
             stmt.setObject(2, c.getFecha_cuota());
             stmt.setObject(3, c.getFecha_vencimiento());
             stmt.setInt(4, c.getId());
-            stmt.setInt(5, c.getId_usuario()); 
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -162,6 +124,40 @@ public class DataCuota {
             }
         }
     }
+ // En DataCuota.java
+
+    public Cuota getByNroCuota(int nroCuota) {
+        Cuota c = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            // Buscamos si existe alguna cuota con ese nro_cuota
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT id, nro_cuota, fecha_cuota, fecha_vencimiento FROM cuota WHERE nro_cuota = ?"
+            );
+            stmt.setInt(1, nroCuota);
+            rs = stmt.executeQuery();
+            
+            if (rs != null && rs.next()) {
+                c = new Cuota();
+                c.setId(rs.getInt("id"));
+                c.setNro_cuota(rs.getInt("nro_cuota"));
+                c.setFecha_cuota(rs.getObject("fecha_cuota", java.time.LocalDate.class));
+                c.setFecha_vencimiento(rs.getObject("fecha_vencimiento", java.time.LocalDate.class));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return c;
+    }
 
     public void delete(int id) {
         PreparedStatement stmt = null;
@@ -172,7 +168,6 @@ public class DataCuota {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-
             try {
                 if (stmt != null) stmt.close();
                 DbConnector.getInstancia().releaseConn();

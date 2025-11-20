@@ -73,11 +73,6 @@ public class LogicPagoCuota {
             throw new Exception("La cuota con ID " + pc.getId_cuota() + " no existe.");
         }
 
-        // 3. Validación de Pertenencia: La cuota debe pertenecer al usuario
-        if (cuota.getId_usuario() != usuario.getIdUsuario()) {
-            throw new Exception("Error de consistencia: La cuota (ID: " + cuota.getId() + 
-                              ") no pertenece al usuario (ID: " + usuario.getIdUsuario() + ").");
-        }
 
         // 4. Validación de Duplicados: La cuota no debe haber sido pagada antes
         if (dpc.getByCuotaId(pc.getId_cuota()) != null) {
