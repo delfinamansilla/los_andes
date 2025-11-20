@@ -5,6 +5,12 @@ import Registro from './pages/Registro';
 import CanchasAdmin from './pages/CanchasAdmin';
 import InicioAdmin from './pages/InicioAdmin';
 import AgregarProfesor from './pages/AgregarProfesor';
+import CrearSalon from './pages/CrearSalon';
+import SalonesAdmin from './pages/SalonesAdmin';
+import ModificarSalon from './pages/ModificarSalon';
+import Salones from './pages/Salones';
+import AlquilarSalon from './pages/AlquilarSalon';
+import MisAlquileresSalon from './pages/MisAlquileresSalon';
 import ModificarCancha from './pages/ModificarCancha';
 import CrearCancha from './pages/CrearCancha';
 import InicioSocio from './pages/InicioSocio';
@@ -35,6 +41,12 @@ function App() {
 		<Route path="/inicio-admin" element={<InicioAdmin />} />
 		<Route path="/agregar-profesor" element={<AgregarProfesor/>} />
 		<Route path="/canchas-admin/modificar" element={<ModificarCancha />} />
+		<Route path="/crear-salon" element={<CrearSalon />} />
+		<Route path="/salones-admin" element={<SalonesAdmin />} />
+		<Route path="/modificar-salon" element={<ModificarSalon />} />
+		<Route path="/salones" element={<Salones />} />
+		<Route path="/alquiler_salon/:idSalon" element={<AlquilarSalon />} />
+		<Route path="/mis-alquileres-salon" element={<MisAlquileresSalon />} />
 		<Route path="/crear" element={<CrearCancha />} />
 		<Route path="/inicio-socio" element={<InicioSocio />} />
 		<Route path="/modificar-usuario" element={<MiCuenta />} />

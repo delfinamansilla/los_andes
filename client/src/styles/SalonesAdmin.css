@@ -1,0 +1,164 @@
+.salones-admin-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20321E;
+  align-items: center;
+}
+
+.contenido-admin-salon {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.contenido-admin-salon h2 {
+  color: #DDD8CA;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 800;
+}
+
+.contenido-admin-salon ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contenido-admin-salon li {
+  background-color: #DDD8CA;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contenido-admin-salon li:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+/* ❗ Imagen SIN RECORTE — ENTERA ❗ */
+.salon-img {
+  width: 100%;
+  max-width: 260px;
+  height: auto;              /* La altura se ajusta automáticamente */
+  object-fit: contain;       /* ❗ NO recorta la imagen */
+  border-radius: 10px;
+  margin-bottom: 15px;
+  border: 2px solid #20321E;
+  background-color: black;   /* Para que se vea bien si la imagen tiene bordes transparentes */
+}
+
+.salon-img-placeholder {
+  width: 260px;
+  height: 180px;
+  background-color: #bdb8ab;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  border: 2px dashed #20321E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #20321E;
+  font-weight: bold;
+}
+
+.salon-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Botón Modificar – estilo texto plano */
+.btn-modificar {
+  background: transparent !important;
+  border: none !important;
+  color: #20321E !important;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0;
+  transition: 0.2s;
+}
+
+.btn-modificar:hover {
+  color: #466245 !important;
+  transform: scale(1.03);
+}
+
+/* Botón Eliminar */
+.btn-eliminar {
+  background-color: #20321E;
+  color: #DDD8CA;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-eliminar:hover {
+  background-color: #466245;
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal {
+  background-color: #DDD8CA;
+  color: #20321E;
+  padding: 30px 40px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.btn-confirm {
+  background-color: #dc2626;
+  color: white;
+  border: none;
+}
+
+.btn-confirm:hover {
+  background-color: #b91c1c;
+}
+
+.btn-cancel {
+  background-color: #DDD8CA;
+  color: #20321E;
+  border: 2px solid #20321E;
+}
+
+.btn-cancel:hover {
+  background-color: #c9c4b5;
+  border-color: #466245;
+}

@@ -1,0 +1,145 @@
+.pag-crear-salon {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20321E;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+.contenido-crear-salon {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.form-crear-salon {
+  background-color: #DDD8CA;
+  color: #20321E;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 600px;
+}
+
+.form-crear-salon h1 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+.crear-salon {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: left;
+}
+
+.crear-salon label {
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin-bottom: -5px;
+}
+
+.crear-salon input,
+.crear-salon select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #466245;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s;
+  background-color: #DDD8CA;
+  color: #20321E;
+}
+
+.crear-salon input:focus,
+.crear-salon select:focus {
+  border-color: #20321E;
+  box-shadow: 0 0 5px rgba(32, 50, 30, 0.5);
+}
+
+/* ----------- BOTONES ----------- */
+.botones-container-salon {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.botones-container-salon button {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.botones-container-salon button[type="submit"] {
+  border: none;
+  background-color: #20321E;
+  color: #DDD8CA;
+}
+
+.botones-container-salon button[type="submit"]:hover {
+  background-color: #466245;
+}
+
+.btn-cancel-salon {
+  background-color: #DDD8CA;
+  color: #20321E;
+  border: 2px solid #20321E;
+}
+
+.btn-cancel-salon:hover {
+  background-color: #c9c4b5;
+  border-color: #466245;
+}
+
+/* ----------- MENSAJES ----------- */
+.mensajes-globales {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.mensaje-exito,
+.mensaje-error {
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.mensaje-exito {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.mensaje-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* ----------- PREVIEW DE LA IMAGEN ----------- */
+.preview-container {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.preview-img {
+  width: 100%;
+  max-height: none;     /* ❗ Permite que la imagen use su altura real */
+  object-fit: contain;  /* ❗ NO RECORTA la imagen */
+  border-radius: 10px;
+  border: 2px solid #20321E;
+  margin-top: 10px;
+  background-color: black; /* ayuda a ver bordes en imágenes transparentes */
+}

@@ -1,19 +1,20 @@
 package entities;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Alquiler_salon {
     private int id;
     private LocalDate fecha;
-    private String horaDesde;
-    private String horaHasta;
+    private LocalTime horaDesde;
+    private LocalTime horaHasta;
     private int idSalon;
     private int idUsuario;
 
     public Alquiler_salon() {
     }
 
-    public Alquiler_salon(LocalDate fecha, String horaDesde, String horaHasta, int idSalon, int idUsuario) {
+    public Alquiler_salon(LocalDate fecha, LocalTime horaDesde, LocalTime horaHasta, int idSalon, int idUsuario) {
         this.fecha = fecha;
         this.horaDesde = horaDesde;
         this.horaHasta = horaHasta;
@@ -21,7 +22,7 @@ public class Alquiler_salon {
         this.idUsuario = idUsuario;
     }
 
-    public Alquiler_salon(int id, LocalDate fecha, String horaDesde, String horaHasta, int idSalon, int idUsuario) {
+    public Alquiler_salon(int id, LocalDate fecha, LocalTime horaDesde, LocalTime horaHasta, int idSalon, int idUsuario) {
         this.id = id;
         this.fecha = fecha;
         this.horaDesde = horaDesde;
@@ -38,11 +39,11 @@ public class Alquiler_salon {
         return fecha;
     }
 
-    public String getHoraDesde() {
+    public LocalTime getHoraDesde() {
         return horaDesde;
     }
 
-    public String getHoraHasta() {
+    public LocalTime getHoraHasta() {
         return horaHasta;
     }
 
@@ -62,11 +63,11 @@ public class Alquiler_salon {
         this.fecha = fecha;
     }
 
-    public void setHoraDesde(String horaDesde) {
+    public void setHoraDesde(LocalTime horaDesde) {
         this.horaDesde = horaDesde;
     }
 
-    public void setHoraHasta(String horaHasta) {
+    public void setHoraHasta(LocalTime horaHasta) {
         this.horaHasta = horaHasta;
     }
 

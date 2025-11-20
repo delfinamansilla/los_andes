@@ -1,6 +1,7 @@
 package logic;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.LinkedList;
 
 import data.DataAlquiler_salon;
@@ -31,14 +32,23 @@ public class LogicAlquiler_salon {
     }
 
     public void add(Alquiler_salon a) throws Exception {
-        validarAlquiler(a);
+        LinkedList<Alquiler_salon> existentes =
+            da.getBySalonYFecha(a.getIdSalon(), a.getFecha());
 
-        if (existeConflictoPorFecha(a)) {
-            throw new Exception("El salón ya tiene una reserva para esa fecha.");
+        for (Alquiler_salon ex : existentes) {
+        	boolean solapa = 
+        	        a.getHoraDesde().isBefore(ex.getHoraHasta()) &&
+        	        a.getHoraHasta().isAfter(ex.getHoraDesde());
+
+
+            if (solapa) {
+                throw new Exception("El horario solicitado ya está reservado");
+            }
         }
 
         da.add(a);
     }
+
 
     public void update(Alquiler_salon a) throws Exception {
         if (a.getId() <= 0) {
@@ -47,13 +57,12 @@ public class LogicAlquiler_salon {
 
         validarAlquiler(a);
 
-        if (existeConflictoPorFecha(a)) {
-            throw new Exception("Ya existe otra reserva en esa fecha para el mismo salón.");
+        if (existeConflictoHorario(a)) {
+            throw new Exception("Ya existe otra reserva en ese horario para el mismo salón.");
         }
 
         da.update(a);
     }
-
 
     public void delete(int id) throws Exception {
         if (id <= 0) {
@@ -69,40 +78,64 @@ public class LogicAlquiler_salon {
     }
 
     /**
-     * Verifica conflicto SOLO por fecha.
-     * Devuelve true si existe al menos otra reserva para el mismo salón
-     * en la misma fecha (excluye el propio registro cuando se está actualizando).
+     * Verifica conflicto por HORA (no solo fecha).
      */
-    private boolean existeConflictoPorFecha(Alquiler_salon nuevo) {
-        LinkedList<Alquiler_salon> existentes = da.getBySalonYFecha(nuevo.getIdSalon(), nuevo.getFecha());
+    private boolean existeConflictoHorario(Alquiler_salon nuevo) {
+        LinkedList<Alquiler_salon> existentes =
+            da.getBySalonYFecha(nuevo.getIdSalon(), nuevo.getFecha());
 
         for (Alquiler_salon a : existentes) {
-            if (a.getId() != nuevo.getId()) { 
-                return true;
-            }
+            if (a.getId() == nuevo.getId()) continue;
+
+            boolean seSuperponen =
+                !(nuevo.getHoraHasta().isBefore(a.getHoraDesde()) ||
+                  nuevo.getHoraDesde().isAfter(a.getHoraHasta()));
+
+            if (seSuperponen) return true;
         }
 
         return false;
     }
+    
+ // Agrega este método en LogicAlquiler_salon.java
 
+    public LinkedList<Alquiler_salon> getByUsuarioFuturos(int idUsuario) {
+        return da.getByUsuarioFuturos(idUsuario);
+    }
 
+    /**
+     * Validaciones completas del alquiler.
+     */
     private void validarAlquiler(Alquiler_salon a) throws Exception {
-        if (a == null) {
-            throw new Exception("El alquiler no puede ser nulo.");
-        }
-        if (a.getFecha() == null) {
+        if (a == null) throw new Exception("El alquiler no puede ser nulo.");
+
+        if (a.getFecha() == null)
             throw new Exception("Debe ingresar una fecha válida.");
-        }
-        if (a.getFecha().isBefore(LocalDate.now())) {
+
+        if (a.getFecha().isBefore(LocalDate.now()))
             throw new Exception("La fecha no puede ser anterior a hoy.");
+
+        if (a.getHoraDesde() == null || a.getHoraHasta() == null)
+            throw new Exception("Debe ingresar ambos horarios.");
+
+        if (!a.getHoraDesde().isBefore(a.getHoraHasta()))
+            throw new Exception("La hora de inicio debe ser anterior a la de fin.");
+
+        // Validar rangos de 4 horas (opcional)
+     // Dif exacta en minutos
+        long minutos = java.time.Duration.between(a.getHoraDesde(), a.getHoraHasta()).toMinutes();
+
+        // Permitimos 4 horas exactas = 240 min
+        // y permitimos 239 min en caso de usar 23:59 (tolerancia)
+        if (minutos < 239 || minutos > 240) {
+            throw new Exception("Los alquileres deben ser de exactamente 4 horas.");
         }
-        if (a.getIdSalon() <= 0) {
+
+
+        if (a.getIdSalon() <= 0)
             throw new Exception("Debe seleccionar un salón válido.");
-        }
-        if (a.getIdUsuario() <= 0) {
+
+        if (a.getIdUsuario() <= 0)
             throw new Exception("Debe seleccionar un usuario válido.");
-        }
     }
 }
-
-

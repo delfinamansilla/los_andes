@@ -82,6 +82,19 @@ const NavbarAdmin: React.FC = () => {
                 </ul>
               )}
             </li>
+			<li
+			  className="menu-item"
+			  onMouseOver={() => handleMouseEnter('salones')}
+			  onMouseOut={handleMouseLeave}
+			>
+			  <i className="fa-solid fa-building"></i> Salones
+			  {activeMenu === 'salones' && (
+			    <ul className="dropdown">
+			      <li><button onClick={() => navigate('/salones-admin')}>Ver todos</button></li>
+			      <li><button onClick={() => navigate('/crear-salon')}>Agregar nuevo</button></li>
+			    </ul>
+			  )}
+			</li>
 
             <li
               className="menu-item"
