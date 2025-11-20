@@ -19,15 +19,15 @@ const AgregarCuota: React.FC = () => {
     }
 
     try {
-      // 1. Calculamos el número de mes actual (1 = Enero, etc.)
+
       const nroCuotaActual = new Date().getMonth() + 1;
 
-      // --- PASO 1: CREAR LA CUOTA ---
+
       const paramsCuota = new URLSearchParams();
       paramsCuota.append('action', 'crear');
       paramsCuota.append('nro_cuota', nroCuotaActual.toString());
       paramsCuota.append('fecha_vencimiento', fechaVencimiento);
-      // No enviamos id_usuario, el Servlet lo manejará internamente
+
 
       const resCuota = await fetch('http://localhost:8080/club/cuota', {
         method: 'POST',
@@ -40,7 +40,7 @@ const AgregarCuota: React.FC = () => {
         throw new Error(errData.error || 'Error al crear la cuota');
       }
 
-      // Obtenemos la respuesta JSON que DEBE incluir el ID generado
+
       const cuotaCreada = await resCuota.json();
       const idCuotaGenerado = cuotaCreada.id;
 
@@ -48,7 +48,7 @@ const AgregarCuota: React.FC = () => {
         throw new Error('El servidor creó la cuota pero no devolvió el ID.');
       }
 
-      // --- PASO 2: CREAR EL MONTO ASOCIADO ---
+
       const paramsMonto = new URLSearchParams();
       paramsMonto.append('action', 'crear');
       paramsMonto.append('monto', monto);
@@ -63,12 +63,11 @@ const AgregarCuota: React.FC = () => {
       const dataMonto = await resMonto.json();
 
       if (resMonto.ok) {
-        setSuccess(`✅ ¡Listo! Cuota del mes ${nroCuotaActual} creada con monto $${monto}.`);
-        // Limpiar campos
+        setSuccess(` ¡Listo! Cuota del mes ${nroCuotaActual} creada con monto $${monto}.`);
         setFechaVencimiento('');
         setMonto('');
       } else {
-        setError(`⚠️ Cuota creada (ID: ${idCuotaGenerado}), pero error en el monto: ${dataMonto.error}`);
+        setError(` Cuota creada (ID: ${idCuotaGenerado}), pero error en el monto: ${dataMonto.error}`);
       }
 
     } catch (err: any) {

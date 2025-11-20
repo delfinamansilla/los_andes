@@ -25,7 +25,7 @@ public class ServletPagoCuota extends HttpServlet {
         super();
         logicPago = new LogicPagoCuota();
         
-        // Configurar Gson para manejar LocalDate
+
         gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDate.class,
                         (com.google.gson.JsonSerializer<LocalDate>) (src, typeOfSrc, context) ->

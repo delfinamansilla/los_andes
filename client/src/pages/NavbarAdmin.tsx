@@ -104,7 +104,7 @@ const NavbarAdmin: React.FC = () => {
 						  <i className="fa-solid fa-money-bill-1-wave"></i> Cuotas
 						  {activeMenu === 'cuotas' && (
 						    <ul className="dropdown">
-						      <li><button onClick={() => navigate('/salones-admin')}>Ver todos</button></li>
+						      <li><button onClick={() => navigate('/listado-cuota')}>Ver todos</button></li>
 						      <li><button onClick={() => navigate('/agregar-cuota')}>Agregar nuevo</button></li>
 						    </ul>
 						  )}
