@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 //import javax.xml.bind.DatatypeConverter;
 import java.util.HexFormat;
+import java.io.InputStream;
 
 
 public class LogicUsuario {
@@ -37,6 +38,9 @@ public class LogicUsuario {
         usuario.setContrasenia(hashPassword(usuario.getContrasenia()));
         
         return du.getByMailAndContrasenia(usuario);
+    }
+    public Usuario getById(int id) {
+        return du.getById(id);
     }
     
     /**
@@ -117,6 +121,33 @@ public class LogicUsuario {
         if (id > 0) {
             du.delete(id);
         }
+    }
+    
+    /**
+     * Busca un usuario por su ID.
+     * @param id El ID del usuario a buscar.
+     * @return El objeto Usuario si se encuentra, sino null.
+     */
+    public Usuario getById(int id) {
+        return du.getById(id); 
+    }
+
+    /**
+     * Procesa la actualización de la foto de perfil de un usuario.
+     * @param idUsuario El ID del usuario a modificar.
+     * @param fotoStream El flujo de bytes de la nueva imagen.
+     */
+    public void updateFoto(int idUsuario, InputStream fotoStream) {
+        du.updateFoto(idUsuario, fotoStream);
+    }
+
+    /**
+     * Obtiene los bytes de la foto de un usuario.
+     * @param idUsuario El ID del usuario.
+     * @return Un array de bytes con los datos de la imagen.
+     */
+    public byte[] getFotoById(int idUsuario) {
+        return du.getFotoById(idUsuario);
     }
 
 

@@ -1,5 +1,4 @@
-
-.pag-modificar {
+.pag-crear-salon {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -8,46 +7,45 @@
   box-sizing: border-box;
 }
 
-.contenido-centrado {
-  flex: 1; 
+.contenido-crear-salon {
+  flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 0; 
+  padding: 40px;
 }
 
-
-.form-modificar {
+.form-crear-salon {
   background-color: #DDD8CA;
   color: #20321E;
   padding: 40px;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-  max-width: 650px;
-  width: 90%;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 600px;
 }
 
-.form-modificar h1 {
+.form-crear-salon h1 {
   text-align: center;
   margin-top: 0;
   margin-bottom: 25px;
 }
 
-.modificar {
+.crear-salon {
   display: flex;
   flex-direction: column;
   gap: 15px;
   text-align: left;
 }
 
-.modificar label {
+.crear-salon label {
   font-weight: bold;
   font-size: 0.95rem;
   margin-bottom: -5px;
 }
 
-.modificar input {
+.crear-salon input,
+.crear-salon select {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid #466245;
@@ -60,18 +58,20 @@
   color: #20321E;
 }
 
-.modificar input:focus {
+.crear-salon input:focus,
+.crear-salon select:focus {
   border-color: #20321E;
   box-shadow: 0 0 5px rgba(32, 50, 30, 0.5);
 }
 
-.botones-container {
+/* ----------- BOTONES ----------- */
+.botones-container-salon {
   display: flex;
   gap: 15px;
   margin-top: 20px;
 }
 
-.botones-container button {
+.botones-container-salon button {
   flex: 1;
   padding: 12px 0;
   border-radius: 8px;
@@ -81,39 +81,34 @@
   transition: all 0.2s;
 }
 
-.botones-container button[type="submit"] {
+.botones-container-salon button[type="submit"] {
   border: none;
   background-color: #20321E;
   color: #DDD8CA;
 }
 
-.botones-container button[type="submit"]:hover {
+.botones-container-salon button[type="submit"]:hover {
   background-color: #466245;
 }
 
-.btn-cambiar-contrasena {
+.btn-cancel-salon {
   background-color: #DDD8CA;
   color: #20321E;
   border: 2px solid #20321E;
 }
 
-.btn-ver-credencial:hover {
+.btn-cancel-salon:hover {
   background-color: #c9c4b5;
   border-color: #466245;
 }
 
-.btn-ver-credencial {
-  background-color: #DDD8CA;
-  color: #20321E;
-  border: 2px solid #20321E;
+/* ----------- MENSAJES ----------- */
+.mensajes-globales {
+  margin-bottom: 20px;
+  text-align: center;
 }
-
-.btn-cambiar-contrasena:hover {
-  background-color: #c9c4b5;
-  border-color: #466245;
-}
-
-.mensaje-exito, .mensaje-error {
+.mensaje-exito,
+.mensaje-error {
   margin-bottom: 20px;
   padding: 10px;
   border-radius: 5px;
@@ -131,4 +126,20 @@
   background-color: #f8d7da;
   color: #721c24;
   border: 1px solid #f5c6cb;
+}
+
+/* ----------- PREVIEW DE LA IMAGEN ----------- */
+.preview-container {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.preview-img {
+  width: 100%;
+  max-height: none;     /* ❗ Permite que la imagen use su altura real */
+  object-fit: contain;  /* ❗ NO RECORTA la imagen */
+  border-radius: 10px;
+  border: 2px solid #20321E;
+  margin-top: 10px;
+  background-color: black; /* ayuda a ver bordes en imágenes transparentes */
 }

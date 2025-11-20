@@ -15,6 +15,7 @@ const Footer: React.FC = () => {
             <li><button onClick={() => navigate('/inicio-socio')}>Inicio</button></li>
             <li><button onClick={() => navigate('/inscripcion-actividad')}>Actividades</button></li>
             <li><button onClick={() => navigate('/canchas')}>Canchas</button></li>
+			<li><button onClick={() => navigate('/salones')}>Salones</button></li>
             <li><button onClick={() => navigate('/info/nosotros')}>Sobre Nosotros</button></li>
           </ul>
         </div>
@@ -45,7 +46,7 @@ const Footer: React.FC = () => {
             </div>
             <div className="info-item">
               <span className="icono">✉️</span>
-              <span>info@clublosandes.com.ar</span>
+              <span>losandesclubrosario@gmail.com</span>
             </div>
           </div>
         </div>

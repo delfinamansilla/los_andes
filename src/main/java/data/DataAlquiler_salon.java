@@ -3,6 +3,7 @@ package data;
 import entities.Alquiler_salon;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.LinkedList;
 
 public class DataAlquiler_salon {
@@ -23,8 +24,53 @@ public class DataAlquiler_salon {
                 Alquiler_salon a = new Alquiler_salon();
                 a.setId(rs.getInt("id"));
                 a.setFecha(rs.getDate("fecha").toLocalDate());
-                a.setHoraDesde(rs.getString("hora_desde"));
-                a.setHoraHasta(rs.getString("hora_hasta"));
+                a.setHoraDesde(rs.getTime("hora_desde").toLocalTime());
+                a.setHoraHasta(rs.getTime("hora_hasta").toLocalTime());
+                a.setIdSalon(rs.getInt("id_salon"));
+                a.setIdUsuario(rs.getInt("id_usuario"));
+
+                alquileres.add(a);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return alquileres;
+    }
+    
+ // Agrega este método en DataAlquiler_salon.java
+
+    public LinkedList<Alquiler_salon> getByUsuarioFuturos(int idUsuario) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        LinkedList<Alquiler_salon> alquileres = new LinkedList<>();
+
+        try {
+            // Selecciona reservas del usuario desde HOY en adelante
+            // Ordenadas por fecha y hora de inicio
+            String sql = "SELECT * FROM alquiler_salon " +
+                         "WHERE id_usuario = ? AND fecha >= CURDATE() " +
+                         "ORDER BY fecha ASC, hora_desde ASC";
+
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(sql);
+            stmt.setInt(1, idUsuario);
+            rs = stmt.executeQuery();
+
+            while (rs != null && rs.next()) {
+                Alquiler_salon a = new Alquiler_salon();
+                a.setId(rs.getInt("id"));
+                a.setFecha(rs.getDate("fecha").toLocalDate());
+                a.setHoraDesde(rs.getTime("hora_desde").toLocalTime());
+                a.setHoraHasta(rs.getTime("hora_hasta").toLocalTime());
                 a.setIdSalon(rs.getInt("id_salon"));
                 a.setIdUsuario(rs.getInt("id_usuario"));
 
@@ -65,8 +111,8 @@ public class DataAlquiler_salon {
                 a = new Alquiler_salon();
                 a.setId(rs.getInt("id"));
                 a.setFecha(rs.getDate("fecha").toLocalDate());
-                a.setHoraDesde(rs.getString("hora_desde"));
-                a.setHoraHasta(rs.getString("hora_hasta"));
+                a.setHoraDesde(rs.getTime("hora_desde").toLocalTime());
+                a.setHoraHasta(rs.getTime("hora_hasta").toLocalTime());
                 a.setIdSalon(rs.getInt("id_salon"));
                 a.setIdUsuario(rs.getInt("id_usuario"));
             }
@@ -100,8 +146,8 @@ public class DataAlquiler_salon {
             );
 
             stmt.setDate(1, Date.valueOf(a.getFecha()));
-            stmt.setString(2, a.getHoraDesde());
-            stmt.setString(3, a.getHoraHasta());
+            stmt.setTime(2, Time.valueOf(a.getHoraDesde()));
+            stmt.setTime(3, Time.valueOf(a.getHoraHasta()));
             stmt.setInt(4, a.getIdSalon());
             stmt.setInt(5, a.getIdUsuario());
 
@@ -137,8 +183,8 @@ public class DataAlquiler_salon {
             );
 
             stmt.setDate(1, Date.valueOf(a.getFecha()));
-            stmt.setString(2, a.getHoraDesde());
-            stmt.setString(3, a.getHoraHasta());
+            stmt.setTime(2, Time.valueOf(a.getHoraDesde()));
+            stmt.setTime(3, Time.valueOf(a.getHoraHasta()));
             stmt.setInt(4, a.getIdSalon());
             stmt.setInt(5, a.getIdUsuario());
             stmt.setInt(6, a.getId());
@@ -187,30 +233,28 @@ public class DataAlquiler_salon {
     /**
      * Devuelve todos los alquileres de un salón específico.
      */
+
     public LinkedList<Alquiler_salon> getBySalon(int idSalon) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         LinkedList<Alquiler_salon> alquileres = new LinkedList<>();
-
         try {
+            // AGREGAMOS EL ORDER BY fecha ASC, hora_desde ASC
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
-                "SELECT * FROM alquiler_salon WHERE id_salon = ?"
+                "SELECT * FROM alquiler_salon WHERE id_salon = ? ORDER BY fecha ASC, hora_desde ASC"
             );
             stmt.setInt(1, idSalon);
             rs = stmt.executeQuery();
-
             while (rs != null && rs.next()) {
                 Alquiler_salon a = new Alquiler_salon();
                 a.setId(rs.getInt("id"));
                 a.setFecha(rs.getDate("fecha").toLocalDate());
-                a.setHoraDesde(rs.getString("hora_desde"));
-                a.setHoraHasta(rs.getString("hora_hasta"));
+                a.setHoraDesde(rs.getTime("hora_desde").toLocalTime());
+                a.setHoraHasta(rs.getTime("hora_hasta").toLocalTime());
                 a.setIdSalon(rs.getInt("id_salon"));
                 a.setIdUsuario(rs.getInt("id_usuario"));
-
                 alquileres.add(a);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -222,10 +266,8 @@ public class DataAlquiler_salon {
                 e.printStackTrace();
             }
         }
-
         return alquileres;
-    }
-    
+    }    
     public boolean tieneReservasActivas(int idSalon) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -276,8 +318,8 @@ public class DataAlquiler_salon {
                 Alquiler_salon a = new Alquiler_salon();
                 a.setId(rs.getInt("id"));
                 a.setFecha(rs.getDate("fecha").toLocalDate());
-                a.setHoraDesde(rs.getString("hora_desde"));
-                a.setHoraHasta(rs.getString("hora_hasta"));
+                a.setHoraDesde(rs.getTime("hora_desde").toLocalTime());
+                a.setHoraHasta(rs.getTime("hora_hasta").toLocalTime());
                 a.setIdSalon(rs.getInt("id_salon"));
                 a.setIdUsuario(rs.getInt("id_usuario"));
                 alquileres.add(a);

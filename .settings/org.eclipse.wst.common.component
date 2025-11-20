@@ -7,6 +7,7 @@
     
     
     <wb-module deploy-name="club">
+<<<<<<< HEAD
                                                                 
         
         
@@ -27,6 +28,10 @@
         
         
         
+=======
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+>>>>>>> ba7c21c22ce3ce74660af0e599f017ac2af6e19c
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/lib"/>
                                                         
         

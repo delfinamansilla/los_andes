@@ -1,0 +1,157 @@
+/* --- CONFIGURACIÓN GENERAL DE PÁGINA --- */
+.ver-alquileres-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20321E; /* Fondo Verde Oscuro */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+}
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.admin-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* --- BOTÓN VOLVER --- */
+.btn-volver-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.btn-volver {
+  background-color: transparent;
+  color: #DDD8CA;
+  border: 2px solid #DDD8CA;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-volver:hover {
+  background-color: #DDD8CA;
+  color: #20321E;
+}
+
+/* --- TÍTULO --- */
+.admin-container h2 {
+  color: #DDD8CA;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* --- TARJETA CONTENEDORA (Formato Papel) --- */
+.alquileres-card-container {
+  background-color: #DDD8CA; /* Fondo Beige */
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+  width: 100%;
+  color: #20321E;
+}
+
+/* --- TABLA --- */
+.tabla-alquileres {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.tabla-alquileres thead tr {
+  border-bottom: 2px solid #20321E;
+}
+
+.tabla-alquileres th {
+  text-align: left;
+  padding: 15px;
+  font-size: 1.1rem;
+  color: #20321E;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tabla-alquileres td {
+  padding: 15px;
+  border-bottom: 1px solid rgba(32, 50, 30, 0.15); /* Verde con transparencia */
+  color: #20321E;
+  font-size: 1rem;
+  vertical-align: middle;
+}
+
+.tabla-alquileres tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-alquileres tbody tr:hover {
+  background-color: rgba(32, 50, 30, 0.05); /* Hover sutil */
+}
+
+/* --- DETALLES DEL USUARIO --- */
+.usuario-info strong {
+  display: block;
+  font-size: 1.05rem;
+}
+
+.usuario-mail {
+  font-size: 0.85rem;
+  color: #466245; /* Verde un poco más claro */
+}
+
+/* --- ESTADOS (Badges) --- */
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: inline-block;
+  text-align: center;
+}
+
+.badge-finalizado {
+  background-color: #a3a3a3;
+  color: #fff;
+}
+
+.badge-pendiente {
+  background-color: #20321E;
+  color: #DDD8CA;
+}
+
+/* --- MENSAJES DE ESTADO --- */
+.loading-msg, .error-msg, .empty-msg {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2rem;
+}
+
+.error-msg {
+  color: #dc2626;
+  background-color: #fee2e2;
+  border: 1px solid #dc2626;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.empty-msg {
+  color: #20321E;
+  font-style: italic;
+}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
 import NavbarSocio from './NavbarSocio';
+import Footer from './Footer';
 
 import '../styles/MiCuenta.css';
 
@@ -154,6 +155,14 @@ const MiCuenta: React.FC = () => {
                 <button type="button" onClick={() => setMostrarFormulario(true)} className="btn-cambiar-contrasena">
                   Cambiar contraseña
                 </button>
+				{usuario.rol !== 'administrador' && (
+			      <button 
+			        type="button" 
+			        onClick={() => navigate(`/credencial/${usuario.id}`)}
+			        className="btn-ver-credencial">
+			        Ver Credencial
+			      </button>
+			    )}
               </div>
             </form>
           ) : (
@@ -174,6 +183,7 @@ const MiCuenta: React.FC = () => {
           )}
         </div>
       </div>
+	  <Footer />
     </div>
   );
 };

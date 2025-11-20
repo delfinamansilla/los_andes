@@ -50,31 +50,40 @@ public class ServletUsuario extends HttpServlet {
             }
 
             switch (action.toLowerCase()) {
-                case "listar": {
-                    LinkedList<Usuario> usuarios = logicUsuario.getAll();
-                    request.setAttribute("listaUsuarios", usuarios);
-                    request.getRequestDispatcher("WEB-INF/listaUsuarios.jsp").forward(request, response);
-                    break;
+            case "listar": {
+                LinkedList<Usuario> usuarios = logicUsuario.getAll();
+                
+                com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
+                    .registerTypeAdapter(java.time.LocalDate.class,
+                        (com.google.gson.JsonSerializer<java.time.LocalDate>) (src, typeOfSrc, context) ->
+                            new com.google.gson.JsonPrimitive(src.toString()))
+                    .create();
+
+                String json = gson.toJson(usuarios);
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write(json);
+                break;
+            }
+            case "buscar": {
+            	// System.out.println("➡️ Entró al case 'buscar'"); // Opcional
+                int id = Integer.parseInt(request.getParameter("id"));
+                
+                // --- CAMBIO AQUÍ: Búsqueda directa y rápida ---
+                Usuario u = logicUsuario.getById(id);
+                // ----------------------------------------------
+
+                response.setContentType("application/json;charset=UTF-8");
+                if (u != null) {
+                    // OJO: Asegúrate que el JSON coincida con lo que espera tu Front
+                    response.getWriter().write("{\"id\":" + u.getIdUsuario() + 
+                        ", \"nombre\":\"" + u.getNombreCompleto() + 
+                        "\", \"mail\":\"" + u.getMail() + "\"}");
+                } else {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    response.getWriter().write("{\"error\":\"Usuario no encontrado\"}");
                 }
-                case "buscar": {
-                	System.out.println("➡️ Entró al case 'buscar'");
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    System.out.println("este es el id"+id);
-                    Usuario u = logicUsuario.getAll().stream()
-                            .filter(x -> x.getIdUsuario() == id)
-                            .findFirst().orElse(null);
-                    System.out.println("este es el usuario"+u);
-                    response.setContentType("application/json;charset=UTF-8");
-                    if (u != null) {
-                        response.getWriter().write("{\"id\":" + u.getIdUsuario() + 
-                            ", \"nombre\":\"" + u.getNombreCompleto() + 
-                            "\", \"mail\":\"" + u.getMail() + "\"}");
-                    } else {
-                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                        response.getWriter().write("{\"error\":\"Usuario no encontrado\"}");
-                    }
-                    break;
-                }
+                break;
+            }
 
                 case "eliminar": {
                     int id = Integer.parseInt(request.getParameter("id"));
