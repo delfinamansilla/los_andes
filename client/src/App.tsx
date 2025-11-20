@@ -18,9 +18,8 @@ import MisActividades from './pages/MisActividades';
 import InscripcionActividad from './pages/InscripcionActividad';
 import ActividadDetalle from './pages/ActividadDetalle';
 import AgregarHorario from './pages/AgregarHorario';
+import Credencial from './pages/Credencial';
 import Info from './pages/Info';
-
-
 
 function App() {
   return (
@@ -47,6 +46,7 @@ function App() {
 		<Route path="/actividades" element={<ListaActividades />} />
 		<Route path="/actividad-detalle" element={<ActividadDetalle />} />
 		<Route path="/agregar-horario" element={<AgregarHorario />} />
+		<Route path="/credencial/:id" element={<Credencial />} />
 		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>

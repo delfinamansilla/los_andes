@@ -308,4 +308,68 @@ public class DataUsuario {
             }
         }
     }
+    
+    /**
+     * Actualiza la columna 'foto' de un usuario específico.
+     * @param idUsuario El ID del usuario.
+     * @param fotoStream El flujo de bytes de la imagen a guardar.
+     */
+    public void updateFoto(int idUsuario, java.io.InputStream fotoStream) {
+        PreparedStatement stmt = null;
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "UPDATE usuario SET foto = ? WHERE id = ?"
+            );
+            stmt.setBlob(1, fotoStream); // <-- Guarda los bytes de la imagen
+            stmt.setInt(2, idUsuario);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Obtiene los bytes de la foto de un usuario desde la base de datos.
+     * @param idUsuario El ID del usuario.
+     * @return Un array de bytes con los datos de la imagen, o null si no existe.
+     */
+    public byte[] getFotoById(int idUsuario) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        byte[] fotoData = null;
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT foto FROM usuario WHERE id = ?"
+            );
+            stmt.setInt(1, idUsuario);
+            rs = stmt.executeQuery();
+            if (rs != null && rs.next()) {
+                java.sql.Blob fotoBlob = rs.getBlob("foto");
+                if (fotoBlob != null) {
+                    // Convierte el BLOB a un array de bytes que Java pueda manejar
+                    fotoData = fotoBlob.getBytes(1, (int) fotoBlob.length());
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return fotoData;
+    }
+    
+    
 }
