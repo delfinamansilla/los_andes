@@ -53,7 +53,6 @@ public class ServletUsuario extends HttpServlet {
             case "listar": {
                 LinkedList<Usuario> usuarios = logicUsuario.getAll();
                 
-                // Configurar Gson para fechas
                 com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
                     .registerTypeAdapter(java.time.LocalDate.class,
                         (com.google.gson.JsonSerializer<java.time.LocalDate>) (src, typeOfSrc, context) ->

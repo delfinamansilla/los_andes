@@ -49,7 +49,7 @@ const ListadoSocios: React.FC = () => {
 
       const data: Socio[] = await response.json();
 
-      // Filtramos para mostrar SOLO los que son 'socio'
+
       const soloSocios = data.filter(u => u.rol && u.rol.toLowerCase() === 'socio');
       
       setSocios(soloSocios);
@@ -62,15 +62,13 @@ const ListadoSocios: React.FC = () => {
     }
   };
 
-  // --- ESTA ES LA FUNCIÓN CORRECTA (ASEGÚRATE QUE SOLO HAYA UNA) ---
   const handleVerCuotas = (socio: Socio) => {
-    // Guardamos en LocalStorage
+
     localStorage.setItem('usuarioSeleccionadoParaCuotas', JSON.stringify(socio));
-    
-    // Navegamos
+
     navigate('/cuotas-usuario');
   };
-  // ----------------------------------------------------------------
+
 
   if (loading) {
     return (
