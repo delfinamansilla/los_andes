@@ -1,0 +1,155 @@
+.pag-modificar-salon {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20321E;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- CONTENIDO --- */
+
+.contenido-salon {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.contenido-salon h1 {
+  color: #DDD8CA;
+  margin-bottom: 30px;
+  font-size: 2.2rem;
+  text-align: center;
+  font-weight: 800;
+}
+
+/* --- FORMULARIO --- */
+
+.form-modificar-salon {
+  background-color: #DDD8CA;
+  color: #20321E;
+  padding: 40px;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+}
+
+.modificar-salon {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.modificar-salon label {
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.modificar-salon input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #466245;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #DDD8CA;
+  color: #20321E;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+.modificar-salon input:focus {
+  border-color: #20321E;
+  outline: none;
+  box-shadow: 0 0 5px rgba(32, 50, 30, 0.5);
+}
+
+/* --- IMAGEN ACTUAL --- */
+
+.imagen-actual {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.imagen-actual p {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.imagen-actual img {
+  width: 100%;
+  max-height: none;     /* ❗ Permite que la imagen use su altura real */
+  object-fit: contain;  /* ❗ NO RECORTA la imagen */
+  border-radius: 10px;
+  border: 2px solid #20321E;
+  margin-top: 10px;
+  background-color: black;
+}
+
+/* --- MENSAJES --- */
+.mensajes-globales {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.mensaje-exito,
+.mensaje-error {
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.mensaje-exito {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.mensaje-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* --- BOTONES --- */
+
+.botones-container {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+}
+
+.botones-container button {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 1rem;
+}
+
+/* guardar */
+.botones-container button[type="submit"] {
+  border: none;
+  background-color: #20321E;
+  color: #DDD8CA;
+}
+
+.botones-container button[type="submit"]:hover {
+  background-color: #466245;
+}
+
+/* cancelar */
+.btn-cancel {
+  background-color: #DDD8CA;
+  color: #20321E;
+  border: 2px solid #20321E;
+}
+
+.btn-cancel:hover {
+  background-color: #c9c4b5;
+  border-color: #466245;
+}

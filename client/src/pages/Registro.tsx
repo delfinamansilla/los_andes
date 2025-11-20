@@ -62,6 +62,7 @@ const Registro: React.FC = () => {
 	    setSuccess('✅ Usuario registrado correctamente. Redirigiendo...');
 	    setTimeout(() => navigate('/login'), 4000);
 	  } else {
+		console.log(text);
 	    setError(`⚠ Error al registrar el usuario: ${text}`);
 	  }
 

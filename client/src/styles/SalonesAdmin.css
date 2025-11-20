@@ -1,0 +1,168 @@
+.salones-admin-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20321E;
+  align-items: center;
+}
+
+.contenido-admin-salon {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.contenido-admin-salon h2 {
+  color: #DDD8CA;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 800;
+}
+
+.contenido-admin-salon ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contenido-admin-salon li {
+  background-color: #DDD8CA;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contenido-admin-salon li:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+/* ❗ Imagen SIN RECORTE — ENTERA ❗ */
+.salon-img {
+  width: 100%;
+  max-width: 260px;
+  height: auto;              /* La altura se ajusta automáticamente */
+  object-fit: contain;       /* ❗ NO recorta la imagen */
+  border-radius: 10px;
+  margin-bottom: 15px;
+  border: 2px solid #20321E;
+  background-color: black;   /* Para que se vea bien si la imagen tiene bordes transparentes */
+}
+
+.salon-img-placeholder {
+  width: 260px;
+  height: 180px;
+  background-color: #bdb8ab;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  border: 2px dashed #20321E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #20321E;
+  font-weight: bold;
+}
+
+.salon-buttons {
+  display: flex;
+  gap: 10px; /* Espacio entre botones */
+  margin-top: 20px;
+  width: 100%;
+  justify-content: center; /* Centrados horizontalmente */
+  flex-wrap: wrap; /* Si la pantalla es chica, bajan */
+}
+
+/* Estilo Base para TODOS los botones dentro de .salon-buttons */
+.salon-buttons button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #fff; /* Texto blanco por defecto */
+  flex: 1; /* Intentan ocupar el mismo ancho */
+  min-width: 120px; /* Ancho mínimo para que no se aplasten */
+  max-width: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.salon-buttons button:hover {
+  transform: translateY(-3px); /* Efecto de elevación */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  opacity: 0.95;
+}
+
+.salon-buttons button:active {
+  transform: translateY(0);
+}
+
+/* --- Colores Específicos --- */
+
+/* 1. Ver Alquileres (Verde Tema - Acción Principal) */
+.btn-ver-alquileres {
+  background-color: #20321E; 
+  color: #DDD8CA !important; /* Color beige del tema */
+}
+
+/* 2. Modificar (Azul - Acción de Edición) */
+.btn-modificar {
+  background-color: #20321E; 
+  color: #DDD8CA !important;
+}
+
+/* 3. Eliminar (Rojo - Acción Destructiva) */
+.btn-eliminar {
+ background-color: #20321E; 
+  color: #DDD8CA !important;
+}
+
+/* Ajustes para el modal (se mantienen igual o se pueden mejorar) */
+.modal-buttons .btn-confirm {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.modal-buttons .btn-cancel {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-confirm {
+  background-color: #dc2626;
+  color: white;
+  border: none;
+}
+
+.btn-confirm:hover {
+  background-color: #b91c1c;
+}
+
+.btn-cancel {
+  background-color: #DDD8CA;
+  color: #20321E;
+  border: 2px solid #20321E;
+}
+
+.btn-cancel:hover {
+  background-color: #c9c4b5;
+  border-color: #466245;
+}
