@@ -65,6 +65,17 @@ public class LogicMonto_cuota {
 
         dataMontoCuota.delete(fecha);
     }
+    /**
+     * Obtiene todos los montos asociados a una cuota.
+     * @param idCuota El ID de la cuota.
+     * @return LinkedList de Monto_cuota.
+     */
+    public LinkedList<Monto_cuota> getMontosPorCuota(int idCuota) throws Exception {
+        if (idCuota <= 0) {
+            throw new Exception("El ID de la cuota debe ser válido (mayor que 0).");
+        }
+        return dataMontoCuota.getMontosPorCuota(idCuota);
+    }
 
     private void validarMontoCuota(Monto_cuota mc) throws Exception {
         if (mc == null) {

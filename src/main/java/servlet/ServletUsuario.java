@@ -50,12 +50,21 @@ public class ServletUsuario extends HttpServlet {
             }
 
             switch (action.toLowerCase()) {
-                case "listar": {
-                    LinkedList<Usuario> usuarios = logicUsuario.getAll();
-                    request.setAttribute("listaUsuarios", usuarios);
-                    request.getRequestDispatcher("WEB-INF/listaUsuarios.jsp").forward(request, response);
-                    break;
-                }
+            case "listar": {
+                LinkedList<Usuario> usuarios = logicUsuario.getAll();
+                
+                // Configurar Gson para fechas
+                com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
+                    .registerTypeAdapter(java.time.LocalDate.class,
+                        (com.google.gson.JsonSerializer<java.time.LocalDate>) (src, typeOfSrc, context) ->
+                            new com.google.gson.JsonPrimitive(src.toString()))
+                    .create();
+
+                String json = gson.toJson(usuarios);
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write(json);
+                break;
+            }
                 case "buscar": {
                 	System.out.println("➡️ Entró al case 'buscar'");
                     int id = Integer.parseInt(request.getParameter("id"));

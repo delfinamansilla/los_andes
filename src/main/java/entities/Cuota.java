@@ -7,19 +7,15 @@ public class Cuota {
     private int nro_cuota;
     private LocalDate fecha_cuota;
     private LocalDate fecha_vencimiento;
-    private int id_usuario;
 
     public Cuota() {}
 
-    public Cuota(int nro_cuota, LocalDate fecha_cuota, LocalDate fecha_vencimiento,int id_usuario) {
+    public Cuota(int nro_cuota, LocalDate fecha_cuota, LocalDate fecha_vencimiento) {
         this.nro_cuota = nro_cuota;
         this.fecha_cuota = fecha_cuota;
         this.fecha_vencimiento = fecha_vencimiento;
-        this.id_usuario=id_usuario;
     }
 
-    public int getId_usuario() { return id_usuario; }
-    public void setId_usuario(int id_usuario) { this.id_usuario = id_usuario; }
     
     public int getId() {
         return id;
