@@ -1,0 +1,201 @@
+/* src/styles/CuotasUsuario.css */
+
+.cuotas-page-container {
+  background-color: #20321E;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding-bottom: 50px;
+}
+
+/* --- CABECERA LIMPIA Y CENTRADA --- */
+.header-bar {
+  background-color: transparent; /* Sin fondo */
+  border: none;                  /* Sin borde */
+  box-shadow: none;              /* Sin sombra */
+  
+  width: 95%;
+  max-width: 1200px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  
+  /* Centrado Flex en columna */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-bar h2 {
+  margin: 0;
+  color: #DDD8CA; /* Letras claras */
+  font-size: 2.5rem; /* Más grande e imponente */
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.user-info {
+  display: flex;
+  gap: 20px;
+  font-size: 1.1rem;
+  color: #E8E4D9; /* Un tono un poco más brillante para leerse bien */
+  font-weight: normal;
+  opacity: 0.9;
+}
+
+/* --- CONTENEDOR DE TABLA (SIN FONDO) --- */
+.table-container {
+  width: 95%;
+  max-width: 1200px;
+  margin-top: 10px;
+  
+  /* Quitamos el fondo verde/gris que rodeaba la lista */
+  background-color: transparent; 
+  padding: 0; 
+  border-radius: 10px;
+}
+
+/* --- TABLA --- */
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #E8E4D9; /* El beige de las filas se mantiene */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5); /* Sombra más fuerte para que destaque del fondo */
+}
+
+.styled-table thead tr {
+  background-color: #2C4229; /* Verde un poco más claro que el fondo para distinguir */
+  color: #ffffff;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 18px 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.styled-table tbody tr:last-of-type {
+  border-bottom: 4px solid #2C4229; /* Borde final elegante */
+}
+
+.styled-table tbody tr:hover {
+  background-color: #f5f2e9;
+}
+
+/* Estilos de Texto en Tabla */
+.text-bold {
+  font-weight: bold;
+  color: #20321E;
+}
+
+.text-monto {
+  font-family: 'Consolas', monospace;
+  font-weight: bold;
+  color: #20321E;
+  font-size: 1.1rem;
+}
+
+/* Badges de Estado */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  display: inline-block;
+  min-width: 100px;
+  text-align: center;
+}
+
+.status-pagado {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.status-pendiente {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Botones */
+.btn-pay {
+  background-color: #20321E;
+  color: #E8E4D9;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s, background-color 0.2s;
+  border: 1px solid #466245;
+}
+
+.btn-pay:hover {
+  background-color: #466245;
+  transform: scale(1.05);
+  color: white;
+}
+
+.btn-back {
+  margin-top: 40px;
+  background-color: transparent;
+  color: #DDD8CA;
+  border: 2px solid #DDD8CA;
+  padding: 10px 30px;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: bold;
+}
+
+.btn-back:hover {
+  background-color: #DDD8CA;
+  color: #20321E;
+  transform: translateY(-3px);
+}
+/* Estilo para el botón de Cuotas (Fondo crema, letras verdes) */
+.btn-cuotas {
+  background-color: #E8E4D9; /* El tono cremita */
+  color: #20321E;            /* Letras verde oscuro */
+  border: 2px solid #20321E; /* Borde verde para que parezca botón */
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.85rem;
+}
+
+/* Efecto al pasar el mouse (Invierte los colores) */
+.btn-cuotas:hover {
+  background-color: #20321E; /* Se pone verde */
+  color: #E8E4D9;            /* Letras cremas */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.error-msg {
+  color: #ff6b6b;
+  background: rgba(0,0,0,0.8);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 50px;
+}
+
+/* Agregado para cuotas vencidas */
+.status-vencida {
+  background-color: #ffcccc; /* Fondo rojizo claro */
+  color: #cc0000;            /* Texto rojo oscuro */
+  border: 1px solid #ff9999;
+}

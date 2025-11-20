@@ -24,6 +24,8 @@ import MisActividades from './pages/MisActividades';
 import InscripcionActividad from './pages/InscripcionActividad';
 import ActividadDetalle from './pages/ActividadDetalle';
 import AgregarHorario from './pages/AgregarHorario';
+import ListadoSocio from './pages/ListadoSocio';
+import CuotasUsuario from './pages/CuotasUsuario';
 import Info from './pages/Info';
 import AgregarCuota from './pages/AgregarCuota';
 
@@ -61,6 +63,8 @@ function App() {
 		<Route path="/actividad-detalle" element={<ActividadDetalle />} />
 		<Route path="/agregar-horario" element={<AgregarHorario />} />
 		<Route path="/agregar-cuota" element={<AgregarCuota />} />
+		<Route path="/listado-socio" element={<ListadoSocio />} />
+		<Route path="/cuotas-usuario" element={<CuotasUsuario />} />
 		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>

@@ -109,6 +109,19 @@ const NavbarAdmin: React.FC = () => {
 						    </ul>
 						  )}
 						</li>
+				<li
+										  className="menu-item"
+										  onMouseOver={() => handleMouseEnter('socios')}
+										  onMouseOut={handleMouseLeave}
+										>
+										  <i className="fa-solid fa-people-group"></i> Socios
+										  {activeMenu === 'socios' && (
+										    <ul className="dropdown">
+										      <li><button onClick={() => navigate('/listado-socio')}>Ver todos</button></li>
+										      <li><button onClick={() => navigate('/agregar-cuota')}>Agregar nuevo</button></li>
+										    </ul>
+										  )}
+										</li>
 
             <li
               className="menu-item"
