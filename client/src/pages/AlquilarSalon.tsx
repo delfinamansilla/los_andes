@@ -96,33 +96,37 @@ const AlquilarSalon: React.FC = () => {
 
     try {
       const params = new URLSearchParams();
-      params.append('action', 'crear');
-      params.append('fecha', fecha);
-      params.append('hora_desde', desde);
-      params.append('hora_hasta', hasta);
-      params.append('id_salon', String(idSalon));
-      params.append('id_usuario', usuario.id);
+      params.append("action", "pre_reserva");
+      params.append("fecha", fecha);
+      params.append("hora_desde", desde);
+      params.append("hora_hasta", hasta);
+      params.append("id_salon", String(idSalon));
+      params.append("id_usuario", usuario.id);
+      params.append("email", usuario.mail); // 👈 importante
 
-      const res = await fetch('http://localhost:8080/club/alquiler_salon', {	 
+      const url = `http://localhost:8080/club/alquiler_salon?${params.toString()}`;
 
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params.toString(),
-      });
-
+      const res = await fetch(url);
       const text = await res.text();
 
-      if (text.includes("ok")) {
-        setSuccess("Reserva realizada con éxito 🎉");
-        setTimeout(() => navigate('/salones'), 1800);
+      if (text.includes("mail_enviado")) {
+        setSuccess(
+			"Te enviamos un mail para confirmar la reserva. Revisá tu bandeja!"
+			  );
+
+			  // ▶️ Después de 5 segundos, redirigir
+			  setTimeout(() => {
+			    navigate('/inicio-socio');
+			  }, 5000);
       } else {
-        setError("❌ No se pudo realizar la reserva.");
+        setError("❌ No se pudo iniciar la reserva.");
       }
 
     } catch (err) {
       setError("❌ Error de conexión con el servidor.");
     }
   };
+
 
   return (
     <>
