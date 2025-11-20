@@ -4,33 +4,36 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 30px;
+  padding: 6px 20px; 
   background-color: #DDD8CA;
   color: #20321E;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   position: sticky;  /* 🔹 CAMBIA ESTO */
   top: 0;            /* 🔹 AGREGA ESTO */
   z-index: 1000;
-  width: 100%;       /* 🔹 AGREGA ESTO */
+  width: 100vw; /* Para que ocupe exactamente el ancho de la ventana */
+  box-sizing: border-box;
+  flex-wrap: nowrap !important; 
+ 
 }
 
 /* 2. Sección izquierda (Usuario, Inicio, Cerrar Sesión) */
 .navbar-left {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 6px;
 }
 
 /* Estilo para los botones de la izquierda - TODOS CON VERDE */
 .btn-usuario {
-  padding: 10px 20px;
-  border-radius: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
   background-color: transparent;
   color: #20321E !important;
   border: 2.5px solid #20321E !important;
   cursor: pointer;
-  font-weight: 900;
-  font-size: 1rem;
+  font-weight: 700;
+  font-size: o.8rem;
   transition: all 0.2s;
 }
 
@@ -45,15 +48,17 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 20px;
+  gap: 10px;
+  flex-shrink: 1 !important;
 }
 
 .menu-item {
   position: relative;
-  padding: 10px;
+  padding: 6px 8px;
   cursor: pointer;
   font-weight: bold;
   color: #20321E;
+  font-size:0.85rem;
 }
 
 /* 4. Dropdown (con fondo claro y texto oscuro) */
@@ -67,7 +72,8 @@
   margin-top: 8px;
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  width: 180px;
+  width: 180px;        
+  max-width: 90vw;
   border: 1px solid #e0dbd1;
 }
 
@@ -124,7 +130,7 @@
 }
 
 .modal-buttons button {
-  padding: 10px 30px;
+  padding: 5px 20px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;

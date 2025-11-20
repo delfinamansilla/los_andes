@@ -18,6 +18,9 @@ import MisActividades from './pages/MisActividades';
 import InscripcionActividad from './pages/InscripcionActividad';
 import ActividadDetalle from './pages/ActividadDetalle';
 import AgregarHorario from './pages/AgregarHorario';
+import AgregarPartido from './pages/AgregarPartido';
+import AdminPartidos from './pages/AdminPartidos';
+import PartidoDetalle from './pages/PartidoDetalle';
 import Info from './pages/Info';
 
 
@@ -47,6 +50,9 @@ function App() {
 		<Route path="/actividades" element={<ListaActividades />} />
 		<Route path="/actividad-detalle" element={<ActividadDetalle />} />
 		<Route path="/agregar-horario" element={<AgregarHorario />} />
+		<Route path="/agregar-partido" element={<AgregarPartido />} />
+		<Route path="/admin-partidos" element={<AdminPartidos />} />
+		<Route path="/partido-detalle" element={<PartidoDetalle />} />
 		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>

@@ -92,10 +92,28 @@ const NavbarAdmin: React.FC = () => {
               {activeMenu === 'actividades' && (
                 <ul className="dropdown">
                   <li><button onClick={() => navigate('/actividades')}>Ver todas</button></li>
-                  <li><button onClick={() => navigate('/actividades/nueva')}>Agregar nueva</button></li>
+                  <li><button onClick={() => navigate('/actividades/nueva')}>Agregar nueva</button></li>	  
+				  
+		
                 </ul>
               )}
             </li>
+			
+			<li
+			  className="menu-item"
+			  onMouseOver={() => handleMouseEnter('partidos')}
+			  onMouseOut={handleMouseLeave}
+			>
+			  <i className="fa-solid fa-trophy"></i> Partidos
+			  {activeMenu === 'partidos' && (
+			    <ul className="dropdown">
+				  <li><button onClick={() => navigate('/admin-partidos')}> Ver Todos</button></li>
+			      <li><button onClick={() => navigate('/agregar-partido')}>Agregar nuevo</button></li>
+
+				</ul>
+				)}
+			</li>
+
           </ul>
         </nav>
 

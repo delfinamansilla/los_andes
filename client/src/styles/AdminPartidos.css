@@ -1,0 +1,75 @@
+.partido-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  padding: 10px;
+}
+
+/* TARJETA DE PARTIDO */
+.partido-card,
+.partido-btn {
+  background-color: #F2E9D8 !important;
+  color: #1A1A1A !important;
+  padding: 15px;
+  border-radius: 12px;
+  width: 250px;          /* más chico */
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+}
+
+.partido-card:hover,
+.partido-btn:hover {
+  background-color: #E9DFCA; /* cremita más oscura */
+  transform: translateY(-2px);
+}
+
+/* CONTENIDO */
+.partido-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* TÍTULO */
+.partido-titulo {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+  color: #20321E;
+}
+
+.partido-titulo .vs {
+  font-size: 1rem;
+  margin: 0 4px;
+  color: #6D7A6D;
+}
+
+/* FECHA, ACTIVIDAD */
+.partido-fecha,
+.partido-actividad {
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* CANCHA, PRECIO */
+.partido-cancha,
+.partido-precio {
+  font-size: 0.9rem;
+  color: #6D7A6D;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ÍCONOS */
+.partido-card i,
+.partido-btn i {
+  color: #20321E;
+}

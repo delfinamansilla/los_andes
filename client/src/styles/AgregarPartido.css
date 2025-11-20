@@ -1,0 +1,115 @@
+.page-container {
+  min-height: 100vh;
+  background-color: #20321E;
+  color: #20321E;
+  padding: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.page-container h2 {
+  text-align: center;
+  color: #DDD8CA;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+}
+
+/* === FORMULARIO PARA PARTIDO === */
+.form-partido {
+  background-color: #DDD8CA;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  color: #20321E;
+}
+
+.form-partido label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #20321E;
+  gap: 6px;
+}
+
+.form-partido input,
+.form-partido select,
+.form-partido textarea {
+  padding: 10px 12px;
+  border: 1px solid #466245;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #FFFFFF;
+  color: #20321E;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.form-partido input:focus,
+.form-partido select:focus,
+.form-partido textarea:focus {
+  border-color: #20321E;
+  box-shadow: 0 0 5px rgba(32, 50, 30, 0.4);
+}
+
+.form-partido textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* === BOTONES === */
+.opciones-form {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.opciones-form button {
+  flex: 1;
+  background-color: #20321E;
+  color: #DDD8CA;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 160px;
+}
+
+.opciones-form button:hover {
+  background-color: #466245;
+  transform: translateY(-2px);
+}
+
+.opciones-form button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.opciones-form button i.fa-solid {
+  margin-right: 8px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 600px) {
+  .form-partido {
+    padding: 25px;
+  }
+
+  .opciones-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
