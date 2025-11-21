@@ -33,7 +33,7 @@ import ListadoCuota from './pages/ListadoCuota';
 import CuotasUsuario from './pages/CuotasUsuario';
 import Info from './pages/Info';
 import AgregarCuota from './pages/AgregarCuota';
-
+import CambioContrasenia from './pages/CambioContrasenia';
 
 
 function App() {
@@ -75,6 +75,7 @@ function App() {
 		<Route path="/listado-socio" element={<ListadoSocio />} />
 		<Route path="/listado-cuota" element={<ListadoCuota />} />
 		<Route path="/cuotas-usuario" element={<CuotasUsuario />} />
+		<Route path="/cambiar-contrasenia" element={<CambioContrasenia />} />
 		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>

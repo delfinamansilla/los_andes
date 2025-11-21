@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
+import logic.LogicRecuperacionPass;
 
 import entities.Usuario;
 import logic.LogicUsuario;
@@ -22,10 +22,12 @@ import logic.LogicUsuario;
 public class ServletUsuario extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private LogicUsuario logicUsuario;
+    private LogicRecuperacionPass logicRecupero;
 
     public ServletUsuario() {
         super();
         logicUsuario = new LogicUsuario();
+        logicRecupero = new LogicRecuperacionPass();
     }
 
     /**
@@ -50,7 +52,14 @@ public class ServletUsuario extends HttpServlet {
             }
 
             switch (action.toLowerCase()) {
+                /*case "listar": {
+                    LinkedList<Usuario> usuarios = logicUsuario.getAll();
+                    request.setAttribute("listaUsuarios", usuarios);
+                    request.getRequestDispatcher("WEB-INF/listaUsuarios.jsp").forward(request, response);
+                    break;
+                }*/
             case "listar": {
+                // MODIFICADO: Usamos tu versión que devuelve JSON para el frontend (React)
                 LinkedList<Usuario> usuarios = logicUsuario.getAll();
                 
                 com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
@@ -64,26 +73,21 @@ public class ServletUsuario extends HttpServlet {
                 response.getWriter().write(json);
                 break;
             }
-            case "buscar": {
-            	// System.out.println("➡️ Entró al case 'buscar'"); // Opcional
-                int id = Integer.parseInt(request.getParameter("id"));
-                
-                // --- CAMBIO AQUÍ: Búsqueda directa y rápida ---
-                Usuario u = logicUsuario.getById(id);
-                // ----------------------------------------------
+                case "buscar": {
+                	int id = Integer.parseInt(request.getParameter("id"));
+                    Usuario u = logicUsuario.getById(id);
 
-                response.setContentType("application/json;charset=UTF-8");
-                if (u != null) {
-                    // OJO: Asegúrate que el JSON coincida con lo que espera tu Front
-                    response.getWriter().write("{\"id\":" + u.getIdUsuario() + 
-                        ", \"nombre\":\"" + u.getNombreCompleto() + 
-                        "\", \"mail\":\"" + u.getMail() + "\"}");
-                } else {
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    response.getWriter().write("{\"error\":\"Usuario no encontrado\"}");
+                    response.setContentType("application/json;charset=UTF-8");
+                    if (u != null) {
+                        response.getWriter().write("{\"id\":" + u.getIdUsuario() + 
+                            ", \"nombre\":\"" + u.getNombreCompleto() + 
+                            "\", \"mail\":\"" + u.getMail() + "\"}");
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                        response.getWriter().write("{\"error\":\"Usuario no encontrado\"}");
+                    }
+                    break;
                 }
-                break;
-            }
 
                 case "eliminar": {
                     int id = Integer.parseInt(request.getParameter("id"));
@@ -226,6 +230,80 @@ public class ServletUsuario extends HttpServlet {
                         response.setCharacterEncoding("UTF-8");
                         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                         response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+                    }
+                    break;
+                }
+                case "recuperar": {
+                    String mail = request.getParameter("mail");
+                    
+                    LinkedList<Usuario> todos = logicUsuario.getAll();
+                    Usuario uEncontrado = null;
+                    for(Usuario u : todos) {
+                        if(u.getMail().equalsIgnoreCase(mail)) {
+                            uEncontrado = u;
+                            break;
+                        }
+                    }
+                    
+                    if (uEncontrado != null) {
+                        entities.RecuperacionPass rp = logicRecupero.crearSolicitud(uEncontrado.getIdUsuario());
+                        
+                        // OJO: Asegurate que este puerto coincida con tu Frontend React
+                        String link = "http://localhost:3000/cambiar-contrasenia?token=" + rp.getToken();
+                        
+                        String cuerpo = "<div style='background-color: #20321E; padding: 50px; font-family: Arial, sans-serif;'>"
+                                + "  <div style='max-width: 500px; margin: 0 auto; background-color: #E8E4D9; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.5);'>"
+                                + "    <div style='background-color: #1a2918; padding: 20px; text-align: center; border-bottom: 4px solid #466245;'>"
+                                + "      <h1 style='color: #E8E4D9; margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 1px;'>Club Los Andes</h1>"
+                                + "    </div>"
+                                + "    <div style='padding: 40px; color: #20321E; text-align: center;'>"
+                                + "      <h2 style='margin-top: 0; color: #20321E;'>Recuperar Contraseña</h2>"
+                                + "      <p style='font-size: 16px; line-height: 1.5;'>Hola <strong>" + uEncontrado.getNombreCompleto() + "</strong>,</p>"
+                                + "      <p style='font-size: 15px; margin-bottom: 30px;'>Hemos recibido una solicitud para cambiar tu clave. Hacé clic en el botón de abajo para crear una nueva:</p>"
+                                + "      <a href='" + link + "' style='background-color: #20321E; color: #E8E4D9; padding: 15px 30px; text-decoration: none; font-weight: bold; border-radius: 5px; display: inline-block; font-size: 16px;'>CAMBIAR CONTRASEÑA</a>"
+                                + "      <p style='margin-top: 30px; font-size: 12px; color: #555;'>Este enlace expirará en 1 hora.<br>Si no lo solicitaste, ignorá este mensaje.</p>"
+                                + "    </div>"
+                                + "  </div>"
+                                + "</div>";
+                        
+                        try {
+                            entities.MailSender.enviarCorreo(mail, "Recupero de Clave", cuerpo);
+                            response.getWriter().write("{\"message\":\"Correo enviado\"}");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            response.setStatus(500);
+                            response.getWriter().write("{\"error\":\"Error al enviar mail\"}");
+                        }
+                    } else {
+                        response.setStatus(400);
+                        response.getWriter().write("{\"error\":\"Email no encontrado\"}");
+                    }
+                    break;
+                }
+
+                // --- AGREGADO: CASO RESTABLECER CONTRASEÑA ---
+                case "restablecer": {
+                    String token = request.getParameter("token");
+                    String nuevaPass = request.getParameter("nueva_pass");
+                    
+                    entities.RecuperacionPass rp = logicRecupero.obtenerPorToken(token);
+                    
+                    if (rp != null && rp.getExpiracion().isAfter(java.time.LocalDateTime.now())) {
+                        Usuario u = logicUsuario.getById(rp.getIdUsuario());
+                        u.setContrasenia(nuevaPass);
+                        
+                        try {
+                            logicUsuario.update(u); // La lógica debe encargarse de hashear si es necesario
+                            logicRecupero.eliminarToken(token);
+                            
+                            response.getWriter().write("{\"message\":\"Contraseña actualizada\"}");
+                        } catch (Exception e) {
+                            response.setStatus(500);
+                            response.getWriter().write("{\"error\":\"Error al actualizar\"}");
+                        }
+                    } else {
+                        response.setStatus(400);
+                        response.getWriter().write("{\"error\":\"El enlace es inválido o ha expirado.\"}");
                     }
                     break;
                 }

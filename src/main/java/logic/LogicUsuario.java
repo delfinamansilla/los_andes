@@ -39,8 +39,7 @@ public class LogicUsuario {
         
         return du.getByMailAndContrasenia(usuario);
     }
-    public Usuario getById(int id) {
-        return du.getById(id);
+
     
     
     /**
