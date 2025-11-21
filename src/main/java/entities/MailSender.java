@@ -1,4 +1,4 @@
-package entities;
+/*package entities;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import java.util.Properties;
@@ -25,4 +25,4 @@ public class MailSender {
 
         Transport.send(msg);
     }
-}
+}*/

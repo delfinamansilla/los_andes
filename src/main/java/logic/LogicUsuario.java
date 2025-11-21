@@ -41,7 +41,7 @@ public class LogicUsuario {
     }
     public Usuario getById(int id) {
         return du.getById(id);
-    }
+    
     
     /**
      * Devuelve todos los usuarios.
