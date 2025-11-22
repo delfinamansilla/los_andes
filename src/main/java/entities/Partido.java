@@ -11,7 +11,7 @@ public class Partido {
     private LocalTime hora_hasta;
     private String categoria;
     private Double precio_entrada;
-    private int id_cancha;
+    private Integer id_cancha;
     private int id_actividad;
 
     public Partido() {}
@@ -85,11 +85,11 @@ public class Partido {
         this.precio_entrada = precio_entrada;
     }
 
-    public int getId_cancha() {
+    public Integer getId_cancha() {
         return id_cancha;
     }
 
-    public void setId_cancha(int id_cancha) {
+    public void setId_cancha(Integer id_cancha) {
         this.id_cancha = id_cancha;
     }
 

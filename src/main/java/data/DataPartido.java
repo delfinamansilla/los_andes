@@ -137,7 +137,11 @@ public class DataPartido {
             stmt.setObject(4, p.getHora_hasta());
             stmt.setString(5, p.getCategoria());
             stmt.setDouble(6, p.getPrecio_entrada());
-            stmt.setInt(7, p.getId_cancha());
+            if (p.getId_cancha() == null) {
+                stmt.setNull(7, java.sql.Types.INTEGER);
+            } else {
+                stmt.setInt(7, p.getId_cancha());
+            }
             stmt.setInt(8, p.getId_actividad());
             stmt.executeUpdate();
             
@@ -204,4 +208,52 @@ public class DataPartido {
             }
         }
     }
+    
+    
+    public LinkedList<Partido> getByFechaRango(LocalDate fechaDesde, LocalDate fechaHasta) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        LinkedList<Partido> partidos = new LinkedList<>();
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT id, fecha, oponente, hora_desde, hora_hasta, categoria, precio_entrada, id_cancha, id_actividad " +
+                "FROM partido WHERE fecha BETWEEN ? AND ? ORDER BY fecha ASC"
+            );
+
+            stmt.setObject(1, fechaDesde);
+            stmt.setObject(2, fechaHasta);
+
+            rs = stmt.executeQuery();
+
+            while (rs != null && rs.next()) {
+                Partido p = new Partido();
+                p.setId(rs.getInt("id"));
+                p.setFecha(rs.getObject("fecha", LocalDate.class));
+                p.setOponente(rs.getString("oponente"));
+                p.setHora_desde(rs.getObject("hora_desde", LocalTime.class));
+                p.setHora_hasta(rs.getObject("hora_hasta", LocalTime.class));
+                p.setCategoria(rs.getString("categoria"));
+                p.setPrecio_entrada(rs.getDouble("precio_entrada"));
+                p.setId_cancha(rs.getInt("id_cancha"));
+                p.setId_actividad(rs.getInt("id_actividad"));
+
+                partidos.add(p);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return partidos;
+    }
+
 }

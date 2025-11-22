@@ -122,7 +122,7 @@ const ListadoCuotas: React.FC = () => {
              Crear Nueva Cuota
         </button>
         
-        <button onClick={() => navigate('/')} className="btn-back">
+        <button onClick={() => navigate('/inicio-admin')} className="btn-back">
             Volver al Inicio
         </button>
       </div>

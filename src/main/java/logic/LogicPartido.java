@@ -106,9 +106,13 @@ public class LogicPartido {
         }
         
         // 3. Validación de existencia de entidades relacionadas (Foreign Keys)
-        if (dc.getOne(p.getId_cancha()) == null) {
-            throw new Exception("La cancha seleccionada no existe.");
+     // Si id_cancha es null → significa cancha del oponente → válido
+        if (p.getId_cancha() != null) {
+            if (dc.getOne(p.getId_cancha()) == null) {
+                throw new Exception("La cancha seleccionada no existe.");
+            }
         }
+
         if (da.getOne(p.getId_actividad()) == null) {
             throw new Exception("La actividad seleccionada no existe.");
         }
@@ -122,6 +126,11 @@ public class LogicPartido {
      * @throws Exception si la cancha ya está ocupada en ese horario.
      */
     private void validarDisponibilidadCancha(Partido partidoAValidar) throws Exception {
+    	
+       if (partidoAValidar.getId_cancha() == null) {
+    	        return;
+    	    }
+       
         LinkedList<Partido> partidosEnMismaCanchaYFecha = dp.getByCanchaAndFecha(
             partidoAValidar.getId_cancha(),
             partidoAValidar.getFecha()
@@ -147,4 +156,9 @@ public class LogicPartido {
             }
         }
     }
+    
+    public LinkedList<Partido> getByFechaRango(LocalDate desde, LocalDate hasta) {
+        return dp.getByFechaRango(desde, hasta);
+    }
+
 }

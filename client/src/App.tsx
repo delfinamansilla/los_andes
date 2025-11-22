@@ -25,6 +25,9 @@ import MisActividades from './pages/MisActividades';
 import InscripcionActividad from './pages/InscripcionActividad';
 import ActividadDetalle from './pages/ActividadDetalle';
 import AgregarHorario from './pages/AgregarHorario';
+import AgregarPartido from './pages/AgregarPartido';
+import AdminPartidos from './pages/AdminPartidos';
+import PartidoDetalle from './pages/PartidoDetalle';
 import ListadoSocio from './pages/ListadoSocio';
 import ListadoCuota from './pages/ListadoCuota';
 import CuotasUsuario from './pages/CuotasUsuario';
@@ -32,7 +35,7 @@ import Credencial from './pages/Credencial';
 import MisCuotas from './pages/MisCuotas';
 import Info from './pages/Info';
 import AgregarCuota from './pages/AgregarCuota';
-
+import CambioContrasenia from './pages/CambioContrasenia';
 
 
 function App() {
@@ -67,12 +70,16 @@ function App() {
 		<Route path="/actividades" element={<ListaActividades />} />
 		<Route path="/actividad-detalle" element={<ActividadDetalle />} />
 		<Route path="/agregar-horario" element={<AgregarHorario />} />
+		<Route path="/agregar-partido" element={<AgregarPartido />} />
+		<Route path="/admin-partidos" element={<AdminPartidos />} />
+		<Route path="/partido-detalle" element={<PartidoDetalle />} />
 		<Route path="/agregar-cuota" element={<AgregarCuota />} />
 		<Route path="/listado-socio" element={<ListadoSocio />} />
 		<Route path="/mis-cuotas" element={<MisCuotas />} />
 		<Route path="/listado-cuota" element={<ListadoCuota />} />
 		<Route path="/credencial/:id" element={<Credencial />} />
 		<Route path="/cuotas-usuario" element={<CuotasUsuario />} />
+		<Route path="/cambiar-contrasenia" element={<CambioContrasenia />} />
 		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>

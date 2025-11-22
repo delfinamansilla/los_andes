@@ -1,0 +1,169 @@
+.page-container {
+  min-height: 100vh;
+  background-color: #20321E;
+  color: #20321E;
+  padding: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.page-container h2 {
+  text-align: center;
+  color: #DDD8CA;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+}
+
+.detalle-actividad {
+  background-color: #DDD8CA;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 650px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  color: #20321E;
+}
+
+.detalle-actividad label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #20321E;
+  gap: 6px;
+}
+
+.detalle-actividad input,
+.detalle-actividad select,
+.detalle-actividad textarea {
+  padding: 10px 12px;
+  border: 1px solid #466245;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #DDD8CA;
+  color: #20321E;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.detalle-actividad input:disabled,
+.detalle-actividad select:disabled,
+.detalle-actividad textarea:disabled {
+  background-color: #DDD8CA;
+  cursor: not-allowed;
+}
+
+.detalle-actividad input:focus,
+.detalle-actividad select:focus,
+.detalle-actividad textarea:focus {
+  border-color: #20321E;
+  box-shadow: 0 0 6px rgba(32, 50, 30, 0.4);
+}
+
+.page-container > div:last-child,
+.detalle-actividad + div {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.page-container button {
+  background-color: #20321E;
+  color: #DDD8CA;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 160px;
+}
+
+.page-container button:hover {
+  background-color: #466245;
+  transform: translateY(-2px);
+}
+
+.page-container button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.page-container button.eliminar {
+  background-color: #20321E;
+}
+
+.page-container button.eliminar:hover {
+  background-color: #466245;
+}
+
+.page-container button.guardar {
+  background-color: #20321E;
+}
+
+.page-container button.guardar:hover {
+  background-color: #466245;
+}
+
+.page-container button.horarios {
+  background-color: #20321E;
+}
+
+.page-container button.horarios:hover {
+  background-color: #466245;
+}
+
+.error-box {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  margin: 20px auto;
+  width: fit-content;
+}
+
+@media (max-width: 600px) {
+  .detalle-actividad {
+    padding: 25px;
+  }
+
+  .page-container > div:last-child,
+  .detalle-actividad + div {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.mensaje-exito {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  text-align: center;
+  animation: fadeOut 0.5s ease-in-out 2.5s forwards;
+}
+
+.page-container button i.fa-solid {
+    margin-right: 8px;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+}

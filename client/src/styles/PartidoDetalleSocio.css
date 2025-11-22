@@ -1,0 +1,94 @@
+.page-container {
+  min-height: 100vh;
+  background-color: #20321E;
+  color: #20321E;
+  padding: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Título */
+.page-container h2 {
+  text-align: center;
+  color: #DDD8CA;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+}
+
+/* Caja del detalle */
+.detalle-partido-solo-vista {
+  background-color: #DDD8CA;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 650px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  color: #20321E;
+}
+
+/* Texto + íconos */
+.detalle-partido-solo-vista p {
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Íconos */
+.detalle-partido-solo-vista i.fa-solid {
+  font-size: 1.2rem;
+  width: 22px;
+}
+
+/* Botón volver */
+.page-container button {
+  background-color: #20321E;
+  color: #DDD8CA;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 160px;
+  margin-top: 20px;
+}
+
+.page-container button:hover {
+  background-color: #466245;
+  transform: translateY(-2px);
+}
+
+.page-container button i.fa-solid {
+  margin-right: 8px;
+}
+
+/* Caja de error */
+.error-box {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  margin: 20px auto;
+  width: fit-content;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  .detalle-partido-solo-vista {
+    padding: 25px;
+  }
+
+  .page-container button {
+    width: 100%;
+  }
+}
