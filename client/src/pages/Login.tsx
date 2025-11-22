@@ -35,6 +35,63 @@ const Login: React.FC = () => {
           else setError(data.error || 'Error al enviar.');
       } catch(err) { setError('Error de conexión'); }
     };
+	
+	const verificarCuotas = async (usuarioId: number): Promise<boolean> => {
+	    try {
+		
+	      const resCuotas = await fetch('http://localhost:8080/club/cuota?action=listar');
+	      console.log(resCuotas);
+	      if (!resCuotas.ok) {
+	        console.error('Error al obtener cuotas');
+	        return true; 
+	      }
+
+	      const todasLasCuotas = await resCuotas.json();
+
+	      const cuotasOrdenadas = todasLasCuotas.sort((a: any, b: any) => {
+	        const fechaA = new Date(a.fecha_vencimiento);
+	        const fechaB = new Date(b.fecha_vencimiento);
+	        return fechaB.getTime() - fechaA.getTime();
+	      });
+
+	      const ultimasDosCuotas = cuotasOrdenadas.slice(0, 2);
+		  
+
+	      if (ultimasDosCuotas.length < 2) {
+	        return true; 
+	      }
+
+	      const resPagos = await fetch(`http://localhost:8080/club/pagocuota?action=listar_por_usuario&id_usuario=${usuarioId}`);
+	      
+	      if (!resPagos.ok) {
+	        console.error('Error al obtener pagos');
+	        return true; 
+	      }
+
+	      const pagosUsuario = await resPagos.json();
+
+
+	      const idUltimasCuotas = ultimasDosCuotas.map((c: any) => c.id);
+	      
+	      const tienePagoPrimeraQuota = pagosUsuario.some((pago: any) => 
+	        pago.id_cuota === idUltimasCuotas[0]
+	      );
+	      
+	      const tienePagoSegundaCuota = pagosUsuario.some((pago: any) => 
+	        pago.id_cuota === idUltimasCuotas[1]
+	      );
+
+	      if (!tienePagoPrimeraQuota && !tienePagoSegundaCuota) {
+	        return false;
+	      }
+
+	      return true;
+
+	    } catch (err) {
+	      console.error('Error al verificar cuotas:', err);
+	      return true;
+	    }
+	  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,25 +120,36 @@ const Login: React.FC = () => {
       }
 
       if (data && data.status === 'ok') {
-        localStorage.setItem('usuario', JSON.stringify(data.usuario));
-
-        setSuccess(`✅ Bienvenido ${data.usuario.nombre_completo}`);
-		setTimeout(() => {
+       
 		  if (data.usuario.rol === 'socio') {
-		    navigate('/inicio-socio');
-		  } else {
-		    navigate('/inicio-admin');
-		  }
-		}, 2000);
+			
+			const puedeAcceder = await verificarCuotas(data.usuario.id);
+			          
+	          if (!puedeAcceder) {
+	            setError('Tenés las últimas dos cuotas sin pagar. Por favor, acércate a la oficina o envía un mail a losandesclubrosario@gmail.com para regularizar tu situación.');
+	            return;
+	          }
+	        }
+			
+			localStorage.setItem('usuario', JSON.stringify(data.usuario));
+
+		        setSuccess(`Bienvenido ${data.usuario.nombre_completo}`);
+				setTimeout(() => {
+				  if (data.usuario.rol === 'socio') {
+					navigate('/inicio-socio');
+				  } else {
+				    navigate('/inicio-admin');
+				  }
+				}, 2000);
 
       } else if (res.status === 401) {
-        setError('❌ Correo o contraseña incorrectos.');
+        setError('Correo o contraseña incorrectos.');
       } else {
-        setError('⚠ Error inesperado en el servidor.');
+        setError('Error inesperado en el servidor.');
       }
     } catch (err) {
       console.error(err);
-      setError('🚫 Error al conectar con el servidor.');
+      setError('Error al conectar con el servidor.');
     }
   };
   
@@ -152,7 +220,6 @@ const Login: React.FC = () => {
                       </span>
                   )}
               </div>
-              {/* ----------------------------------------------------- */}
 
               <button type="submit" className="btn_is">
                   {isRecovering ? "Enviar Enlace" : "Iniciar Sesión"}
