@@ -12,6 +12,7 @@ import java.util.UUID;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import entities.Alquiler_cancha;
 import entities.Alquiler_salon;
 import entities.PreReserva;
 import entities.MailSender;
@@ -112,6 +113,29 @@ public class ServletAlquiler_salon extends HttpServlet {
                     }
                     break;
                 }
+                
+                case "listar_por_usuario": {
+                    try {
+                        int idUsuario = Integer.parseInt(req.getParameter("id_usuario"));
+
+                        LinkedList<Alquiler_salon> todos = logic.getAll();
+                        
+
+                        List<Alquiler_salon> delUsuario = todos.stream()
+                            .filter(a -> a.getIdUsuario() == idUsuario)
+                            .collect(java.util.stream.Collectors.toList());
+                            
+
+                        resp.getWriter().write(gson.toJson(delUsuario));
+                        
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        resp.setStatus(500);
+                        resp.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
+                    }
+                    break;
+                }
+
 
              // ============================================================
              // DESCARGAR CONSTANCIA (HTML descargable)

@@ -41,6 +41,8 @@ import AlquilerCanchasAdmin from './pages/AlquilerCanchasAdmin';
 import PartidoDetalleSocio from './pages/PartidoDetalleSocio';
 import MisAlquileresCancha from './pages/MisAlquileresCancha';
 import CambioContrasenia from './pages/CambioContrasenia';
+import AlquileresCanchaSocio from './pages/AlquileresCanchaSocio';
+import AlquileresSalonSocio from './pages/AlquileresSalonSocio';
 
 
 
@@ -61,6 +63,8 @@ function App() {
 		<Route path="/salones-admin" element={<SalonesAdmin />} />
 		<Route path="/modificar-salon" element={<ModificarSalon />} />
 		<Route path="/salones" element={<Salones />} />
+		<Route path="/alquileres-canchas-socio" element={<AlquileresCanchaSocio />} />
+		<Route path="/alquileres-salones-socio" element={<AlquileresSalonSocio />} />
 		<Route path="/alquiler_salon/:idSalon" element={<AlquilarSalon />} />
 		<Route path="/mis-alquileres-salon" element={<MisAlquileresSalon />} />
 		<Route path="/ver-alquileres-salon" element={<VerAlquileresSalon />} />

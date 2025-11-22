@@ -75,12 +75,12 @@ const ListadoSocios: React.FC = () => {
   
   const handleVerAlquileresCanchas = (socio: Socio) => {
       localStorage.setItem('usuarioSeleccionadoParaAlquileres', JSON.stringify(socio));
-      navigate('/alquileres-canchas-usuario');
+      navigate('/alquileres-canchas-socio');
     };
 
     const handleVerAlquileresSalones = (socio: Socio) => {
       localStorage.setItem('usuarioSeleccionadoParaAlquileres', JSON.stringify(socio));
-      navigate('/alquileres-salones-usuario');
+      navigate('/alquileres-salones-socio');
     };
 
 

@@ -111,6 +111,28 @@ public class ServletAlquiler_cancha extends HttpServlet {
                     }
                     break;
                 }
+                
+                case "listar_por_usuario": {
+                    try {
+                        int idUsuario = Integer.parseInt(req.getParameter("id_usuario"));
+
+                        LinkedList<Alquiler_cancha> todos = logic.getAll();
+                        
+
+                        List<Alquiler_cancha> delUsuario = todos.stream()
+                            .filter(a -> a.getId_usuario() == idUsuario)
+                            .collect(java.util.stream.Collectors.toList());
+                            
+
+                        resp.getWriter().write(gson.toJson(delUsuario));
+                        
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        resp.setStatus(500);
+                        resp.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
+                    }
+                    break;
+                }
 
 
                 case "descargar_constancia": {
@@ -338,7 +360,7 @@ public class ServletAlquiler_cancha extends HttpServlet {
                     resp.getWriter().write("<div class='card'>");
                     resp.getWriter().write("<h1>¡Reserva Confirmada!</h1>");
                     resp.getWriter().write("<p>Hemos enviado un correo a <b>" + (u != null ? u.getMail() : "tu casilla") + "</b> con las opciones de descarga.</p>");
-                    resp.getWriter().write("<a href='http://localhost:3000/mis-reservas' class='btn'>Ir a Mis Reservas</a>");
+                    resp.getWriter().write("<a href='http://localhost:3000/alquileres-cancha' class='btn'>Ir a Mis Reservas</a>");
                     resp.getWriter().write("</div></body></html>");
                     break;
                 }
