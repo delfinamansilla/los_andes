@@ -11,8 +11,15 @@
   padding: 2rem 1rem;
 }
 
+.grid-contacto-mapa {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
 .bienvenida-header {
-  background: rgba(221, 216, 202, 0.95); /* Cremita con transparencia */
+  background: rgba(221, 216, 202, 0.95); 
   backdrop-filter: blur(10px);
   color: #20321E;
   border-radius: 1rem;
@@ -35,7 +42,7 @@
 }
 
 .seccion-card {
-  background: rgba(221, 216, 202, 0.95); /* Cremita */
+  background: rgba(221, 216, 202, 0.95); 
   backdrop-filter: blur(10px);
   border-radius: 1rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -74,7 +81,6 @@
   color: #20321E;
 }
 
-/* Grid de Horarios */
 .grid-horarios {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -113,7 +119,6 @@
   font-size: 0.95rem;
 }
 
-/* Grid de Beneficios */
 .grid-beneficios {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -126,7 +131,7 @@
   gap: 1rem;
   padding: 1rem;
   border-radius: 0.75rem;
-  background: rgba(201, 196, 181, 0.3); /* Cremita más oscuro */
+  background: rgba(201, 196, 181, 0.3); 
   transition: all 0.3s ease;
 }
 
@@ -196,7 +201,6 @@
   color: #20321E;
 }
 
-/* Reglamento */
 .reglamento-lista {
   display: flex;
   flex-direction: column;
@@ -229,7 +233,6 @@
   line-height: 1.5;
 }
 
-/* Grid de Contacto */
 .grid-contacto {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -339,36 +342,15 @@
   font-size: 1.125rem;
 }
 
-@media (max-width: 768px) {
-  .contenido-socio {
-    padding: 1rem;
-  }
+.map-container {
+  width: 100%;
+  height: 500px;   
+  border-radius: 10px;
+  overflow: hidden;
+}
 
-  .bienvenida-header {
-    padding: 1.5rem;
-  }
-
-  .bienvenida-header h2 {
-    font-size: 1.75rem;
-  }
-
-  .seccion-card {
-    padding: 1.5rem;
-  }
-
-  .seccion-titulo h3 {
-    font-size: 1.5rem;
-  }
-
-  .grid-horarios,
-  .grid-beneficios,
-  .grid-contacto,
-  .grid-contacto-mapa {
-    grid-template-columns: 1fr;
-  }
-
-  .map-container {
-    max-width: 100%;
-    aspect-ratio: 16 / 9;
-  }
+.map-container iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
 }

@@ -28,6 +28,8 @@ import AgregarHorario from './pages/AgregarHorario';
 import ListadoSocio from './pages/ListadoSocio';
 import ListadoCuota from './pages/ListadoCuota';
 import CuotasUsuario from './pages/CuotasUsuario';
+import Credencial from './pages/Credencial';
+import MisCuotas from './pages/MisCuotas';
 import Info from './pages/Info';
 import AgregarCuota from './pages/AgregarCuota';
 
@@ -67,7 +69,9 @@ function App() {
 		<Route path="/agregar-horario" element={<AgregarHorario />} />
 		<Route path="/agregar-cuota" element={<AgregarCuota />} />
 		<Route path="/listado-socio" element={<ListadoSocio />} />
+		<Route path="/mis-cuotas" element={<MisCuotas />} />
 		<Route path="/listado-cuota" element={<ListadoCuota />} />
+		<Route path="/credencial/:id" element={<Credencial />} />
 		<Route path="/cuotas-usuario" element={<CuotasUsuario />} />
 		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>

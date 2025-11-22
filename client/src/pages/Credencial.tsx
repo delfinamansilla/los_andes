@@ -4,6 +4,7 @@ import '../styles/Credencial.css';
 import logoClub from '../assets/los_andes.png';
 import NavbarSocio from './NavbarSocio';
 import Footer from './Footer';
+import { QRCodeSVG } from "qrcode.react";
 
 const Credencial: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,7 +19,7 @@ const Credencial: React.FC = () => {
     if (id) {
       setImageUrl(`http://localhost:8080/club/usuario?action=verfoto&id=${id}&t=${new Date().getTime()}`);
       
-      fetch(`http://localhost:8080/club/usuario?action=buscar&id=${id}`)
+      fetch(`http://localhost:8080/club/usuario?action=buscarc&id=${id}`)
         .then(res => res.ok ? res.json() : Promise.reject('Usuario no encontrado'))
         .then(data => setSocio(data))
         .catch(err => setError(err.message));
@@ -36,7 +37,7 @@ const Credencial: React.FC = () => {
       const res = await fetch('http://localhost:8080/club/usuario', { method: 'POST', body: formData });
       const result = await res.json();
       if (res.ok) {
-        setMensaje('✅ ¡Foto actualizada!');
+        setMensaje('¡Foto actualizada!');
         setImageUrl(`http://localhost:8080/club/usuario?action=verfoto&id=${id}&t=${new Date().getTime()}`);
       } else {
         setError(result.error || 'Error al subir la foto.');
@@ -84,12 +85,21 @@ const Credencial: React.FC = () => {
                 <h2>{socio.nombre_completo}</h2>
                 <p><strong>DNI:</strong> {socio.dni}</p>
                 <p><strong>Rol:</strong> {socio.rol}</p>
-                <p><strong>Estado:</strong> 
+                <p><strong>Estado: </strong> 
                   <span className={`estado-badge ${socio.estado ? 'activo' : 'inactivo'}`}>
-                    {socio.estado ? 'Activo' : 'Inactivo'}
+                    {socio.estado ? ' Activo' : ' Inactivo'}
                   </span>
                 </p>
               </div>
+			  <div className="carnet-qr">
+			    <QRCodeSVG 
+			      value={socio.id?.toString() || "socio"} 
+			      size={100}
+			      bgColor="#DDD8CA"
+			      fgColor="#20321E"
+			      level="H"
+			    />
+			  </div>
             </main>
           </div> 
 

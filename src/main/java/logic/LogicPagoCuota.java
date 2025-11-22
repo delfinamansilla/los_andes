@@ -75,7 +75,7 @@ public class LogicPagoCuota {
 
 
         // 4. Validación de Duplicados: La cuota no debe haber sido pagada antes
-        if (dpc.getByCuotaId(pc.getId_cuota()) != null) {
+        if (dpc.getByCuotaIdAndUsuarioId(pc.getId_cuota(), pc.getId_usuario()) != null) {
             throw new Exception("Esta cuota ya ha sido pagada previamente.");
         }
     }

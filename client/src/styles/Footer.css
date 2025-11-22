@@ -104,6 +104,16 @@
   margin-bottom: 5px;
 }
 
+.footer-columna {
+  text-align: right;
+}
+
+.info-item {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+
 /* Barra inferior */
 .footer-bottom {
   text-align: center;

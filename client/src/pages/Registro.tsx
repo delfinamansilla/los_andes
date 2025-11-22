@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Registro.css';
+import Navbar from './Navbar';
 
 const Registro: React.FC = () => {
   const [rol, setRol] = useState<'socio' | 'administrador'>('socio');
@@ -74,7 +75,7 @@ const Registro: React.FC = () => {
 
   return (
     <div className="registro-page">
-
+	<Navbar/>
       <div className="content-area">
         <div className="form-container">
           <h2>Registro de {rol === 'socio' ? 'Socio' : 'Administrador'}</h2>

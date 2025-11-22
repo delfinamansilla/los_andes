@@ -1,4 +1,3 @@
-
 .pagina-credencial {
   display: flex;
   flex-direction: column;
@@ -13,44 +12,48 @@
   flex-direction: column;
   justify-content: center; 
   align-items: center;    
-  padding: 40px 20px; 
+  padding: 60px 20px; 
 }
 
 .carnet-socio {
   background-color: #DDD8CA;
   color: #20321E;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
   width: 100%;
-  max-width: 520px;
+  max-width: 750px;   
   overflow: hidden;
+  min-width: 450px;
+  padding-bottom: 20px;
 }
 
 .carnet-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  border-bottom: 2px solid #466245;
+  padding: 20px 30px;   
+  border-bottom: 3px solid #466245;
 }
 
 .carnet-header h3 {
   margin: 0;
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 2rem;    
+  font-weight: 700;
 }
 
 .club-logo {
-  height: 60px;
+  height: 85px;        
   object-fit: contain;
 }
 
 .carnet-body {
   display: flex;
   align-items: center;
-  padding: 25px 20px;
-  gap: 25px;
+  justify-content: space-between;
+  padding: 40px 30px;
+  gap: 40px;
 }
+
 
 .carnet-foto {
   position: relative;
@@ -59,51 +62,110 @@
 }
 
 .carnet-foto img {
-  width: 120px;
-  height: 120px;
+  width: 160px;       
+  height: 160px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #466245;
-  display: block;
+  border: 4px solid #466245;
   transition: filter 0.3s ease;
 }
 
 .foto-overlay {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background-color: rgba(32, 50, 30, 0.7); border-radius: 50%;
-  display: flex; flex-direction: column; justify-content: center; align-items: center;
-  color: #DDD8CA; opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
+  position: absolute; 
+  top: 0; left: 0; 
+  width: 100%; height: 100%;
+  background-color: rgba(32, 50, 30, 0.7);
+  border-radius: 50%;
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center;
+  color: #DDD8CA; 
+  opacity: 0; 
+  transition: opacity 0.3s ease; 
+  pointer-events: none;
 }
-.foto-overlay svg { width: 35px; height: 35px; }
-.foto-overlay span { font-size: 0.8rem; font-weight: bold; margin-top: 5px; }
-.carnet-foto:hover img { filter: brightness(0.7); }
-.carnet-foto:hover .foto-overlay { opacity: 1; }
+
+.foto-overlay svg { 
+  width: 50px; 
+  height: 50px; 
+}
+
+.foto-overlay span { 
+  font-size: 1rem; 
+  font-weight: bold; 
+  margin-top: 8px; 
+}
+
+.carnet-foto:hover img { 
+  filter: brightness(0.7); 
+}
+.carnet-foto:hover .foto-overlay { 
+  opacity: 1; 
+}
 
 .carnet-datos {
   text-align: left;
 }
 
 .carnet-datos h2 {
-  margin: 0 0 10px 0;
-  font-size: 1.8rem;
-  font-weight: 700;
+  margin: 0 0 15px 0;
+  font-size: 2.4rem;    
+  font-weight: 800;
 }
 
 .carnet-datos p {
-  margin: 6px 0;
-  font-size: 1rem;
+  margin: 10px 0;
+  font-size: 1.3rem;  
 }
 
-.estado-badge {
-  padding: 4px 10px; border-radius: 20px; font-size: 0.9rem;
-  font-weight: bold; color: #DDD8CA;
+.estado-label {
+  font-weight: 600;
 }
-.estado-badge.activo { background-color: #4CAF50; }
-.estado-badge.inactivo { background-color: #f44336; }
+
+.estado-valor {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-left: 8px;
+}
+
+.estado-valor.activo {
+  color: #0a3d2e; 
+}
+
+.estado-valor.inactivo {
+  color: #8a0000; 
+}
+
 
 .btn-volver {
-  margin-top: 25px; padding: 12px 30px; background-color: transparent;
-  color: #DDD8CA; border: 2px solid #DDD8CA; border-radius: 8px;
-  cursor: pointer; font-size: 1rem; font-weight: bold; transition: all 0.2s;
+  margin-top: 35px; 
+  padding: 14px 40px; 
+  background-color: transparent;
+  color: #DDD8CA; 
+  border: 2px solid #DDD8CA; 
+  border-radius: 10px;
+  cursor: pointer; 
+  font-size: 1.3rem; 
+  font-weight: bold; 
+  transition: all 0.2s;
 }
-.btn-volver:hover { background-color: #DDD8CA; color: #20321E; }
+
+.btn-volver:hover { 
+  background-color: #DDD8CA; 
+  color: #20321E; 
+}
+
+.carnet-qr {
+  width: 210px;
+  height: 210px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0; 
+}
+
+.carnet-datos {
+  flex: 1; 
+}
+

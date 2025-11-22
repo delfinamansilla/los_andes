@@ -31,22 +31,33 @@ public class LogicCuota {
  // En LogicCuota.java
 
     public void add(Cuota c) throws Exception {
-        // 1. Validaciones básicas (que ya tenías)
+        // 1. Validaciones básicas (se quedan igual)
         validarCuota(c);
 
-        // 2. NUEVA VALIDACIÓN: Verificar si ya existe el mes
+        // --- ¡NUEVA LÓGICA DE NEGOCIO! ---
+        // Asumimos que c.getNro_cuota() viene con solo el mes (ej: 11).
+        // Lo convertimos al formato AÑO-MES (ej: 202511).
+        int anioActual = LocalDate.now().getYear();
+        int periodoCompleto = anioActual * 100 + c.getNro_cuota();
+        c.setNro_cuota(periodoCompleto); // Actualizamos el objeto antes de guardarlo
+
+        // 2. AHORA la validación de duplicados usará el formato correcto
         Cuota existente = dc.getByNroCuota(c.getNro_cuota());
         
         if (existente != null) {
-            // Si entra aquí, es porque YA existe una cuota con ese número
-            throw new Exception("⚠️ Ya existe una cuota registrada para el mes " + c.getNro_cuota());
+            throw new Exception("⚠️ Ya existe una cuota registrada para este período.");
         }
 
-        // 3. Si pasa la validación, guarda
+        // 3. Si pasa todo, se guarda con el nro_cuota correcto (ej: 202511)
         dc.add(c);
     }
 
     public void update(Cuota c) throws Exception {
+        // Aplicamos la misma lógica para la actualización
+        int anioActual = LocalDate.now().getYear();
+        int periodoCompleto = anioActual * 100 + c.getNro_cuota();
+        c.setNro_cuota(periodoCompleto);
+
         validarCuota(c);
         dc.update(c);
     }
