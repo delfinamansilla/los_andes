@@ -3,6 +3,10 @@ import NavbarSocio from './NavbarSocio';
 import Footer from './Footer';
 import { Clock, MapPin, Phone, Mail, Award, Shield, Users, Dumbbell } from 'lucide-react';
 import '../styles/InicioSocio.css';
+import EstadoCuentaWidget from './EstadoCuentaWidget';
+import ProximasActividadesWidget from './ProximasActividadesWidget';
+import ReservasActivasWidget from './ReservasActivasWidget';
+import EstadisticasWidget from './EstadisticasWidget';
 
 const InicioSocio: React.FC = () => {
 	const [esCumple, setEsCumple] = useState(false);
@@ -84,12 +88,15 @@ const InicioSocio: React.FC = () => {
 	        )}
       
       <div className="contenido-socio">
-
+	  
         <div className="bienvenida-header">
           <h2>Los Andes</h2>
           <p>Tu espacio deportivo en el corazón de Rosario</p>
         </div>
-
+		<EstadoCuentaWidget />
+			  <ProximasActividadesWidget />
+			  <ReservasActivasWidget />
+			  <EstadisticasWidget />
         <div className="seccion-card">
           <div className="seccion-titulo">
             <Clock className="icono-titulo" size={28} />
