@@ -12,6 +12,14 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import entities.PagoCuota;
+import logic.LogicUsuario;
+import logic.GeneradorArchivos;
+import logic.LogicCuota;
+import logic.LogicMonto_cuota;
+import entities.MailSender;
+import entities.Usuario;
+import entities.Cuota;
+import entities.Monto_cuota;
 import logic.LogicPagoCuota;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -27,14 +35,21 @@ import com.google.gson.JsonParser;
 public class ServletPagoCuota extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private LogicPagoCuota logicPago;
+    private LogicUsuario logicUsuario;
+    private LogicCuota logicCuota;
+    private LogicMonto_cuota logicMonto;
     private Gson gson;
     
-    // 👇 REEMPLAZA CON TU ACCESS TOKEN DE TEST
     private static final String MP_ACCESS_TOKEN = "TEST-823938148084228-112018-f842aba74684673c394867dc4ef8f1bf-660480912";
+    
+    
 
     public ServletPagoCuota() {
         super();
         logicPago = new LogicPagoCuota();
+        logicUsuario = new LogicUsuario();
+        logicCuota = new LogicCuota();
+        logicMonto = new LogicMonto_cuota();
 
         gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDate.class,
@@ -99,6 +114,23 @@ public class ServletPagoCuota extends HttpServlet {
             response.getWriter().write("{\"error\":\"Error servidor: " + e.getMessage() + "\"}");
         }
     }
+    
+    private String formatearPeriodo(int nro) {
+        if (nro == 0) return "N/A";
+        
+        int anio = nro / 100;
+        int mes = nro % 100;
+        
+        String[] meses = {"", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+                          "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+        
+        if (mes >= 1 && mes < meses.length) {
+            return meses[mes] + " " + anio;
+        } else {
+            return "Mes inválido " + anio;
+        }
+    }
+    
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -114,19 +146,22 @@ public class ServletPagoCuota extends HttpServlet {
         try {
             if ("crear_orden_pago".equalsIgnoreCase(action)) {
                 System.out.println("=== INICIANDO CREACIÓN DE ORDEN DE PAGO ===");
-                
-                int idUsuario = Integer.parseInt(request.getParameter("id_usuario"));
                 int idCuota = Integer.parseInt(request.getParameter("id_cuota"));
+                Cuota cuotaObj = logicCuota.getById(idCuota);
+                int nroCuota = cuotaObj.getNro_cuota();
+                int idUsuario = Integer.parseInt(request.getParameter("id_usuario"));
+               
+
+                String periodoFormateado = formatearPeriodo(nroCuota);
                 double monto = Double.parseDouble(request.getParameter("monto"));
                 
-                System.out.println("Usuario: " + idUsuario + ", Cuota: " + idCuota + ", Monto: " + monto);
                 
-                // Crear una preferencia de pago (esto genera un link de pago)
+                System.out.println("Usuario: " + idUsuario + ", Cuota : " + periodoFormateado + ", Monto: " + monto + ", Nro: " + nroCuota);
+               
                 JsonObject preferenceRequest = new JsonObject();
                 
-                // Items del pago
                 JsonObject item = new JsonObject();
-                item.addProperty("title", "Cuota #" + idCuota);
+                item.addProperty("title", "Cuota " + periodoFormateado);
                 item.addProperty("quantity", 1);
                 item.addProperty("unit_price", monto);
                 item.addProperty("currency_id", "ARS");
@@ -135,27 +170,21 @@ public class ServletPagoCuota extends HttpServlet {
                 items.add(item);
                 preferenceRequest.add("items", items);
                 
-                // Payer
                 JsonObject payer = new JsonObject();
                 payer.addProperty("email", "test_user_123@test.com");
                 preferenceRequest.add("payer", payer);
                 
-                // Back URLs (opcional)
                 JsonObject backUrls = new JsonObject();
                 backUrls.addProperty("success", "http://localhost:3000/pago-exitoso");
                 backUrls.addProperty("failure", "http://localhost:3000/pago-fallido");
                 backUrls.addProperty("pending", "http://localhost:3000/pago-pendiente");
                 preferenceRequest.add("back_urls", backUrls);
                 
-                //preferenceRequest.addProperty("auto_return", "approved");
-                
-                // External reference para identificar el pago
                 preferenceRequest.addProperty("external_reference", "cuota_" + idCuota + "_usuario_" + idUsuario);
                 
                 String jsonPayload = gson.toJson(preferenceRequest);
                 System.out.println("JSON Request: " + jsonPayload);
                 
-                // Crear la preferencia en Mercado Pago
                 URL url = new URL("https://api.mercadopago.com/checkout/preferences");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -163,13 +192,11 @@ public class ServletPagoCuota extends HttpServlet {
                 conn.setRequestProperty("Authorization", "Bearer " + MP_ACCESS_TOKEN);
                 conn.setDoOutput(true);
                 
-                // Enviar el JSON
                 try (OutputStream os = conn.getOutputStream()) {
                     byte[] input = jsonPayload.getBytes(StandardCharsets.UTF_8);
                     os.write(input, 0, input.length);
                 }
                 
-                // Leer la respuesta
                 int responseCode = conn.getResponseCode();
                 System.out.println("Response Code: " + responseCode);
                 
@@ -190,29 +217,26 @@ public class ServletPagoCuota extends HttpServlet {
                 System.out.println("Response Body: " + responseStr.toString());
                 
                 if (responseCode >= 200 && responseCode < 300) {
-                    // Parsear la respuesta
+
                     JsonObject mpResponse = JsonParser.parseString(responseStr.toString()).getAsJsonObject();
                     
                     String preferenceId = mpResponse.get("id").getAsString();
                     String initPoint = mpResponse.get("init_point").getAsString();
                     String sandboxInitPoint = mpResponse.get("sandbox_init_point").getAsString();
                     
-                    // Para QR, usamos el sandbox_init_point
-                    String qrData = sandboxInitPoint; // Este es el link que se convierte en QR
+                    String qrData = sandboxInitPoint; // o sea, esto seria el link convertido en qr
                     
-                    // Construir respuesta
                     JsonObject jsonResponse = new JsonObject();
                     jsonResponse.addProperty("qr_data", qrData);
                     jsonResponse.addProperty("payment_id", preferenceId);
                     jsonResponse.addProperty("init_point", initPoint);
                     
-                    System.out.println("✅ PREFERENCIA CREADA EXITOSAMENTE");
+                    System.out.println("PREFERENCIA CREADA EXITOSAMENTE");
                     System.out.println("Link de pago: " + sandboxInitPoint);
                     response.getWriter().write(gson.toJson(jsonResponse));
                     
                 } else {
-                    // Error de Mercado Pago
-                    System.err.println("❌ ERROR DE MERCADO PAGO");
+                    System.err.println("ERROR DE MERCADO PAGO");
                     response.setStatus(500);
                     response.getWriter().write("{\"error\":\"Error de MercadoPago: " + responseStr.toString() + "\"}");
                 }
@@ -227,16 +251,56 @@ public class ServletPagoCuota extends HttpServlet {
                 pago.setFecha_pago(LocalDate.now());
 
                 logicPago.add(pago);
+                try {
+                    
+                    Usuario u = logicUsuario.getById(idUsuario);
+                    Cuota c = logicCuota.getById(idCuota);
+                    
+                    Monto_cuota mc = logicMonto.getByCuota(idCuota); 
+ 
+                    double precioFinal = (mc != null) ? mc.getMonto() : 0;
+                    
+                    if (LocalDate.now().isAfter(c.getFecha_vencimiento())) {
+                        precioFinal = precioFinal * 1.10;
+                    }
+
+                    GeneradorArchivos gen = new GeneradorArchivos();
+                    byte[] pdfBytes = gen.generarReciboPago(u, c, precioFinal);
+
+                    String cuerpoHtml = "<div style='background-color:#20321E;padding:40px;font-family:Arial;color:#E8E4D9;text-align:center;'>"
+                            + "<h1 style='border-bottom:2px solid #E8E4D9;padding-bottom:10px;'>Pago Recibido</h1>"
+                            + "<p>Hola " + u.getNombreCompleto() + ",</p>"
+                            + "<p>Hemos registrado exitosamente el pago de tu <strong>Cuota N° " + c.getNro_cuota() + "</strong>.</p>"
+                            + "<p>Adjunto encontrarás el comprobante oficial.</p>"
+                            + "<br><p style='font-size:12px;color:#aaa;'>Club Los Andes</p>"
+                            + "</div>";
+
+                    if (u.getMail() != null && !u.getMail().isEmpty()) {
+                        MailSender.enviarCorreoConAdjunto(
+                            u.getMail(), 
+                            "Comprobante de Pago - Club Los Andes", 
+                            cuerpoHtml, 
+                            pdfBytes, 
+                            "Recibo_Cuota_" + c.getNro_cuota() + ".pdf"
+                        );
+                        System.out.println("Comprobante enviado a: " + u.getMail());
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    System.out.println("El pago se guardó, pero falló el envío del mail: " + ex.getMessage());
+
+                }
                 
-                response.getWriter().write("{\"mensaje\":\"Pago registrado correctamente\"}");
-                
+                response.getWriter().write("{\"mensaje\":\"Pago registrado y comprobante enviado.\"}");
+
             } else {
                 response.getWriter().write("{\"error\":\"Acción POST no reconocida\"}");
             }
             
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("❌ ERROR GENERAL: " + e.getMessage());
+            System.err.println("ERROR GENERAL: " + e.getMessage());
             response.setStatus(500);
             response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
         }

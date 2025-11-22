@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import '../styles/Login.css';
+import Navbar from './Navbar';
 
 const CambioContrasenia: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -35,7 +36,7 @@ const CambioContrasenia: React.FC = () => {
         const data = await res.json();
 
         if (res.ok) {
-            setMensaje('✅ ¡Contraseña cambiada! Redirigiendo...');
+            setMensaje('¡Contraseña cambiada! Redirigiendo...');
             setTimeout(() => navigate('/login'), 3000);
         } else {
             setMensaje('❌ ' + (data.error || 'Error al cambiar contraseña'));
@@ -49,6 +50,7 @@ const CambioContrasenia: React.FC = () => {
 
   return (
     <div className="home-page">
+	<Navbar/>
       <div className="home-content">
         <h2>Crear Nueva Contraseña</h2>
         <div className="form_inicio">

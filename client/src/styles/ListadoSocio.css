@@ -121,5 +121,22 @@
   font-size: 1.5rem;
 }
 
+.buscador-container .input-buscar {
+  background-color: #f3efe6; 
+  border: 1px solid #d6d0c4; 
+  color: #3f372e;            
+  padding: 8px 12px;
+  border-radius: 6px;
+  width: 97.5%;
+}
 
+.buscador-container .input-buscar::placeholder {
+  color: #8c8578; 
+}
+
+.buscador-container .input-buscar:focus {
+  outline: none;
+  border-color: #b0a99c;
+  box-shadow: 0 0 4px rgba(150, 140, 120, 0.4);
+}
 

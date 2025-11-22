@@ -12,10 +12,8 @@ public class LogicRecuperacionPass {
         RecuperacionPass r = new RecuperacionPass();
         r.setIdUsuario(idUsuario);
         
-        // Generar Token Único
         r.setToken(UUID.randomUUID().toString());
         
-        // Expira en 60 minutos
         r.setExpiracion(LocalDateTime.now().plusMinutes(60));
         
         dr.add(r);

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../styles/Login.css';
+import Navbar from './Navbar';
 
 
 const Login: React.FC = () => {
@@ -88,6 +89,7 @@ const Login: React.FC = () => {
 
     return (
       <div className="home-page">
+	  <Navbar/>
         <div className="home-content">
           <h2>Bienvenido al Club Los Andes</h2>
           <p>

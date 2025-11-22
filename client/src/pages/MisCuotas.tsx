@@ -126,7 +126,6 @@ const MisCuotas: React.FC = () => {
     });
   };
 
-  // 👇 NUEVO: filtrado de cuotas
   const cuotasFiltradas = cuotasProcesadas.filter(c => {
     if (filtro === "pagas") return c.estaPagada === true;
     if (filtro === "pendientes") return c.estaPagada === false;

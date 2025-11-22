@@ -98,18 +98,6 @@ const NavbarSocio: React.FC = () => {
 			    </ul>
 			  )}
 			</li>
-            <li
-              className="menu-item"
-              onMouseOver={() => handleMouseEnter('canchas')}
-              onMouseOut={handleMouseLeave}
-            >
-              <i className=""></i> Canchas {/*emoji: fa-solid fa-volleyball*/}
-              {activeMenu === 'canchas' && (
-                <ul className="dropdown">
-                  <li><button onClick={() => navigate('/canchas')}>Ver todas</button></li>
-                </ul>
-              )}
-            </li>
 			<li
 			  className="menu-item"
 			  onMouseOver={() => handleMouseEnter('partidos')}

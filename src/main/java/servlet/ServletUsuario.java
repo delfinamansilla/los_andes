@@ -15,6 +15,7 @@ import java.io.InputStream;
 
 import entities.Usuario;
 import logic.LogicUsuario;
+import logic.LogicRecuperacionPass;
 
 /**
  * Servlet para gestionar las operaciones CRUD de Usuario.
@@ -25,10 +26,12 @@ import logic.LogicUsuario;
 public class ServletUsuario extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private LogicUsuario logicUsuario;
+    private LogicRecuperacionPass logicRecupero;
 
     public ServletUsuario() {
         super();
         logicUsuario = new LogicUsuario();
+        logicRecupero = new LogicRecuperacionPass(); 
     }
 
     /**
@@ -68,16 +71,12 @@ public class ServletUsuario extends HttpServlet {
                 break;
             }
             case "buscar": {
-            	// System.out.println("➡️ Entró al case 'buscar'"); // Opcional
                 int id = Integer.parseInt(request.getParameter("id"));
                 
-                // --- CAMBIO AQUÍ: Búsqueda directa y rápida ---
                 Usuario u = logicUsuario.getById(id);
-                // ----------------------------------------------
 
                 response.setContentType("application/json;charset=UTF-8");
                 if (u != null) {
-                    // OJO: Asegúrate que el JSON coincida con lo que espera tu Front
                     response.getWriter().write("{\"id\":" + u.getIdUsuario() + 
                         ", \"nombre\":\"" + u.getNombreCompleto() + 
                         "\", \"mail\":\"" + u.getMail() + "\"}");
@@ -89,7 +88,6 @@ public class ServletUsuario extends HttpServlet {
             }
             
             case "buscarc": {
-                // ESTE CASE AHORA ES MÁS EFICIENTE Y COMPLETO
                 int id = Integer.parseInt(request.getParameter("id"));
                 Usuario u = logicUsuario.getById(id);
                 response.setContentType("application/json;charset=UTF-8");
@@ -110,16 +108,14 @@ public class ServletUsuario extends HttpServlet {
             }
             
             case "verfoto": {
-                // <-- ESTE ES EL NUEVO CASE PARA SERVIR LA IMAGEN
                 int id = Integer.parseInt(request.getParameter("id"));
                 byte[] fotoData = logicUsuario.getFotoById(id);
 
                 if (fotoData != null && fotoData.length > 0) {
-                    response.setContentType("image/jpeg"); // Asumimos JPEG
+                    response.setContentType("image/jpeg");
                     response.setContentLength(fotoData.length);
                     response.getOutputStream().write(fotoData);
                 } else {
-                    // Opcional: podrías devolver una imagen por defecto aquí
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 }
                 break;
@@ -160,7 +156,6 @@ public class ServletUsuario extends HttpServlet {
            boolean isMultipart = contentType != null && contentType.toLowerCase().startsWith("multipart/form-data");
 
            if (isMultipart) {
-               // SI LA PETICIÓN CONTIENE UN ARCHIVO, ENTRA AQUÍ
                response.setContentType("application/json;charset=UTF-8");
                try {
                    int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
@@ -170,7 +165,10 @@ public class ServletUsuario extends HttpServlet {
                    response.setStatus(HttpServletResponse.SC_OK);
                    response.getWriter().write("{\"message\":\"Foto actualizada.\"}");
                } catch (Exception e) {
-                   // ... manejo de error ...
+            	   response.setContentType("application/json");
+                   response.setCharacterEncoding("UTF-8");
+                   response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                   response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
                }
            } else {
            
@@ -199,7 +197,6 @@ public class ServletUsuario extends HttpServlet {
 	                if (usuarioLogueado != null) {
 	                    request.getSession().setAttribute("usuarioActual", usuarioLogueado);
 	
-	                    // ✅ Gson con soporte para LocalDate
 	                    com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
 	                        .registerTypeAdapter(java.time.LocalDate.class,
 	                            (com.google.gson.JsonSerializer<java.time.LocalDate>)
@@ -236,7 +233,6 @@ public class ServletUsuario extends HttpServlet {
 	                    try {
 	                        logicUsuario.add(nuevo);
 	
-	                        // ✅ devolvemos JSON simple al frontend
 	                        response.setContentType("application/json");
 	                        response.setCharacterEncoding("UTF-8");
 	                        response.setStatus(HttpServletResponse.SC_OK);
@@ -270,7 +266,6 @@ public class ServletUsuario extends HttpServlet {
 	                    try {
 	                        logicUsuario.update(u);
 	
-	                        // ✅ Devolver JSON con los datos actualizados
 	                        response.setContentType("application/json");
 	                        response.setCharacterEncoding("UTF-8");
 	                        response.setStatus(HttpServletResponse.SC_OK);
@@ -288,7 +283,78 @@ public class ServletUsuario extends HttpServlet {
 	                    }
 	                    break;
 	                }
-	
+	                
+	                case "recuperar": {
+	                    String mail = request.getParameter("mail");
+	                    
+	                    LinkedList<Usuario> todos = logicUsuario.getAll();
+	                    Usuario uEncontrado = null;
+	                    for(Usuario u : todos) {
+	                        if(u.getMail().equalsIgnoreCase(mail)) {
+	                            uEncontrado = u;
+	                            break;
+	                        }
+	                    }
+	                    
+	                    if (uEncontrado != null) {
+	                        entities.RecuperacionPass rp = logicRecupero.crearSolicitud(uEncontrado.getIdUsuario());
+
+	                        String link = "http://localhost:3000/cambiar-contrasenia?token=" + rp.getToken();
+	                        String cuerpo = "<div style='background-color: #20321E; padding: 50px; font-family: Arial, sans-serif;'>"
+	                                + "  <div style='max-width: 500px; margin: 0 auto; background-color: #E8E4D9; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.5);'>"
+	                                + "    <div style='background-color: #1a2918; padding: 20px; text-align: center; border-bottom: 4px solid #466245;'>"
+	                                + "      <h1 style='color: #E8E4D9; margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 1px;'>Club Los Andes</h1>"
+	                                + "    </div>"
+	                                + "    <div style='padding: 40px; color: #20321E; text-align: center;'>"
+	                                + "      <h2 style='margin-top: 0; color: #20321E;'>Recuperar Contraseña</h2>"
+	                                + "      <p style='font-size: 16px; line-height: 1.5;'>Hola <strong>" + uEncontrado.getNombreCompleto() + "</strong>,</p>"
+	                                + "      <p style='font-size: 15px; margin-bottom: 30px;'>Hemos recibido una solicitud para cambiar tu clave. Hacé clic en el botón de abajo para crear una nueva:</p>"
+	                                + "      <a href='" + link + "' style='background-color: #20321E; color: #E8E4D9; padding: 15px 30px; text-decoration: none; font-weight: bold; border-radius: 5px; display: inline-block; font-size: 16px;'>CAMBIAR CONTRASEÑA</a>"
+	                                + "      <p style='margin-top: 30px; font-size: 12px; color: #555;'>Este enlace expirará en 1 hora.<br>Si no lo solicitaste, ignorá este mensaje.</p>"
+	                                + "    </div>"
+	                                + "  </div>"
+	                                + "</div>";
+	                        
+	                        try {
+	                            entities.MailSender.enviarCorreo(mail, "Recupero de Clave", cuerpo);
+	                            response.getWriter().write("{\"message\":\"Correo enviado\"}");
+	                        } catch (Exception e) {
+	                            e.printStackTrace();
+	                            response.setStatus(500);
+	                            response.getWriter().write("{\"error\":\"Error al enviar mail\"}");
+	                        }
+	                    } else {
+	                        response.setStatus(400);
+	                        response.getWriter().write("{\"error\":\"Email no encontrado\"}");
+	                    }
+	                    break;
+	                }
+
+	                case "restablecer": {
+	                    String token = request.getParameter("token");
+	                    String nuevaPass = request.getParameter("nueva_pass");
+	                    
+	                    entities.RecuperacionPass rp = logicRecupero.obtenerPorToken(token);
+	                    
+	                    if (rp != null && rp.getExpiracion().isAfter(java.time.LocalDateTime.now())) {
+	                        Usuario u = logicUsuario.getById(rp.getIdUsuario());
+	                        u.setContrasenia(nuevaPass);
+	                        
+	                        try {
+	                            logicUsuario.update(u); 
+	                            logicRecupero.eliminarToken(token);
+	                            
+	                            response.getWriter().write("{\"message\":\"Contraseña actualizada\"}");
+	                        } catch (Exception e) {
+	                            response.setStatus(500);
+	                            response.getWriter().write("{\"error\":\"La contraseña debe tener al menos 8 caracteres.\"}");
+	                        }
+	                    } else {
+	                        response.setStatus(400);
+	                        response.getWriter().write("{\"error\":\"El enlace es inválido o ha expirado.\"}");
+	                    }
+	                    break;
+	                }
 	
 	                default:
 	                    response.getWriter().append("Acción POST no reconocida: ").append(action);

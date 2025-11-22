@@ -12,7 +12,7 @@ public class RecuperacionPass {
     public void setId(int id) { this.id = id; }
     
     public int getIdUsuario() { return id_usuario; }
-    public void setIdUsuario(int idUsuario) { this.id_usuario = idUsuario; }
+    public void setIdUsuario(int id_usuario) { this.id_usuario = id_usuario; }
     
     public String getToken() { return token; }
     public void setToken(String token) { this.token = token; }
