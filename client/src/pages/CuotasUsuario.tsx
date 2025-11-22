@@ -191,6 +191,14 @@ const CuotasUsuario: React.FC = () => {
         </div>
       );
   }
+  
+  const formatearPeriodo = (nro: number) => {
+      if (!nro) return "N/A";
+      const anio = Math.floor(nro / 100);
+      const mes = nro % 100;
+      const meses = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+      return `${meses[mes]} ${anio}`;
+    };
 
   return (
     <div className="cuotas-page-container">
@@ -262,7 +270,7 @@ const CuotasUsuario: React.FC = () => {
                         return (
                             <tr key={c.id}>
                                 <td className="text-bold">
-                                    Cuota Mensual {c.nro_cuota}
+                                    Cuota {formatearPeriodo(c.nro_cuota)}
                                     {aplicaInteres && (
                                         <div style={{
                                             fontSize: '0.75rem', 

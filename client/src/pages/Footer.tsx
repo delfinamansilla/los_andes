@@ -37,15 +37,15 @@ const Footer: React.FC = () => {
           <h3>Atención al Socio</h3>
           <div className="footer-info">
             <div className="info-item">
-              <span className="icono">📞</span>
+              <span className="icono"></span>
               <span>(0341) 424-5678</span>
             </div>
             <div className="info-item">
-              <span className="icono">📱</span>
+              <span className="icono"></span>
               <span>+54 9 341 555-1234</span>
             </div>
             <div className="info-item">
-              <span className="icono">✉️</span>
+              <span className="icono"></span>
               <span>losandesclubrosario@gmail.com</span>
             </div>
           </div>
@@ -56,7 +56,7 @@ const Footer: React.FC = () => {
           <h3>Visitanos</h3>
           <div className="footer-info">
             <div className="info-item">
-              <span className="icono">📍</span>
+              <span className="icono"></span>
               <span>Av. Pellegrini 1250<br />Rosario, Santa Fe (S2000)</span>
             </div>
             

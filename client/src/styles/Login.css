@@ -3,18 +3,25 @@
 /* 1. Estructura principal de la página (para centrar el contenido) */
 .home-page {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   min-height: 100vh;
   background-color: #20321E;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding: 20px;
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
 }
 
-/* 2. Contenedor principal (el recuadro cremita) */
-/* En tu TSX se llama .home-content, lo he adaptado aquí */
 .home-content {
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+  padding: 40px 20px; 
+}
+
+.home-content > div {
   background-color: #DDD8CA;
   color: #20321E;
   padding: 40px;
@@ -25,15 +32,15 @@
   text-align: center;
 }
 
-/* Títulos y textos de bienvenida */
 .home-content h2 {
   margin-top: 0;
   margin-bottom: 10px;
+  color: #DDD8CA;
 }
 
 .home-content > p { /* El selector '>' afecta solo al párrafo de bienvenida, no al del link */
   margin-bottom: 30px;
-  color: #466245; /* Un tono de verde más suave para el subtítulo */
+  color: #DDD8CA; /* Un tono de verde más suave para el subtítulo */
 }
 
 /* 3. Contenedor del formulario de inicio de sesión */

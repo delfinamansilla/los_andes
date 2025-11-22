@@ -101,6 +101,45 @@ public class DataPagoCuota {
         }
         return pc;
     }
+    
+    public PagoCuota getByCuotaIdAndUsuarioId(int idCuota, int idUsuario) {
+        PagoCuota pc = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT * FROM pago_cuota WHERE id_cuota = ? AND id_usuario = ?"
+            );
+
+            stmt.setInt(1, idCuota);
+            stmt.setInt(2, idUsuario);
+
+            rs = stmt.executeQuery();
+
+            if (rs != null && rs.next()) {
+                pc = new PagoCuota();
+                pc.setId(rs.getInt("id"));
+                pc.setFecha_pago(rs.getObject("fecha_pago", LocalDate.class));
+                pc.setId_usuario(rs.getInt("id_usuario"));
+                pc.setId_cuota(rs.getInt("id_cuota"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return pc;
+    }
+
 
     public void delete(int id) {
         PreparedStatement stmt = null;

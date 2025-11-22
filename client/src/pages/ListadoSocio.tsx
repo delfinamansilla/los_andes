@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
-import '../styles/ListadoProfesor.css';
+import '../styles/ListadoSocio.css';
 
 interface Socio {
   id: number;
@@ -17,6 +17,9 @@ const ListadoSocios: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [busquedaDni, setBusquedaDni] = useState<string>('');
+  const [activeMenu, setActiveMenu] = useState<number | null>(null);
+
 
   const navigate = useNavigate();
 
@@ -53,6 +56,7 @@ const ListadoSocios: React.FC = () => {
       const soloSocios = data.filter(u => u.rol && u.rol.toLowerCase() === 'socio');
       
       setSocios(soloSocios);
+	  
 
     } catch (err: any) {
       setError('No se pudo cargar la lista de socios.');
@@ -68,6 +72,16 @@ const ListadoSocios: React.FC = () => {
 
     navigate('/cuotas-usuario');
   };
+  
+  const handleVerAlquileresCanchas = (socio: Socio) => {
+      localStorage.setItem('usuarioSeleccionadoParaAlquileres', JSON.stringify(socio));
+      navigate('/alquileres-canchas-usuario');
+    };
+
+    const handleVerAlquileresSalones = (socio: Socio) => {
+      localStorage.setItem('usuarioSeleccionadoParaAlquileres', JSON.stringify(socio));
+      navigate('/alquileres-salones-usuario');
+    };
 
 
   if (loading) {
@@ -87,6 +101,10 @@ const ListadoSocios: React.FC = () => {
       </div>
     );
   }
+  
+  const sociosFiltrados = socios.filter((s) =>
+  	    s.dni.toLowerCase().includes(busquedaDni.toLowerCase())
+  	  );
 
   return (
     <div className="admin-page">
@@ -94,6 +112,16 @@ const ListadoSocios: React.FC = () => {
       <div className="content-area">
         <div className="list-container">
           <h2>Listado de Socios</h2>
+		  
+		  <div className="buscador-container">
+		    <input
+		      type="text"
+		      placeholder="Buscar por DNI..."
+		      value={busquedaDni}
+		      onChange={(e) => setBusquedaDni(e.target.value)}
+		      className="input-buscar"
+		    />
+		  </div>
 
           {error && <p className="error-box">{error}</p>}
 
@@ -111,7 +139,7 @@ const ListadoSocios: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {socios.map((socio) => (
+                {sociosFiltrados.map((socio) => (
                   <tr key={socio.id}>
                     <td>{socio.dni}</td>
                     <td>{socio.nombre_completo}</td>
@@ -125,9 +153,23 @@ const ListadoSocios: React.FC = () => {
                       >
                          Cuotas
                       </button>
-                    </td>
-                  </tr>
-                ))}
+					  <div className="dropdown-hover">
+	                      <button className="btn-alquileres">
+	                        Alquileres
+	                      </button>
+	                      
+	                      <div className="dropdown-hover-menu">
+	                        <button onClick={() => handleVerAlquileresCanchas(socio)}>
+	                          Canchas
+	                        </button>
+	                        <button onClick={() => handleVerAlquileresSalones(socio)}>
+	                          Salones
+	                        </button>
+	                      </div>
+	                    </div>
+	                  </td>
+	                </tr>
+	              ))}
               </tbody>
             </table>
           )}

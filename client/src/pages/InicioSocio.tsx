@@ -1,13 +1,87 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import NavbarSocio from './NavbarSocio';
 import Footer from './Footer';
 import { Clock, MapPin, Phone, Mail, Award, Shield, Users, Dumbbell } from 'lucide-react';
 import '../styles/InicioSocio.css';
 
 const InicioSocio: React.FC = () => {
+	const [esCumple, setEsCumple] = useState(false);
+	  const [nombreUsuario, setNombreUsuario] = useState("");
+
+	  useEffect(() => {
+	      const userStr = localStorage.getItem('usuario');
+	      if (userStr) {
+	        const user = JSON.parse(userStr);
+	        setNombreUsuario(user.nombre_completo || "Socio");
+
+	        if (user.fecha_nacimiento) {
+	          const nacimiento = new Date(user.fecha_nacimiento + 'T00:00:00');
+	          const hoy = new Date();
+
+	          const esMes = nacimiento.getMonth() === hoy.getMonth();
+	          const esDia = nacimiento.getDate() === hoy.getDate();
+
+	          if (esMes && esDia) {
+	            setEsCumple(true);
+	            
+	            
+	            const timer = setTimeout(() => {
+	              setEsCumple(false);
+	            }, 15000);
+
+	            return () => clearTimeout(timer);
+	          }
+	        }
+	      }
+	    }, []);
+
+	    // aca dibujamos los globitos
+		const renderBalloons = () => {
+		    const balloons = [];
+		    const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#1A535C', '#FF9F1C', '#9B5DE5'];
+
+		    for (let i = 0; i < 30; i++) {
+		      const randomLeft = Math.floor(Math.random() * 100);
+		      
+		 
+		      const randomDuration = Math.floor(Math.random() * 3) + 10; 
+		
+		      const randomDelay = Math.floor(Math.random() * 4);
+		      
+		      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+		      const randomScale = 0.7 + Math.random() * 0.6;
+
+		      const style = {
+		        left: `${randomLeft}%`,
+		        animationDuration: `${randomDuration}s`, 
+		        animationDelay: `${randomDelay}s`,      
+		        transform: `scale(${randomScale})`,
+		        '--balloon-color': randomColor,
+		      } as React.CSSProperties;
+
+		      balloons.push(
+		        <div key={i} className="balloon" style={style}></div>
+		      );
+		    }
+		    return balloons;
+		  };
+		 
   return (
     <div className="inicio-socio-page">
       <NavbarSocio />
+	  
+	  {/* --- LÓGICA DE CUMPLEAÑOS --- */}
+	        {esCumple && (
+	          <>
+	            <div className="balloon-container">
+	              {renderBalloons()}
+	            </div>
+	            <div className="birthday-message">
+	              <h3>¡Feliz Cumpleaños, {nombreUsuario}!</h3>
+	              <p style={{margin:0, fontSize: '0.9rem'}}>El club te desea un gran día.</p>
+	            </div>
+	          </>
+	        )}
       
       <div className="contenido-socio">
 

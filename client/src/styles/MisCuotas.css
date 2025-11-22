@@ -1,0 +1,189 @@
+/* --- MisCuotas.css (Nuevo Estilo Unificado) --- */
+
+/* 1. Contenedor principal de la página */
+.pagina-cuotas {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20321E; /* Verde oscuro */
+  color: #DDD8CA; /* Crema */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 2. Contenedor del contenido (título y tabla) */
+.cuotas-contenido {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.cuotas-contenido h1 {
+  text-align: center;
+  font-size: 2.8rem;
+  color: #DDD8CA;
+  margin-bottom: 40px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* 3. Tabla */
+.tabla-cuotas {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #DDD8CA; /* Fondo crema */
+  color: #20321E; /* Texto verde oscuro */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Encabezado */
+.tabla-cuotas thead tr {
+  background-color: #20321E;
+  color: #DDD8CA;
+}
+
+.tabla-cuotas th {
+  padding: 18px 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Filas */
+.tabla-cuotas tbody td {
+  padding: 15px 20px;
+  border-top: 1px solid #c9c4b5;
+  vertical-align: middle;
+}
+
+.tabla-cuotas tbody tr:hover {
+  background-color: #d1ccbc; /* Crema más oscuro */
+}
+
+/* 4. Badges de estado */
+.estado-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #DDD8CA; /* Texto crema */
+}
+
+/* Verde suave de tu paleta */
+.estado-pagado {
+  background-color: #466245; 
+}
+
+/* Rojo reemplazado por un tono "óxido" natural suave */
+.estado-pendiente {
+  background-color: #8b3a3a; 
+}
+
+/* 5. Mensajes */
+.status-message {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 80px 20px;
+  color: #DDD8CA;
+}
+
+.status-message.error {
+  color: #ffb3b3;
+  font-weight: bold;
+}
+
+/* 6. Botón Pagar */
+.btn-pagar {
+  background-color: #20321E;
+  color: #DDD8CA;
+  border: 1px solid #20321E;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.btn-pagar:hover {
+  background-color: #466245;
+  border-color: #466245;
+}
+
+/* 7. Modal QR */
+.modal-qr-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-qr-content {
+  background: #DDD8CA;
+  padding: 30px 40px;
+  border-radius: 10px;
+  text-align: center;
+  color: #20321E;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-qr-content h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.modal-qr-content .btn-cerrar-modal {
+  margin-top: 25px;
+  padding: 10px 25px;
+  background-color: #20321E;
+  color: #DDD8CA;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.modal-qr-content .btn-cerrar-modal:hover {
+  background-color: #466245;
+}
+
+.filtro-cuotas {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #EEE9E0;
+  padding: 10px 18px;
+  border-radius: 12px;
+  width: fit-content;
+  margin: 0 auto 25px auto;
+}
+
+.filtro-cuotas label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #20321E;
+}
+
+.filtro-cuotas select {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #20321E;
+  padding: 6px 4px;
+  border-bottom: 2px solid #20321E40;
+  border-radius: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.filtro-cuotas select:focus {
+  border-bottom-color: #20321E;
+}

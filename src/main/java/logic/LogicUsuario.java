@@ -74,40 +74,27 @@ public class LogicUsuario {
      * @throws Exception Si alguna validación de negocio falla o el usuario no existe.
      */
     public void update(Usuario u) throws Exception {
-        // 1. Validar todos los campos del usuario (incluida la unicidad de DNI).
-        // La validación de contraseña vacía se omite aquí porque la manejaremos ahora.
         if (u.getContrasenia() == null || u.getContrasenia().isEmpty()){
-            // Si la contraseña está vacía, no la validamos por longitud, etc.
         } else if (u.getContrasenia().length() < 8) {
             throw new Exception("La nueva contraseña debe tener al menos 8 caracteres.");
         }
-        validarUsuario(u); //Llamamos a las otras validaciones
+        validarUsuario(u);
         
-        // 2. Formatear email
         u.setMail(u.getMail().toLowerCase());
 
-        // 3. Lógica para manejar la actualización de la contraseña
         if (u.getContrasenia() != null && !u.getContrasenia().trim().isEmpty()) {
-            // CASO A: Se proporcionó una nueva contraseña.
-            // La hasheamos y la establecemos en el objeto a guardar.
+
             u.setContrasenia(hashPassword(u.getContrasenia()));
         } else {
-            // CASO B: No se proporcionó una nueva contraseña (el campo venía vacío).
-            // Debemos mantener la contraseña que ya estaba en la base de datos.
-            
-            // Obtenemos el estado actual del usuario desde la BD
             Usuario usuarioActual = du.getById(u.getIdUsuario());
             
             if (usuarioActual == null) {
-                // Esto sería un caso raro, pero es bueno manejarlo
                 throw new Exception("No se encontró el usuario que intenta modificar.");
             }
             
-            // Establecemos la contraseña antigua (ya hasheada) en el objeto a guardar
             u.setContrasenia(usuarioActual.getContrasenia());
         }
 
-        // 4. Llamar a la capa de datos para realizar la actualización final
         du.update(u);
     }
     /**

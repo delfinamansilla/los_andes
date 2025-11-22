@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/NavbarSocio.css';
+import logoClub from '../assets/los_andes.png';
 
 const NavbarSocio: React.FC = () => {
   const navigate = useNavigate();
@@ -53,14 +54,30 @@ const NavbarSocio: React.FC = () => {
   		    <i className="fa-solid fa-lock"></i> Cerrar sesión
   		  </button>
           </div>
+		  
+		  <div className="navbar-logo" onClick={() => navigate('/inicio-socio')}>
+		    <img src={logoClub} alt="logo" />
+		  </div>
 
           <ul className="navbar-menu">
+		  <li
+		    className="menu-item"
+		    onMouseOver={() => handleMouseEnter('cuotas')}
+		    onMouseOut={handleMouseLeave}
+		  >
+		    <i className=""></i> Cuotas {/*emoji: fa-solid fa-money-bill-1-wave*/}
+		    {activeMenu === 'cuotas' && (
+		      <ul className="dropdown">
+		        <li><button onClick={() => navigate('/mis-cuotas')}>Mis cuotas</button></li>
+		      </ul>
+		    )}
+		  </li>
             <li
               className="menu-item"
               onMouseOver={() => handleMouseEnter('actividades')}
               onMouseOut={handleMouseLeave}
             >
-              <i className="fa-solid fa-person-walking"></i> Actividades
+              <i className=""></i> Actividades {/*emoji: fa-solid fa-person-walking*/}
               {activeMenu === 'actividades' && (
                 <ul className="dropdown">
                   <li><button onClick={() => navigate('/inscripcion-actividad')}>Ver todas</button></li>
@@ -73,7 +90,7 @@ const NavbarSocio: React.FC = () => {
 			  onMouseOver={() => handleMouseEnter('salones')}
 			  onMouseOut={handleMouseLeave}
 			>
-			  <i className="fa-solid fa-building"></i> Salones
+			  <i className=""></i> Salones {/*emoji: fa-solid fa-building*/}
 			  {activeMenu === 'salones' && (
 			    <ul className="dropdown">
 			      <li><button onClick={() => navigate('/salones')}>Ver todos</button></li>
@@ -81,6 +98,7 @@ const NavbarSocio: React.FC = () => {
 			    </ul>
 			  )}
 			</li>
+
             <li
               className="menu-item"
               onMouseOver={() => handleMouseEnter('canchas')}
@@ -94,6 +112,7 @@ const NavbarSocio: React.FC = () => {
                 </ul>
               )}
             </li>
+
 			<li
 			  className="menu-item"
 			  onMouseOver={() => handleMouseEnter('partidos')}

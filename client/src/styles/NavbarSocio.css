@@ -1,5 +1,4 @@
-/* --- NavbarSocio.css (Idéntico a NavbarAdmin) --- */
-/* 1. Contenedor principal de la Navbar */
+
 .navbar-socio {
   display: flex;
   justify-content: space-between;
@@ -8,36 +7,55 @@
   background-color: #DDD8CA;
   color: #20321E;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  position: relative;
+  position: sticky;  
+  top: 0;            
   z-index: 1000;
+  width: 96.05%;      
+  margin: 0 auto;  
 }
 
-/* 2. Sección izquierda (Usuario, Inicio, Cerrar Sesión) */
+
+
 .navbar-left {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-/* Estilo para los botones de la izquierda - TODOS CON VERDE */
 .btn-usuario {
-  padding: 10px 20px;
+  padding: 8px 20px;
+  background: #ece7dd;
   border-radius: 8px;
-  background-color: transparent;
-  color: #20321E !important;
-  border: 2.5px solid #20321E !important;
+  border: none;
+  color: #3f372e;
+  font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
-  font-weight: 900;
-  font-size: 1rem;
-  transition: all 0.2s;
+  transition: 0.15s ease;
 }
 
 .btn-usuario:hover {
-  background-color: #20321E !important;
-  color: #DDD8CA !important;
+  filter: brightness(0.92);
 }
 
-/* 3. Menú de navegación de la derecha */
+/*.btn-usuario {
+  padding: 8px 20px;
+  background: #ECE7DD;          
+  border-radius: 8px;
+  border: 2px solid #20321E;    
+  color: #20321E;               
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-usuario:hover {
+  background: #20321E;   
+  color: #ECE7DD;      
+}*/
+
+
 .navbar-menu {
   display: flex;
   list-style: none;
@@ -54,7 +72,6 @@
   color: #20321E;
 }
 
-/* 4. Dropdown (con fondo claro y texto oscuro) */
 .dropdown {
   position: absolute;
   top: 100%;
@@ -87,7 +104,6 @@
   color: #DDD8CA;
 }
 
-/* 5. Modal de confirmación */
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -153,4 +169,24 @@
 
 .navbar-socio i.fa-solid {
 	margin-right: 8px;
+}
+
+.navbar {
+  position: relative;
+  height: 90px;   
+}
+
+.navbar-logo {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 50%); 
+  z-index: 10;
+  cursor: pointer;
+}
+
+.navbar-logo img {
+  width: 130px;     
+  height: 130px;  
+  border-radius: 50%;
 }
