@@ -60,6 +60,11 @@ const CanchasAdmin = () => {
     localStorage.setItem('canchaSeleccionada', JSON.stringify(cancha));
     window.location.href = '/canchas-admin/modificar';
   };
+  
+  const handleVerAlquileres = (cancha: Cancha) => {
+    localStorage.setItem('canchaVerAlquileres', JSON.stringify(cancha));
+    window.location.href = '/alquileres-admin';
+  };
 
   return (
     <div className="canchas-admin-page">
@@ -78,6 +83,9 @@ const CanchasAdmin = () => {
               <p>Estado: {c.estado ? 'Disponible' : 'No disponible'}</p>
 
               <div className="cancha-buttons">
+			  <button onClick={() => handleVerAlquileres(c)} className="btn-ver-alquileres">
+			    Ver alquileres
+			  </button>
                 <button onClick={() => handleModificar(c)} className="btn-modificar">
                   Modificar datos
                 </button>

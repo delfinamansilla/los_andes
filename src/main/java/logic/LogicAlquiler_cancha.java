@@ -4,6 +4,7 @@ import data.DataAlquiler_cancha;
 import data.DataCancha;
 import data.DataUsuario;
 import entities.Alquiler_cancha;
+import entities.Alquiler_salon;
 import entities.Cancha;
 import entities.Usuario;
 
@@ -24,8 +25,9 @@ public class LogicAlquiler_cancha {
             throw new Exception("La fecha de alquiler no puede ser pasada.");
         }
 
-        LocalTime desde = LocalTime.parse(a.getHoraDesde());
-        LocalTime hasta = LocalTime.parse(a.getHoraHasta());
+        LocalTime desde = a.getHoraDesde();
+        LocalTime hasta = a.getHoraHasta();
+
         if (!desde.isBefore(hasta)) {
             throw new Exception("La hora de inicio debe ser anterior a la hora de fin.");
         }
@@ -38,8 +40,8 @@ public class LogicAlquiler_cancha {
         LinkedList<Alquiler_cancha> alquileres = dac.getAlquileresByCancha(a.getId_cancha());
         for (Alquiler_cancha alq : alquileres) {
             if (alq.getFechaAlquiler().equals(a.getFechaAlquiler())) {
-                LocalTime existDesde = LocalTime.parse(alq.getHoraDesde());
-                LocalTime existHasta = LocalTime.parse(alq.getHoraHasta());
+            	LocalTime existDesde = alq.getHoraDesde();
+            	LocalTime existHasta = alq.getHoraHasta();
                 if (desde.isBefore(existHasta) && hasta.isAfter(existDesde)) {
                     throw new Exception("La cancha ya está alquilada en ese horario.");
                 }
@@ -52,8 +54,9 @@ public class LogicAlquiler_cancha {
     public void updateAlquiler(Alquiler_cancha a) throws Exception {
 
         if (a.getFechaAlquiler() == null) a.setFechaAlquiler(LocalDate.now());
-        LocalTime desde = LocalTime.parse(a.getHoraDesde());
-        LocalTime hasta = LocalTime.parse(a.getHoraHasta());
+        LocalTime desde = a.getHoraDesde();
+        LocalTime hasta = a.getHoraHasta();
+
         if (!desde.isBefore(hasta)) {
             throw new Exception("La hora de inicio debe ser anterior a la hora de fin.");
         }
@@ -66,8 +69,9 @@ public class LogicAlquiler_cancha {
         LinkedList<Alquiler_cancha> alquileres = dac.getAlquileresByCancha(a.getId_cancha());
         for (Alquiler_cancha alq : alquileres) {
             if (alq.getId() != a.getId() && alq.getFechaAlquiler().equals(a.getFechaAlquiler())) {
-                LocalTime existDesde = LocalTime.parse(alq.getHoraDesde());
-                LocalTime existHasta = LocalTime.parse(alq.getHoraHasta());
+            	LocalTime existDesde = alq.getHoraDesde();
+            	LocalTime existHasta = alq.getHoraHasta();
+
                 if (desde.isBefore(existHasta) && hasta.isAfter(existDesde)) {
                     throw new Exception("La cancha ya está alquilada en ese horario.");
                 }
@@ -87,5 +91,13 @@ public class LogicAlquiler_cancha {
 
     public void delete(int id) {
         dac.delete(id);
+    }
+    
+    public LinkedList<Alquiler_cancha> getByUsuarioFuturos(int idUsuario) {
+        return dac.getByUsuarioFuturos(idUsuario);
+    }
+    
+    public LinkedList<Alquiler_cancha> getByCancha(int idCancha) {
+        return dac.getByCancha(idCancha);
     }
 }

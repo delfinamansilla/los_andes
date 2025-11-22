@@ -21,6 +21,7 @@ const AgregarActividad: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [actividadCreada, setActividadCreada] = useState(false);
   const [actividad, setActividad] = useState<any | null>(null);
+  const [mensaje, setMensaje] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,11 +78,11 @@ const AgregarActividad: React.FC = () => {
 	  setActividad(nuevaActividad);
 	  setActividadCreada(true);
 
-      alert('✅ Actividad creada correctamente');
+      setMensaje("Actividad creada correctamente");
       
     } catch (err) {
       console.error('🚫 Error al crear actividad:', err);
-      alert('❌ Error al crear la actividad');
+      setMensaje("Error al crear la actividad");
     } finally {
       setLoading(false);
     }
@@ -92,7 +93,7 @@ const AgregarActividad: React.FC = () => {
       localStorage.setItem('actividad', JSON.stringify(actividad));
       navigate('/agregar-horario');
     } else {
-      alert('⚠ Primero debes crear la actividad antes de agregar horarios.');
+      setMensaje("Primero debes crear la actividad");
     }
   };
 
@@ -102,7 +103,13 @@ const AgregarActividad: React.FC = () => {
         <NavbarAdmin />
         <div className="page-container">
           <h2>Nueva Actividad</h2>
+
           <form className="form-actividad" onSubmit={handleSubmit}>
+		  {mensaje && (
+		    <div className="mensaje-simple">
+		      {mensaje}
+		    </div>
+		  )}
             <label>
               Nombre:
               <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required />
@@ -161,7 +168,7 @@ const AgregarActividad: React.FC = () => {
                 }
               </button>
               <button type="button" onClick={() => navigate('/actividades')}>
-                Cancelar
+                Volver
               </button>
 
               <button

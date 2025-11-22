@@ -65,3 +65,36 @@
   color: #ff8a80;
   font-weight: bold;
 }
+
+
+.btn-alquilar-cancha {
+  background-color: #466245; 
+  color: #DDD8CA;           
+  border: none;
+  padding: 10px 18px;
+  margin-top: 15px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  width: 100%;
+  max-width: 200px;
+}
+
+.btn-alquilar-cancha:hover {
+  background-color: #20321E; 
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+
+.btn-alquilar-cancha:disabled,
+.btn-alquilar-cancha.disabled {
+  background-color: #8a8a8a;
+  color: #e0e0e0;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

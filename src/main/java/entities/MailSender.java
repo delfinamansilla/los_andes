@@ -1,4 +1,4 @@
-/*package entities;
+package entities;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import java.util.Properties;
@@ -10,6 +10,7 @@ public class MailSender {
         props.put("mail.smtp.port", "587");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
         Session session = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -25,4 +26,4 @@ public class MailSender {
 
         Transport.send(msg);
     }
-}*/
+}

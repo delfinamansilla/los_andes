@@ -213,4 +213,119 @@ public class DataHorario {
             }
         }
     }
+    
+    public List<String> verificarConflictos(Horario h, int idProfesor, int idCancha) throws SQLException {
+        List<String> conflictos = new ArrayList<>();
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT a.id_profesor, a.id_cancha, h.dia, h.hora_desde, h.hora_hasta, act.nombre AS actividad_nombre " +
+                "FROM horario h " +
+                "JOIN actividad act ON h.id_actividad = act.id " +
+                "JOIN actividad a ON a.id = h.id_actividad " +
+                "WHERE h.dia = ? AND h.id_actividad <> ?"
+            );
+
+            stmt.setString(1, h.getDia());
+            stmt.setInt(2, h.getIdActividad());
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                LocalTime hd = rs.getTime("hora_desde").toLocalTime();
+                LocalTime hh = rs.getTime("hora_hasta").toLocalTime();
+                LocalTime nuevoDesde = h.getHoraDesde();
+                LocalTime nuevoHasta = h.getHoraHasta();
+
+                boolean seSuperpone =
+                    nuevoDesde.isBefore(hh) &&
+                    nuevoHasta.isAfter(hd);
+
+                if (seSuperpone) {
+
+
+                    if (rs.getInt("id_profesor") == idProfesor) {
+                        conflictos.add("El profesor ya dicta la actividad " + rs.getString("actividad_nombre") +
+                                       " en ese horario.");
+                    }
+
+
+                    if (rs.getInt("id_cancha") == idCancha) {
+                        conflictos.add("La cancha está ocupada por la actividad " +
+                                       rs.getString("actividad_nombre"));
+                    }
+                }
+            }
+
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            DbConnector.getInstancia().releaseConn();
+        }
+
+        return conflictos;
+    }
+    
+    public List<Horario> getOcupadosProfesor(int idProfesor) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Horario> horarios = new ArrayList<>();
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT h.* FROM horario h INNER JOIN actividad a ON h.id_actividad = a.id "
+                + "WHERE a.id_profesor = ?");
+            stmt.setInt(1, idProfesor);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Horario h = new Horario();
+                h.setId(rs.getInt("id"));
+                h.setDia(rs.getString("dia"));
+                h.setHoraDesde(rs.getTime("hora_desde").toLocalTime());
+                h.setHoraHasta(rs.getTime("hora_hasta").toLocalTime());
+                h.setIdActividad(rs.getInt("id_actividad"));
+                horarios.add(h);
+            }
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            DbConnector.getInstancia().releaseConn();
+        }
+        return horarios;
+    }
+
+    
+    public List<Horario> getOcupadosCancha(int idCancha) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Horario> horarios = new ArrayList<>();
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT h.* FROM horario h INNER JOIN actividad a ON h.id_actividad = a.id "
+                + "WHERE a.id_cancha = ?");
+            stmt.setInt(1, idCancha);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Horario h = new Horario();
+                h.setId(rs.getInt("id"));
+                h.setDia(rs.getString("dia"));
+                h.setHoraDesde(rs.getTime("hora_desde").toLocalTime());
+                h.setHoraHasta(rs.getTime("hora_hasta").toLocalTime());
+                h.setIdActividad(rs.getInt("id_actividad"));
+                horarios.add(h);
+            }
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            DbConnector.getInstancia().releaseConn();
+        }
+        return horarios;
+    }
+
+
 }

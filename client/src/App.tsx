@@ -33,6 +33,11 @@ import ListadoCuota from './pages/ListadoCuota';
 import CuotasUsuario from './pages/CuotasUsuario';
 import Info from './pages/Info';
 import AgregarCuota from './pages/AgregarCuota';
+import PartidosSocio from './pages/PartidosSocio';
+import AlquilarCancha from './pages/AlquilarCancha';
+import AlquilerCanchasAdmin from './pages/AlquilerCanchasAdmin';
+import PartidoDetalleSocio from './pages/PartidoDetalleSocio';
+import MisAlquileresCancha from './pages/MisAlquileresCancha';
 
 
 
@@ -75,6 +80,12 @@ function App() {
 		<Route path="/listado-socio" element={<ListadoSocio />} />
 		<Route path="/listado-cuota" element={<ListadoCuota />} />
 		<Route path="/cuotas-usuario" element={<CuotasUsuario />} />
+		<Route path="/partidos-socio" element={<PartidosSocio />} />
+		<Route path="/partido-detalle-socio" element={<PartidoDetalleSocio/>} />
+		<Route path="/partido-detalle-socio" element={<PartidoDetalleSocio/>} />
+		<Route path="alquilar-cancha/:idCancha" element={<AlquilarCancha/>} />
+		<Route path="/alquileres-admin" element={<AlquilerCanchasAdmin/>} />
+		<Route path="/alquileres-cancha" element={<MisAlquileresCancha/>} />
 		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>

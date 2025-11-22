@@ -1,0 +1,218 @@
+/* --- PÁGINA GENERAL --- */
+.mis-reservas-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20321E;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+}
+
+/* --- CONTENEDOR CENTRAL --- */
+.reservas-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.reservas-container h2 {
+  color: #DDD8CA;
+  font-size: 2.6rem;
+  font-weight: 800;
+  margin: 40px 0 40px 0;
+  text-align: center;
+}
+
+/* --- LISTA --- */
+.lista-reservas {
+  width: 100%;
+  max-width: 950px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* --- TARJETAS --- */
+.reserva-card {
+  background-color: #DDD8CA;
+  display: flex;
+  padding: 22px;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+  gap: 25px;
+  transition: 0.2s ease;
+}
+
+.reserva-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.45);
+}
+
+/* --- IMAGEN (opcional) --- */
+.reserva-img {
+  width: 200px;
+  height: 150px;
+  border-radius: 14px;
+  overflow: hidden;
+  background-color: #20321E;
+  flex-shrink: 0;
+}
+
+.reserva-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: #DDD8CA;
+  height: 100%;
+}
+
+/* --- CONTENIDO --- */
+.reserva-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.6rem;
+  color: #20321E;
+  font-weight: 900;
+}
+
+/* BODY */
+.card-body {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dato-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #20321E;
+  font-size: 1.1rem;
+}
+
+/* FOOTER */
+.card-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-cancelar-reserva {
+  background-color: #20321E;
+  color: #DDD8CA;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  border: none;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.2s;
+}
+
+.btn-cancelar-reserva:hover {
+  background-color: #466245;
+}
+
+/* --- EMPTY STATE --- */
+.empty-state {
+  background-color: #DDD8CA;
+  padding: 35px 40px;
+  border-radius: 18px;
+  text-align: center;
+  color: #20321E;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+
+/* --- MODAL --- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal {
+  background-color: #DDD8CA;
+  color: #20321E;
+  padding: 35px 45px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+.modal-buttons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn-confirm {
+  background-color: #dc2626;
+  color: white;
+  padding: 10px 25px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background-color: #DDD8CA;
+  color: #20321E;
+  border: 2px solid #20321E;
+  padding: 10px 25px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* --- BOTÓN EMPTY STATE LINDO --- */
+.btn-reservar-nuevo {
+  background-color: #20321E;
+  color: #DDD8CA;
+  padding: 12px 26px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: 0.25s ease;
+}
+
+.btn-reservar-nuevo:hover {
+  background-color: #3a5134;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+}

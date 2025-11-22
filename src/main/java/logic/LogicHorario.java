@@ -4,14 +4,18 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import data.DataActividad;
 import data.DataHorario;
+import entities.Actividad;
 import entities.Horario;
 
 public class LogicHorario {
     private DataHorario dh;
+    private DataActividad da;
 
     public LogicHorario() {
         dh = new DataHorario();
+        da = new DataActividad();
     }
 
     public LinkedList<Horario> getAll() {
@@ -38,6 +42,18 @@ public class LogicHorario {
 
     public void add(Horario h) throws Exception {
         validarHorario(h);
+        
+        Actividad act = da.getOne(h.getIdActividad());
+        int idProfesor = act.getIdProfesor();
+        int idCancha = act.getIdCancha();
+
+
+        List<String> conflictos = dh.verificarConflictos(h, idProfesor, idCancha);
+
+        if (!conflictos.isEmpty()) {
+            throw new Exception(String.join("\n", conflictos));
+        }
+        
         dh.add(h);
     }
 
@@ -102,4 +118,14 @@ public class LogicHorario {
             throw new Exception("Debe seleccionar una actividad válida.");
         }
     }
+    
+    
+    public List<Horario> getOcupadosProfesor(int idProfesor) throws Exception {
+        return dh.getOcupadosProfesor(idProfesor);
+    }
+
+    public List<Horario> getOcupadosCancha(int idCancha) throws Exception {
+        return dh.getOcupadosCancha(idCancha);
+    }
+
     }

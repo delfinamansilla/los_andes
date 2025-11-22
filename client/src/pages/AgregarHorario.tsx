@@ -28,6 +28,9 @@ const AgregarHorario: React.FC = () => {
   const [horarioAEliminar, setHorarioAEliminar] = useState<Horario | null>(null);
 
   const navigate = useNavigate();
+  
+  const [ocupadosProfesor, setOcupadosProfesor] = useState<Horario[]>([]);
+  const [ocupadosCancha, setOcupadosCancha] = useState<Horario[]>([]);
 
   useEffect(() => {
     const stored = localStorage.getItem("actividad");
@@ -35,6 +38,7 @@ const AgregarHorario: React.FC = () => {
       const actividad = JSON.parse(stored);
       setNuevoHorario((prev) => ({ ...prev, id_actividad: actividad.id || 0 }));
       cargarHorarios(actividad.id);
+	  cargarDatos(actividad);
     }
   }, []);
 
@@ -56,6 +60,36 @@ const AgregarHorario: React.FC = () => {
   };
 
   const handleAgregar = async () => {
+	
+	setMensaje(""); 
+
+	  const desde = nuevoHorario.horaDesde;
+	  const hasta = nuevoHorario.horaHasta;
+	  const dia = nuevoHorario.dia;
+
+
+	  const choqueProfesor = ocupadosProfesor.some(h =>
+	    h.dia === dia &&
+	    desde < h.horaHasta &&
+	    hasta > h.horaDesde
+	  );
+
+	  if (choqueProfesor) {
+	    setMensaje("El profesor no está disponible en ese horario.");
+	    return;
+	  }
+
+
+	  const choqueCancha = ocupadosCancha.some(h =>
+	    h.dia === dia &&
+	    desde < h.horaHasta &&
+	    hasta > h.horaDesde
+	  );
+
+	  if (choqueCancha) {
+	    setMensaje("La cancha no está disponible en ese horario.");
+	    return;
+	  }
     try {
       const formData = new URLSearchParams();
       formData.append("action", "agregar");
@@ -131,16 +165,64 @@ const AgregarHorario: React.FC = () => {
     }
   };
 
+  
+  const cargarDatos = async (actividad: any) => {
+	cargarHorarios(actividad.id);
+
+	const rProf = await fetch(
+	  `http://localhost:8080/club/horario?action=ocupados_profesor&id_profesor=${actividad.id_profesor}`
+	);
+	const dataProf = await rProf.json();
+	setOcupadosProfesor(Array.isArray(dataProf) ? dataProf : []);
+
+	const rCan = await fetch(
+	  `http://localhost:8080/club/horario?action=ocupados_cancha&id_cancha=${actividad.id_cancha}`
+	);
+	const dataCan = await rCan.json();
+	setOcupadosCancha(Array.isArray(dataCan) ? dataCan : []);
+  };
+
+  
   return (
     <div>
       <NavbarAdmin />
 
       <div className="page-container-horario">
         <h2>Horarios de la Actividad</h2>
+		
+		<div className="ocupados-container">
+
+		  <div className="ocupados-box">
+		    <h3>Horarios ocupados del Profesor</h3>
+		    {ocupadosProfesor.length === 0 ? (
+		      <p>No tiene horarios ocupados.</p>
+		    ) : (
+		      ocupadosProfesor.map((h, i) => (
+		        <p key={i}>{h.dia}: {h.horaDesde} - {h.horaHasta}</p>
+		      ))
+		    )}
+		  </div>
+
+		  <div className="ocupados-box">
+		    <h3>Horarios ocupados de la Cancha</h3>
+		    {ocupadosCancha.length === 0 ? (
+		      <p>No tiene horarios ocupados.</p>
+		    ) : (
+		      ocupadosCancha.map((h, i) => (
+		        <p key={i}>{h.dia}: {h.horaDesde} - {h.horaHasta}</p>
+		      ))
+		    )}
+		  </div>
+
+		</div>
+		
 
         <div className="horario-contenedor">
           <div className="horario-card horario-form">
             <h3>Agregar horario</h3>
+			
+			{mensaje && <p className="mensaje-error">{mensaje}</p>}
+			
             <select name="dia" value={nuevoHorario.dia} onChange={handleChange}>
               <option value="">Seleccionar día</option>
               <option value="Lunes">Lunes</option>

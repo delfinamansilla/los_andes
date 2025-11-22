@@ -140,3 +140,55 @@
 .btn-volver:hover {
   background-color: #466245;
 }
+
+
+/* --- CONTENEDOR GENERAL DE OCUPADOS --- */
+.ocupados-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 900px;
+}
+
+/* --- CAJA DE CADA COLUMNA (Profesor / Cancha) --- */
+.ocupados-box {
+  background-color: #DDD8CA;        /* cremita */
+  color: #20321E;                   /* verde oscuro */
+  padding: 20px 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Título */
+.ocupados-box h3 {
+  color: #20321E;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Texto de horarios */
+.ocupados-box p {
+  color: #20321E;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 6px 0;
+  text-align: center;
+}
+
+
+.mensaje-error {
+  background-color: #e57373;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+}

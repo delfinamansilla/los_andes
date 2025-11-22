@@ -11,6 +11,7 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.Rectangle;
 
+import entities.Cancha;
 import entities.Salon;
 import entities.Usuario;
 
@@ -121,4 +122,79 @@ public class GeneradorArchivos {
         table.addCell(cellLabel);
         table.addCell(cellValue);
     }
+    
+    public byte[] generarConstanciaCanchaPDF(Cancha cancha, Usuario usuario, LocalDate fecha, LocalTime desde, LocalTime hasta) throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Document doc = new Document(PageSize.A4, 50, 50, 50, 50);
+        PdfWriter writer = PdfWriter.getInstance(doc, baos);
+        
+        doc.open();
+
+        // --- 1. ENCABEZADO CON CAJA DE COLOR ---
+        PdfPTable headerTable = new PdfPTable(1);
+        headerTable.setWidthPercentage(100);
+        
+        PdfPCell cellHeader = new PdfPCell();
+        cellHeader.setBackgroundColor(COLOR_PRINCIPAL);
+        cellHeader.setPadding(20);
+        cellHeader.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cellHeader.setBorder(Rectangle.NO_BORDER);
+
+        Font fontTitulo = new Font(Font.HELVETICA, 24, Font.BOLD, COLOR_FONDO);
+        Font fontSubtitulo = new Font(Font.HELVETICA, 14, Font.NORMAL, COLOR_FONDO);
+        
+        cellHeader.addElement(new Paragraph("Club Deportivo Los Andes", fontTitulo));
+        cellHeader.addElement(new Paragraph("Comprobante de Reserva", fontSubtitulo));
+        
+        headerTable.addCell(cellHeader);
+        doc.add(headerTable);
+        
+        doc.add(new Paragraph("\n\n")); // Espacio
+
+        // --- 2. TABLA DE DETALLES ---
+        // Usamos una tabla para alinear "Etiqueta: Valor" perfectamente
+        PdfPTable table = new PdfPTable(2);
+        table.setWidthPercentage(100);
+        table.setWidths(new float[]{1, 2}); // La columna de valor es el doble de ancha
+        table.setSpacingBefore(10);
+
+        // Formateadores de fecha/hora
+        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
+
+        // Agregar filas
+        agregarFila(table, "SOCIO", usuario.getNombreCompleto());
+        agregarFila(table, "DNI", usuario.getDni());
+        agregarFila(table, "EMAIL", usuario.getMail());
+        agregarFila(table, " ", " "); // Espaciador
+        agregarFila(table, "CANCHA", cancha.getDescripcion());
+        agregarFila(table, "FECHA", fecha.format(dateFmt));
+        agregarFila(table, "HORARIO", desde.format(timeFmt) + " a " + hasta.format(timeFmt) + " hs");
+
+        doc.add(table);
+
+        // --- 3. ESTADO ---
+        doc.add(new Paragraph("\n"));
+        Paragraph pEstado = new Paragraph("ESTADO: CONFIRMADA", new Font(Font.HELVETICA, 16, Font.BOLD, new Color(0, 128, 0)));
+        pEstado.setAlignment(Element.ALIGN_RIGHT);
+        doc.add(pEstado);
+
+        // --- 4. PIE DE PÁGINA / LINEA DIVISORIA ---
+        doc.add(new Paragraph("\n\n\n"));
+        
+        // Linea punteada
+        Paragraph linea = new Paragraph("-----------------------------------------------------------------------------------");
+        linea.setAlignment(Element.ALIGN_CENTER);
+        linea.getFont().setColor(Color.GRAY);
+        doc.add(linea);
+
+        Font fontFooter = new Font(Font.HELVETICA, 10, Font.ITALIC, Color.GRAY);
+        Paragraph footer = new Paragraph("Por favor presente este comprobante digital o impreso en portería para ingresar.\nGenerado el: " + LocalDate.now(), fontFooter);
+        footer.setAlignment(Element.ALIGN_CENTER);
+        doc.add(footer);
+
+        doc.close();
+        return baos.toByteArray();
+    }
+
 }

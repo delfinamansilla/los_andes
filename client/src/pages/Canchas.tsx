@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavbarSocio from './NavbarSocio';
 import '../styles/Canchas.css'; // <-- Importa el nuevo CSS
+import { useNavigate } from 'react-router-dom';
 import Footer from './Footer';
 
 interface Cancha {
@@ -16,6 +17,8 @@ const Canchas: React.FC = () => { // Usamos React.FC para consistencia
   const [canchas, setCanchas] = useState<Cancha[]>([]);
   const [loading, setLoading] = useState(true); // Añadimos estado de carga
   const [error, setError] = useState<string | null>(null); // Mejor manejo de errores
+  
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCanchas = async () => {
@@ -32,6 +35,10 @@ const Canchas: React.FC = () => { // Usamos React.FC para consistencia
     };
     fetchCanchas();
   }, []);
+  
+  const alquilarCancha = (cancha: Cancha) => {
+    navigate(`/alquilar-cancha/${cancha.id}`);
+  };
 
   if (loading) return <div className="canchas-socio-page"><p className="status-message">Cargando...</p></div>;
   if (error) return <div className="canchas-socio-page"><p className="status-message error">{error}</p></div>;
@@ -56,6 +63,15 @@ const Canchas: React.FC = () => { // Usamos React.FC para consistencia
                   <span className="estado-label">Estado:</span>{' '}
                   {c.estado ? 'Disponible' : 'No disponible'}
                 </p>
+				
+				<button
+				  className="btn-alquilar-cancha"
+				  disabled={!c.estado}
+				  onClick={() => alquilarCancha(c)}
+				>
+				  Alquilar
+				</button>
+				
               </li>
             ))}
           </ul>

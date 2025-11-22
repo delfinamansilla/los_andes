@@ -94,7 +94,7 @@ const PartidoDetalleSocio: React.FC = () => {
     <div>
       <NavbarSocio />
 
-      <div className="page-container">
+      <div className="contenedor">
 
         {loading && <p>Cargando detalles...</p>}
         {error && <p className="error-box">{error}</p>}
@@ -106,6 +106,10 @@ const PartidoDetalleSocio: React.FC = () => {
               Los Andes VS {partido.oponente}
             </h2>
 
+			<p>
+			  <i className="fa-solid fa-person-running"></i> Actividad: {nombreActividad}
+			</p>
+			
             <p>
               <i className="fa-solid fa-calendar-days"></i> Fecha: {partido.fecha}
             </p>
@@ -126,7 +130,7 @@ const PartidoDetalleSocio: React.FC = () => {
             </p>
 
             <button onClick={handleVolver}>
-              <i className="fa-solid fa-right-left" /> Volver
+              <i className="fa-solid fa-arrow-left" /> Volver
             </button>
 
           </div>

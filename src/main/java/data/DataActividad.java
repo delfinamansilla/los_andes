@@ -1,6 +1,7 @@
 package data;
 
 import entities.Actividad;
+import entities.Horario;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -266,5 +267,52 @@ public class DataActividad {
             }
         }
     }
+    
+    
+    public LinkedList<Horario> getHorariosByCanchaAndDia(int idCancha, String dia) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        LinkedList<Horario> horarios = new LinkedList<>();
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT h.* FROM horario h " +
+                "INNER JOIN actividad a ON h.id_actividad = a.id " +
+                "WHERE a.id_cancha = ? AND h.dia = ?"
+            );
+
+            stmt.setInt(1, idCancha);
+            stmt.setString(2, dia);
+
+            rs = stmt.executeQuery();
+
+            while (rs != null && rs.next()) {
+                Horario h = new Horario();
+
+                h.setId(rs.getInt("id"));
+                h.setIdActividad(rs.getInt("id_actividad"));
+                h.setDia(rs.getString("dia"));
+                h.setHoraDesde(rs.getTime("hora_desde").toLocalTime());
+                h.setHoraHasta(rs.getTime("hora_hasta").toLocalTime());
+
+                horarios.add(h);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return horarios;
+    }
+
+    
 }
 

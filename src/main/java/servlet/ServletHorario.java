@@ -92,6 +92,23 @@ public class ServletHorario extends HttpServlet {
                     response.getWriter().write("{\"status\":\"ok\", \"mensaje\":\"Horario eliminado correctamente.\"}");
                     break;
                 }
+                
+                //ACA EMPIEZA LO Q AGREGUE
+                case "ocupados_profesor": {
+                    int idProfesor = Integer.parseInt(request.getParameter("id_profesor"));
+                    List<Horario> horarios = logicHorario.getOcupadosProfesor(idProfesor);
+                    response.getWriter().write(gson.toJson(horarios));
+                    break;
+                }
+
+                case "ocupados_cancha": {
+                    int idCancha = Integer.parseInt(request.getParameter("id_cancha"));
+                    List<Horario> horarios = logicHorario.getOcupadosCancha(idCancha);
+                    response.getWriter().write(gson.toJson(horarios));
+                    break;
+                }
+                
+                //ACA TERMINA
 
                 default:
                     response.getWriter().write("{\"error\":\"Acción GET no reconocida: " + action + "\"}");

@@ -5,6 +5,7 @@ import entities.Cancha;
 import entities.Alquiler_cancha;
 import entities.Actividad;
 import entities.Partido;
+import entities.Salon;
 
 import java.util.LinkedList;
 
@@ -101,4 +102,6 @@ public class LogicCancha {
         c.setEstado(estado);
         dataCancha.update(c);
     }
+    
+
 }

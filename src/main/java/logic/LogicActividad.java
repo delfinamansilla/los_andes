@@ -6,16 +6,22 @@ import java.util.Map;
 import data.*;
 import entities.*;
 import java.util.LinkedList;
+import java.util.List;
 
 public class LogicActividad {
     private DataActividad dataActividad;
     private DataProfesor dataProfesor;
     private DataCancha dataCancha;
 
+
+
+
     public LogicActividad() {
         dataActividad = new DataActividad();
         dataProfesor = new DataProfesor();
         dataCancha = new DataCancha();
+
+
     }
 
     public void add(Actividad act) throws Exception {
@@ -84,5 +90,11 @@ public class LogicActividad {
             throw new Exception("No existe una cancha con ID " + idCancha + ".");
         }
     }
+    
+    public LinkedList<Horario> getHorariosByCanchaAndDia(int idCancha, String dia) throws Exception {
+        DataActividad da = new DataActividad();
+        return da.getHorariosByCanchaAndDia(idCancha, dia);
+    }
+
 }
 

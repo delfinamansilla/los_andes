@@ -1,4 +1,4 @@
-.page-container {
+.contenedor {
   min-height: 100vh;
   background-color: #20321E;
   color: #20321E;
@@ -11,9 +11,9 @@
 }
 
 /* Título */
-.page-container h2 {
+.contenedor h2 {
   text-align: center;
-  color: #DDD8CA;
+  color: #20321E;
   margin-bottom: 25px;
   font-size: 1.8rem;
 }
@@ -21,14 +21,14 @@
 /* Caja del detalle */
 .detalle-partido-solo-vista {
   background-color: #DDD8CA;
-  padding: 40px;
+  padding: 28px;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   width: 100%;
-  max-width: 650px;
+  max-width: 480px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
   color: #20321E;
 }
 

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import NavbarAdmin from './NavbarAdmin';
-import '../styles/VerAlquileresSalon.css'; 
+import '../styles/VerAlquileresSalon.css';
+
 
 interface AlquilerData {
   id: number;
-  fecha: string;
-  horaDesde: string;
-  horaHasta: string;
-  idSalon: number;
-  idUsuario: number;
+  fecha_alquiler: string;
+  hora_desde: string;
+  hora_hasta: string;
+  id_cancha: number;
+  id_usuario: number;
 }
 
 interface AlquilerConUsuario {
@@ -17,33 +18,34 @@ interface AlquilerConUsuario {
   mailUsuario?: string;
 }
 
-interface Salon {
+interface Cancha {
   id: number;
   nombre: string;
 }
 
-const VerAlquileresSalon = () => {
+const AlquileresCanchasAdmin = () => {
   const [alquileres, setAlquileres] = useState<AlquilerConUsuario[]>([]);
-  const [salon, setSalon] = useState<Salon | null>(null);
+  const [cancha, setCancha] = useState<Cancha | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const salonStored = localStorage.getItem('salonVerAlquileres');
-    if (!salonStored) {
-      setError('No se seleccionó ningún salón.');
+    const canchaStored = localStorage.getItem('canchaVerAlquileres');
+    if (!canchaStored) {
+      setError('No se seleccionó ninguna cancha.');
       setLoading(false);
       return;
     }
-    const salonParsed: Salon = JSON.parse(salonStored);
-    setSalon(salonParsed);
-    fetchAlquileres(salonParsed.id);
+
+    const canchaParsed: Cancha = JSON.parse(canchaStored);
+    setCancha(canchaParsed);
+    fetchAlquileres(canchaParsed.id);
   }, []);
 
-  const fetchAlquileres = async (idSalon: number) => {
+  const fetchAlquileres = async (idCancha: number) => {
     try {
-      const res = await fetch(`http://localhost:8080/club/alquiler_salon?action=listar_por_salon&id_salon=${idSalon}`);
-      if (!res.ok) throw new Error('Error al obtener alquileres');
+      const res = await fetch(`http://localhost:8080/club/alquiler_cancha?action=listar_por_cancha&id_cancha=${idCancha}`);
+      if (!res.ok) throw new Error('Error al obtener alquileres.');
       const data = await res.json();
       setAlquileres(data);
     } catch (err) {
@@ -55,31 +57,31 @@ const VerAlquileresSalon = () => {
   };
 
   const handleVolver = () => {
-    localStorage.removeItem('salonVerAlquileres');
-    window.location.href = '/salones-admin';
+    localStorage.removeItem('canchaVerAlquileres');
+    window.location.href = '/canchas-admin';
   };
 
-  const formatHora = (hora: string) => hora.substring(0, 5);
+  const formatHora = (hora?: string) => {
+    if (!hora) return ""; 
+    return hora.substring(0, 5);
+  };
 
   return (
     <div className="ver-alquileres-page">
       <NavbarAdmin />
-      
-      <div className="admin-container">
-        {/* Botón Volver */}
-        
 
-        {salon && <h2>Alquileres: {salon.nombre}</h2>}
+      <div className="admin-container">
+
+        {cancha && <h2>Alquileres: {cancha.nombre}</h2>}
 
         {error && <div className="error-msg">{error}</div>}
         {loading && <p className="loading-msg">Cargando alquileres...</p>}
 
-        {/* Contenedor tipo "Tarjeta" para la lista */}
         {!loading && !error && (
           <div className="alquileres-card-container">
-            
+
             {alquileres.length === 0 ? (
-              <p className="empty-msg">No hay alquileres registrados para este salón.</p>
+              <p className="empty-msg">No hay alquileres registrados para esta cancha.</p>
             ) : (
               <table className="tabla-alquileres">
                 <thead>
@@ -93,8 +95,8 @@ const VerAlquileresSalon = () => {
                 <tbody>
                   {alquileres.map((item) => {
                     const { alquiler, nombreUsuario } = item;
-                    
-                    const fechaAlquiler = new Date(alquiler.fecha + 'T' + alquiler.horaHasta);
+
+                    const fechaAlquiler = new Date(alquiler.fecha_alquiler + 'T' + alquiler.hora_hasta);
                     const hoy = new Date();
                     const esPasado = fechaAlquiler < hoy;
 
@@ -102,11 +104,11 @@ const VerAlquileresSalon = () => {
                       <tr key={alquiler.id}>
                         <td>
                           <i className="fa-regular fa-calendar" style={{ marginRight: '8px' }}></i>
-                          {alquiler.fecha}
+                          {alquiler.fecha_alquiler}
                         </td>
                         <td>
                           <i className="fa-regular fa-clock" style={{ marginRight: '8px' }}></i>
-                          {formatHora(alquiler.horaDesde)} - {formatHora(alquiler.horaHasta)}
+                          {formatHora(alquiler.hora_desde)} - {formatHora(alquiler.hora_hasta)}
                         </td>
                         <td className="usuario-info">
                           <strong>{nombreUsuario}</strong>
@@ -127,14 +129,16 @@ const VerAlquileresSalon = () => {
             )}
           </div>
         )}
-		<div className="btn-volver-container">
-		          <button onClick={handleVolver} className="btn-volver">
-		            <i className="fa-solid fa-arrow-left"></i> Volver a Salones
-		          </button>
-		        </div>
+
+        <div className="btn-volver-container">
+          <button onClick={handleVolver} className="btn-volver">
+            <i className="fa-solid fa-arrow-left"></i> Volver a Canchas
+          </button>
+        </div>
+
       </div>
     </div>
   );
 };
 
-export default VerAlquileresSalon;
+export default AlquileresCanchasAdmin;
