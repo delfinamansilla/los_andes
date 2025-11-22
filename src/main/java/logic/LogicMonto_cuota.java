@@ -41,7 +41,13 @@ public class LogicMonto_cuota {
 
         dataMontoCuota.add(mc);
     }
-
+    public entities.Monto_cuota getByCuota(int idCuota) throws Exception {
+        java.util.LinkedList<entities.Monto_cuota> lista = dataMontoCuota.getMontosPorCuota(idCuota);
+        if (lista != null && !lista.isEmpty()) {
+            return lista.getFirst();
+        }
+        return null;
+    }
     public void update(Monto_cuota mc) throws Exception {
         validarMontoCuota(mc);
 
