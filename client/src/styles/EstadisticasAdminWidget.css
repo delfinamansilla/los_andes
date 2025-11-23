@@ -4,13 +4,14 @@
   border-radius: 1rem;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  color: #DDD8CA;
 }
 
 .estadisticas-widget.loading {
   text-align: center;
   padding: 3rem;
-  color: #4a5c48;
+  color: #DDD8CA;
   font-size: 1.1rem;
 }
 
@@ -20,19 +21,19 @@
   align-items: center;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #a69d85;
+  border-bottom: 2px solid #DDD8CA;/*ACA*/
 }
 
 .widget-header-stats h3 {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #20321E;
+  color: #DDD8CA;
   margin: 0;
 }
 
 .btn-refresh {
-  background: linear-gradient(135deg, #20321E 0%, #2d4a29 100%);
-  color: #DDD8CA;
+  background: #DDD8CA;
+  color: #20321E;
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
@@ -43,7 +44,7 @@
 }
 
 .btn-refresh:hover {
-  background: linear-gradient(135deg, #2d4a29 0%, #3d5a39 100%);
+  background: #f5f1e8;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
@@ -55,9 +56,9 @@
   gap: 1.5rem;
 }
 
-/* Tarjeta individual - SIN ANIMACIÓN DE COLORES */
+/* Tarjeta individual - FONDO SÓLIDO */
 .stat-card-real {
-  background: #FFFFFF;
+  background: #DDD8CA;
   border-radius: 12px;
   padding: 1.5rem;
   display: flex;
@@ -69,14 +70,14 @@
   position: relative;
   overflow: hidden;
   border: 2px solid #a69d85;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .stat-card-real:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
-  border-color: #20321E;
-  background: #f9f8f5;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  border-color: #466245;
+  background: #e5e0d3;
 }
 
 /* Header de la tarjeta */
@@ -96,7 +97,7 @@
   background: #20321E;
   color: #DDD8CA;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .stat-card-real:hover .stat-icon-real {
@@ -114,7 +115,7 @@
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .trend-up {
@@ -146,9 +147,8 @@
 
 .stat-valor-container {
   display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .stat-valor-real {
@@ -159,36 +159,29 @@
   letter-spacing: -1px;
 }
 
-.stat-sufijo {
-  font-size: 1rem;
+/* NUEVO: Estilo para el monto extra */
+.monto-extra {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #20321E;
+  color: #DDD8CA;
+  padding: 8px 14px;
+  border-radius: 8px;
+  width: fit-content;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.monto-label {
+  font-size: 0.85rem;
   font-weight: 600;
-  color: #20321E;
-  background: #DDD8CA;
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: 1px solid #a69d85;
+  opacity: 0.9;
 }
 
-/* Animación del contador - SIN PULSE */
-.contador-animado {
-  /* Sin animación */
-}
-
-/* Footer de la tarjeta */
-.stat-footer-real {
-  padding-top: 0.75rem;
-  border-top: 1px solid #a69d85;
-}
-
-.ver-detalles {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #20321E;
-  transition: color 0.3s ease;
-}
-
-.stat-card-real:hover .ver-detalles {
-  color: #2d4a29;
+.monto-valor {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
 /* Responsive */
@@ -219,5 +212,11 @@
 
   .stat-card-real {
     padding: 1.25rem;
+  }
+
+  .monto-extra {
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
   }
 }

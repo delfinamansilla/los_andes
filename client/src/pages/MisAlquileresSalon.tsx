@@ -97,44 +97,52 @@ const MisAlquileresSalon: React.FC = () => {
   const formatHora = (hora: string) => hora.substring(0, 5);
 
   return (
-        <div className="mis-reservas-page">
-          <NavbarSocio />
-          
-          <div className="reservas-container">
-            <h2>Mis Reservas de Salones</h2>
+      <div className="mis-reservas-page">
+        <NavbarSocio />
+        
+        <div className="reservas-container">
+          <h2>Mis Reservas de Salones</h2>
 
-            {loading && <p className="loading-text">Cargando...</p>}
-            {error && <p className="error-msg">{error}</p>}
+          {loading && <p className="loading-text">Cargando...</p>}
+          {error && <p className="error-msg">{error}</p>}
 
-            {!loading && !error && reservas.length === 0 && (
-                <div className="empty-state">
-                    <p>No tienes reservas activas.</p>
-    				<button 
-    				  className="btn-reservar-nuevo"
-    				  onClick={() => navigate('/salones')}
-    				>
-    				  Reservar Nuevo
-    				</button>
+          {!loading && !error && reservas.length === 0 && (
+            <div className="empty-state">
+              <p>No tienes reservas activas.</p>
+              <button 
+                className="btn-reservar-nuevo"
+                onClick={() => navigate('/salones')}
+              >
+                Reservar Nuevo
+              </button>
+            </div>
+          )}
+
+          <div className="lista-reservas">
+            {reservas.map((item) => (
+              <div key={item.id} className="reserva-card">
+                
+                {/* IMAGEN A LA IZQUIERDA */}
+                <div className="reserva-img">
+                  {item.datosSalon?.imagen ? (
+                    <img src={item.datosSalon.imagen} alt={item.datosSalon.nombre} />
+                  ) : (
+                    <div className="img-placeholder">
+                      <i className="fa-solid fa-building"></i>
+                    </div>
+                  )}
                 </div>
-            )}
 
-            <div className="lista-reservas">
-              {reservas.map((item) => (
-                <div key={item.id} className="reserva-card">
+                {/* CONTENIDO A LA DERECHA */}
+                <div className="reserva-content">
                   
-                  {/* 1. Imagen */}
-                  <div className="reserva-img">
-                    {item.datosSalon?.imagen ? (
-                       <img src={item.datosSalon.imagen} alt={item.datosSalon.nombre} />
-                    ) : (
-                       <div className="img-placeholder"><i className="fa-solid fa-building"></i></div>
-                    )}
+                  {/* HEADER: Nombre + Badge */}
+                  <div className="card-header">
+                    <h3>{item.datosSalon?.nombre || 'Salón'}</h3>
+                    <span className="estado-badge">Confirmado</span>
                   </div>
 
-                  {/* 2. Nombre del Salón */}
-                  <h3 className="salon-nombre">{item.datosSalon?.nombre || 'Salón'}</h3>
-
-                  {/* 3. Fecha y Hora (¡VA ANTES DEL BOTÓN!) */}
+                  {/* BODY: Fecha y Hora */}
                   <div className="card-body">
                     <div className="dato-item">
                       <i className="fa-regular fa-calendar"></i>
@@ -146,35 +154,44 @@ const MisAlquileresSalon: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* 4. Botón (ÚLTIMO elemento, posicionado ABSOLUTAMENTE en el CSS) */}
-                  <button 
-                    className="btn-cancelar-reserva" 
-                    onClick={() => handleEliminar(item)}
-                  >
-                    <i className="fa-solid fa-trash"></i> Cancelar Reserva
-                  </button>
+                  {/* FOOTER: Botón */}
+                  <div className="card-footer">
+                    <button 
+                      className="btn-cancelar-reserva" 
+                      onClick={() => handleEliminar(item)}
+                    >
+                      <i className="fa-solid fa-trash"></i>
+                      Cancelar Reserva
+                    </button>
+                  </div>
 
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Modal */}
-          {showModalEliminar && (
-            <div className="modal-backdrop">
-              <div className="modal">
-                <h3>¿Cancelar reserva?</h3>
-                <p>Esta acción es permanente.</p>
-                <div className="modal-buttons">
-                  <button onClick={confirmarEliminar} className="btn-confirm">Sí, Eliminar</button>
-                  <button onClick={() => setShowModalEliminar(false)} className="btn-cancel">Volver</button>
                 </div>
               </div>
-            </div>
-          )}
-    	  <Footer />
+            ))}
+          </div>
         </div>
-      );
+
+        {/* Modal */}
+        {showModalEliminar && (
+          <div className="modal-backdrop">
+            <div className="modal">
+              <h3>¿Cancelar reserva?</h3>
+              <p>Esta acción es permanente.</p>
+              <div className="modal-buttons">
+                <button onClick={confirmarEliminar} className="btn-confirm">
+                  Sí, Eliminar
+                </button>
+                <button onClick={() => setShowModalEliminar(false)} className="btn-cancel">
+                  Volver
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        <Footer />
+      </div>
+    );
 };
 
 export default MisAlquileresSalon;

@@ -51,7 +51,7 @@ interface Estadistica {
   tendencia: number;
   enlace: string;
   colorClass: string;
-  sufijo?: string;
+  montoExtra?: number;
 }
 
 const EstadisticasAdminWidget: React.FC = () => {
@@ -62,7 +62,6 @@ const EstadisticasAdminWidget: React.FC = () => {
   const [profesoresActivos, setProfesoresActivos] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // Tendencias (simuladas por ahora, después podemos calcularlas con datos históricos)
   const [tendenciaSocios] = useState(5.2);
   const [tendenciaReservas] = useState(-2.1);
   const [tendenciaCuotas] = useState(8.3);
@@ -74,13 +73,11 @@ const EstadisticasAdminWidget: React.FC = () => {
 
   const cargarEstadisticas = async () => {
     try {
-      // 1. Total de Socios Activos
       const resUsuarios = await fetch('http://localhost:8080/club/usuario?action=listar');
       const usuarios: Usuario[] = await resUsuarios.json();
       const socios = usuarios.filter(u => u.rol.toLowerCase() === 'socio' && u.estado);
       setSociosActivos(socios.length);
 
-      // 2. Reservas de Hoy (Canchas + Salones)
       const hoy = new Date().toISOString().split('T')[0];
       
       const resCanchas = await fetch('http://localhost:8080/club/alquiler_cancha?action=listar');
@@ -93,7 +90,6 @@ const EstadisticasAdminWidget: React.FC = () => {
 
       setReservasHoy(canchasHoy + salonesHoy);
 
-      // 3. Cuotas Pendientes del Mes
       const resCuotas = await fetch('http://localhost:8080/club/cuota?action=listar');
       const cuotas: Cuota[] = await resCuotas.json();
 
@@ -106,7 +102,6 @@ const EstadisticasAdminWidget: React.FC = () => {
       const idsPagadas = new Set(pagos.map(p => p.id_cuota));
       const cuotasPendientes = cuotas.filter(c => !idsPagadas.has(c.id));
 
-      // Calcular monto total pendiente
       let totalPendiente = 0;
       cuotasPendientes.forEach(cuota => {
         const monto = montos.find(m => m.id_cuota === cuota.id);
@@ -118,7 +113,6 @@ const EstadisticasAdminWidget: React.FC = () => {
       setCuotasPendientes(cuotasPendientes.length);
       setMontoPendiente(totalPendiente);
 
-      // 4. Profesores Activos
       const resProfesores = await fetch('http://localhost:8080/club/profesor?action=listar');
       const profesores: Profesor[] = await resProfesores.json();
       setProfesoresActivos(profesores.length);
@@ -154,7 +148,7 @@ const EstadisticasAdminWidget: React.FC = () => {
       tendencia: tendenciaCuotas,
       enlace: '/admin/cuotas',
       colorClass: 'stat-cuotas',
-      sufijo: `$${montoPendiente.toFixed(2)}`
+      montoExtra: montoPendiente
     },
     {
       titulo: 'Profesores Activos',
@@ -185,7 +179,7 @@ const EstadisticasAdminWidget: React.FC = () => {
 
       <div className="grid-estadisticas-real">
         {estadisticas.map((stat, index) => (
-          <a 
+          <div 
             key={index} 
             className={`stat-card-real ${stat.colorClass}`}
           >
@@ -213,17 +207,18 @@ const EstadisticasAdminWidget: React.FC = () => {
             <div className="stat-body-real">
               <h4 className="stat-titulo">{stat.titulo}</h4>
               <div className="stat-valor-container">
-                <span className="stat-valor-real contador-animado">
+                <span className="stat-valor-real">
                   {stat.valor}
                 </span>
-                {stat.sufijo && (
-                  <span className="stat-sufijo">{stat.sufijo}</span>
+                {stat.montoExtra !== undefined && (
+                  <div className="monto-extra">
+                    <span className="monto-label">Total:</span>
+                    <span className="monto-valor">${stat.montoExtra.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                  </div>
                 )}
               </div>
             </div>
-
-            
-          </a>
+          </div>
         ))}
       </div>
     </div>
