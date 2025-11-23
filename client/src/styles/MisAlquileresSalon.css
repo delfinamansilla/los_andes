@@ -1,227 +1,126 @@
-/* --- PÁGINA GENERAL --- */
-.mis-reservas-page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #20321E;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  width: 100%;
-}
-
-/* --- CONTENEDOR CENTRAL --- */
-.reservas-container {
-  flex-grow: 1;
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.lista-reservas {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  gap: 40px;
   padding: 40px 20px;
-  width: 100%;
-  box-sizing: border-box;
 }
 
-.reservas-container h2 {
-  color: #DDD8CA;
-  font-size: 2.6rem;
-  font-weight: 800;
-  margin: 40px 0 40px 0;
-  text-align: center;
-}
-
-/* --- LISTA --- */
-.lista-reservas {
-  width: 100%;
-  max-width: 950px;
+/* ===== TARJETA DE RESERVA (Ancla para el botón) ===== */
+.reserva-card {
+  background-color: #DDD8CA; 
   display: flex;
   flex-direction: column;
-  gap: 30px;
-}
+  align-items: center;
+  text-align: center;
 
-/* --- TARJETAS --- */
-.reserva-card {
-  background-color: #DDD8CA;
-  display: flex;
-  padding: 22px;
+  padding: 30px;
+  /* Espacio en el fondo para que quepa la fecha y el botón */
+  padding-bottom: 100px; 
+  
   border-radius: 18px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.35);
-  gap: 25px;
-  transition: 0.2s ease;
+
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+
+  /* ¡CLAVE! Ancla para el botón absoluto */
+  position: relative; 
+  z-index: 999; 
+  
+  overflow: visible;
 }
 
-.reserva-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.45);
-}
 
-/* --- IMAGEN --- */
+/* ===== IMAGEN y CONTENEDOR (CORRECCIÓN DE FONDO Y VISIBILIDAD COMPLETA) ===== */
 .reserva-img {
-  width: 200px;
-  height: 150px;
-  border-radius: 14px;
-  overflow: hidden;
-  background-color: #20321E;
-  flex-shrink: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centra la imagen si quedan espacios */
+  
+  /* Mínimo margen superior para que la tarjeta suba */
+  margin-top: 5px; 
+  /* Mínimo margen debajo de la imagen */
+  margin-bottom: 10px; 
+  
+  /* Aseguramos que no tenga fondo para evitar el "verde" */
+  background-color: transparent; 
+  /* Si la imagen es más pequeña que el contenedor, se verá el fondo transparente */
+  height: 170px; /* Mantener la altura del contenedor */
+  border-radius: 12px;
+  overflow: hidden; /* Asegura que la imagen no se salga del contenedor */
 }
 
 .reserva-img img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: 100%; 
+  /* ¡CLAVE! Usamos 'contain' para que la imagen se vea completa sin cortar */
+  object-fit: contain; 
+  border-radius: 12px;
+  border: none;
 }
 
-.img-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-  color: #DDD8CA;
-  height: 100%;
-}
 
-/* --- CONTENIDO --- */
-.reserva-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-/* HEADER */
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card-header h3 {
-  margin: 0;
+/* ===== NOMBRE DEL SALÓN ===== */
+.salon-nombre {
   font-size: 1.6rem;
+  margin: 0;
+  /* Margen pequeño debajo del nombre */
+  margin-bottom: 10px; 
   color: #20321E;
-  font-weight: 900;
 }
 
-.estado-badge {
-  background-color: #20321E;
-  color: #DDD8CA;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: bold;
-}
-
-/* BODY */
+/* ===== CONTENEDOR DE FECHA/HORA (La separación crítica del botón) ===== */
 .card-body {
-  margin-top: 12px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  /* Este margen separa el .card-body del elemento siguiente, que en el flujo normal sería el botón. */
+  margin-bottom: 20px; 
 }
 
 .dato-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: #20321E;
+  gap: 8px;
   font-size: 1.1rem;
+  color: #20321E;
+  margin-bottom: 8px; 
 }
 
-/* FOOTER */
-.card-footer {
-  margin-top: auto;
-  display: flex;
-  justify-content: flex-end;
-}
 
+/* ===== BOTÓN DE CANCELAR RESERVA (Centrado Fijo y Separación) ===== */
 .btn-cancelar-reserva {
   background-color: #20321E;
   color: #DDD8CA;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border-radius: 10px;
-  cursor: pointer;
-  font-size: 1rem;
   border: none;
+  cursor: pointer;
   font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: 0.2s;
+  font-size: 1rem;
+  
+  max-width: 80%; 
+
+  /* POSICIONAMIENTO ABSOLUTO (Garantía de visibilidad) */
+  position: absolute;
+  /* Lo pegamos al fondo para dejar espacio al texto */
+  bottom: 25px; 
+  
+  left: 50%; 
+  transform: translateX(-50%); 
+
+  white-space: nowrap;
+  transition: 0.2s ease;
 }
 
 .btn-cancelar-reserva:hover {
   background-color: #466245;
+  transform: translateX(-50%) scale(1.03); 
 }
-
-/* --- EMPTY STATE --- */
-.empty-state {
-  background-color: #DDD8CA;
-  padding: 35px 40px;
-  border-radius: 18px;
-  text-align: center;
-  color: #20321E;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-}
-
-/* --- MODAL --- */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0,0,0,0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
-
-.modal {
-  background-color: #DDD8CA;
-  color: #20321E;
-  padding: 35px 45px;
-  border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  text-align: center;
-}
-
-.modal-buttons {
-  margin-top: 25px;
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-}
-
-.btn-confirm {
-  background-color: #dc2626;
-  color: white;
-  padding: 10px 25px;
-  border-radius: 10px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.btn-cancel {
-  background-color: #DDD8CA;
-  color: #20321E;
-  border: 2px solid #20321E;
-  padding: 10px 25px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-}
-/* --- BOTÓN EMPTY STATE LINDO --- */
-.btn-reservar-nuevo {
-  background-color: #20321E;
-  color: #DDD8CA;
-  padding: 12px 26px;
-  border-radius: 12px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  transition: 0.25s ease;
-}
-
-.btn-reservar-nuevo:hover {
-  background-color: #3a5134;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
-}
-
