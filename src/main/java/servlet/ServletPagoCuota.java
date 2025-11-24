@@ -40,7 +40,7 @@ public class ServletPagoCuota extends HttpServlet {
     private LogicMonto_cuota logicMonto;
     private Gson gson;
     
-    private static final String MP_ACCESS_TOKEN = "TEST-823938148084228-112018-f842aba74684673c394867dc4ef8f1bf-660480912";
+    private static final String MP_ACCESS_TOKEN = System.getenv("MP_ACCESS_TOKEN");
     
     
 
@@ -65,7 +65,7 @@ public class ServletPagoCuota extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         
@@ -136,16 +136,21 @@ public class ServletPagoCuota extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
         String action = request.getParameter("action");
         response.setContentType("application/json;charset=UTF-8");
+        
+        if (MP_ACCESS_TOKEN == null || MP_ACCESS_TOKEN.isEmpty()) {
+            System.err.println("❌ ERROR GRAVE: No se encontró el Token de Mercado Pago en las variables de entorno.");
+            response.sendError(500, "Error de configuración del servidor (Falta Token MP).");
+            return;
+        }
 
         try {
             if ("crear_orden_pago".equalsIgnoreCase(action)) {
-                System.out.println("=== INICIANDO CREACIÓN DE ORDEN DE PAGO ===");
                 int idCuota = Integer.parseInt(request.getParameter("id_cuota"));
                 Cuota cuotaObj = logicCuota.getById(idCuota);
                 int nroCuota = cuotaObj.getNro_cuota();
@@ -175,9 +180,9 @@ public class ServletPagoCuota extends HttpServlet {
                 preferenceRequest.add("payer", payer);
                 
                 JsonObject backUrls = new JsonObject();
-                backUrls.addProperty("success", "http://localhost:3000/pago-exitoso");
-                backUrls.addProperty("failure", "http://localhost:3000/pago-fallido");
-                backUrls.addProperty("pending", "http://localhost:3000/pago-pendiente");
+                backUrls.addProperty("success", "https://losandesback-production.up.railway.app/mis-cuotas");
+                backUrls.addProperty("failure", "https://losandesback-production.up.railway.app/mis-cuotas");
+                backUrls.addProperty("pending", "https://losandesback-production.up.railway.app/mis-cuotas");
                 preferenceRequest.add("back_urls", backUrls);
                 
                 preferenceRequest.addProperty("external_reference", "cuota_" + idCuota + "_usuario_" + idUsuario);
@@ -222,17 +227,16 @@ public class ServletPagoCuota extends HttpServlet {
                     
                     String preferenceId = mpResponse.get("id").getAsString();
                     String initPoint = mpResponse.get("init_point").getAsString();
-                    String sandboxInitPoint = mpResponse.get("sandbox_init_point").getAsString();
                     
-                    String qrData = sandboxInitPoint; // o sea, esto seria el link convertido en qr
+                    String qrData = initPoint;
                     
                     JsonObject jsonResponse = new JsonObject();
                     jsonResponse.addProperty("qr_data", qrData);
                     jsonResponse.addProperty("payment_id", preferenceId);
                     jsonResponse.addProperty("init_point", initPoint);
                     
-                    System.out.println("PREFERENCIA CREADA EXITOSAMENTE");
-                    System.out.println("Link de pago: " + sandboxInitPoint);
+                    System.out.println("PREFERENCIA CREADA");
+                    System.out.println("Link de pago: " + initPoint);
                     response.getWriter().write(gson.toJson(jsonResponse));
                     
                 } else {
@@ -309,7 +313,7 @@ public class ServletPagoCuota extends HttpServlet {
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setStatus(HttpServletResponse.SC_OK);

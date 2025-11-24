@@ -91,7 +91,6 @@ const Info: React.FC = () => {
 	      <div className="info-main-content">
 	        <h1>{data.titulo}</h1>
 
-	        {/* ESTA ES LA CAJA QUE FALTABA EN TU CAPTURA */}
 	        <div className="info-card">
 	          {data.texto && <p>{data.texto}</p>}
 

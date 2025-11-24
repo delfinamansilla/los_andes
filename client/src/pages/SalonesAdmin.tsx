@@ -18,7 +18,7 @@ const SalonesAdmin = () => {
 
   const fetchSalones = async () => {
     try {
-      const res = await fetch('http://localhost:8080/club/salon?action=listar');
+      const res = await fetch('https://losandesback-production.up.railway.app/salon?action=listar');
       if (!res.ok) throw new Error('Error al traer los salones');
       const data: Salon[] = await res.json();
       setSalones(data);
@@ -42,7 +42,7 @@ const SalonesAdmin = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/club/salon?action=eliminar&id=${salonAEliminar.id}`
+        `https://losandesback-production.up.railway.app/salon?action=eliminar&id=${salonAEliminar.id}`
       );
       if (!res.ok) throw new Error('Error al eliminar salón');
 
@@ -81,7 +81,6 @@ const SalonesAdmin = () => {
             <li key={s.id}>
               <h3>{s.nombre}</h3>
 
-              {/* Imagen */}
               {s.imagen ? (
                 <img
                   src={s.imagen}
@@ -97,7 +96,6 @@ const SalonesAdmin = () => {
               <p><strong>Capacidad:</strong> {s.capacidad} personas</p>
               <p><strong>Descripción:</strong> {s.descripcion}</p>
 
-              {/* BOTONES AHORA UNIFICADOS */}
               <div className="salon-buttons">
                 <button 
                   onClick={() => handleVerAlquileres(s)} 
@@ -125,7 +123,6 @@ const SalonesAdmin = () => {
         </ul>
       </div>
 
-      {/* MODAL ELIMINAR */}
       {showModalEliminar && salonAEliminar && (
         <div className="modal-backdrop">
           <div className="modal">

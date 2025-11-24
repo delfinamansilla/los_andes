@@ -43,7 +43,7 @@ const AlquileresCanchasUsuario: React.FC = () => {
     setSocio(socioParsed);
 
     try {
-      const res = await fetch(`http://localhost:8080/club/alquiler_cancha?action=listar_por_usuario&id_usuario=${socioParsed.id}`);
+      const res = await fetch(`https://losandesback-production.up.railway.app/alquiler_cancha?action=listar_por_usuario&id_usuario=${socioParsed.id}`);
       
       if (!res.ok) throw new Error('Error al conectar con el servidor.');
       

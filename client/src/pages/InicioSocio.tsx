@@ -39,7 +39,6 @@ const InicioSocio: React.FC = () => {
 	      }
 	    }, []);
 
-	    // aca dibujamos los globitos
 		const renderBalloons = () => {
 		    const balloons = [];
 		    const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#1A535C', '#FF9F1C', '#9B5DE5'];
@@ -74,7 +73,6 @@ const InicioSocio: React.FC = () => {
     <div className="inicio-socio-page">
       <NavbarSocio />
 	  
-	  {/* --- LÓGICA DE CUMPLEAÑOS --- */}
 	        {esCumple && (
 	          <>
 	            <div className="balloon-container">

@@ -14,7 +14,7 @@ import entities.Salon;
 import logic.LogicSalon;
 
 @WebServlet("/salon")
-@MultipartConfig(maxFileSize = 2 * 1024 * 1024) // 2MB igual que tu validación
+@MultipartConfig(maxFileSize = 2 * 1024 * 1024) 
 public class ServletSalon extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private LogicSalon logicSalon;
@@ -25,7 +25,7 @@ public class ServletSalon extends HttpServlet {
     }
 
     private void setCORS(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
     }

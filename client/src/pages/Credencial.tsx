@@ -17,9 +17,9 @@ const Credencial: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      setImageUrl(`http://localhost:8080/club/usuario?action=verfoto&id=${id}&t=${new Date().getTime()}`);
+      setImageUrl(`https://losandesback-production.up.railway.app/usuario?action=verfoto&id=${id}&t=${new Date().getTime()}`);
       
-      fetch(`http://localhost:8080/club/usuario?action=buscarc&id=${id}`)
+      fetch(`https://losandesback-production.up.railway.app/usuario?action=buscarc&id=${id}`)
         .then(res => res.ok ? res.json() : Promise.reject('Usuario no encontrado'))
         .then(data => setSocio(data))
         .catch(err => setError(err.message));
@@ -34,11 +34,11 @@ const Credencial: React.FC = () => {
     formData.append('idUsuario', id);
     formData.append('foto', file);
     try {
-      const res = await fetch('http://localhost:8080/club/usuario', { method: 'POST', body: formData });
+      const res = await fetch('https://losandesback-production.up.railway.app/usuario', { method: 'POST', body: formData });
       const result = await res.json();
       if (res.ok) {
         setMensaje('¡Foto actualizada!');
-        setImageUrl(`http://localhost:8080/club/usuario?action=verfoto&id=${id}&t=${new Date().getTime()}`);
+        setImageUrl(`https://losandesback-production.up.railway.app/usuario?action=verfoto&id=${id}&t=${new Date().getTime()}`);
       } else {
         setError(result.error || 'Error al subir la foto.');
       }

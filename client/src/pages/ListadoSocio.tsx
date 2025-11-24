@@ -44,7 +44,7 @@ const ListadoSocios: React.FC = () => {
 
   const fetchSocios = async () => {
     try {
-      const response = await fetch('http://localhost:8080/club/usuario?action=listar');
+      const response = await fetch('https://losandesback-production.up.railway.app/usuario?action=listar');
 
       if (!response.ok) {
         throw new Error('Error al conectar con el servidor.');

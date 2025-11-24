@@ -19,7 +19,7 @@ const Salones: React.FC = () => {
   useEffect(() => {
     const fetchSalones = async () => {
       try {
-        const res = await fetch('http://localhost:8080/club/salon?action=listar');
+        const res = await fetch('https://losandesback-production.up.railway.app/salon?action=listar');
         if (!res.ok) throw new Error('No se pudieron cargar los salones.');
         const data: Salon[] = await res.json();
         setSalones(data);

@@ -28,7 +28,7 @@ const ProximasActividadesWidget: React.FC = () => {
       return;
     }
 
-    const url = `http://localhost:8080/club/inscripcion?action=porusuario&id_usuario=${usuario.id}`;
+    const url = `https://losandesback-production.up.railway.app/inscripcion?action=porusuario&id_usuario=${usuario.id}`;
 
     fetch(url)
       .then(res => res.json())
@@ -46,7 +46,7 @@ const ProximasActividadesWidget: React.FC = () => {
 
   const calcularProximaClase = (actividades: Inscripcion[]) => {
     const ahora = new Date();
-    const diaActual = ahora.getDay(); // 0=Domingo, 1=Lunes, ..., 6=Sábado
+    const diaActual = ahora.getDay(); 
     const horaActual = ahora.getHours() + ahora.getMinutes() / 60;
 
     const diasSemana: {[key: string]: number} = {
@@ -67,8 +67,8 @@ const ProximasActividadesWidget: React.FC = () => {
       const horaClase = hora + minutos / 60;
 
       let diasDiferencia = diaClase - diaActual;
-      if (diasDiferencia < 0) diasDiferencia += 7; // próxima semana
-      if (diasDiferencia === 0 && horaClase < horaActual) diasDiferencia = 7; // ya pasó hoy
+      if (diasDiferencia < 0) diasDiferencia += 7; 
+      if (diasDiferencia === 0 && horaClase < horaActual) diasDiferencia = 7; 
 
       const horasDiferencia = diasDiferencia * 24 + (horaClase - horaActual);
 

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
-import Modal from './Modal'; // ✅ Importamos el Modal
+import Modal from './Modal'; 
 import '../styles/CuotasUsuario.css';
 
-// --- Interfaces ---
 interface Usuario {
   id: number;
   nombre_completo: string;
@@ -33,7 +32,6 @@ const CuotasUsuario: React.FC = () => {
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   
-  // Estados de datos
   const [cuotas, setCuotas] = useState<Cuota[]>([]);
   const [montos, setMontos] = useState<MontoCuota[]>([]);
   const [pagos, setPagos] = useState<PagoCuota[]>([]);
@@ -41,21 +39,17 @@ const CuotasUsuario: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // --- ESTADOS PARA EL MODAL ---
-  // 1. Para confirmar el pago (¿Seguro que quiere pagar?)
   const [modalConfirmacion, setModalConfirmacion] = useState<{ visible: boolean, idCuota: number | null }>({
     visible: false,
     idCuota: null
   });
 
-  // 2. Para mostrar resultado (Éxito o Error)
   const [modalInfo, setModalInfo] = useState<{ visible: boolean, titulo: string, mensaje: string }>({
     visible: false,
     titulo: '',
     mensaje: ''
   });
 
-  // Carga Inicial
   useEffect(() => {
     cargarDatos();
   }, []);
@@ -73,13 +67,13 @@ const CuotasUsuario: React.FC = () => {
     setUsuario(userObj);
 
     try {
-      const resCuotas = await fetch('http://localhost:8080/club/cuota?action=listar');
+      const resCuotas = await fetch('https://losandesback-production.up.railway.app/cuota?action=listar');
       if (!resCuotas.ok) throw new Error('Error al cargar cuotas');
       
-      const resMontos = await fetch('http://localhost:8080/club/montocuota?action=listar');
+      const resMontos = await fetch('https://losandesback-production.up.railway.app/montocuota?action=listar');
       if (!resMontos.ok) throw new Error('Error al cargar montos');
 
-      const resPagos = await fetch(`http://localhost:8080/club/pagocuota?action=listar_por_usuario&id_usuario=${userObj.id}`);
+      const resPagos = await fetch(`https://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${userObj.id}`);
       if (!resPagos.ok) throw new Error('Error al cargar pagos');
 
       const dataCuotas = await resCuotas.json();
@@ -98,18 +92,14 @@ const CuotasUsuario: React.FC = () => {
     }
   };
 
-  // --- PASO 1: El usuario hace clic en "Realizó Pago" ---
   const handleBotonPagar = (idCuota: number) => {
-    // Abrimos el modal de confirmación
     setModalConfirmacion({ visible: true, idCuota: idCuota });
   };
 
-  // --- PASO 2: El usuario confirma en el Modal ---
   const confirmarPago = async () => {
     if (!usuario || modalConfirmacion.idCuota === null) return;
 
     const idCuota = modalConfirmacion.idCuota;
-    // Cerramos el modal de confirmación
     setModalConfirmacion({ visible: false, idCuota: null });
 
     try {
@@ -118,27 +108,24 @@ const CuotasUsuario: React.FC = () => {
       params.append('id_usuario', usuario.id.toString());
       params.append('id_cuota', idCuota.toString());
 
-      const response = await fetch('http://localhost:8080/club/pagocuota', {
+      const response = await fetch('https://losandesback-production.up.railway.app/pagocuota', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),
       });
 
       if (response.ok) {
-        // Mostramos Modal de Éxito
         setModalInfo({
             visible: true,
             titulo: '¡Pago Exitoso!',
             mensaje: 'El pago se ha registrado correctamente en el sistema.'
         });
 
-        // Recargamos los pagos en segundo plano
-        const resPagos = await fetch(`http://localhost:8080/club/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`);
+        const resPagos = await fetch(`https://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`);
         const dataPagos = await resPagos.json();
         setPagos(dataPagos);
       } else {
         const errData = await response.json();
-        // Mostramos Modal de Error
         setModalInfo({
             visible: true,
             titulo: 'Error ❌',
@@ -156,7 +143,6 @@ const CuotasUsuario: React.FC = () => {
     }
   };
 
-  // Helpers
   const getEstadoPago = (idCuota: number) => {
     const pago = pagos.find(p => p.id_cuota === idCuota);
     return pago ? { pagado: true, fecha: pago.fecha_pago } : { pagado: false, fecha: null };
@@ -167,7 +153,6 @@ const CuotasUsuario: React.FC = () => {
     return montoObj ? montoObj.monto : 0;
   };
 
-  // Cancelar Modales
   const cerrarModalConfirmacion = () => {
     setModalConfirmacion({ visible: false, idCuota: null });
   };
@@ -176,8 +161,6 @@ const CuotasUsuario: React.FC = () => {
     setModalInfo({ visible: false, titulo: '', mensaje: '' });
   };
 
-
-  // --- RENDER ---
   if (loading) return <div className="cuotas-page-container"><p style={{color:'white', marginTop:50}}>Cargando datos...</p></div>;
   
   if (error) {
@@ -235,7 +218,6 @@ const CuotasUsuario: React.FC = () => {
                         const estado = getEstadoPago(c.id);
                         const montoBase = getMontoCuota(c.id);
                         
-                        // Normalización de Fechas
                         const fechaVenc = new Date(c.fecha_vencimiento);
                         fechaVenc.setHours(0, 0, 0, 0); 
                         
@@ -248,7 +230,6 @@ const CuotasUsuario: React.FC = () => {
                             fechaDePago.setHours(0, 0, 0, 0);
                         }
 
-                        // Cálculo del Interés
                         let montoFinal = montoBase;
                         let aplicaInteres = false;
                         let textoInteres = "";
@@ -320,7 +301,6 @@ const CuotasUsuario: React.FC = () => {
                                   {!estado.pagado ? (
                                     <button 
                                       className="btn-pay"
-                                      // AQUI: Llamamos a la función que abre el modal
                                       onClick={() => handleBotonPagar(c.id)}
                                     >
                                        Realizó Pago
@@ -341,7 +321,6 @@ const CuotasUsuario: React.FC = () => {
           ⬅ Volver al Listado
       </button>
 
-      {/* --- MODAL DE CONFIRMACIÓN --- */}
       {modalConfirmacion.visible && (
         <Modal
           titulo="Confirmar Pago"
@@ -353,13 +332,12 @@ const CuotasUsuario: React.FC = () => {
         />
       )}
 
-      {/* --- MODAL DE INFORMACIÓN (ÉXITO/ERROR) --- */}
       {modalInfo.visible && (
         <Modal
           titulo={modalInfo.titulo}
           mensaje={modalInfo.mensaje}
           textoConfirmar="Aceptar"
-          textoCancelar="" // Ocultamos el botón cancelar visualmente si el CSS lo permite, o simplemente no hace nada
+          textoCancelar="" 
           onConfirmar={cerrarModalInfo}
           onCancelar={cerrarModalInfo}
         />

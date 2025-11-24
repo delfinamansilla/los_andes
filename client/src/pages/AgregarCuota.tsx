@@ -29,7 +29,7 @@ const AgregarCuota: React.FC = () => {
       paramsCuota.append('fecha_vencimiento', fechaVencimiento);
 
 
-      const resCuota = await fetch('http://localhost:8080/club/cuota', {
+      const resCuota = await fetch('https://losandesback-production.up.railway.app/cuota', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: paramsCuota.toString(),
@@ -54,7 +54,7 @@ const AgregarCuota: React.FC = () => {
       paramsMonto.append('monto', monto);
       paramsMonto.append('id_cuota', idCuotaGenerado.toString());
       
-      const resMonto = await fetch('http://localhost:8080/club/montocuota', {
+      const resMonto = await fetch('https://losandesback-production.up.railway.app/montocuota', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: paramsMonto.toString(),

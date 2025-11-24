@@ -53,23 +53,23 @@ const ModificarCancha: React.FC = () => {
     params.append('estado', estado.toString());
 
     try {
-      const res = await fetch('http://localhost:8080/club/cancha', {
+      const res = await fetch('https://losandesback-production.up.railway.app/cancha', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),
       });
 
       if (res.ok) {
-        setMensajeExito('✅ Cancha actualizada correctamente');
+        setMensajeExito('Cancha actualizada correctamente');
         localStorage.removeItem('canchaSeleccionada');
         setTimeout(() => navigate('/canchas-admin'), 2000);
       } else {
-        setMensajeError('❌ Error al actualizar la cancha');
+        setMensajeError('Error al actualizar la cancha');
         setTimeout(() => setMensajeError(''), 3000);
       }
     } catch (err) {
       console.error(err);
-      setMensajeError('🚫 Error de conexión con el servidor');
+      setMensajeError('Error de conexión con el servidor');
       setTimeout(() => setMensajeError(''), 3000);
     }
   };

@@ -8,7 +8,6 @@ const Footer: React.FC = () => {
   return (
     <footer className="footer-club">
       <div className="footer-contenido">
-        {/* Columna 1: Navegación */}
         <div className="footer-columna">
           <h3>Navegación</h3>
           <ul>
@@ -20,7 +19,6 @@ const Footer: React.FC = () => {
           </ul>
         </div>
 
-        {/* Columna 2: Información */}
         <div className="footer-columna">
           <h3>Información</h3>
           <ul>
@@ -32,7 +30,6 @@ const Footer: React.FC = () => {
           </ul>
         </div>
 
-        {/* Columna 3: Atención al Socio */}
         <div className="footer-columna">
           <h3>Atención al Socio</h3>
           <div className="footer-info">
@@ -51,7 +48,6 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Columna 4: Ubicación y Redes */}
         <div className="footer-columna">
           <h3>Visitanos</h3>
           <div className="footer-info">
@@ -64,7 +60,6 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* Barra inferior */}
       <div className="footer-bottom">
         <p>© 2024 Club Deportivo Los Andes - Todos los derechos reservados</p>
         <p className="footer-creditos">Rosario, Santa Fe, Argentina</p>

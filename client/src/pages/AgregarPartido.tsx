@@ -33,8 +33,8 @@ const AgregarPartido: React.FC = () => {
 	  const fetchData = async () => {
 	    try {
 	      const [actRes, canchaRes] = await Promise.all([
-	        fetch('http://localhost:8080/club/actividad?action=listar'),
-	        fetch('http://localhost:8080/club/cancha?action=listar'),
+	        fetch('https://losandesback-production.up.railway.app/actividad?action=listar'),
+	        fetch('https://losandesback-production.up.railway.app/cancha?action=listar'),
 	      ]);
 
 	      const actividadesData = await actRes.json();
@@ -70,7 +70,7 @@ const AgregarPartido: React.FC = () => {
 	  };
 
 	  try {
-	    const res = await fetch('http://localhost:8080/club/partido?action=crear', {
+	    const res = await fetch('https://losandesback-production.up.railway.app/partido?action=crear', {
 	      method: 'POST',
 	      headers: { 'Content-Type': 'application/json' },
 	      body: JSON.stringify(payload),

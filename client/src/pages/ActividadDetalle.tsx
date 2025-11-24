@@ -48,8 +48,8 @@ const ActividadDetalle: React.FC = () => {
     const fetchData = async () => {
       try {
         const [profRes, canchaRes] = await Promise.all([
-          fetch("http://localhost:8080/club/profesor?action=listar"),
-          fetch("http://localhost:8080/club/cancha?action=listar"),
+          fetch("https://losandesback-production.up.railway.app/profesor?action=listar"),
+          fetch("https://losandesback-production.up.railway.app/cancha?action=listar"),
         ]);
         const profesoresData = await profRes.json();
         const canchasData = await canchaRes.json();
@@ -70,14 +70,14 @@ const ActividadDetalle: React.FC = () => {
       try {
         if (actividad.id_profesor) {
           const resProf = await fetch(
-            `http://localhost:8080/club/profesor?action=buscar&id=${actividad.id_profesor}`
+            `https://losandesback-production.up.railway.app/profesor?action=buscar&id=${actividad.id_profesor}`
           );
           const dataProf = await resProf.json();
           setNombreProfesor(dataProf?.nombre_completo || "Profesor no encontrado");
         }
         if (actividad.id_cancha) {
           const resCancha = await fetch(
-            `http://localhost:8080/club/cancha?action=buscar&id=${actividad.id_cancha}`
+            `https://losandesback-production.up.railway.app/cancha?action=buscar&id=${actividad.id_cancha}`
           );
           const text = await resCancha.text();
           if (text) {
@@ -115,7 +115,7 @@ const ActividadDetalle: React.FC = () => {
   const handleGuardarCambios = async () => {
     if (!actividad) return;
     try {
-      const res = await fetch(`http://localhost:8080/club/actividad?action=actualizar`, {
+      const res = await fetch(`https://losandesback-production.up.railway.app/actividad?action=actualizar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -156,7 +156,7 @@ const ActividadDetalle: React.FC = () => {
     if (!actividad) return;
     try {
       const res = await fetch(
-        `http://localhost:8080/club/actividad?action=eliminar&id=${actividad.id}`,
+        `https://losandesback-production.up.railway.app/actividad?action=eliminar&id=${actividad.id}`,
         { method: "GET", credentials: "include" }
       );
       const text = await res.text();

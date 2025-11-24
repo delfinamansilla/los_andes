@@ -25,7 +25,6 @@ public class ServletHorario extends HttpServlet {
         super();
         logicHorario = new LogicHorario();
 
-        // Configuración de Gson con soporte para LocalTime
         gson = new GsonBuilder()
                 .registerTypeAdapter(LocalTime.class,
                         (com.google.gson.JsonSerializer<LocalTime>)
@@ -93,7 +92,6 @@ public class ServletHorario extends HttpServlet {
                     break;
                 }
                 
-                //ACA EMPIEZA LO Q AGREGUE
                 case "ocupados_profesor": {
                     int idProfesor = Integer.parseInt(request.getParameter("id_profesor"));
                     List<Horario> horarios = logicHorario.getOcupadosProfesor(idProfesor);
@@ -107,8 +105,6 @@ public class ServletHorario extends HttpServlet {
                     response.getWriter().write(gson.toJson(horarios));
                     break;
                 }
-                
-                //ACA TERMINA
 
                 default:
                     response.getWriter().write("{\"error\":\"Acción GET no reconocida: " + action + "\"}");
@@ -124,9 +120,6 @@ public class ServletHorario extends HttpServlet {
         }
     }
 
-    // -------------------------------
-    // MÉTODOS POST → Agregar o Actualizar
-    // -------------------------------
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

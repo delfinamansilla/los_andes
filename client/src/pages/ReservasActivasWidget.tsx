@@ -62,23 +62,18 @@ const ReservasActivasWidget: React.FC = () => {
 
   const fetchReservas = async () => {
     try {
-      // Fetch alquileres de canchas
-      const resCanchas = await fetch(`http://localhost:8080/club/alquiler_cancha?action=mis_reservas&idUsuario=${usuario.id}`);
+      const resCanchas = await fetch(`https://losandesback-production.up.railway.app/alquiler_cancha?action=mis_reservas&idUsuario=${usuario.id}`);
       const dataCanchas: AlquilerCancha[] = await resCanchas.json();
 
-      // Fetch todas las canchas para obtener detalles
-      const resCanchasInfo = await fetch('http://localhost:8080/club/cancha?action=listar');
+      const resCanchasInfo = await fetch('https://losandesback-production.up.railway.app/cancha?action=listar');
       const canchasInfo: Cancha[] = await resCanchasInfo.json();
 
-      // Fetch alquileres de salones
-      const resSalones = await fetch(`http://localhost:8080/club/alquiler_salon?action=mis_reservas&idUsuario=${usuario.id}`);
+      const resSalones = await fetch(`https://losandesback-production.up.railway.app/alquiler_salon?action=mis_reservas&idUsuario=${usuario.id}`);
       const dataSalones: AlquilerSalon[] = await resSalones.json();
 
-      // Fetch todos los salones para obtener detalles
-      const resSalonesInfo = await fetch('http://localhost:8080/club/salon?action=listar');
+      const resSalonesInfo = await fetch('https://losandesback-production.up.railway.app/salon?action=listar');
       const salonesInfo: Salon[] = await resSalonesInfo.json();
 
-      // Unificar reservas de canchas
       const reservasCanchas: ReservaUnificada[] = dataCanchas.map(alq => {
         const cancha = canchasInfo.find(c => c.id === alq.id_cancha);
         return {
@@ -92,7 +87,6 @@ const ReservasActivasWidget: React.FC = () => {
         };
       });
 
-      // Unificar reservas de salones
       const reservasSalones: ReservaUnificada[] = dataSalones.map(alq => {
         const salon = salonesInfo.find(s => s.id === alq.idSalon);
         return {
@@ -106,7 +100,6 @@ const ReservasActivasWidget: React.FC = () => {
         };
       });
 
-      // Combinar y ordenar por fecha más cercana
       const todasReservas = [...reservasCanchas, ...reservasSalones].sort((a, b) => {
         return new Date(a.fecha).getTime() - new Date(b.fecha).getTime();
       });

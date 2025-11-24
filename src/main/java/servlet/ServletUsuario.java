@@ -44,17 +44,7 @@ public class ServletUsuario extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     	
-    	String origin = request.getHeader("Origin");
-        
-        //la version anterior era sacandole todo esto del origin y dejando el response normal
-        if (origin != null && (
-            origin.equals("http://localhost:3000") || 
-            origin.equals("https://losandes-five.vercel.app")
-            || 
-            origin.equals("https://losandesback-production.up.railway.app")
-        )) {
-            response.setHeader("Access-Control-Allow-Origin", origin);
-        }
+    	   response.setHeader("Access-Control-Allow-Origin", "*");
            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
            response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
@@ -149,27 +139,10 @@ public class ServletUsuario extends HttpServlet {
         }
     }
 
-    /**
-     * Maneja peticiones POST: login, registrar y actualizar usuario.
-     * Ejemplos:
-     *   POST /usuario?action=login
-     *   POST /usuario?action=registrar
-     *   POST /usuario?action=actualizar
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-String origin = request.getHeader("Origin");
-        
-        //la version anterior era sacandole todo esto del origin y dejando el response normal
-        if (origin != null && (
-            origin.equals("http://localhost:3000") || 
-            origin.equals("https://losandes-five.vercel.app")
-            || 
-            origin.equals("https://losandesback-production.up.railway.app")
-        )) {
-            response.setHeader("Access-Control-Allow-Origin", origin);
-        }
+    	   response.setHeader("Access-Control-Allow-Origin", "*");
            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
            response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 

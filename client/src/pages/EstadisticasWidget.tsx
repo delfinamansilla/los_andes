@@ -23,21 +23,18 @@ const EstadisticasWidget: React.FC = () => {
 
   const fetchEstadisticas = async () => {
     try {
-      // 1. Actividades inscritas
-      const resActividades = await fetch(`http://localhost:8080/club/inscripcion?action=porusuario&id_usuario=${usuario.id}`);
+      const resActividades = await fetch(`https://losandesback-production.up.railway.app/inscripcion?action=porusuario&id_usuario=${usuario.id}`);
       const actividades = await resActividades.json();
 
-      // 2. Reservas futuras (canchas + salones)
-      const resCanchas = await fetch(`http://localhost:8080/club/alquiler_cancha?action=mis_reservas&idUsuario=${usuario.id}`);
+      const resCanchas = await fetch(`https://losandesback-production.up.railway.app/alquiler_cancha?action=mis_reservas&idUsuario=${usuario.id}`);
       const canchas = await resCanchas.json();
 
-      const resSalones = await fetch(`http://localhost:8080/club/alquiler_salon?action=mis_reservas&idUsuario=${usuario.id}`);
+      const resSalones = await fetch(`https://losandesback-production.up.railway.app/alquiler_salon?action=mis_reservas&idUsuario=${usuario.id}`);
       const salones = await resSalones.json();
 
       const totalReservas = canchas.length + salones.length;
 
-      // 3. Cuotas pagadas
-      const resPagos = await fetch(`http://localhost:8080/club/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`);
+      const resPagos = await fetch(`https://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`);
       const pagos = await resPagos.json();
 
       setStats({

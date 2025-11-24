@@ -64,7 +64,6 @@ const ActividadRecienteWidget: React.FC = () => {
 
   const cargarActividades = async () => {
     try {
-      // Cargar todos los datos necesarios
       const [
         resUsuarios,
         resCanchas,
@@ -74,13 +73,13 @@ const ActividadRecienteWidget: React.FC = () => {
         resAlqSalon,
         resPagos
       ] = await Promise.all([
-        fetch('http://localhost:8080/club/usuario?action=listar'),
-        fetch('http://localhost:8080/club/cancha?action=listar'),
-        fetch('http://localhost:8080/club/salon?action=listar'),
-        fetch('http://localhost:8080/club/cuota?action=listar'),
-        fetch('http://localhost:8080/club/alquiler_cancha?action=listar'),
-        fetch('http://localhost:8080/club/alquiler_salon?action=listar'),
-        fetch('http://localhost:8080/club/pagocuota?action=listar')
+        fetch('https://losandesback-production.up.railway.app/usuario?action=listar'),
+        fetch('https://losandesback-production.up.railway.app/cancha?action=listar'),
+        fetch('https://losandesback-production.up.railway.app/salon?action=listar'),
+        fetch('https://losandesback-production.up.railway.app/cuota?action=listar'),
+        fetch('https://losandesback-production.up.railway.app/alquiler_cancha?action=listar'),
+        fetch('https://losandesback-production.up.railway.app/alquiler_salon?action=listar'),
+        fetch('https://losandesback-production.up.railway.app/pagocuota?action=listar')
       ]);
 
       const usuarios: Usuario[] = await resUsuarios.json();
@@ -93,13 +92,11 @@ const ActividadRecienteWidget: React.FC = () => {
 
       const eventosTemp: EventoActividad[] = [];
 
-      // Procesar alquileres de canchas
       alquileresCanchas.forEach(alq => {
         const usuario = usuarios.find(u => u.id === alq.id_usuario);
         const cancha = canchas.find(c => c.id === alq.id_cancha);
         
         if (usuario && cancha) {
-          // Combinar fecha y hora para ordenamiento
           const fechaHora = new Date(`${alq.fecha_alquiler}T${alq.hora_desde}`);
           
           eventosTemp.push({
@@ -112,7 +109,6 @@ const ActividadRecienteWidget: React.FC = () => {
         }
       });
 
-      // Procesar alquileres de salones
       alquileresSalones.forEach(alq => {
         const usuario = usuarios.find(u => u.id === alq.idUsuario);
         const salon = salones.find(s => s.id === alq.idSalon);
@@ -130,7 +126,6 @@ const ActividadRecienteWidget: React.FC = () => {
         }
       });
 
-      // Procesar pagos de cuotas
       pagos.forEach(pago => {
         const usuario = usuarios.find(u => u.id === pago.id_usuario);
         const cuota = cuotas.find(c => c.id === pago.id_cuota);
@@ -149,7 +144,6 @@ const ActividadRecienteWidget: React.FC = () => {
         }
       });
 
-      // Ordenar por fecha (más recientes primero) y tomar solo los últimos 5
       const eventosOrdenados = eventosTemp
         .sort((a, b) => b.fecha.getTime() - a.fecha.getTime())
         .slice(0, 5);

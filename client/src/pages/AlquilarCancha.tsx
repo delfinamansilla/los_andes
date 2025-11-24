@@ -55,7 +55,7 @@ const AlquilarCancha: React.FC = () => {
     setLoadingHoras(true);
 
     try {
-      const url = `http://localhost:8080/club/alquiler_cancha?action=horarios&idCancha=${idCancha}&fecha=${value}`;
+      const url = `https://losandesback-production.up.railway.app/alquiler_cancha?action=horarios&idCancha=${idCancha}&fecha=${value}`;
 
       const res = await fetch(url);
       const text = await res.text();
@@ -108,7 +108,7 @@ const AlquilarCancha: React.FC = () => {
       params.append('id_usuario', usuario.id);
       params.append('email', usuario.mail);
 
-      const url = `http://localhost:8080/club/alquiler_cancha?${params.toString()}`;
+      const url = `https://losandesback-production.up.railway.app/alquiler_cancha?${params.toString()}`;
 
       const res = await fetch(url);
       const text = await res.text();
@@ -121,10 +121,10 @@ const AlquilarCancha: React.FC = () => {
 	    }, 10000);
 	  } else {
 	    setModalType('error');
-	    setModalMessage('❌ No se pudo iniciar la reserva.');
+	    setModalMessage('No se pudo iniciar la reserva.');
 	  }
     } catch (err) {
-      setModalMessage('❌ Error de conexión con el servidor.');
+      setModalMessage('Error de conexión con el servidor.');
     }finally {
 	   setLoadingReservaTurno(null); 
 	 }

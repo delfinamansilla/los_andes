@@ -59,7 +59,7 @@ const ModificarProfesor: React.FC = () => {
         params.append('telefono', telefono);
         params.append('mail', mail);
 
-        const response = await fetch('http://localhost:8080/club/profesor', {
+        const response = await fetch('https://losandesback-production.up.railway.app/profesor', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: params.toString(),
@@ -70,7 +70,7 @@ const ModificarProfesor: React.FC = () => {
         const data = await response.json();
 
         if (response.ok && data.status === 'ok') {
-          setSuccess('✅ ¡Profesor actualizado correctamente!');
+          setSuccess('¡Profesor actualizado correctamente!');
         } else {
           throw new Error(data.message || 'Error al actualizar el profesor.');
         }

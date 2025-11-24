@@ -38,7 +38,7 @@ const MisActividades: React.FC = () => {
       return;
     }
 
-    const url = `http://localhost:8080/club/inscripcion?action=porusuario&id_usuario=${usuario.id}`;
+    const url = `https://losandesback-production.up.railway.app/inscripcion?action=porusuario&id_usuario=${usuario.id}`;
 
     try {
       const res = await fetch(url);
@@ -62,7 +62,7 @@ const MisActividades: React.FC = () => {
     if (!inscripcionAEliminar) return;
 
     try {
-      const url = `http://localhost:8080/club/inscripcion?action=eliminar&id=${inscripcionAEliminar.inscripcion_id}`;
+      const url = `https://losandesback-production.up.railway.app/inscripcion?action=eliminar&id=${inscripcionAEliminar.inscripcion_id}`;
       const res = await fetch(url, { method: 'GET' });
       if (!res.ok) throw new Error('Error al eliminar');
 

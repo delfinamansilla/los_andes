@@ -25,7 +25,7 @@ const Login: React.FC = () => {
           params.append('action', 'recuperar');
           params.append('mail', mail);
 
-          const res = await fetch('http://losandesback-production.up.railway.app/usuario', {
+          const res = await fetch('https://losandesback-production.up.railway.app/usuario', {
               method: 'POST',
               headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
               body: params.toString(),
@@ -39,7 +39,7 @@ const Login: React.FC = () => {
 	const verificarCuotas = async (usuarioId: number): Promise<boolean> => {
 	    try {
 		
-	      const resCuotas = await fetch('http://losandesback-production.up.railway.app/cuota?action=listar');
+	      const resCuotas = await fetch('https://losandesback-production.up.railway.app/cuota?action=listar');
 	      console.log(resCuotas);
 	      if (!resCuotas.ok) {
 	        console.error('Error al obtener cuotas');
@@ -61,7 +61,7 @@ const Login: React.FC = () => {
 	        return true; 
 	      }
 
-	      const resPagos = await fetch(`http://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${usuarioId}`);
+	      const resPagos = await fetch(`https://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${usuarioId}`);
 	      
 	      if (!resPagos.ok) {
 	        console.error('Error al obtener pagos');
@@ -168,10 +168,8 @@ const Login: React.FC = () => {
 
           <div className="form_inicio">
             
-            {/* El título cambia según el estado */}
             <h3>{isRecovering ? "Recuperar Contraseña" : "Iniciar Sesión"}</h3>
             
-            {/* El formulario ejecuta una función u otra según el estado */}
             <form onSubmit={isRecovering ? handleRecuperar : handleSubmit}>
               
               <input
@@ -183,7 +181,6 @@ const Login: React.FC = () => {
                 required
               />
 
-              {/* Si NO estamos recuperando, mostramos el campo contraseña */}
               {!isRecovering && (
                   <div className="relative password-field">
                   <input
@@ -200,12 +197,10 @@ const Login: React.FC = () => {
                   </div>
               )}
 
-              {/* --- AQUÍ ESTÁ EL BOTÓN DE OLVIDASTE TU CONTRASEÑA --- */}
               <div style={{textAlign: 'right', marginBottom: '15px', marginTop: '5px'}}>
                   {!isRecovering ? (
                       <span 
                           style={{fontSize: '0.9rem', textDecoration: 'underline', cursor: 'pointer', color: '#20321E'}}
-                          // Al hacer click, activamos el modo recuperación
                           onClick={() => { setIsRecovering(true); setError(null); setSuccess(null); }}
                       >
                           ¿Olvidaste tu contraseña?
@@ -213,7 +208,6 @@ const Login: React.FC = () => {
                   ) : (
                       <span 
                           style={{fontSize: '0.9rem', textDecoration: 'underline', cursor: 'pointer', color: '#20321E'}}
-                          // Botón para Cancelar y volver al Login
                           onClick={() => { setIsRecovering(false); setError(null); setSuccess(null); }}
                       >
                           Cancelar / Volver

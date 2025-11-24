@@ -7,8 +7,7 @@ const CambioContrasenia: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   
-  // Obtener el token de la URL: localhost:3000/cambiar-contrasenia?token=XYZ...
-  const token = searchParams.get('token'); 
+ const token = searchParams.get('token'); 
   
   const [pass1, setPass1] = useState('');
   const [pass2, setPass2] = useState('');
@@ -24,12 +23,12 @@ const CambioContrasenia: React.FC = () => {
     }
 
     const params = new URLSearchParams();
-    params.append('action', 'restablecer'); // Llama al segundo caso del Servlet
-    params.append('token', token);          // Enviamos el Token, no el ID
+    params.append('action', 'restablecer'); 
+    params.append('token', token);        
     params.append('nueva_pass', pass1);
 
     try {
-        const res = await fetch('http://localhost:8080/club/usuario', {
+        const res = await fetch('https://losandesback-production.up.railway.app/usuario', {
             method: 'POST',
             body: params
         });
@@ -42,7 +41,7 @@ const CambioContrasenia: React.FC = () => {
             setMensaje('❌ ' + (data.error || 'Error al cambiar contraseña'));
         }
     } catch (err) {
-        setMensaje('❌ Error de conexión');
+        setMensaje('Error de conexión');
     }
   };
 

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import NavbarSocio from './NavbarSocio';
 import '../styles/MisAlquileresSalon.css';
 import Footer from './Footer';
-// Interfaces
 interface Salon {
   id: number;
   nombre: string;
@@ -43,12 +42,11 @@ const MisAlquileresSalon: React.FC = () => {
       }
       const usuario = JSON.parse(usuarioStorage);
       
-      // AJUSTE: Usar URL correcta
-      const resReservas = await fetch(`http://localhost:8080/club/alquiler_salon?action=mis_reservas&idUsuario=${usuario.id}`);
+      const resReservas = await fetch(`https://losandesback-production.up.railway.app/alquiler_salon?action=mis_reservas&idUsuario=${usuario.id}`);
       if (!resReservas.ok) throw new Error('Error al obtener reservas');
       const dataReservas: Alquiler[] = await resReservas.json();
 
-      const resSalones = await fetch('http://localhost:8080/club/salon?action=listar');
+      const resSalones = await fetch('https://losandesback-production.up.railway.app/salon?action=listar');
       if (!resSalones.ok) throw new Error('Error al obtener salones');
       const dataSalones: Salon[] = await resSalones.json();
 
@@ -81,12 +79,11 @@ const MisAlquileresSalon: React.FC = () => {
   const confirmarEliminar = async () => {
     if (!reservaAEliminar) return;
     try {
-      const res = await fetch(`http://localhost:8080/club/alquiler_salon?action=eliminar&id=${reservaAEliminar.id}`);
+      const res = await fetch(`https://losandesback-production.up.railway.app/alquiler_salon?action=eliminar&id=${reservaAEliminar.id}`);
       if (!res.ok) throw new Error('No se pudo eliminar');
       
       setShowModalEliminar(false);
       setReservaAEliminar(null);
-      // Recargar la lista localmente
       setReservas(prev => prev.filter(r => r.id !== reservaAEliminar.id));
     } catch (err: any) {
       alert(err.message);
@@ -122,7 +119,6 @@ const MisAlquileresSalon: React.FC = () => {
             {reservas.map((item) => (
               <div key={item.id} className="reserva-card">
                 
-                {/* IMAGEN A LA IZQUIERDA */}
                 <div className="reserva-img">
                   {item.datosSalon?.imagen ? (
                     <img src={item.datosSalon.imagen} alt={item.datosSalon.nombre} />
@@ -133,16 +129,13 @@ const MisAlquileresSalon: React.FC = () => {
                   )}
                 </div>
 
-                {/* CONTENIDO A LA DERECHA */}
                 <div className="reserva-content">
                   
-                  {/* HEADER: Nombre + Badge */}
                   <div className="card-header">
                     <h3>{item.datosSalon?.nombre || 'Salón'}</h3>
                     <span className="estado-badge">Confirmado</span>
                   </div>
 
-                  {/* BODY: Fecha y Hora */}
                   <div className="card-body">
                     <div className="dato-item">
                       <i className="fa-regular fa-calendar"></i>
@@ -154,7 +147,6 @@ const MisAlquileresSalon: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* FOOTER: Botón */}
                   <div className="card-footer">
                     <button 
                       className="btn-cancelar-reserva" 
@@ -171,7 +163,6 @@ const MisAlquileresSalon: React.FC = () => {
           </div>
         </div>
 
-        {/* Modal */}
         {showModalEliminar && (
           <div className="modal-backdrop">
             <div className="modal">

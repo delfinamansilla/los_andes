@@ -27,8 +27,8 @@ const AgregarActividad: React.FC = () => {
     const fetchData = async () => {
       try {
         const [profRes, canchaRes] = await Promise.all([
-          fetch('http://localhost:8080/club/profesor?action=listar'),
-          fetch('http://localhost:8080/club/cancha?action=listar'),
+          fetch('https://losandesback-production.up.railway.app/profesor?action=listar'),
+          fetch('https://losandesback-production.up.railway.app/cancha?action=listar'),
         ]);
 
         const profesoresData = await profRes.json();
@@ -64,7 +64,7 @@ const AgregarActividad: React.FC = () => {
     };
 
     try {
-      const res = await fetch('http://localhost:8080/club/actividad?action=crear', {
+      const res = await fetch('https://losandesback-production.up.railway.app/actividad?action=crear', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

@@ -60,16 +60,16 @@ const Registro: React.FC = () => {
 	  const text = await res.text();
 
 	  if (res.ok) {
-	    setSuccess('✅ Usuario registrado correctamente. Redirigiendo...');
+	    setSuccess('Usuario registrado correctamente. Redirigiendo...');
 	    setTimeout(() => navigate('/login'), 4000);
 	  } else {
 		console.log(text);
-	    setError(`⚠ Error al registrar el usuario: ${text}`);
+	    setError(`Error al registrar el usuario: ${text}`);
 	  }
 
     } catch (err) {
       console.error(err);
-      setError('🚫 Error al conectar con el servidor.');
+      setError('Error al conectar con el servidor.');
     }
   };
 

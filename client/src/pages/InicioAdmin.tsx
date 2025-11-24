@@ -65,7 +65,6 @@ const InicioAdmin: React.FC = () => {
           </div>
         </div>
 
-        {/* 🌟 NUEVO WIDGET DE ESTADÍSTICAS */}
         <EstadisticasAdminWidget />
 		<ActividadRecienteWidget />
 

@@ -28,9 +28,9 @@ const AgregarProfesor: React.FC = () => {
       params.append('telefono', telefono);
       params.append('mail', mail);
 	  
-	  const url = 'http://localhost:8080/profesor';
+	  const url = 'https://losandesback-production.up.railway.app/profesor';
 
-      const res = await fetch('http://localhost:8080/club/profesor', {
+      const res = await fetch('https://losandesback-production.up.railway.app/profesor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),
@@ -43,17 +43,17 @@ const AgregarProfesor: React.FC = () => {
       const data = await res.json();
 
       if (data && data.status === 'ok') {
-        setSuccess('✅ ¡Profesor agregado exitosamente!');
+        setSuccess('¡Profesor agregado exitosamente!');
 
         setNombreCompleto('');
         setTelefono('');
         setMail('');
       } else {
-        setError(data.message || '⚠ Error inesperado al agregar el profesor.');
+        setError(data.message || 'Error inesperado al agregar el profesor.');
       }
     } catch (err) {
       console.error(err);
-      setError('🚫 Error al conectar con el servidor.');
+      setError('Error al conectar con el servidor.');
     }
   };
 
@@ -107,7 +107,6 @@ const AgregarProfesor: React.FC = () => {
           <button type="submit" className="btn_agregar">Agregar Profesor</button>
         </form>
 
-        {/* Mostrar mensajes de estado */}
         {error && <p className="error-box">{error}</p>}
         {success && <p className="success-box">{success}</p>}
       </div>

@@ -16,10 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.Map;
 
-/**
- * Servlet para gestionar las operaciones CRUD de Inscripcion.
- * Soporta listar, buscar, crear, actualizar y eliminar inscripciones.
- */
+
 @WebServlet({"/inscripcion", "/Inscripcion", "/INSCRIPCION"})
 public class ServletInscripcion extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -30,7 +27,6 @@ public class ServletInscripcion extends HttpServlet {
         super();
         logicInscripcion = new LogicInscripcion();
         
-        // ✅ Registrá el adaptador para LocalDate
         gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDate.class,
                         (com.google.gson.JsonSerializer<LocalDate>) (src, typeOfSrc, context) ->
@@ -44,7 +40,7 @@ public class ServletInscripcion extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     	
-    	response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    	response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         
@@ -57,7 +53,6 @@ public class ServletInscripcion extends HttpServlet {
                 return;
             }
             
-            // ✅ Limpiá espacios y convertí a minúsculas
             action = action.trim().toLowerCase();
             
             System.out.println("🔹 Acción procesada: '" + action + "'");
@@ -97,7 +92,6 @@ public class ServletInscripcion extends HttpServlet {
                     int idUsuario = Integer.parseInt(idParam);
                     System.out.println("🔹 Buscando inscripciones para usuario: " + idUsuario);
 
-                    // ✅ Usá el nuevo método que trae los detalles
                     LinkedList<Map<String, Object>> inscripciones = logicInscripcion.getInscripcionesConDetalles(idUsuario);
                     System.out.println("🔹 Inscripciones encontradas: " + inscripciones.size());
 
@@ -127,9 +121,6 @@ public class ServletInscripcion extends HttpServlet {
         }
     }
 
-    // -------------------------------------------------
-    // MÉTODO POST → crear o actualizar inscripción
-    // -------------------------------------------------
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

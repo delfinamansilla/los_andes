@@ -19,7 +19,7 @@ const CanchasAdmin = () => {
 
   const fetchCanchas = async () => {
     try {
-      const res = await fetch('http://localhost:8080/club/cancha?action=listar');
+      const res = await fetch('https://losandesback-production.up.railway.app/cancha?action=listar');
       if (!res.ok) throw new Error('Error al traer las canchas');
       const data: Cancha[] = await res.json();
       setCanchas(data);
@@ -42,7 +42,7 @@ const CanchasAdmin = () => {
     if (!canchaAEliminar) return;
     try {
       const res = await fetch(
-        `http://localhost:8080/club/cancha?action=eliminar&id=${canchaAEliminar.id}`
+        `https://losandesback-production.up.railway.app/cancha?action=eliminar&id=${canchaAEliminar.id}`
       );
       if (!res.ok) throw new Error('Error al eliminar cancha');
       setShowModalEliminar(false);

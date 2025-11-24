@@ -43,9 +43,9 @@ const EstadoCuentaWidget: React.FC = () => {
     }
 
     Promise.all([
-      fetch('http://localhost:8080/club/cuota?action=listar').then(res => res.json()),
-      fetch('http://localhost:8080/club/montocuota?action=listar').then(res => res.json()),
-      fetch(`http://localhost:8080/club/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`).then(res => res.json())
+      fetch('https://losandesback-production.up.railway.app/cuota?action=listar').then(res => res.json()),
+      fetch('https://losandesback-production.up.railway.app/montocuota?action=listar').then(res => res.json()),
+      fetch(`https://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`).then(res => res.json())
     ])
     .then(([todasLasCuotas, todosLosMontos, misPagos]: [Cuota[], Monto[], Pago[]]) => {
       const datosCombinados = todasLasCuotas.map(cuota => {
@@ -62,15 +62,12 @@ const EstadoCuentaWidget: React.FC = () => {
         };
       });
 
-      // Filtrar pendientes
       const pendientes = datosCombinados.filter(c => !c.estaPagada);
       setCuotasPendientes(pendientes);
 
-      // Calcular deuda total
       const deuda = pendientes.reduce((sum, c) => sum + c.monto, 0);
       setTotalDeuda(deuda);
 
-      // Obtener último pago
       const pagadas = datosCombinados
         .filter(c => c.estaPagada && c.fecha_pago)
         .sort((a, b) => new Date(b.fecha_pago!).getTime() - new Date(a.fecha_pago!).getTime());
@@ -79,7 +76,6 @@ const EstadoCuentaWidget: React.FC = () => {
         setUltimoPago(pagadas[0]);
       }
 
-      // Obtener próximo vencimiento
       const hoy = new Date();
       const proximasPendientes = pendientes
         .filter(c => new Date(c.fecha_vencimiento) >= hoy)
@@ -126,7 +122,6 @@ const EstadoCuentaWidget: React.FC = () => {
       </div>
 
       <div className="widget-cards">
-        {/* Card de cuotas pendientes */}
         <div className={`info-card ${cuotasPendientes.length > 0 ? 'card-warning' : 'card-success'}`}>
           <div className="card-icon">
             {cuotasPendientes.length > 0 ? (
@@ -144,7 +139,6 @@ const EstadoCuentaWidget: React.FC = () => {
           </div>
         </div>
 
-        {/* Card de próximo vencimiento */}
         <div className="info-card card-info-blue">
           <div className="card-icon">
             <Calendar size={32} />
@@ -162,7 +156,6 @@ const EstadoCuentaWidget: React.FC = () => {
           </div>
         </div>
 
-        {/* Card de último pago */}
         <div className="info-card card-success-light">
           <div className="card-icon">
             <CheckCircle size={32} />

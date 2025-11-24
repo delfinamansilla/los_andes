@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import NavbarSocio from './NavbarSocio';
 import Footer from './Footer';
 import '../styles/MisCuotas.css';
@@ -37,22 +38,25 @@ const MisCuotas: React.FC = () => {
   const [paymentId, setPaymentId] = useState<string | null>(null);
   const [isPagarLoading, setIsPagarLoading] = useState(false);
 
-  // 👇 NUEVO: estado del filtro
   const [filtro, setFiltro] = useState("todas");
 
   const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  const cargarDatos = useCallback(() => {
+      if (!usuario || !usuario.id) {
+        setError('No se pudo identificar al usuario.');
+        setLoading(false);
+        return;
+      }
 
-  useEffect(() => {
-    if (!usuario || !usuario.id) {
-      setError('No se pudo identificar al usuario.');
-      setLoading(false);
-      return;
-    }
+      setLoading(true);
 
     Promise.all([
-      fetch('http://localhost:8080/club/cuota?action=listar').then(res => res.json()),
-      fetch('http://localhost:8080/club/montocuota?action=listar').then(res => res.json()),
-      fetch(`http://localhost:8080/club/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`).then(res => res.json())
+      fetch('https://losandesback-production.up.railway.app/cuota?action=listar').then(res => res.json()),
+      fetch('https://losandesback-production.up.railway.app/montocuota?action=listar').then(res => res.json()),
+      fetch(`https://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`).then(res => res.json())
     ])
     .then(([todasLasCuotas, todosLosMontos, misPagos]: [Cuota[], Monto[], Pago[]]) => {
       const datosCombinados = todasLasCuotas.map(cuota => {
@@ -79,7 +83,24 @@ const MisCuotas: React.FC = () => {
     .finally(() => {
       setLoading(false);
     });
-  }, []);
+  }, [usuario.id]);
+  
+  useEffect(() => {
+      cargarDatos();
+    }, [cargarDatos]);
+  
+	useEffect(() => {
+	    const queryParams = new URLSearchParams(location.search);
+	    const status = queryParams.get('collection_status');
+	    
+	    if (status === 'approved') {
+	      setShowSuccessModal(true);
+	      
+	      navigate(location.pathname, { replace: true });
+	      
+	      cargarDatos();
+	    }
+	  }, [location, navigate, cargarDatos]);
 
   const formatearPeriodo = (nro: number) => {
     if (!nro) return "N/A";
@@ -104,7 +125,7 @@ const MisCuotas: React.FC = () => {
     params.append('id_cuota', String(cuota.id_cuota));
     params.append('monto', String(cuota.monto));
 
-    fetch('http://localhost:8080/club/pagocuota', {
+    fetch('https://losandesback-production.up.railway.app/pagocuota', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: params
@@ -214,6 +235,27 @@ const MisCuotas: React.FC = () => {
           </div>
         </div>
       )}
+	  
+	  {showSuccessModal && (
+          <div className="modal-qr-overlay">
+            <div className="modal-qr-content" style={{borderTop: '5px solid #4CAF50'}}>
+               <div style={{fontSize: '50px', color: '#4CAF50', marginBottom: '10px'}}>
+                 ✅
+               </div>
+               <h2 style={{color: '#20321E'}}>¡Pago Exitoso!</h2>
+               <p>Hemos registrado tu pago correctamente.</p>
+               <p>Recibirás el comprobante en tu correo electrónico.</p>
+               
+               <button 
+                 onClick={() => setShowSuccessModal(false)} 
+                 className="btn-primary"
+                 style={{marginTop: '20px'}}
+               >
+                 Aceptar
+               </button>
+            </div>
+          </div>
+        )}
     </div>
   );
 };

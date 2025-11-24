@@ -30,8 +30,8 @@ const ListadoCuotas: React.FC = () => {
   const cargarDatos = async () => {
     try {
       const [resCuotas, resMontos] = await Promise.all([
-        fetch('http://localhost:8080/club/cuota?action=listar'),
-        fetch('http://localhost:8080/club/montocuota?action=listar')
+        fetch('https://losandesback-production.up.railway.app/cuota?action=listar'),
+        fetch('https://losandesback-production.up.railway.app/montocuota?action=listar')
       ]);
 
       if (!resCuotas.ok) throw new Error('Error al cargar el listado de cuotas');

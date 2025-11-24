@@ -14,10 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-/**
- * Servlet para gestionar las operaciones CRUD de Monto_Cuota.
- * Soporta listar, buscar, crear, actualizar y eliminar montos de cuota.
- */
+
 @WebServlet({"/montocuota", "/MontoCuota", "/MONTOCUOTA"})
 public class ServletMonto_cuota extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -28,7 +25,6 @@ public class ServletMonto_cuota extends HttpServlet {
         super();
         logicMontoCuota = new LogicMonto_cuota();
         
-        // ✅ Registrá el adaptador para LocalDate
         gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDate.class,
                         (com.google.gson.JsonSerializer<LocalDate>) (src, typeOfSrc, context) ->
@@ -43,7 +39,7 @@ public class ServletMonto_cuota extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     	
-    	response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    	response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         
@@ -140,14 +136,12 @@ public class ServletMonto_cuota extends HttpServlet {
 
             switch (action.toLowerCase()) {
                 case "crear": {
-                    // El monto y el id_cuota vienen del formulario
                     double monto = Double.parseDouble(request.getParameter("monto"));
                     int idCuota = Integer.parseInt(request.getParameter("id_cuota"));
 
                     Monto_cuota nuevaMontoCuota = new Monto_cuota();
                     nuevaMontoCuota.setMonto(monto);
                     nuevaMontoCuota.setId_cuota(idCuota);
-                    // La fecha se asigna automáticamente en el constructor a LocalDate.now()
 
                     logicMontoCuota.add(nuevaMontoCuota);
                     response.getWriter().write("{\"mensaje\":\"Monto de cuota creado correctamente\"}");

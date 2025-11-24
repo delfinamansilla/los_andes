@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import NavbarSocio from './NavbarSocio';
-import '../styles/Canchas.css'; // <-- Importa el nuevo CSS
+import '../styles/Canchas.css';
 import { useNavigate } from 'react-router-dom';
 import Footer from './Footer';
 
@@ -13,17 +13,17 @@ interface Cancha {
   estado: boolean;
 }
 
-const Canchas: React.FC = () => { // Usamos React.FC para consistencia
+const Canchas: React.FC = () => {
   const [canchas, setCanchas] = useState<Cancha[]>([]);
-  const [loading, setLoading] = useState(true); // Añadimos estado de carga
-  const [error, setError] = useState<string | null>(null); // Mejor manejo de errores
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState<string | null>(null); 
   
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCanchas = async () => {
       try {
-        const res = await fetch('http://localhost:8080/club/cancha?action=listar');
+        const res = await fetch('https://losandesback-production.up.railway.app/cancha?action=listar');
         if (!res.ok) throw new Error('No se pudieron cargar las canchas.');
         const data: Cancha[] = await res.json();
         setCanchas(data);
