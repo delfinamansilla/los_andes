@@ -113,13 +113,25 @@ const MisCuotas: React.FC = () => {
 	      })
 	      .then(res => res.json())
 	      .then(data => {
-	        console.log("Pago registrado en BD:", data);
+			setCuotasProcesadas(prevCuotas => 
+	            prevCuotas.map(c => {
+	                
+	                if (c.id_cuota.toString() === idCuotaRecuperado) {
+	                    return { 
+	                        ...c, 
+	                        estaPagada: true, 
+	                        fecha_pago: new Date().toISOString().split('T')[0] // Ponemos la fecha de hoy
+	                    };
+	                }
+	                return c;
+	            })
+	        );
+
+	        setQrData(null); 
 	        
 	        setShowSuccessModal(true);
 	        
 	        navigate(location.pathname, { replace: true });
-	        
-	        cargarDatos();
 	      })
 	      .catch(err => {
 	        console.error("Error al registrar el pago en el backend", err);
@@ -256,11 +268,10 @@ const MisCuotas: React.FC = () => {
                 </p>
                 
                 <div style={{background: 'white', padding: '10px', display: 'inline-block', borderRadius: '8px'}}>
-                  {/* El QR sigue funcionando */}
+
                   <QRCodeSVG value={qrData!} size={220} />
                 </div>
                 
-                {/* 👇👇 ESTE ES EL BOTÓN QUE PEDISTE 👇👇 */}
                 <div style={{marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center'}}>
                     
                     <a 
@@ -269,7 +280,7 @@ const MisCuotas: React.FC = () => {
                       style={{
                           textDecoration: 'none', 
                           padding: '12px 25px', 
-                          backgroundColor: '#009EE3', // Azul Mercado Pago
+                          backgroundColor: '#009EE3', 
                           color: 'white', 
                           borderRadius: '5px',
                           fontWeight: 'bold',

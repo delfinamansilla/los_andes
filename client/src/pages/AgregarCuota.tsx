@@ -14,13 +14,17 @@ const AgregarCuota: React.FC = () => {
     setSuccess(null);
 
     if (!fechaVencimiento || !monto) {
-      setError('❌ La fecha de vencimiento y el monto son obligatorios.');
+      setError('La fecha de vencimiento y el monto son obligatorios.');
       return;
     }
 
     try {
+		
+      const fechaHoy = new Date();
+	  const anio = fechaHoy.getFullYear();
+	  const mes = fechaHoy.getMonth() + 1;
 
-      const nroCuotaActual = new Date().getMonth() + 1;
+      const nroCuotaActual = (anio * 100) + mes;
 
 
       const paramsCuota = new URLSearchParams();
@@ -63,7 +67,7 @@ const AgregarCuota: React.FC = () => {
       const dataMonto = await resMonto.json();
 
       if (resMonto.ok) {
-        setSuccess(` ¡Listo! Cuota del mes ${nroCuotaActual} creada con monto $${monto}.`);
+        setSuccess(`¡Listo! Cuota ${mes}/${anio} (Cod: ${nroCuotaActual}) creada con monto $${monto}.`);
         setFechaVencimiento('');
         setMonto('');
       } else {

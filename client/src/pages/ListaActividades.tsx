@@ -24,8 +24,7 @@ const ListaActividades: React.FC = () => {
 
       try {
         const res = await fetch('https://losandesback-production.up.railway.app/actividad?action=listar', {
-          method: 'GET',
-          credentials: 'include',
+          method: 'GET'
         });
 
         const text = await res.text();

@@ -63,7 +63,7 @@ const AdminPartidos: React.FC = () => {
         url = `https://losandesback-production.up.railway.app/partido?action=listar`;
       }
 
-      const res = await fetch(url, { method: "GET", credentials: "include" });
+      const res = await fetch(url, { method: "GET"});
 
       const texto = await res.text();
       const data = texto ? JSON.parse(texto) : [];

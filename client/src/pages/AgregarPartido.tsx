@@ -181,7 +181,7 @@ const AgregarPartido: React.FC = () => {
 		  )}
 		</button>
 
-		<button type="button" onClick={() => navigate('/partidos')}>
+		<button type="button" onClick={() => navigate('/admin-partidos')}>
 		  Volver
 		</button>
 		</div>
