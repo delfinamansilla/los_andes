@@ -43,7 +43,18 @@ public class ServletUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    	
+    	String origin = request.getHeader("Origin");
+        
+        //la version anterior era sacandole todo esto del origin y dejando el response normal
+        if (origin != null && (
+            origin.equals("http://localhost:3000") || 
+            origin.equals("https://losandes-five.vercel.app")
+            || 
+            origin.equals("https://losandesback-production.up.railway.app")
+        )) {
+            response.setHeader("Access-Control-Allow-Origin", origin);
+        }
            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
            response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 

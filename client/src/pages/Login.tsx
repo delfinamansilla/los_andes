@@ -103,7 +103,7 @@ const Login: React.FC = () => {
       params.append('action', 'login');
       params.append('mail', mail);
       params.append('contrasenia', contrasenia);
-      const res = await fetch('http://localhost:8080/club/usuario', {
+      const res = await fetch('https://losandesback-production.up.railway.app/usuario', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         credentials: 'include',

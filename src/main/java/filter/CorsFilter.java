@@ -1,4 +1,4 @@
-package filter;
+/*package filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,8 +16,16 @@ public class CorsFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
 
-        // 🔥 Configuración de CORS
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        String origin = request.getHeader("Origin");
+        
+        //la version anterior era sacandole todo esto del origin y dejando el response normal
+        if (origin != null && (
+            origin.equals("http://localhost:3000") || 
+            origin.equals("https://losandes-five.vercel.app")
+        )) {
+            response.setHeader("Access-Control-Allow-Origin", origin);
+        }
+        
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -28,7 +36,7 @@ public class CorsFilter implements Filter {
             return; // no seguir al siguiente filtro ni servlet
         }
 
-        // Continuar con la cadena normal
         chain.doFilter(req, res);
     }
 }
+*/

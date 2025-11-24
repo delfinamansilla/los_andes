@@ -7,11 +7,11 @@ public class DbConnector {
     private static DbConnector instancia;
     
     private String driver="com.mysql.cj.jdbc.Driver";
-    private String host="localhost";
+    private String host="mysql.railway.internal";
     private String port="3306";
-    private String user="los_andes_user";
-    private String password="lasnenas";
-    private String db="los_andes";
+    private String user="root";
+    private String password="DZzFsjFltPtFZLhFqPSPHyExwsgUVnIm";
+    private String db="railway";
     
     private Connection conn=null;
     
@@ -34,7 +34,8 @@ public class DbConnector {
         try {
             // Si no hay conexión o se cayó, la creamos de nuevo
             if(conn==null || conn.isClosed()) {
-                conn=DriverManager.getConnection("jdbc:mysql://"+host+":"+port+"/"+db, user, password);
+            	// Agregamos ?allowPublicKeyRetrieval=true&useSSL=false
+            	conn=DriverManager.getConnection("jdbc:mysql://"+host+":"+port+"/"+db+"?allowPublicKeyRetrieval=true&useSSL=false", user, password);
                 System.out.println("🟢 Conexión a BD establecida.");
             }
         } catch (SQLException e) {
