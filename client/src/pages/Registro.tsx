@@ -51,7 +51,7 @@ const Registro: React.FC = () => {
       params.append('contrasenia', formData.contrasenia);
       params.append('rol', rol);
 
-	  const res = await fetch('http://losandesback-production.up.railway.app/usuario', {
+	  const res = await fetch('https://losandesback-production.up.railway.app/usuario', {
 	    method: 'POST',
 	    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 	    body: params.toString(),
