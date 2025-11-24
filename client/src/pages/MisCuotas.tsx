@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import NavbarSocio from './NavbarSocio';
 import Footer from './Footer';
@@ -51,7 +51,7 @@ const MisCuotas: React.FC = () => {
         return;
       }
 
-      setLoading(true);
+    setLoading(true);
 
     Promise.all([
       fetch('https://losandesback-production.up.railway.app/cuota?action=listar').then(res => res.json()),
