@@ -17,10 +17,6 @@ import entities.Usuario;
 import logic.LogicUsuario;
 import logic.LogicRecuperacionPass;
 
-/**
- * Servlet para gestionar las operaciones CRUD de Usuario.
- * Incluye login, alta, modificación, eliminación y listado.
- */
 @WebServlet("/usuario")
 @MultipartConfig
 public class ServletUsuario extends HttpServlet {
@@ -34,12 +30,7 @@ public class ServletUsuario extends HttpServlet {
         logicRecupero = new LogicRecuperacionPass(); 
     }
 
-    /**
-     * Maneja peticiones GET: listar, buscar por ID o eliminar usuario.
-     * Ejemplos:
-     *   GET /usuario?action=listar
-     *   GET /usuario?action=eliminar&id=5
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

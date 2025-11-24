@@ -90,16 +90,41 @@ const MisCuotas: React.FC = () => {
       cargarDatos();
     }, [cargarDatos]);
   
-	useEffect(() => {
+	  useEffect(() => {
 	    const queryParams = new URLSearchParams(location.search);
 	    const status = queryParams.get('collection_status');
+	    const externalRef = queryParams.get('external_reference');
 	    
-	    if (status === 'approved') {
-	      setShowSuccessModal(true);
+	    if (status === 'approved' && externalRef) {
 	      
-	      navigate(location.pathname, { replace: true });
-	      
-	      cargarDatos();
+	      const parts = externalRef.split('_');
+	      const idCuotaRecuperado = parts[1];
+	      const idUsuarioRecuperado = parts[3];
+
+	      const params = new URLSearchParams();
+	      params.append('action', 'pagar');
+	      params.append('id_cuota', idCuotaRecuperado);
+	      params.append('id_usuario', idUsuarioRecuperado);
+
+	      fetch('https://losandesback-production.up.railway.app/pagocuota', {
+	        method: 'POST',
+	        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+	        body: params
+	      })
+	      .then(res => res.json())
+	      .then(data => {
+	        console.log("Pago registrado en BD:", data);
+	        
+	        setShowSuccessModal(true);
+	        
+	        navigate(location.pathname, { replace: true });
+	        
+	        cargarDatos();
+	      })
+	      .catch(err => {
+	        console.error("Error al registrar el pago en el backend", err);
+
+	      });
 	    }
 	  }, [location, navigate, cargarDatos]);
 

@@ -185,6 +185,8 @@ public class ServletPagoCuota extends HttpServlet {
                 backUrls.addProperty("pending", "https://losandesback-production.up.railway.app/mis-cuotas");
                 preferenceRequest.add("back_urls", backUrls);
                 
+                preferenceRequest.addProperty("auto_return", "approved");
+                
                 preferenceRequest.addProperty("external_reference", "cuota_" + idCuota + "_usuario_" + idUsuario);
                 
                 String jsonPayload = gson.toJson(preferenceRequest);

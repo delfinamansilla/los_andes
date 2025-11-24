@@ -60,6 +60,10 @@ public class ServletAlquiler_cancha extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws ServletException, IOException {
+    	
+    	resp.setHeader("Access-Control-Allow-Origin", "*");
+        resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
         resp.setContentType("application/json;charset=UTF-8");
         String action = req.getParameter("action");
@@ -409,6 +413,10 @@ public class ServletAlquiler_cancha extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
         throws ServletException, IOException {
+    	
+    	resp.setHeader("Access-Control-Allow-Origin", "*");
+        resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
         resp.setContentType("application/json;charset=UTF-8");
         String action = req.getParameter("action");
