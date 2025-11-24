@@ -113,13 +113,10 @@ const MisCuotas: React.FC = () => {
 	      })
 	      .then(res => res.json())
 	      .then(data => {
-	        console.log("Pago registrado en BD:", data);
 			
-	        setShowSuccessModal(true);
-	        
+	        setShowSuccessModal(true);    
 	        navigate(location.pathname, { replace: true });
 	        
-	        cargarDatos();
 	      })
 	      .catch(err => {
 	        console.error("Error al registrar el pago en el backend", err);
