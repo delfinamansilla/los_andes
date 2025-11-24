@@ -106,7 +106,6 @@ const Login: React.FC = () => {
       const res = await fetch('https://losandesback-production.up.railway.app/usuario', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        credentials: 'include',
         body: params.toString(),
       });
 
