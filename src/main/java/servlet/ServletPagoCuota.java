@@ -180,9 +180,9 @@ public class ServletPagoCuota extends HttpServlet {
                 preferenceRequest.add("payer", payer);
                 
                 JsonObject backUrls = new JsonObject();
-                backUrls.addProperty("success", "https://losandesback-production.up.railway.app/mis-cuotas");
-                backUrls.addProperty("failure", "https://losandesback-production.up.railway.app/mis-cuotas");
-                backUrls.addProperty("pending", "https://losandesback-production.up.railway.app/mis-cuotas");
+                backUrls.addProperty("success", "https://los-andes-six.vercel.app/mis-cuotas");
+                backUrls.addProperty("failure", "https://los-andes-six.vercel.app/mis-cuotas");
+                backUrls.addProperty("pending", "https://los-andes-six.vercel.app/mis-cuotas");
                 preferenceRequest.add("back_urls", backUrls);
                 
                 preferenceRequest.addProperty("auto_return", "approved");

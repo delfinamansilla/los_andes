@@ -247,15 +247,50 @@ const MisCuotas: React.FC = () => {
         <div className="modal-qr-overlay">
           <div className="modal-qr-content">
             {isPagarLoading ? (
-              <p>Generando código QR...</p>
+              <p>Generando link de pago...</p>
             ) : (
               <>
-                <h3>Escaneá con la app de Mercado Pago</h3>
-                <QRCodeSVG value={qrData!} size={256} />
-                <p className="payment-id">ID de Pago: {paymentId}</p>
-                <button onClick={() => setQrData(null)} className="btn-cerrar-modal">
-                  Cerrar
+                <h3>Paga con Mercado Pago</h3>
+				<p style={{fontSize: '0.9rem', marginBottom: '15px'}}>
+                  Escaneá el QR o usá el botón para pagar ahora mismo.
+                </p>
+                
+                <div style={{background: 'white', padding: '10px', display: 'inline-block', borderRadius: '8px'}}>
+                  {/* El QR sigue funcionando */}
+                  <QRCodeSVG value={qrData!} size={220} />
+                </div>
+                
+                {/* 👇👇 ESTE ES EL BOTÓN QUE PEDISTE 👇👇 */}
+                <div style={{marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center'}}>
+                    
+                    <a 
+                      href={qrData!} 
+                      className="btn-primary" 
+                      style={{
+                          textDecoration: 'none', 
+                          padding: '12px 25px', 
+                          backgroundColor: '#009EE3', // Azul Mercado Pago
+                          color: 'white', 
+                          borderRadius: '5px',
+                          fontWeight: 'bold',
+                          display: 'inline-block'
+                      }}
+                    >
+                        Ir a Pagar (Link Web)
+                    </a>
+                    
+                    <p style={{fontSize: '0.8rem', color: '#666'}}>
+                        (Al pagar volverás automáticamente aquí)
+                    </p>
+
+                    <button 
+                        onClick={() => setQrData(null)} 
+                        className="btn-cerrar-modal"
+                        style={{marginTop: '10px'}}
+                    >
+                      Cerrar
                 </button>
+				</div>
               </>
             )}
           </div>
@@ -269,8 +304,7 @@ const MisCuotas: React.FC = () => {
                  ✅
                </div>
                <h2 style={{color: '#20321E'}}>¡Pago Exitoso!</h2>
-               <p>Hemos registrado tu pago correctamente.</p>
-               <p>Recibirás el comprobante en tu correo electrónico.</p>
+               <p>El pago se registró correctamente en el sistema.</p>
                
                <button 
                  onClick={() => setShowSuccessModal(false)} 

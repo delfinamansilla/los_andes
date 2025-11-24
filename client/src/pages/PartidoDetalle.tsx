@@ -163,7 +163,7 @@ const PartidoDetalle: React.FC = () => {
     try {
       const res = await fetch(
         `https://losandesback-production.up.railway.app/partido?action=eliminar&id=${partido.id}`,
-        { method: "GET", credentials: "include" }
+        { method: "GET"}
       );
       const text = await res.text();
       const data = JSON.parse(text);
