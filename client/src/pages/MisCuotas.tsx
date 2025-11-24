@@ -113,25 +113,13 @@ const MisCuotas: React.FC = () => {
 	      })
 	      .then(res => res.json())
 	      .then(data => {
-			setCuotasProcesadas(prevCuotas => 
-	            prevCuotas.map(c => {
-	                
-	                if (c.id_cuota.toString() === idCuotaRecuperado) {
-	                    return { 
-	                        ...c, 
-	                        estaPagada: true, 
-	                        fecha_pago: new Date().toISOString().split('T')[0] // Ponemos la fecha de hoy
-	                    };
-	                }
-	                return c;
-	            })
-	        );
-
-	        setQrData(null); 
-	        
+	        console.log("Pago registrado en BD:", data);
+			
 	        setShowSuccessModal(true);
 	        
 	        navigate(location.pathname, { replace: true });
+	        
+	        cargarDatos();
 	      })
 	      .catch(err => {
 	        console.error("Error al registrar el pago en el backend", err);
@@ -318,7 +306,7 @@ const MisCuotas: React.FC = () => {
                <p>El pago se registró correctamente en el sistema.</p>
                
                <button 
-                 onClick={() => setShowSuccessModal(false)} 
+                 onClick={() => window.location.reload()} 
                  className="btn-primary"
                  style={{marginTop: '20px'}}
                >
