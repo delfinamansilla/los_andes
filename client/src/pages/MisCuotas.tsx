@@ -38,6 +38,7 @@ const MisCuotas: React.FC = () => {
   const [paymentId, setPaymentId] = useState<string | null>(null);
   const [isPagarLoading, setIsPagarLoading] = useState(false);
 
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [filtro, setFiltro] = useState("todas");
 
   const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
