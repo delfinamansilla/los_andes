@@ -159,7 +159,17 @@ public class ServletUsuario extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+String origin = request.getHeader("Origin");
+        
+        //la version anterior era sacandole todo esto del origin y dejando el response normal
+        if (origin != null && (
+            origin.equals("http://localhost:3000") || 
+            origin.equals("https://losandes-five.vercel.app")
+            || 
+            origin.equals("https://losandesback-production.up.railway.app")
+        )) {
+            response.setHeader("Access-Control-Allow-Origin", origin);
+        }
            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
            response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
@@ -310,7 +320,7 @@ public class ServletUsuario extends HttpServlet {
 	                    if (uEncontrado != null) {
 	                        entities.RecuperacionPass rp = logicRecupero.crearSolicitud(uEncontrado.getIdUsuario());
 
-	                        String link = "http://localhost:3000/cambiar-contrasenia?token=" + rp.getToken();
+	                        String link = "http://losandesback-production.up.railway.app/cambiar-contrasenia?token=" + rp.getToken();
 	                        String cuerpo = "<div style='background-color: #20321E; padding: 50px; font-family: Arial, sans-serif;'>"
 	                                + "  <div style='max-width: 500px; margin: 0 auto; background-color: #E8E4D9; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.5);'>"
 	                                + "    <div style='background-color: #1a2918; padding: 20px; text-align: center; border-bottom: 4px solid #466245;'>"

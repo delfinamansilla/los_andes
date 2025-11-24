@@ -25,7 +25,7 @@ const Login: React.FC = () => {
           params.append('action', 'recuperar');
           params.append('mail', mail);
 
-          const res = await fetch('http://localhost:8080/club/usuario', {
+          const res = await fetch('http://losandesback-production.up.railway.app/usuario', {
               method: 'POST',
               headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
               body: params.toString(),
@@ -39,7 +39,7 @@ const Login: React.FC = () => {
 	const verificarCuotas = async (usuarioId: number): Promise<boolean> => {
 	    try {
 		
-	      const resCuotas = await fetch('http://localhost:8080/club/cuota?action=listar');
+	      const resCuotas = await fetch('http://losandesback-production.up.railway.app/cuota?action=listar');
 	      console.log(resCuotas);
 	      if (!resCuotas.ok) {
 	        console.error('Error al obtener cuotas');
@@ -61,7 +61,7 @@ const Login: React.FC = () => {
 	        return true; 
 	      }
 
-	      const resPagos = await fetch(`http://localhost:8080/club/pagocuota?action=listar_por_usuario&id_usuario=${usuarioId}`);
+	      const resPagos = await fetch(`http://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${usuarioId}`);
 	      
 	      if (!resPagos.ok) {
 	        console.error('Error al obtener pagos');
