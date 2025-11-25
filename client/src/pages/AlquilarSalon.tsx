@@ -44,7 +44,7 @@ const AlquilarSalon: React.FC = () => {
     setLoadingHoras(true);
 
     try {
-      const url = `https://https://losandesback-production.up.railway.app/alquiler_salon?action=horarios&idSalon=${idSalon}&fecha=${value}`;
+      const url = `https://losandesback-production.up.railway.app/alquiler_salon?action=horarios&idSalon=${idSalon}&fecha=${value}`;
 
       const res = await fetch(url);
       const text = await res.text();

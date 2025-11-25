@@ -108,13 +108,10 @@ const AlquilarCancha: React.FC = () => {
       params.append('id_usuario', usuario.id);
       params.append('email', usuario.mail);
 
-	  const res = await fetch('https://losandesback-production.up.railway.app/alquiler_cancha', {
-	        method: 'POST',
-	        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-	        body: params.toString()
-	    });
-	
-	    const text = await res.text();
+      const url = `https://losandesback-production.up.railway.app/alquiler_cancha?${params.toString()}`;
+
+      const res = await fetch(url);
+      const text = await res.text();
 
 	  if (text.includes('mail_enviado')) {
 	    setModalType('success');
