@@ -257,7 +257,12 @@ public class ServletAlquiler_cancha extends HttpServlet {
 
                     
                     PrereservaCancha p = logicPre.crearPreReserva(idUsuario, idCancha, fecha, desde, hasta);
-
+                    if (p == null) {
+                        System.err.println("ERROR: La reserva devolvió NULL (Horario ocupado o error BD)");
+                        resp.setStatus(500);
+                        resp.getWriter().write("{\"error\":\"No se pudo reservar. El horario puede estar ocupado.\"}");
+                        break; 
+                    }
                     
                     String link = "http://losandesback-production.up.railway.app/alquiler_cancha?action=confirmar&token=" + p.getToken();
 
@@ -327,7 +332,7 @@ public class ServletAlquiler_cancha extends HttpServlet {
                     
                     if (u != null && u.getMail() != null) {
                         
-                        String baseUrl = "http://losandesback-production.up.railway.app/alquiler_cancha";
+                        String baseUrl = "https://los-andes-six.vercel.app/alquiler_cancha";
                         String params = "&id_cancha=" + pr.getIdCancha() + 
                                         "&id_usuario=" + pr.getIdUsuario() +
                                         "&fecha=" + pr.getFecha() +

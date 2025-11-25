@@ -212,10 +212,11 @@ public class ServletAlquiler_salon extends HttpServlet {
                     LocalTime desde = LocalTime.parse(req.getParameter("hora_desde"));
                     LocalTime hasta = LocalTime.parse(req.getParameter("hora_hasta"));
                     String emailDestino = req.getParameter("email");
-
+                    
+                    System.out.println("🔵 [DEBUG] Intentando crear PreReserva en BD...");
                     PreReserva p = logicPre.crearPreReserva(idUsuario, idSalon, fecha, desde, hasta);
-
-                    String link = "http://losandesback-production.up.railway.app/alquiler_salon?action=confirmar&token=" + p.getToken();
+                    System.out.println("🔵 [DEBUG] PreReserva creada. Token: " + p.getToken());
+                    String link = "https://los-andes-six.vercel.app/alquiler_salon?action=confirmar&token=" + p.getToken();
 
                     String cuerpo = "<div style='background-color: #f4f4f4; padding: 40px; font-family: Arial, sans-serif;'>"
                             + "<div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);'>"
@@ -242,10 +243,25 @@ public class ServletAlquiler_salon extends HttpServlet {
                             + "</div>"
                             + "</div>";
 
+                    System.out.println("🔵 [DEBUG] Intentando enviar mail a: " + emailDestino);
+                    try {
                     MailSender.enviarCorreo(emailDestino, "Acción requerida: Confirmá tu reserva", cuerpo);
-
                     resp.getWriter().write("{\"status\":\"mail_enviado\"}");
-                    break;
+                    //logs
+                    System.out.println("🟢 [EXITO] Mail enviado y procesado.");
+                    
+                    resp.setContentType("application/json;charset=UTF-8");
+                    resp.getWriter().write("{\"status\":\"mail_enviado\"}");
+                
+                } catch (Exception mailEx) {
+                    System.err.println("❌ [ERROR MAIL] Falló el envío del correo: " + mailEx.getMessage());
+                    mailEx.printStackTrace();
+                    
+                    // Devolvemos 500 pero avisamos que la reserva SÍ se guardó
+                    resp.setStatus(500);
+                    resp.getWriter().write("{\"error\":\"Reserva creada, pero falló el envío del mail. Contacte a soporte.\"}");
+                }
+               break;
                 }
                 case "confirmar": {
                     String token = req.getParameter("token");
