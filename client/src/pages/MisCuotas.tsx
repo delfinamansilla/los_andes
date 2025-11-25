@@ -102,11 +102,13 @@ const MisCuotas: React.FC = () => {
 	      const idUsuarioRecuperado = parts[3];
 		  
 		  setIsPagarLoading(true);
+		  setQrData(null);
 
 	      const params = new URLSearchParams();
 	      params.append('action', 'pagar');
 	      params.append('id_cuota', idCuotaRecuperado);
 	      params.append('id_usuario', idUsuarioRecuperado);
+
 
 	      fetch('https://losandesback-production.up.railway.app/pagocuota', {
 	        method: 'POST',
@@ -117,7 +119,7 @@ const MisCuotas: React.FC = () => {
 	      .then(data => {
 			console.log("Pago registrado en BD:", data);
 			
-			setCuotasProcesadas(prev => prev.map(c => {
+			setCuotasProcesadas(prevCuotas => prevCuotas.map(c => {
 	            
 	            if (c.id_cuota.toString() === idCuotaRecuperado) {
 	                return { 
@@ -130,20 +132,20 @@ const MisCuotas: React.FC = () => {
 	        }));
 	        setQrData(null);
 	        setPaymentId(null);
-	        setShowSuccessModal(true);
+			setIsPagarLoading(false);
+			setShowSuccessModal(true);
+		    navigate(location.pathname, { replace: true });
 	        
-	        navigate(location.pathname, { replace: true });
 	      })
 	      .catch(err => {
 	        console.error("Error al registrar el pago en el backend", err);
 
 	      })
-		  .finally(() => {
-           setIsPagarLoading(false);
-        });
 	    }
 	  }, [location, navigate]);
 
+  
+	  
   const formatearPeriodo = (nro: number) => {
     if (!nro) return "N/A";
     const anio = Math.floor(nro / 100);
