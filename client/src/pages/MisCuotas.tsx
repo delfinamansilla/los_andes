@@ -100,9 +100,6 @@ const MisCuotas: React.FC = () => {
 	      const parts = externalRef.split('_');
 	      const idCuotaRecuperado = parts[1];
 	      const idUsuarioRecuperado = parts[3];
-		  
-		  setIsPagarLoading(true);
-		  setQrData(null);
 
 	      const params = new URLSearchParams();
 	      params.append('action', 'pagar');
@@ -131,9 +128,9 @@ const MisCuotas: React.FC = () => {
 	            return c;
 	        }));
 	        setQrData(null);
-	        setPaymentId(null);
-			setIsPagarLoading(false);
+
 			setShowSuccessModal(true);
+			cargarDatos();
 		    navigate(location.pathname, { replace: true });
 	        
 	      })
