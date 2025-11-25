@@ -100,6 +100,8 @@ const MisCuotas: React.FC = () => {
 	      const parts = externalRef.split('_');
 	      const idCuotaRecuperado = parts[1];
 	      const idUsuarioRecuperado = parts[3];
+		  
+		  setIsPagarLoading(true);
 
 	      const params = new URLSearchParams();
 	      params.append('action', 'pagar');
@@ -113,17 +115,34 @@ const MisCuotas: React.FC = () => {
 	      })
 	      .then(res => res.json())
 	      .then(data => {
+			console.log("Pago registrado en BD:", data);
 			
-	        setShowSuccessModal(true);    
-	        navigate(location.pathname, { replace: true });
+			setCuotasProcesadas(prev => prev.map(c => {
+	            
+	            if (c.id_cuota.toString() === idCuotaRecuperado) {
+	                return { 
+	                    ...c, 
+	                    estaPagada: true, 
+	                    fecha_pago: new Date().toLocaleDateString() 
+	                };
+	            }
+	            return c;
+	        }));
+	        setQrData(null);
+	        setPaymentId(null);
+	        setShowSuccessModal(true);
 	        
+	        navigate(location.pathname, { replace: true });
 	      })
 	      .catch(err => {
 	        console.error("Error al registrar el pago en el backend", err);
 
-	      });
+	      })
+		  .finally(() => {
+           setIsPagarLoading(false);
+        });
 	    }
-	  }, [location, navigate, cargarDatos]);
+	  }, [location, navigate]);
 
   const formatearPeriodo = (nro: number) => {
     if (!nro) return "N/A";
@@ -303,7 +322,7 @@ const MisCuotas: React.FC = () => {
                <p>El pago se registró correctamente en el sistema.</p>
                
                <button 
-                 onClick={() => window.location.reload()} 
+                 onClick={() => setShowSuccessModal(false)}
                  className="btn-primary"
                  style={{marginTop: '20px'}}
                >
