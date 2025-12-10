@@ -10,7 +10,7 @@ public class DbConnector {
     private String host="mysql.railway.internal";
     private String port="3306";
     private String user="root";
-    private String password="DZzFsjFltPtFZLhFqPSPHyExwsgUVnIm";
+    private String password="sbZNmaGRhgoaqiMYhPysbuiRDOGeCuVl";
     private String db="railway";
     
     private Connection conn=null;
@@ -43,6 +43,5 @@ public class DbConnector {
     }
     
     public void releaseConn() {
-
     }
 }
