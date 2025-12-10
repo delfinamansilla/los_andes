@@ -161,7 +161,6 @@ public class ServletAlquiler_cancha extends HttpServlet {
                         
                         byte[] archivo = gen.generarConstanciaCanchaPDF(c, u, fecha, desde, hasta);
 
-                        // 4. Enviar respuesta
                         resp.setContentType("application/pdf");
                         resp.setHeader("Content-Disposition", "attachment; filename=\"Constancia_" + u.getDni() + ".pdf\"");
                         resp.setContentLength(archivo.length);

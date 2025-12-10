@@ -54,9 +54,7 @@ public class ServletInscripcion extends HttpServlet {
             }
             
             action = action.trim().toLowerCase();
-            
-            System.out.println("🔹 Acción procesada: '" + action + "'");
-
+ 
             switch (action) {
             
                 case "listar": {
@@ -78,11 +76,7 @@ public class ServletInscripcion extends HttpServlet {
                 }
                 
                 case "porusuario": {
-                    System.out.println("✅ Entró al case porusuario");
-
                     String idParam = request.getParameter("id_usuario");
-                    System.out.println("🔹 Parámetro id_usuario recibido: " + idParam);
-
                     if (idParam == null || idParam.isEmpty()) {
                         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                         response.getWriter().write("{\"error\":\"Falta el parámetro id_usuario\"}");
@@ -90,14 +84,9 @@ public class ServletInscripcion extends HttpServlet {
                     }
 
                     int idUsuario = Integer.parseInt(idParam);
-                    System.out.println("🔹 Buscando inscripciones para usuario: " + idUsuario);
-
                     LinkedList<Map<String, Object>> inscripciones = logicInscripcion.getInscripcionesConDetalles(idUsuario);
-                    System.out.println("🔹 Inscripciones encontradas: " + inscripciones.size());
-
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
-
                     gson.toJson(inscripciones, response.getWriter());
                     break;
                 }
@@ -110,7 +99,6 @@ public class ServletInscripcion extends HttpServlet {
                 }
 
                 default:
-                    System.out.println("❌ Acción no reconocida: '" + action + "'");
                     response.getWriter().write("{\"error\":\"Acción GET no reconocida: " + action + "\"}");
             }
 

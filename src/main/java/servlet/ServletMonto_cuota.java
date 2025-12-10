@@ -53,7 +53,6 @@ public class ServletMonto_cuota extends HttpServlet {
             }
             
             action = action.trim().toLowerCase();
-            System.out.println("🔹 Acción procesada: '" + action + "'");
 
             switch (action) {
             
@@ -110,7 +109,6 @@ public class ServletMonto_cuota extends HttpServlet {
                 }
 
                 default:
-                    System.out.println("❌ Acción no reconocida: '" + action + "'");
                     response.getWriter().write("{\"error\":\"Acción GET no reconocida: " + action + "\"}");
             }
 

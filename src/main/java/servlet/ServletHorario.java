@@ -163,9 +163,6 @@ public class ServletHorario extends HttpServlet {
                     if (json == null) {
                         json = gson.fromJson(request.getReader(), com.google.gson.JsonObject.class);
                     }
-
-                    System.out.println("📦 JSON recibido para actualizar horario: " + json);
-                    
                     Horario h = new Horario();
                     h.setId(json.get("id").getAsInt());
                     h.setDia(json.get("dia").getAsString());
