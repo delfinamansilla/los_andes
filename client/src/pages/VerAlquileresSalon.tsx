@@ -42,7 +42,7 @@ const VerAlquileresSalon = () => {
 
   const fetchAlquileres = async (idSalon: number) => {
     try {
-      const res = await fetch(`http://localhost:8080/club/alquiler_salon?action=listar_por_salon&id_salon=${idSalon}`);
+      const res = await fetch(`https://losandesback-production.up.railway.app/alquiler_salon?action=listar_por_salon&id_salon=${idSalon}`);
       if (!res.ok) throw new Error('Error al obtener alquileres');
       const data = await res.json();
       setAlquileres(data);
@@ -66,15 +66,12 @@ const VerAlquileresSalon = () => {
       <NavbarAdmin />
       
       <div className="admin-container">
-        {/* Botón Volver */}
-        
 
         {salon && <h2>Alquileres: {salon.nombre}</h2>}
 
         {error && <div className="error-msg">{error}</div>}
         {loading && <p className="loading-msg">Cargando alquileres...</p>}
 
-        {/* Contenedor tipo "Tarjeta" para la lista */}
         {!loading && !error && (
           <div className="alquileres-card-container">
             

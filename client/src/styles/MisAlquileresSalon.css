@@ -8,58 +8,64 @@
   width: 100%;
 }
 
-/* --- CONTENEDOR CENTRAL --- */
+/* --- CONTENEDOR GENERAL --- */
 .reservas-container {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 40px 20px;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .reservas-container h2 {
   color: #DDD8CA;
-  font-size: 2.6rem;
+  font-size: 2.4rem;
   font-weight: 800;
-  margin: 40px 0 40px 0;
-  text-align: center;
+  margin-bottom: 40px;
 }
 
-/* --- LISTA --- */
+/* --- LISTA DE TARJETAS --- */
 .lista-reservas {
+  margin: 0 auto;
   width: 100%;
-  max-width: 950px;
+  max-width: 900px;   /* ✔ tamaño realista */
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 22px;
+  align-items: center; /* opcional */
 }
 
-/* --- TARJETAS --- */
+
+
+/* --- TARJETA --- */
 .reserva-card {
   background-color: #DDD8CA;
-  display: flex;
-  padding: 22px;
-  border-radius: 18px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
-  gap: 25px;
-  transition: 0.2s ease;
+  border-radius: 16px;
+  padding: 25px;
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 22px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+  align-items: center;
+  transition: 0.25s ease;
+  min-height: 180px;
+  width: 100%;
+  max-width: 370px; /* ✔ estable */
 }
 
+
 .reserva-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.45);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
 }
 
 /* --- IMAGEN --- */
 .reserva-img {
-  width: 200px;
-  height: 150px;
+  width: 100%;
+  height: 110px !important;
   border-radius: 14px;
   overflow: hidden;
   background-color: #20321E;
-  flex-shrink: 0;
 }
 
 .reserva-img img {
@@ -68,20 +74,12 @@
   object-fit: cover;
 }
 
-.img-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-  color: #DDD8CA;
-  height: 100%;
-}
-
 /* --- CONTENIDO --- */
 .reserva-content {
-  flex: 1;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  justify-content: space-between !important;
 }
 
 /* HEADER */
@@ -93,7 +91,7 @@
 
 .card-header h3 {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: #20321E;
   font-weight: 900;
 }
@@ -101,33 +99,34 @@
 .estado-badge {
   background-color: #20321E;
   color: #DDD8CA;
+  font-size: 0.95rem;
   padding: 6px 14px;
   border-radius: 8px;
-  font-size: 0.95rem;
   font-weight: bold;
 }
 
 /* BODY */
 .card-body {
-  margin-top: 12px;
+  margin: 14px 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .dato-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  font-size: 1.05rem;
   color: #20321E;
-  font-size: 1.1rem;
 }
 
 /* FOOTER */
 .card-footer {
-  margin-top: auto;
+  
   display: flex;
   justify-content: flex-end;
+  margin-top: 10px !important;
 }
 
 .btn-cancelar-reserva {
@@ -136,27 +135,44 @@
   padding: 10px 20px;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
   border: none;
   font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   transition: 0.2s;
 }
 
 .btn-cancelar-reserva:hover {
-  background-color: #466245;
+  background-color: #3a5134;
 }
 
 /* --- EMPTY STATE --- */
 .empty-state {
   background-color: #DDD8CA;
-  padding: 35px 40px;
+  padding: 35px;
   border-radius: 18px;
   text-align: center;
   color: #20321E;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.btn-reservar-nuevo {
+  margin-top: 15px;
+  background-color: #20321E;
+  color: #DDD8CA;
+  padding: 12px 26px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-reservar-nuevo:hover {
+  background-color: #3a5134;
 }
 
 /* --- MODAL --- */
@@ -172,10 +188,9 @@
 
 .modal {
   background-color: #DDD8CA;
-  color: #20321E;
   padding: 35px 45px;
   border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  color: #20321E;
   text-align: center;
 }
 
@@ -192,36 +207,15 @@
   padding: 10px 25px;
   border-radius: 10px;
   border: none;
-  font-weight: bold;
-  cursor: pointer;
+  font-weight: 700;
 }
 
 .btn-cancel {
-  background-color: #DDD8CA;
-  color: #20321E;
+  background-color: transparent;
   border: 2px solid #20321E;
   padding: 10px 25px;
   border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-}
-/* --- BOTÓN EMPTY STATE LINDO --- */
-.btn-reservar-nuevo {
-  background-color: #20321E;
-  color: #DDD8CA;
-  padding: 12px 26px;
-  border-radius: 12px;
-  font-size: 1.1rem;
+  color: #20321E;
   font-weight: 700;
-  border: none;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  transition: 0.25s ease;
 }
-
-.btn-reservar-nuevo:hover {
-  background-color: #3a5134;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
-}
-

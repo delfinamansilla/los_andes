@@ -11,15 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import entities.Profesor;
 import logic.LogicProfesor;
 
-/**
- * Servlet para gestionar las operaciones CRUD de Profesor.
- * Acciones disponibles:
- *  - listar
- *  - buscar
- *  - agregar
- *  - actualizar
- *  - eliminar
- */
 @WebServlet({"/profesor", "/Profesor", "/PROFESOR"})
 public class ServletProfesor extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -30,18 +21,12 @@ public class ServletProfesor extends HttpServlet {
         logicProfesor = new LogicProfesor();
     }
 
-    /**
-     * Maneja peticiones GET:
-     *  - listar: muestra todos los profesores
-     *  - buscar: obtiene un profesor por ID
-     *  - eliminar: elimina un profesor por ID
-     */
     @Override
     
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
- 	   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+ 	   response.setHeader("Access-Control-Allow-Origin", "*");
        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
        
@@ -65,8 +50,6 @@ public class ServletProfesor extends HttpServlet {
                 try {
                     LinkedList<Profesor> profesores = logicProfesor.getAll();
                     
-                    // Necesitas una librería como Gson para convertir la lista a JSON
-                    // Si no la tienes, añádela a tu pom.xml o a tus librerías
                     com.google.gson.Gson gson = new com.google.gson.Gson();
                     String jsonProfesores = gson.toJson(profesores);
                     
@@ -85,16 +68,11 @@ public class ServletProfesor extends HttpServlet {
                 response.setCharacterEncoding("UTF-8");
                 try {
                 	String idParam = request.getParameter("id");
-                    // AÑADE ESTA LÍNEA PARA VER QUÉ ID LLEGA
-                    System.out.println("--- BUSCANDO PROFESOR CON ID: " + idParam + " ---");
+
                     int id = Integer.parseInt(request.getParameter("id"));
                     Profesor p = logicProfesor.getOne(id);
                    
-                    
-                    // AÑADE ESTA LÍNEA PARA VER QUÉ ENCONTRÓ
-                    System.out.println("--- RESULTADO DE LA BÚSQUEDA: " + p + " ---");
                     if (p != null) {
-                        // Usamos Gson para convertir el objeto a JSON
                         com.google.gson.Gson gson = new com.google.gson.Gson();
                         String jsonProfesor = gson.toJson(p);
                         response.setStatus(HttpServletResponse.SC_OK);
@@ -114,18 +92,14 @@ public class ServletProfesor extends HttpServlet {
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 try {
-                    // Obtenemos el ID del profesor a eliminar
                     int id = Integer.parseInt(request.getParameter("id"));
                     
-                    // Llamamos a la lógica de negocio para que lo borre de la BD
                     logicProfesor.delete(id);
 
-                    // Si no hubo errores, enviamos una respuesta de éxito
                     response.setStatus(HttpServletResponse.SC_OK);
                     response.getWriter().write("{\"status\":\"ok\", \"message\":\"Profesor eliminado correctamente\"}");
 
                 } catch (Exception e) {
-                    // Si algo falla (ej: el ID no existe, error de BD), enviamos un error
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                     response.getWriter().write("{\"status\":\"error\", \"message\":\"" + e.getMessage() + "\"}");
                 }
@@ -142,15 +116,10 @@ public class ServletProfesor extends HttpServlet {
         }
     }
 
-    /**
-     * Maneja peticiones POST:
-     *  - agregar: crea un nuevo profesor
-     *  - actualizar: modifica un profesor existente
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
- 	   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+ 	   response.setHeader("Access-Control-Allow-Origin", "*");
        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         System.out.println("\n--- SERVLET PROFESOR: Petición POST recibida ---");
@@ -177,7 +146,6 @@ public class ServletProfesor extends HttpServlet {
 
                     logicProfesor.add(p);
                     
-                    // ✅ SOLUCIÓN: Envía una respuesta JSON de éxito
                     response.setStatus(HttpServletResponse.SC_OK);
                     response.getWriter().write("{\"status\":\"ok\", \"message\":\"¡Profesor agregado exitosamente!\"}");
 

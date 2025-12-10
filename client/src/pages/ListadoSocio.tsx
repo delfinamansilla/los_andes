@@ -44,7 +44,7 @@ const ListadoSocios: React.FC = () => {
 
   const fetchSocios = async () => {
     try {
-      const response = await fetch('http://localhost:8080/club/usuario?action=listar');
+      const response = await fetch('https://losandesback-production.up.railway.app/usuario?action=listar');
 
       if (!response.ok) {
         throw new Error('Error al conectar con el servidor.');
@@ -75,12 +75,12 @@ const ListadoSocios: React.FC = () => {
   
   const handleVerAlquileresCanchas = (socio: Socio) => {
       localStorage.setItem('usuarioSeleccionadoParaAlquileres', JSON.stringify(socio));
-      navigate('/alquileres-canchas-usuario');
+      navigate('/alquileres-canchas-socio');
     };
 
     const handleVerAlquileresSalones = (socio: Socio) => {
       localStorage.setItem('usuarioSeleccionadoParaAlquileres', JSON.stringify(socio));
-      navigate('/alquileres-salones-usuario');
+      navigate('/alquileres-salones-socio');
     };
 
 

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import NavbarSocio from './NavbarSocio';
 import Footer from './Footer';
 import '../styles/MisCuotas.css';
@@ -37,22 +38,26 @@ const MisCuotas: React.FC = () => {
   const [paymentId, setPaymentId] = useState<string | null>(null);
   const [isPagarLoading, setIsPagarLoading] = useState(false);
 
-  // 👇 NUEVO: estado del filtro
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [filtro, setFiltro] = useState("todas");
 
   const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  const cargarDatos = useCallback(() => {
+      if (!usuario || !usuario.id) {
+        setError('No se pudo identificar al usuario.');
+        setLoading(false);
+        return;
+      }
 
-  useEffect(() => {
-    if (!usuario || !usuario.id) {
-      setError('No se pudo identificar al usuario.');
-      setLoading(false);
-      return;
-    }
+    setLoading(true);
 
     Promise.all([
-      fetch('http://localhost:8080/club/cuota?action=listar').then(res => res.json()),
-      fetch('http://localhost:8080/club/montocuota?action=listar').then(res => res.json()),
-      fetch(`http://localhost:8080/club/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`).then(res => res.json())
+      fetch('https://losandesback-production.up.railway.app/cuota?action=listar').then(res => res.json()),
+      fetch('https://losandesback-production.up.railway.app/montocuota?action=listar').then(res => res.json()),
+      fetch(`https://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`).then(res => res.json())
     ])
     .then(([todasLasCuotas, todosLosMontos, misPagos]: [Cuota[], Monto[], Pago[]]) => {
       const datosCombinados = todasLasCuotas.map(cuota => {
@@ -79,8 +84,65 @@ const MisCuotas: React.FC = () => {
     .finally(() => {
       setLoading(false);
     });
-  }, []);
+  }, [usuario.id]);
+  
+  useEffect(() => {
+      cargarDatos();
+    }, [cargarDatos]);
+  
+	  useEffect(() => {
+	    const queryParams = new URLSearchParams(location.search);
+	    const status = queryParams.get('collection_status');
+	    const externalRef = queryParams.get('external_reference');
+	    
+	    if (status === 'approved' && externalRef) {
+	      
+	      const parts = externalRef.split('_');
+	      const idCuotaRecuperado = parts[1];
+	      const idUsuarioRecuperado = parts[3];
 
+	      const params = new URLSearchParams();
+	      params.append('action', 'pagar');
+	      params.append('id_cuota', idCuotaRecuperado);
+	      params.append('id_usuario', idUsuarioRecuperado);
+
+
+	      fetch('https://losandesback-production.up.railway.app/pagocuota', {
+	        method: 'POST',
+	        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+	        body: params
+	      })
+	      .then(res => res.json())
+	      .then(data => {
+			console.log("Pago registrado en BD:", data);
+			
+			setCuotasProcesadas(prevCuotas => prevCuotas.map(c => {
+	            
+	            if (c.id_cuota.toString() === idCuotaRecuperado) {
+	                return { 
+	                    ...c, 
+	                    estaPagada: true, 
+	                    fecha_pago: new Date().toLocaleDateString() 
+	                };
+	            }
+	            return c;
+	        }));
+	        setQrData(null);
+
+			setShowSuccessModal(true);
+			cargarDatos();
+		    navigate(location.pathname, { replace: true });
+	        
+	      })
+	      .catch(err => {
+	        console.error("Error al registrar el pago en el backend", err);
+
+	      })
+	    }
+	  }, [location, navigate]);
+
+  
+	  
   const formatearPeriodo = (nro: number) => {
     if (!nro) return "N/A";
     const anio = Math.floor(nro / 100);
@@ -104,7 +166,7 @@ const MisCuotas: React.FC = () => {
     params.append('id_cuota', String(cuota.id_cuota));
     params.append('monto', String(cuota.monto));
 
-    fetch('http://localhost:8080/club/pagocuota', {
+    fetch('https://losandesback-production.up.railway.app/pagocuota', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: params
@@ -200,20 +262,74 @@ const MisCuotas: React.FC = () => {
         <div className="modal-qr-overlay">
           <div className="modal-qr-content">
             {isPagarLoading ? (
-              <p>Generando código QR...</p>
+              <p>Generando link de pago...</p>
             ) : (
               <>
-                <h3>Escaneá con la app de Mercado Pago</h3>
-                <QRCodeSVG value={qrData!} size={256} />
-                <p className="payment-id">ID de Pago: {paymentId}</p>
-                <button onClick={() => setQrData(null)} className="btn-cerrar-modal">
-                  Cerrar
+                <h3>Paga con Mercado Pago</h3>
+				<p style={{fontSize: '0.9rem', marginBottom: '15px'}}>
+                  Escaneá el QR o usá el botón para pagar ahora mismo.
+                </p>
+                
+                <div style={{background: 'white', padding: '10px', display: 'inline-block', borderRadius: '8px'}}>
+
+                  <QRCodeSVG value={qrData!} size={220} />
+                </div>
+                
+                <div style={{marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center'}}>
+                    
+                    <a 
+                      href={qrData!} 
+                      className="btn-primary" 
+                      style={{
+                          textDecoration: 'none', 
+                          padding: '12px 25px', 
+                          backgroundColor: '#009EE3', 
+                          color: 'white', 
+                          borderRadius: '5px',
+                          fontWeight: 'bold',
+                          display: 'inline-block'
+                      }}
+                    >
+                        Ir a Pagar (Link Web)
+                    </a>
+                    
+                    <p style={{fontSize: '0.8rem', color: '#666'}}>
+                        (Al pagar volverás automáticamente aquí)
+                    </p>
+
+                    <button 
+                        onClick={() => setQrData(null)} 
+                        className="btn-cerrar-modal"
+                        style={{marginTop: '10px'}}
+                    >
+                      Cerrar
                 </button>
+				</div>
               </>
             )}
           </div>
         </div>
       )}
+	  
+	  {showSuccessModal && (
+          <div className="modal-qr-overlay">
+            <div className="modal-qr-content" style={{borderTop: '5px solid #4CAF50'}}>
+               <div style={{fontSize: '50px', color: '#4CAF50', marginBottom: '10px'}}>
+                 ✅
+               </div>
+               <h2 style={{color: '#20321E'}}>¡Pago Exitoso!</h2>
+               <p>El pago se registró correctamente en el sistema.</p>
+               
+               <button 
+                 onClick={() => setShowSuccessModal(false)}
+                 className="btn-primary"
+                 style={{marginTop: '20px'}}
+               >
+                 Aceptar
+               </button>
+            </div>
+          </div>
+        )}
     </div>
   );
 };

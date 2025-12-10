@@ -14,7 +14,7 @@ import entities.Salon;
 import logic.LogicSalon;
 
 @WebServlet("/salon")
-@MultipartConfig(maxFileSize = 2 * 1024 * 1024) // 2MB igual que tu validación
+@MultipartConfig(maxFileSize = 2 * 1024 * 1024) 
 public class ServletSalon extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private LogicSalon logicSalon;
@@ -25,7 +25,8 @@ public class ServletSalon extends HttpServlet {
     }
 
     private void setCORS(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
     }
@@ -208,16 +209,25 @@ public class ServletSalon extends HttpServlet {
             }
 
             case "actualizar": {
+
+                // Traer el salon actual de la BD
+                int id = Integer.parseInt(request.getParameter("id"));
+                Salon salonActual = logicSalon.getById(id);
+
                 Salon s = new Salon();
-                s.setId(Integer.parseInt(request.getParameter("id")));
+                s.setId(id);
                 s.setNombre(request.getParameter("nombre"));
                 s.setCapacidad(Integer.parseInt(request.getParameter("capacidad")));
                 s.setDescripcion(request.getParameter("descripcion"));
 
                 Part imgPart = request.getPart("imagen");
+
                 if (imgPart != null && imgPart.getSize() > 0) {
                     InputStream is = imgPart.getInputStream();
                     s.setImagen(is.readAllBytes());
+                } else {
+                    // 👇 Mantener la imagen anterior
+                    s.setImagen(salonActual.getImagen());
                 }
 
                 logicSalon.update(s);
@@ -226,6 +236,7 @@ public class ServletSalon extends HttpServlet {
                 response.getWriter().write("{\"status\":\"ok\"}");
                 break;
             }
+
 
             default:
                 response.getWriter().append("Acción POST no reconocida: ").append(action);

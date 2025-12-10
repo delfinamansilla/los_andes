@@ -17,10 +17,6 @@ import entities.Usuario;
 import logic.LogicUsuario;
 import logic.LogicRecuperacionPass;
 
-/**
- * Servlet para gestionar las operaciones CRUD de Usuario.
- * Incluye login, alta, modificación, eliminación y listado.
- */
 @WebServlet("/usuario")
 @MultipartConfig
 public class ServletUsuario extends HttpServlet {
@@ -34,16 +30,17 @@ public class ServletUsuario extends HttpServlet {
         logicRecupero = new LogicRecuperacionPass(); 
     }
 
-    /**
-     * Maneja peticiones GET: listar, buscar por ID o eliminar usuario.
-     * Ejemplos:
-     *   GET /usuario?action=listar
-     *   GET /usuario?action=eliminar&id=5
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+<<<<<<< HEAD
+    	
+    	   response.setHeader("Access-Control-Allow-Origin", "*");
+=======
     	   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    	   response.setHeader("Access-Control-Allow-Credentials", "true");
+>>>>>>> temporal-arreglo
            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
            response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
@@ -138,17 +135,11 @@ public class ServletUsuario extends HttpServlet {
         }
     }
 
-    /**
-     * Maneja peticiones POST: login, registrar y actualizar usuario.
-     * Ejemplos:
-     *   POST /usuario?action=login
-     *   POST /usuario?action=registrar
-     *   POST /usuario?action=actualizar
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    	   response.setHeader("Access-Control-Allow-Origin", "*");
+    	   response.setHeader("Access-Control-Allow-Credentials", "true");
            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
            response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
@@ -285,9 +276,12 @@ public class ServletUsuario extends HttpServlet {
 	                }
 	                
 	                case "recuperar": {
+	                	
+	                	System.out.println("🔵 [DEBUG] Inicio proceso recuperación de contraseña");
 	                    String mail = request.getParameter("mail");
-	                    
+	                    System.out.println("🔵 [DEBUG] 1. Mail recibido: " + mail);
 	                    LinkedList<Usuario> todos = logicUsuario.getAll();
+	                    System.out.println("🔵 [DEBUG] 2. Usuarios traídos de la BD: " + (todos != null ? todos.size() : "null"));
 	                    Usuario uEncontrado = null;
 	                    for(Usuario u : todos) {
 	                        if(u.getMail().equalsIgnoreCase(mail)) {
@@ -297,9 +291,22 @@ public class ServletUsuario extends HttpServlet {
 	                    }
 	                    
 	                    if (uEncontrado != null) {
+	                    	System.out.println("🔵 [DEBUG] 3. Usuario encontrado: " + uEncontrado.getNombreCompleto() + " (ID: " + uEncontrado.getIdUsuario() + ")");
 	                        entities.RecuperacionPass rp = logicRecupero.crearSolicitud(uEncontrado.getIdUsuario());
+	                        //logs
+	                        if (rp == null) {
+	                            System.err.println("❌ [ERROR] El objeto RecuperacionPass vino NULL. Falló la lógica de crear solicitud.");
+	                            response.setStatus(500);
+	                            response.getWriter().write("{\"error\":\"Error interno al generar token\"}");
+	                            break;
+	                        }
 
-	                        String link = "http://localhost:3000/cambiar-contrasenia?token=" + rp.getToken();
+	                        System.out.println("🔵 [DEBUG] 4. Token generado: " + rp.getToken());
+	                        //terminan logs
+	                        
+	                  
+	                        
+	                        String link = "https://los-andes-six.vercel.app/cambiar-contrasenia?token=" + rp.getToken();
 	                        String cuerpo = "<div style='background-color: #20321E; padding: 50px; font-family: Arial, sans-serif;'>"
 	                                + "  <div style='max-width: 500px; margin: 0 auto; background-color: #E8E4D9; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.5);'>"
 	                                + "    <div style='background-color: #1a2918; padding: 20px; text-align: center; border-bottom: 4px solid #466245;'>"
@@ -316,10 +323,17 @@ public class ServletUsuario extends HttpServlet {
 	                                + "</div>";
 	                        
 	                        try {
+	                        	System.out.println("🔵 [DEBUG] 5. Intentando enviar mail con MailSender...");
 	                            entities.MailSender.enviarCorreo(mail, "Recupero de Clave", cuerpo);
+	                            System.out.println("🟢 [EXITO] 6. Mail enviado correctamente.");
 	                            response.getWriter().write("{\"message\":\"Correo enviado\"}");
 	                        } catch (Exception e) {
 	                            e.printStackTrace();
+	                            
+	                            System.err.println("❌ [ERROR FATAL] Falló el envío del mail:");
+	                            e.printStackTrace(); 
+	                            System.err.println("Mensaje de error: " + e.getMessage());
+	                            
 	                            response.setStatus(500);
 	                            response.getWriter().write("{\"error\":\"Error al enviar mail\"}");
 	                        }

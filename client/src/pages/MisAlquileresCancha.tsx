@@ -45,13 +45,11 @@ const MisAlquileresCancha: React.FC = () => {
       }
       const usuario = JSON.parse(usuarioStorage);
 
-      // Traer alquileres de canchas
-      const resReservas = await fetch(`http://localhost:8080/club/alquiler_cancha?action=mis_reservas&idUsuario=${usuario.id}`);
+      const resReservas = await fetch(`https://losandesback-production.up.railway.app/alquiler_cancha?action=mis_reservas&idUsuario=${usuario.id}`);
       if (!resReservas.ok) throw new Error('Error al obtener reservas');
       const dataReservas: Alquiler[] = await resReservas.json();
 
-      // Traer todas las canchas
-      const resCanchas = await fetch('http://localhost:8080/club/cancha?action=listar');
+      const resCanchas = await fetch('https://losandesback-production.up.railway.app/cancha?action=listar');
       if (!resCanchas.ok) throw new Error('Error al obtener canchas');
       const dataCanchas: Cancha[] = await resCanchas.json();
 
@@ -84,7 +82,7 @@ const MisAlquileresCancha: React.FC = () => {
   const confirmarEliminar = async () => {
     if (!reservaAEliminar) return;
     try {
-      const res = await fetch(`http://localhost:8080/club/alquiler_cancha?action=eliminar&id=${reservaAEliminar.id}`);
+      const res = await fetch(`https://losandesback-production.up.railway.app/alquiler_cancha?action=eliminar&id=${reservaAEliminar.id}`);
       if (!res.ok) throw new Error('No se pudo eliminar');
 
       setShowModalEliminar(false);
@@ -123,14 +121,11 @@ const MisAlquileresCancha: React.FC = () => {
         <div className="lista-reservas">
           {reservas.map((item) => (
             <div key={item.id} className="reserva-card">
-              {/* 1. Columna Contenido */}
               <div className="reserva-content">
-                {/* Cabecera */}
                 <div className="card-header">
                   <h3>Cancha {item.datosCancha?.nro_cancha || item.id_cancha}</h3>
                 </div>
 
-                {/* Cuerpo: Fechas y Horas */}
                 <div className="card-body">
                   <div className="dato-item">
                     <i className="fa-regular fa-calendar"></i>
@@ -142,7 +137,6 @@ const MisAlquileresCancha: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Pie: Botón Eliminar */}
                 <div className="card-footer">
                   <button
                     className="btn-cancelar-reserva"
@@ -157,7 +151,6 @@ const MisAlquileresCancha: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal */}
       {showModalEliminar && (
         <div className="modal-backdrop">
           <div className="modal">

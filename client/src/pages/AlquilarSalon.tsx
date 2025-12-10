@@ -34,9 +34,6 @@ const AlquilarSalon: React.FC = () => {
     window.location.href = '/login';
   }
 
-  // --------------------------------------------
-  //   CAMBIO DE FECHA -> PEDIR HORARIOS OCUPADOS
-  // --------------------------------------------
   const handleFechaChange = async (value: string) => {
     setFecha(value);
     setOcupados([]);
@@ -47,7 +44,7 @@ const AlquilarSalon: React.FC = () => {
     setLoadingHoras(true);
 
     try {
-      const url = `http://localhost:8080/club/alquiler_salon?action=horarios&idSalon=${idSalon}&fecha=${value}`;
+      const url = `https://losandesback-production.up.railway.app/alquiler_salon?action=horarios&idSalon=${idSalon}&fecha=${value}`;
 
       const res = await fetch(url);
       const text = await res.text();
@@ -66,7 +63,6 @@ const AlquilarSalon: React.FC = () => {
         return;
       }
 
-      // AHORA buscamos la clave "ocupados"
       if (Array.isArray(data.ocupados)) {
         setOcupados(data.ocupados);
       } else {
@@ -80,18 +76,13 @@ const AlquilarSalon: React.FC = () => {
     }
   };
 
-  // --------------------------------------------
-  //   CHEQUEAR SI UN TURNO ESTÁ OCUPADO
-  // --------------------------------------------
+
   const turnoOcupado = (desde: string, hasta: string) => {
     return ocupados.some((o) => {
       return !(hasta <= o.horaDesde || desde >= o.horaHasta);
     });
   };
-
-  // --------------------------------------------
-  //   RESERVAR
-  // --------------------------------------------
+  
   const reservar = async (desde: string, hasta: string) => {
 	setModalMessage(null);
 	setLoadingReservaTurno(desde);
@@ -104,9 +95,9 @@ const AlquilarSalon: React.FC = () => {
       params.append("hora_hasta", hasta);
       params.append("id_salon", String(idSalon));
       params.append("id_usuario", usuario.id);
-      params.append("email", usuario.mail); // 👈 importante
+      params.append("email", usuario.mail); 
 
-      const url = `http://localhost:8080/club/alquiler_salon?${params.toString()}`;
+      const url = `https://losandesback-production.up.railway.app/alquiler_salon?${params.toString()}`;
 
       const res = await fetch(url);
       const text = await res.text();
@@ -119,11 +110,11 @@ const AlquilarSalon: React.FC = () => {
 			    }, 10000);
       } else {
 		setModalType('error');
-		setModalMessage('❌ No se pudo iniciar la reserva.');
+		setModalMessage('No se pudo iniciar la reserva.');
       }
 
     } catch (err) {
-      setModalMessage('❌ Error de conexión con el servidor.');
+      setModalMessage('Error de conexión con el servidor.');
     }finally {
 	  	   setLoadingReservaTurno(null); 
 	  	 }
@@ -138,7 +129,6 @@ const AlquilarSalon: React.FC = () => {
         <div className="alquilar-content">
           <h2>Alquilar Salón</h2>
 
-          {/* FECHA */}
           <div className="form-box">
             <label>Seleccioná una fecha:</label>
             <input
@@ -150,7 +140,6 @@ const AlquilarSalon: React.FC = () => {
             />
           </div>
 
-          {/* HORARIOS */}
           {fecha && (
             <div className="horarios-box">
               <h3>Horarios disponibles</h3>

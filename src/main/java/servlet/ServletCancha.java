@@ -27,7 +27,7 @@ public class ServletCancha extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    	response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         String action = request.getParameter("action");
@@ -105,7 +105,7 @@ public class ServletCancha extends HttpServlet {
     } 
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
     }
@@ -114,7 +114,7 @@ public class ServletCancha extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    	response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         String action = request.getParameter("action");
@@ -136,7 +136,6 @@ public class ServletCancha extends HttpServlet {
 
                 logicCancha.add(nueva);
 
-                // ✅ Responder con JSON para React
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write("{\"status\":\"ok\"}");
@@ -167,7 +166,6 @@ public class ServletCancha extends HttpServlet {
 
                     logicCancha.update(c);
 
-                    // Responder con éxito en JSON para React
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.getWriter().write("{\"status\":\"ok\"}");

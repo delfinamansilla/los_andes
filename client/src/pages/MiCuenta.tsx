@@ -56,14 +56,14 @@ const MiCuenta: React.FC = () => {
     if (fechaNacimiento) params.append('fecha_nacimiento', fechaNacimiento);
 
     try {
-      const res = await fetch('http://localhost:8080/club/usuario', {
+      const res = await fetch('https://losandesback-production.up.railway.app/usuario', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),
       });
 
       if (res.ok) {
-        setMensajeExito('✅ Datos actualizados correctamente');
+        setMensajeExito('Datos actualizados correctamente');
         const updatedUser = { ...usuario, nombre_completo: nombreCompleto, dni, telefono, mail, fecha_nacimiento: fechaNacimiento };
         localStorage.setItem('usuario', JSON.stringify(updatedUser));
         setUsuario(updatedUser);
@@ -83,7 +83,7 @@ const MiCuenta: React.FC = () => {
   const handleCambiarContrasenia = async (e: React.FormEvent) => {
     e.preventDefault();
     if (nuevaContraseña !== confirmarNuevaContraseña) {
-      setMensajeError('❌ Las contraseñas no coinciden');
+      setMensajeError('Las contraseñas no coinciden');
       setTimeout(() => setMensajeError(''), 3000);
       return;
     }
@@ -101,14 +101,14 @@ const MiCuenta: React.FC = () => {
       params.append('estado', 'true');
       if (fechaNacimiento) params.append('fecha_nacimiento', fechaNacimiento);
 
-      const res = await fetch('http://localhost:8080/club/usuario', {
+      const res = await fetch('https://losandesback-production.up.railway.app/usuario', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),
       });
 
       if (res.ok) {
-        setMensajeExito('✅ Contraseña cambiada correctamente');
+        setMensajeExito('Contraseña cambiada correctamente');
         const updatedUser = { ...usuario, contrasenia: nuevaContraseña };
         localStorage.setItem('usuario', JSON.stringify(updatedUser));
         setUsuario(updatedUser);
@@ -121,7 +121,7 @@ const MiCuenta: React.FC = () => {
       }
     } catch (err) {
       console.error(err);
-      setMensajeError('🚫 Error al conectar con el servidor');
+      setMensajeError('Error al conectar con el servidor');
       setTimeout(() => setMensajeError(''), 3000);
     }
   };

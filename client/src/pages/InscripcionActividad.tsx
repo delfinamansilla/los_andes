@@ -41,7 +41,7 @@ const InscripcionActividad: React.FC = () => {
       setLoading(false);
       return;
     }
-    const url = `http://localhost:8080/club/actividad?action=listarcondetalles&format=json&id_usuario=${usuario.id}`;
+    const url = `https://losandesback-production.up.railway.app/actividad?action=listarcondetalles&format=json&id_usuario=${usuario.id}`;
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
@@ -73,7 +73,7 @@ const InscripcionActividad: React.FC = () => {
 
     try {
       const fechaHoy = new Date().toISOString().split('T')[0];
-      const url = `http://localhost:8080/club/inscripcion?action=crear&fecha_inscripcion=${fechaHoy}&id_usuario=${usuario.id}&id_actividad=${actividadAInscribir.id}`;
+      const url = `https://losandesback-production.up.railway.app/inscripcion?action=crear&fecha_inscripcion=${fechaHoy}&id_usuario=${usuario.id}&id_actividad=${actividadAInscribir.id}`;
       
       const res = await fetch(url, { method: 'POST' });
       const result = await res.json();

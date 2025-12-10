@@ -50,8 +50,8 @@ const PartidoDetalle: React.FC = () => {
     const fetchData = async () => {
       try {
         const [actRes, canchaRes] = await Promise.all([
-          fetch("http://localhost:8080/club/actividad?action=listar"),
-          fetch("http://localhost:8080/club/cancha?action=listar"),
+          fetch("https://losandesback-production.up.railway.app/actividad?action=listar"),
+          fetch("https://losandesback-production.up.railway.app/cancha?action=listar"),
         ]);
         const actividadesData = await actRes.json();
         const canchasData = await canchaRes.json();
@@ -73,7 +73,7 @@ const PartidoDetalle: React.FC = () => {
       try {
         if (partido.id_actividad) {
           const resAct = await fetch(
-            `http://localhost:8080/club/actividad?action=buscar&id=${partido.id_actividad}`
+            `https://losandesback-production.up.railway.app/actividad?action=buscar&id=${partido.id_actividad}`
           );
           const dataAct = await resAct.json();
           setNombreActividad(dataAct?.nombre|| "Actividad no encontrada");
@@ -82,7 +82,7 @@ const PartidoDetalle: React.FC = () => {
 		setNombreCancha("Partido en cancha del oponente");
         if (partido.id_cancha && partido.id_cancha !== 0) {
           const resCancha = await fetch(
-            `http://localhost:8080/club/cancha?action=buscar&id=${partido.id_cancha}`
+            `https://losandesback-production.up.railway.app/cancha?action=buscar&id=${partido.id_cancha}`
           );
           const text = await resCancha.text();
           if (text) {
@@ -120,7 +120,7 @@ const PartidoDetalle: React.FC = () => {
   const handleGuardarCambios = async () => {
     if (!partido) return;
     try {
-      const res = await fetch(`http://localhost:8080/club/partido?action=actualizar`, {
+      const res = await fetch(`https://losandesback-production.up.railway.app/partido?action=actualizar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -131,14 +131,14 @@ const PartidoDetalle: React.FC = () => {
 		  hora_hasta: partido.hora_hasta,
 		  categoria: partido.categoria,
 		  precio_entrada: Number(partido.precio_entrada),
-		  id_cancha: Number(partido.id_cancha),
+		  id_cancha: partido.id_cancha === 0 ? null : Number(partido.id_cancha),
 		  id_actividad:Number(partido.id_actividad)
         }),
       });
       const text = await res.text();
       const data = JSON.parse(text);
       if (data.status === "ok") {
-        setMensajeExito("✅ Partido actualizado correctamente");
+        setMensajeExito("Partido actualizado correctamente");
         localStorage.setItem("partidoSeleccionada", JSON.stringify(partido));
         setEditando(false);
       } else {
@@ -162,8 +162,8 @@ const PartidoDetalle: React.FC = () => {
     if (!partido) return;
     try {
       const res = await fetch(
-        `http://localhost:8080/club/partido?action=eliminar&id=${partido.id}`,
-        { method: "GET", credentials: "include" }
+        `https://losandesback-production.up.railway.app/partido?action=eliminar&id=${partido.id}`,
+        { method: "GET"}
       );
       const text = await res.text();
       const data = JSON.parse(text);

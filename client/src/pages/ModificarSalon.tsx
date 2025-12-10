@@ -23,7 +23,6 @@ const ModificarSalon: React.FC = () => {
   const [descripcion, setDescripcion] = useState('');
   const [nuevaImagen, setNuevaImagen] = useState<File | null>(null);
 
-  // 🔥 Nuevo estado para mostrar preview de una imagen seleccionada
   const [previewImagen, setPreviewImagen] = useState<string | null>(null);
 
   useEffect(() => {
@@ -38,7 +37,6 @@ const ModificarSalon: React.FC = () => {
     setCapacidad(s.capacidad);
     setDescripcion(s.descripcion);
 
-    // Imagen original para mostrar al cargar la vista
     setPreviewImagen(s.imagen);
   }, [navigate]);
 
@@ -55,29 +53,30 @@ const ModificarSalon: React.FC = () => {
 
     if (nuevaImagen) {
       formData.append('imagen', nuevaImagen);
-    }
+    }	  else {
+	    formData.append('imagenActual', salon.imagen ?? '');
+	  }
 
     try {
-      const res = await fetch('http://localhost:8080/club/salon', {
+      const res = await fetch('https://losandesback-production.up.railway.app/salon', {
         method: 'POST',
         body: formData
       });
 
       if (res.ok) {
-        setMensajeExito('✔️ Salón actualizado correctamente');
+        setMensajeExito('Salón actualizado correctamente');
         localStorage.removeItem('salonSeleccionado');
         setTimeout(() => navigate('/salones-admin'), 2000);
       } else {
-        setMensajeError('❌ Error al actualizar el salón');
+        setMensajeError('Error al actualizar el salón');
         setTimeout(() => setMensajeError(''), 3000);
       }
     } catch (err) {
-      setMensajeError('🚫 Error de conexión con el servidor');
+      setMensajeError('Error de conexión con el servidor');
       setTimeout(() => setMensajeError(''), 3000);
     }
   };
 
-  // 🔥 Cuando el usuario selecciona una imagen → la mostramos en preview
   const handleImagenChange = (file: File | null) => {
     setNuevaImagen(file);
 
@@ -130,7 +129,6 @@ const ModificarSalon: React.FC = () => {
               onChange={(e) => handleImagenChange(e.target.files?.[0] || null)} 
             />
 
-            {/* 🔥 Siempre mostramos la imagen ACTUAL o la NUEVA según corresponda */}
             {previewImagen && (
               <div className="imagen-actual">
                 <p>Vista previa:</p>

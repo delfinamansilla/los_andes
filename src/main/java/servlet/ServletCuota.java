@@ -35,7 +35,7 @@ public class ServletCuota extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         
@@ -76,8 +76,7 @@ public class ServletCuota extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        // Configuración CORS necesaria
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
@@ -97,13 +96,8 @@ public class ServletCuota extends HttpServlet {
                     nueva.setFecha_cuota(LocalDate.now());
                     nueva.setFecha_vencimiento(LocalDate.parse(fechaVencimientoStr));
                     
-                    // SIN id_usuario
-                    
-                    // DataCuota.add() inserta en la BD y setea el ID generado en el objeto 'nueva'
                     logicCuota.add(nueva);
 
-                    // ✅ AQUÍ ESTÁ LA SOLUCIÓN AL ERROR ROJO:
-                    // Devolvemos el objeto completo en JSON (incluyendo el ID generado)
                     response.getWriter().write(gson.toJson(nueva));
                     break;
                 }

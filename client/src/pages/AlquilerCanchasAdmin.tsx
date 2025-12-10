@@ -44,7 +44,7 @@ const AlquileresCanchasAdmin = () => {
 
   const fetchAlquileres = async (idCancha: number) => {
     try {
-      const res = await fetch(`http://localhost:8080/club/alquiler_cancha?action=listar_por_cancha&id_cancha=${idCancha}`);
+      const res = await fetch(`https://losandesback-production.up.railway.app/alquiler_cancha?action=listar_por_cancha&id_cancha=${idCancha}`);
       if (!res.ok) throw new Error('Error al obtener alquileres.');
       const data = await res.json();
       setAlquileres(data);

@@ -60,6 +60,10 @@ public class ServletAlquiler_cancha extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws ServletException, IOException {
+    	
+    	resp.setHeader("Access-Control-Allow-Origin", "*");
+        resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
         resp.setContentType("application/json;charset=UTF-8");
         String action = req.getParameter("action");
@@ -106,6 +110,28 @@ public class ServletAlquiler_cancha extends HttpServlet {
                         resp.getWriter().write(gson.toJson(respuesta));
                         
                     } catch (Exception e) {
+                        resp.setStatus(500);
+                        resp.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
+                    }
+                    break;
+                }
+                
+                case "listar_por_usuario": {
+                    try {
+                        int idUsuario = Integer.parseInt(req.getParameter("id_usuario"));
+
+                        LinkedList<Alquiler_cancha> todos = logic.getAll();
+                        
+
+                        List<Alquiler_cancha> delUsuario = todos.stream()
+                            .filter(a -> a.getId_usuario() == idUsuario)
+                            .collect(java.util.stream.Collectors.toList());
+                            
+
+                        resp.getWriter().write(gson.toJson(delUsuario));
+                        
+                    } catch (Exception e) {
+                        e.printStackTrace();
                         resp.setStatus(500);
                         resp.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
                     }
@@ -231,31 +257,32 @@ public class ServletAlquiler_cancha extends HttpServlet {
 
                     
                     PrereservaCancha p = logicPre.crearPreReserva(idUsuario, idCancha, fecha, desde, hasta);
-
+                    if (p == null) {
+                        System.err.println("ERROR: La reserva devolvió NULL (Horario ocupado o error BD)");
+                        resp.setStatus(500);
+                        resp.getWriter().write("{\"error\":\"No se pudo reservar. El horario puede estar ocupado.\"}");
+                        break; 
+                    }
                     
-                    String link = "http://localhost:8080/club/alquiler_cancha?action=confirmar&token=" + p.getToken();
+                    String link = "http://losandesback-production.up.railway.app/alquiler_cancha?action=confirmar&token=" + p.getToken();
 
                     
                     String cuerpo = "<div style='background-color: #f4f4f4; padding: 40px; font-family: Arial, sans-serif;'>"
                             + "<div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);'>"
                             
-                            // Cabecera Verde
                             + "<div style='background-color: #20321E; padding: 30px; text-align: center;'>"
                             + "<h1 style='color: #DDD8CA; margin: 0; font-size: 24px;'>Confirmación de Reserva</h1>"
                             + "</div>"
                             
-                            // Contenido
                             + "<div style='padding: 30px; color: #333;'>"
                             + "<p style='font-size: 16px;'>Hola,</p>"
                             + "<p style='font-size: 16px; line-height: 1.5;'>Has solicitado una reserva en el Club Deportivo Los Andes. Para confirmarla y asegurar tu lugar, por favor haz clic en el botón de abajo.</p>"
                             
-                            // Caja de detalles
                             + "<div style='background-color: #f9f9f9; padding: 15px; border-left: 5px solid #466245; margin: 20px 0;'>"
                             + "<p style='margin: 5px 0;'><strong> Fecha:</strong> " + fecha + "</p>"
                             + "<p style='margin: 5px 0;'><strong> Horario:</strong> " + desde + " - " + hasta + "</p>"
                             + "</div>"
                             
-                            // Botón
                             + "<div style='text-align: center; margin-top: 30px;'>"
                             + "<a href='" + link + "' style='background-color: #b91c1c; color: #ffffff; padding: 15px 30px; text-decoration: none; font-weight: bold; border-radius: 5px; display: inline-block;'>CONFIRMAR RESERVA AHORA</a>"
                             + "</div>"
@@ -280,7 +307,7 @@ public class ServletAlquiler_cancha extends HttpServlet {
                     String estiloCss = "<style>body{font-family:sans-serif;background:#20321E;color:white;display:flex;justify-content:center;align-items:center;height:100vh}.card{background:#DDD8CA;padding:40px;border-radius:10px;color:#333;text-align:center}.btn{background:#466245;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;display:inline-block;margin-top:10px}</style>";
 
                     if (pr == null || pr.getExpiracion().isBefore(LocalDateTime.now())) {
-                        resp.getWriter().write("<html><head>" + estiloCss + "</head><body><div class='card'><h1>Enlace inválido o expirado</h1><a href='http://localhost:3000' class='btn'>Volver</a></div></body></html>");
+                        resp.getWriter().write("<html><head>" + estiloCss + "</head><body><div class='card'><h1>Enlace inválido o expirado</h1><a href='http://losandesback-production.up.railway.app' class='btn'>Volver</a></div></body></html>");
                         return;
                     }
 
@@ -305,7 +332,7 @@ public class ServletAlquiler_cancha extends HttpServlet {
                     
                     if (u != null && u.getMail() != null) {
                         
-                        String baseUrl = "http://localhost:8080/club/alquiler_cancha";
+                        String baseUrl = "https://los-andes-six.vercel.app/alquiler_cancha";
                         String params = "&id_cancha=" + pr.getIdCancha() + 
                                         "&id_usuario=" + pr.getIdUsuario() +
                                         "&fecha=" + pr.getFecha() +
@@ -338,7 +365,7 @@ public class ServletAlquiler_cancha extends HttpServlet {
                     resp.getWriter().write("<div class='card'>");
                     resp.getWriter().write("<h1>¡Reserva Confirmada!</h1>");
                     resp.getWriter().write("<p>Hemos enviado un correo a <b>" + (u != null ? u.getMail() : "tu casilla") + "</b> con las opciones de descarga.</p>");
-                    resp.getWriter().write("<a href='http://localhost:3000/mis-reservas' class='btn'>Ir a Mis Reservas</a>");
+                    resp.getWriter().write("<a href='http://losandesback-production.up.railway.app/alquileres-cancha' class='btn'>Ir a Mis Reservas</a>");
                     resp.getWriter().write("</div></body></html>");
                     break;
                 }
@@ -391,6 +418,10 @@ public class ServletAlquiler_cancha extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
         throws ServletException, IOException {
+    	
+    	resp.setHeader("Access-Control-Allow-Origin", "*");
+        resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
         resp.setContentType("application/json;charset=UTF-8");
         String action = req.getParameter("action");

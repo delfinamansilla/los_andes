@@ -65,7 +65,7 @@ const NavbarSocio: React.FC = () => {
 		    onMouseOver={() => handleMouseEnter('cuotas')}
 		    onMouseOut={handleMouseLeave}
 		  >
-		    <i className=""></i> Cuotas {/*emoji: fa-solid fa-money-bill-1-wave*/}
+		    <i className=""></i> Cuotas 
 		    {activeMenu === 'cuotas' && (
 		      <ul className="dropdown">
 		        <li><button onClick={() => navigate('/mis-cuotas')}>Mis cuotas</button></li>
@@ -77,7 +77,7 @@ const NavbarSocio: React.FC = () => {
               onMouseOver={() => handleMouseEnter('actividades')}
               onMouseOut={handleMouseLeave}
             >
-              <i className=""></i> Actividades {/*emoji: fa-solid fa-person-walking*/}
+              <i className=""></i> Actividades 
               {activeMenu === 'actividades' && (
                 <ul className="dropdown">
                   <li><button onClick={() => navigate('/inscripcion-actividad')}>Ver todas</button></li>
@@ -90,7 +90,7 @@ const NavbarSocio: React.FC = () => {
 			  onMouseOver={() => handleMouseEnter('salones')}
 			  onMouseOut={handleMouseLeave}
 			>
-			  <i className=""></i> Salones {/*emoji: fa-solid fa-building*/}
+			  <i className=""></i> Salones
 			  {activeMenu === 'salones' && (
 			    <ul className="dropdown">
 			      <li><button onClick={() => navigate('/salones')}>Ver todos</button></li>
@@ -104,7 +104,7 @@ const NavbarSocio: React.FC = () => {
               onMouseOver={() => handleMouseEnter('canchas')}
               onMouseOut={handleMouseLeave}
             >
-              <i className="fa-solid fa-volleyball"></i> Canchas
+              <i className=""></i> Canchas
               {activeMenu === 'canchas' && (
                 <ul className="dropdown">
                   <li><button onClick={() => navigate('/canchas')}>Ver todas</button></li>
@@ -118,7 +118,7 @@ const NavbarSocio: React.FC = () => {
 			  onMouseOver={() => handleMouseEnter('partidos')}
 			  onMouseOut={handleMouseLeave}
 			>
-			  <i className="fa-solid fa-trophy"></i> Partidos
+			  <i className=""></i> Partidos
 			  {activeMenu === 'partidos' && (
 			    <ul className="dropdown">
 			      <li><button onClick={() => navigate('/partidos-socio')}>Ver todos</button></li>
@@ -144,5 +144,3 @@ const NavbarSocio: React.FC = () => {
   };
 
 export default NavbarSocio;
-
-

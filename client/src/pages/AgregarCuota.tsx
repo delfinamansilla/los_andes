@@ -14,13 +14,17 @@ const AgregarCuota: React.FC = () => {
     setSuccess(null);
 
     if (!fechaVencimiento || !monto) {
-      setError('❌ La fecha de vencimiento y el monto son obligatorios.');
+      setError('La fecha de vencimiento y el monto son obligatorios.');
       return;
     }
 
     try {
+		
+      const fechaHoy = new Date();
+	  const anio = fechaHoy.getFullYear();
+	  const mes = fechaHoy.getMonth() + 1;
 
-      const nroCuotaActual = new Date().getMonth() + 1;
+      const nroCuotaActual = (anio * 100) + mes;
 
 
       const paramsCuota = new URLSearchParams();
@@ -29,7 +33,7 @@ const AgregarCuota: React.FC = () => {
       paramsCuota.append('fecha_vencimiento', fechaVencimiento);
 
 
-      const resCuota = await fetch('http://localhost:8080/club/cuota', {
+      const resCuota = await fetch('https://losandesback-production.up.railway.app/cuota', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: paramsCuota.toString(),
@@ -54,7 +58,7 @@ const AgregarCuota: React.FC = () => {
       paramsMonto.append('monto', monto);
       paramsMonto.append('id_cuota', idCuotaGenerado.toString());
       
-      const resMonto = await fetch('http://localhost:8080/club/montocuota', {
+      const resMonto = await fetch('https://losandesback-production.up.railway.app/montocuota', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: paramsMonto.toString(),
@@ -63,7 +67,7 @@ const AgregarCuota: React.FC = () => {
       const dataMonto = await resMonto.json();
 
       if (resMonto.ok) {
-        setSuccess(` ¡Listo! Cuota del mes ${nroCuotaActual} creada con monto $${monto}.`);
+        setSuccess(`¡Listo! Cuota ${mes}/${anio} (Cod: ${nroCuotaActual}) creada con monto $${monto}.`);
         setFechaVencimiento('');
         setMonto('');
       } else {

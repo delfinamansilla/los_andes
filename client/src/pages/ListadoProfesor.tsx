@@ -46,7 +46,7 @@ const ListadoProfesor: React.FC = () => {
 
   const fetchProfesores = async () => {
     try {
-      const response = await fetch('http://localhost:8080/club/profesor?action=listar');
+      const response = await fetch('https://losandesback-production.up.railway.app/profesor?action=listar');
 
       if (!response.ok) {
         throw new Error('La respuesta del servidor no fue exitosa.');
@@ -77,7 +77,7 @@ const ListadoProfesor: React.FC = () => {
     if (profesorAEliminar === null) return;
 
     try {
-      const response = await fetch(`http://localhost:8080/club/profesor?action=eliminar&id=${profesorAEliminar}`);
+      const response = await fetch(`https://losandesback-production.up.railway.app/profesor?action=eliminar&id=${profesorAEliminar}`);
       const data = await response.json();
 
       if (!response.ok || data.status !== 'ok') {
@@ -85,11 +85,11 @@ const ListadoProfesor: React.FC = () => {
       }
 
       setProfesores(profesores.filter(p => p.id !== profesorAEliminar));
-      setInfoModal({ visible: true, mensaje: '✅ Profesor eliminado correctamente.' });
+      setInfoModal({ visible: true, mensaje: 'Profesor eliminado correctamente.' });
 
 
     } catch (err: any) {
-      setInfoModal({ visible: true, mensaje: `❌ Error al eliminar: ${err.message}` });
+      setInfoModal({ visible: true, mensaje: `Error al eliminar: ${err.message}` });
       console.error("Error en onConfirmarDelete:", err);
     } finally {
       onCancelarDelete();

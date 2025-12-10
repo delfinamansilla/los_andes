@@ -58,12 +58,12 @@ const PartidosSocio: React.FC = () => {
 
       if (filtro === "semana") {
         const { desde, hasta } = obtenerFechasSemana();
-        url = `http://localhost:8080/club/partido?action=listar_por_rango&desde=${desde}&hasta=${hasta}`;
+        url = `https://losandesback-production.up.railway.app/partido?action=listar_por_rango&desde=${desde}&hasta=${hasta}`;
       } else {
-        url = `http://localhost:8080/club/partido?action=listar`;
+        url = `https://losandesback-production.up.railway.app/partido?action=listar`;
       }
 
-      const res = await fetch(url, { method: "GET", credentials: "include" });
+      const res = await fetch(url, { method: "GET"});
 
 
       const texto = await res.text();
@@ -83,7 +83,7 @@ const PartidosSocio: React.FC = () => {
          
           try {
             const actRes = await fetch(
-              `http://localhost:8080/club/actividad?action=buscar&id=${p.idActividad ?? p.id_actividad}`
+              `https://losandesback-production.up.railway.app/actividad?action=buscar&id=${p.idActividad ?? p.id_actividad}`
             );
             const actTxt = await actRes.text();
             actividad = actTxt ? JSON.parse(actTxt) : null;
@@ -95,7 +95,7 @@ const PartidosSocio: React.FC = () => {
           if (idCancha && idCancha !== 0) {
             try {
               const canchaRes = await fetch(
-                `http://localhost:8080/club/cancha?action=buscar&id=${idCancha}`
+                `https://losandesback-production.up.railway.app/cancha?action=buscar&id=${idCancha}`
               );
               const canchaTxt = await canchaRes.text();
               cancha = canchaTxt ? JSON.parse(canchaTxt) : null;

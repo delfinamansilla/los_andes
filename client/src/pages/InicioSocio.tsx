@@ -3,6 +3,10 @@ import NavbarSocio from './NavbarSocio';
 import Footer from './Footer';
 import { Clock, MapPin, Phone, Mail, Award, Shield, Users, Dumbbell } from 'lucide-react';
 import '../styles/InicioSocio.css';
+import EstadoCuentaWidget from './EstadoCuentaWidget';
+import ProximasActividadesWidget from './ProximasActividadesWidget';
+import ReservasActivasWidget from './ReservasActivasWidget';
+import EstadisticasWidget from './EstadisticasWidget';
 
 const InicioSocio: React.FC = () => {
 	const [esCumple, setEsCumple] = useState(false);
@@ -35,7 +39,6 @@ const InicioSocio: React.FC = () => {
 	      }
 	    }, []);
 
-	    // aca dibujamos los globitos
 		const renderBalloons = () => {
 		    const balloons = [];
 		    const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#1A535C', '#FF9F1C', '#9B5DE5'];
@@ -70,7 +73,6 @@ const InicioSocio: React.FC = () => {
     <div className="inicio-socio-page">
       <NavbarSocio />
 	  
-	  {/* --- LÓGICA DE CUMPLEAÑOS --- */}
 	        {esCumple && (
 	          <>
 	            <div className="balloon-container">
@@ -84,12 +86,15 @@ const InicioSocio: React.FC = () => {
 	        )}
       
       <div className="contenido-socio">
-
+	  
         <div className="bienvenida-header">
           <h2>Los Andes</h2>
           <p>Tu espacio deportivo en el corazón de Rosario</p>
         </div>
-
+		<EstadoCuentaWidget />
+			  <ProximasActividadesWidget />
+			  <ReservasActivasWidget />
+			  <EstadisticasWidget />
         <div className="seccion-card">
           <div className="seccion-titulo">
             <Clock className="icono-titulo" size={28} />

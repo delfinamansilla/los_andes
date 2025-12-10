@@ -58,14 +58,13 @@ const AdminPartidos: React.FC = () => {
 
       if (filtro === "semana") {
         const { desde, hasta } = obtenerFechasSemana();
-        url = `http://localhost:8080/club/partido?action=listar_por_rango&desde=${desde}&hasta=${hasta}`;
+        url = `https://losandesback-production.up.railway.app/partido?action=listar_por_rango&desde=${desde}&hasta=${hasta}`;
       } else {
-        url = `http://localhost:8080/club/partido?action=listar`;
+        url = `https://losandesback-production.up.railway.app/partido?action=listar`;
       }
 
-      const res = await fetch(url, { method: "GET", credentials: "include" });
+      const res = await fetch(url, { method: "GET"});
 
-      // 🔥 EVITA EL ERROR DE JSON VACÍO
       const texto = await res.text();
       const data = texto ? JSON.parse(texto) : [];
 
@@ -74,16 +73,13 @@ const AdminPartidos: React.FC = () => {
         return;
       }
 
-      // 🔥 BLOQUE ARREGLADO
       const partidosConDatos = await Promise.all(
         data.map(async (p) => {
           let actividad = null;
           let cancha = null;
-
-          // Cargar actividad
           try {
             const actRes = await fetch(
-              `http://localhost:8080/club/actividad?action=buscar&id=${p.idActividad ?? p.id_actividad}`
+              `https://losandesback-production.up.railway.app/actividad?action=buscar&id=${p.idActividad ?? p.id_actividad}`
             );
             const actTxt = await actRes.text();
             actividad = actTxt ? JSON.parse(actTxt) : null;
@@ -91,12 +87,11 @@ const AdminPartidos: React.FC = () => {
             actividad = null;
           }
 
-          // Cargar cancha si corresponde
           const idCancha = p.idCancha ?? p.id_cancha;
           if (idCancha && idCancha !== 0) {
             try {
               const canchaRes = await fetch(
-                `http://localhost:8080/club/cancha?action=buscar&id=${idCancha}`
+                `https://losandesback-production.up.railway.app/cancha?action=buscar&id=${idCancha}`
               );
               const canchaTxt = await canchaRes.text();
               cancha = canchaTxt ? JSON.parse(canchaTxt) : null;

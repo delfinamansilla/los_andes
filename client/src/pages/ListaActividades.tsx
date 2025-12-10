@@ -23,9 +23,8 @@ const ListaActividades: React.FC = () => {
       setError(null);
 
       try {
-        const res = await fetch('http://localhost:8080/club/actividad?action=listar', {
-          method: 'GET',
-          credentials: 'include',
+        const res = await fetch('https://losandesback-production.up.railway.app/actividad?action=listar', {
+          method: 'GET'
         });
 
         const text = await res.text();
@@ -34,7 +33,7 @@ const ListaActividades: React.FC = () => {
         try {
           data = JSON.parse(text);
         } catch {
-          console.warn('⚠ No se pudo parsear JSON');
+          console.warn('No se pudo parsear JSON');
         }
 
         if (Array.isArray(data)) {

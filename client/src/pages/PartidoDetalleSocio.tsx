@@ -53,7 +53,7 @@ const PartidoDetalleSocio: React.FC = () => {
       try {
         if (partido.id_actividad) {
           const resAct = await fetch(
-            `http://localhost:8080/club/actividad?action=buscar&id=${partido.id_actividad}`
+            `https://losandesback-production.up.railway.app/actividad?action=buscar&id=${partido.id_actividad}`
           );
           const dataAct = await resAct.json();
           setNombreActividad(dataAct?.nombre|| "Actividad no encontrada");
@@ -62,7 +62,7 @@ const PartidoDetalleSocio: React.FC = () => {
 		setNombreCancha("Partido en cancha del oponente");
         if (partido.id_cancha && partido.id_cancha !== 0) {
           const resCancha = await fetch(
-            `http://localhost:8080/club/cancha?action=buscar&id=${partido.id_cancha}`
+            `https://losandesback-production.up.railway.app/cancha?action=buscar&id=${partido.id_cancha}`
           );
           const text = await resCancha.text();
           if (text) {

@@ -19,10 +19,6 @@ import com.google.gson.JsonObject;
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Servlet para gestionar las operaciones CRUD de Actividad.
- * Soporta: listar, buscar, crear, actualizar y eliminar.
- */
 @WebServlet({"/actividad", "/Actividad", "/ACTIVIDAD"})
 public class ServletActividad extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -33,11 +29,9 @@ public class ServletActividad extends HttpServlet {
         super();
         logicActividad = new LogicActividad();
         gson = new GsonBuilder()
-        	    // cómo serializar LocalDate (para enviar JSON al frontend)
         	    .registerTypeAdapter(LocalDate.class,
         	        (com.google.gson.JsonSerializer<LocalDate>)
         	            (src, typeOfSrc, context) -> new com.google.gson.JsonPrimitive(src.toString()))
-        	    // cómo deserializar LocalDate (para leer JSON del frontend)
         	    .registerTypeAdapter(LocalDate.class,
         	        (com.google.gson.JsonDeserializer<LocalDate>)
         	            (json, typeOfT, context) -> LocalDate.parse(json.getAsString()))
@@ -50,7 +44,10 @@ public class ServletActividad extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+    	
+    	response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         String action = request.getParameter("action");
         String format = request.getParameter("format");
         
@@ -69,7 +66,7 @@ public class ServletActividad extends HttpServlet {
 
             switch (action.toLowerCase()) {
             case "listar": {
-                List<Actividad> actividades = logicActividad.getAll(); // ✅ usa List
+                List<Actividad> actividades = logicActividad.getAll();
                 String json = gson.toJson(actividades);
                 response.getWriter().write(json);
                 break;             
@@ -139,15 +136,15 @@ public class ServletActividad extends HttpServlet {
         }
     }
 
-    // -------------------------------------
-    // MÉTODOS POST → Crear o Actualizar
-    // -------------------------------------
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+    	response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setContentType("application/json;charset=UTF-8");
-        String action = request.getParameter("action"); // 👈 esto va a venir en la URL, está bien
+        String action = request.getParameter("action");
 
         try {
             if (action == null) {
@@ -155,10 +152,9 @@ public class ServletActividad extends HttpServlet {
                 return;
             }
 
-            // ✅ Leer el cuerpo JSON
             BufferedReader reader = request.getReader();
             JsonObject body = gson.fromJson(reader, JsonObject.class);
-            System.out.println("🟢 JSON recibido: " + body);// usa el gson de la clase
+            System.out.println("🟢 JSON recibido: " + body);
 
 
             switch (action.toLowerCase()) {

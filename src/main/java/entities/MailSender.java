@@ -16,7 +16,7 @@ public class MailSender {
 
         Session session = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("losandesclubrosario@gmail.com", "oqms hcip oykp aqal");
+                return new PasswordAuthentication("losandesclubrosario@gmail.com", "oqmshcipoykpaqal");
             }
         });
 

@@ -1,0 +1,272 @@
+.proximas-actividades-widget {
+  background: rgba(221, 216, 202, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  margin-bottom: 32px;
+  border: 2px solid rgba(221, 216, 202, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.proximas-actividades-widget:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.proximas-actividades-widget.loading,
+.proximas-actividades-widget.empty {
+  text-align: center;
+  padding: 40px 24px;
+}
+
+.proximas-actividades-widget.loading p {
+  color: #4a5c48;
+  margin: 0;
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #a69d85;
+}
+
+.widget-header svg {
+  color: #20321E;
+  flex-shrink: 0;
+}
+
+.widget-header h3 {
+  margin: 0;
+  font-size: 1.75rem;
+  color: #20321E;
+  font-weight: 700;
+  flex: 1;
+}
+
+.badge-count {
+  background: linear-gradient(135deg, #20321E 0%, #2d4a29 100%);
+  color: #DDD8CA;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Próxima clase destacada */
+.proxima-clase-destacada {
+  background: linear-gradient(135deg, #3d5a39 0%, #4a6f45 100%);
+  border: 2px solid #20321E;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.proxima-clase-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.proxima-clase-header svg {
+  color: #DDD8CA;
+}
+
+.proxima-clase-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #DDD8CA;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.proxima-clase-content h4 {
+  margin: 0 0 12px 0;
+  font-size: 1.25rem;
+  color: #DDD8CA;
+  font-weight: 700;
+}
+
+.proxima-clase-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tiempo-restante {
+  background: #20321E;
+  color: #DDD8CA;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dia-hora {
+  color: #DDD8CA;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Lista de actividades */
+.actividades-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.actividad-card {
+  border: 2px solid #a69d85;
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s ease;
+  background: rgba(201, 196, 181, 0.3);
+}
+
+.actividad-card:hover {
+  border-color: #20321E;
+  background: rgba(201, 196, 181, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateX(5px);
+}
+
+.actividad-main {
+  margin-bottom: 12px;
+}
+
+.actividad-nombre {
+  margin: 0 0 6px 0;
+  font-size: 1.1rem;
+  color: #20321E;
+  font-weight: 700;
+}
+
+.actividad-descripcion {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #4a5c48;
+  line-height: 1.4;
+}
+
+.actividad-detalles {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detalle-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: #4a5c48;
+  font-weight: 500;
+}
+
+.detalle-item svg {
+  color: #20321E;
+  flex-shrink: 0;
+}
+
+/* Ver más */
+.ver-mas {
+  text-align: center;
+  padding: 16px 0 0 0;
+}
+
+.texto-mas {
+  margin: 0;
+  color: #4a5c48;
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+/* Footer del widget */
+.widget-footer {
+  text-align: center;
+  padding-top: 16px;
+  border-top: 2px solid #a69d85;
+  margin-top: 16px;
+}
+
+.btn-ver-todas {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #20321E 0%, #2d4a29 100%);
+  color: #DDD8CA;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-ver-todas:hover {
+  background: linear-gradient(135deg, #2d4a29 0%, #3d5a39 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Estado vacío */
+.empty-state {
+  padding: 20px;
+}
+
+.empty-state p {
+  margin: 0 0 20px 0;
+  color: #4a5c48;
+  font-size: 1rem;
+}
+
+.btn-inscribirse {
+  display: inline-block;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #20321E 0%, #2d4a29 100%);
+  color: #DDD8CA;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-inscribirse:hover {
+  background: linear-gradient(135deg, #2d4a29 0%, #3d5a39 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .widget-header h3 {
+    font-size: 1.5rem;
+  }
+
+  .proxima-clase-content h4 {
+    font-size: 1.1rem;
+  }
+
+  .proxima-clase-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .actividad-nombre {
+    font-size: 1rem;
+  }
+
+  .actividad-descripcion {
+    font-size: 0.8rem;
+  }
+}
