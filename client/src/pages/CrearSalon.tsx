@@ -35,10 +35,10 @@ const CrearSalon: React.FC = () => {
       });
 
       if (res.ok) {
-        setMensajeExito('✅ Salón creado correctamente');
+        setMensajeExito('Salón creado correctamente');
         setTimeout(() => navigate('/inicio-admin'), 2000);
       } else {
-        setMensajeError('❌ Error al crear el salón');
+        setMensajeError('Error al crear el salón');
         setTimeout(() => setMensajeError(''), 3000);
       }
     } catch (err) {

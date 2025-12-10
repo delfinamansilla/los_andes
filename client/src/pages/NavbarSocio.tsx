@@ -104,7 +104,7 @@ const NavbarSocio: React.FC = () => {
               onMouseOver={() => handleMouseEnter('canchas')}
               onMouseOut={handleMouseLeave}
             >
-              <i className="fa-solid fa-volleyball"></i> Canchas
+               Canchas
               {activeMenu === 'canchas' && (
                 <ul className="dropdown">
                   <li><button onClick={() => navigate('/canchas')}>Ver todas</button></li>
@@ -118,7 +118,7 @@ const NavbarSocio: React.FC = () => {
 			  onMouseOver={() => handleMouseEnter('partidos')}
 			  onMouseOut={handleMouseLeave}
 			>
-			  <i className="fa-solid fa-trophy"></i> Partidos
+			   Partidos
 			  {activeMenu === 'partidos' && (
 			    <ul className="dropdown">
 			      <li><button onClick={() => navigate('/partidos-socio')}>Ver todos</button></li>

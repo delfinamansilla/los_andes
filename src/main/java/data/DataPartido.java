@@ -174,7 +174,11 @@ public class DataPartido {
             stmt.setObject(4, p.getHora_hasta());
             stmt.setString(5, p.getCategoria());
             stmt.setDouble(6, p.getPrecio_entrada());
-            stmt.setInt(7, p.getId_cancha());
+            if(p.getId_cancha() == null){
+                stmt.setNull(7, java.sql.Types.INTEGER);
+            } else {
+                stmt.setInt(7, p.getId_cancha());
+            }
             stmt.setInt(8, p.getId_actividad());
             stmt.setInt(9, p.getId());
             stmt.executeUpdate();

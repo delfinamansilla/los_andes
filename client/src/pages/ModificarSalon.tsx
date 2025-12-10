@@ -55,7 +55,9 @@ const ModificarSalon: React.FC = () => {
 
     if (nuevaImagen) {
       formData.append('imagen', nuevaImagen);
-    }
+    }	  else {
+	    formData.append('imagenActual', salon.imagen ?? '');
+	  }
 
     try {
       const res = await fetch('http://localhost:8080/club/salon', {
