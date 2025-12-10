@@ -17,7 +17,7 @@
   color: #1A1A1A !important;
   padding: 15px;
   border-radius: 12px;
-  width: 250px;          /* más chico */
+  width: 250px;          
   border: none;
   text-align: left;
   cursor: pointer;
@@ -27,18 +27,18 @@
 
 .partido-card:hover,
 .partido-btn:hover {
-  background-color: #E9DFCA; /* cremita más oscura */
+  background-color: #E9DFCA; 
   transform: translateY(-2px);
 }
 
-/* CONTENIDO */
+
 .partido-card-content {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-/* TÍTULO */
+
 .partido-titulo {
   font-size: 1.2rem;
   font-weight: bold;
@@ -52,7 +52,7 @@
   color: #6D7A6D;
 }
 
-/* FECHA, ACTIVIDAD */
+
 .partido-fecha,
 .partido-actividad {
   font-size: 1rem;
@@ -62,7 +62,7 @@
   gap: 6px;
 }
 
-/* CANCHA, PRECIO */
+
 .partido-cancha,
 .partido-precio {
   font-size: 0.9rem;
@@ -72,7 +72,7 @@
   gap: 6px;
 }
 
-/* ÍCONOS */
+
 .partido-card i,
 .partido-btn i {
   color: #20321E;

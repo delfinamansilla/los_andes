@@ -1,6 +1,4 @@
-/* --- AgregarCuota.css --- */
 
-/* 1. Configuración general de la página */
 .agregar-cuota-page {
   background-color: #20321E; /* Fondo verde oscuro */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -9,29 +7,29 @@
   flex-direction: column;
 }
 
-/* 2. Área de contenido centrada */
+
 .content-area {
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center; /* Centra verticalmente */
+  align-items: center; 
   padding: 40px 20px;
 }
 
-/* 3. Tarjeta del formulario (Estilo "Card" beige) */
+
 .form-container {
-  background-color: #E8E4D9; /* Beige claro, similar a tu captura */
-  color: #20321E; /* Texto oscuro para contraste */
+  background-color: #E8E4D9; 
+  color: #20321E; 
   padding: 40px;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   width: 100%;
-  max-width: 500px; /* Ancho máximo elegante */
+  max-width: 500px; 
   text-align: center;
   border: 1px solid #DDD8CA;
 }
 
-/* Títulos y textos dentro de la tarjeta */
+
 .form-container h2 {
   margin-top: 0;
   margin-bottom: 10px;
@@ -46,10 +44,9 @@
   font-size: 0.95rem;
 }
 
-/* 4. Grupos del formulario */
 .form-group {
   margin-bottom: 20px;
-  text-align: left; /* Etiquetas alineadas a la izquierda */
+  text-align: left; 
 }
 
 .form-group label {
@@ -60,7 +57,7 @@
   font-size: 0.95rem;
 }
 
-/* 5. Inputs (Clase .inp del TSX) */
+
 .inp {
   width: 100%;
   padding: 12px 15px;
@@ -80,7 +77,7 @@
   box-shadow: 0 0 8px rgba(70, 98, 69, 0.3);
 }
 
-/* 6. Botón de Agregar (Clase .btn_agregar del TSX) */
+
 .btn_agregar {
   width: 100%;
   background-color: #20321E;
@@ -105,9 +102,9 @@
   transform: translateY(0);
 }
 
-/* 7. Mensajes de Estado (Error y Éxito) */
+
 .error-box {
-  background-color: #ffcccc; /* Rojo claro */
+  background-color: #ffcccc; 
   color: #cc0000;
   padding: 12px;
   border-radius: 6px;
@@ -119,7 +116,7 @@
 }
 
 .success-box {
-  background-color: #d4edda; /* Verde claro */
+  background-color: #d4edda; 
   color: #155724;
   padding: 12px;
   border-radius: 6px;
@@ -130,13 +127,13 @@
   animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Animación suave para los mensajes */
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 8. Responsive */
+
 @media (max-width: 600px) {
   .form-container {
     padding: 25px 20px;

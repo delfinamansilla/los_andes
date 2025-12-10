@@ -93,7 +93,7 @@
   border-color: #466245;
 }
 
-/* Botón Eliminar */
+
 .btn-eliminar {
   background-color: #20321E;
   color: #DDD8CA;
@@ -103,7 +103,7 @@
   background-color: #466245;
 }
 
-/* 7. Modal de confirmación */
+
 .modal-backdrop {
   position: fixed;
   top: 0;

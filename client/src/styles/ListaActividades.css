@@ -1,7 +1,7 @@
-/* Fondo general */
+
 .page-container {
   min-height: 100vh;
-  background-color: #20321E; /* verde oscuro */
+  background-color: #20321E; 
   padding: 40px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   box-sizing: border-box;
@@ -10,7 +10,7 @@
   align-items: center;
 }
 
-/* Título */
+
 .page-container h2 {
   text-align: center;
   color: #DDD8CA;
@@ -18,7 +18,7 @@
   font-size: 1.8rem;
 }
 
-/* Contenedor de tarjetas */
+
 .actividad-lista {
   display: flex;
   flex-wrap: wrap;
@@ -26,10 +26,10 @@
   justify-content: center;
 }
 
-/* 🔸 Cada tarjeta individual */
+
 .actividad-btn {
-  background-color: #DDD8CA !important; /* cremita */
-  color: #20321E !important; /* texto verde oscuro */
+  background-color: #DDD8CA !important; 
+  color: #20321E !important; 
   border: none;
   border-radius: 14px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
@@ -52,26 +52,26 @@
 .actividad-btn p {
   font-size: 0.95rem;
   color: #466245;
-  white-space: normal; /* permite que el texto salte de línea */
-  word-wrap: break-word; /* corta palabras largas si es necesario */
-  overflow: hidden; /* evita desbordes visuales */
-  text-overflow: ellipsis; /* opcional: agrega "..." si se pasa */
+  white-space: normal; 
+  word-wrap: break-word; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
   display: -webkit-box;
-  -webkit-line-clamp: 5; /* muestra hasta 5 líneas antes de cortar */
+  -webkit-line-clamp: 5; 
   -webkit-box-orient: vertical;
 }
 
 
-/* Hover */
+
 .actividad-btn:hover {
-  background-color: #D3CCB9; /* un poco más oscuro al pasar el mouse */
+  background-color: #D3CCB9; 
   transform: translateY(-4px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
 }
 
-/* 🔹 Botón "Agregar actividad" (mismo estilo que los otros, pero con ícono) */
+
 .agregar-btn {
-  background-color: #DDD8CA; /* mismo cremita */
+  background-color: #DDD8CA; 
   color: #20321E;
   display: flex;
   align-items: center;
@@ -85,7 +85,7 @@
   background-color: #D3CCB9;
 }
 
-/* Mensajes de error */
+
 .error-box {
   background-color: #f8d7da;
   color: #721c24;
@@ -97,7 +97,7 @@
   width: fit-content;
 }
 
-/* Espacio para el icono de agregar actividad */
+
 .agregar-btn i.fa-solid {
   margin-right: 8px;
 }

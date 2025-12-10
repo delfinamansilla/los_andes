@@ -6,7 +6,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* --- CONTENIDO --- */
+
 
 .contenido-salon {
   flex-grow: 1;
@@ -24,7 +24,7 @@
   font-weight: 800;
 }
 
-/* --- FORMULARIO --- */
+
 
 .form-modificar-salon {
   background-color: #DDD8CA;
@@ -65,7 +65,7 @@
   box-shadow: 0 0 5px rgba(32, 50, 30, 0.5);
 }
 
-/* --- IMAGEN ACTUAL --- */
+
 
 .imagen-actual {
   margin-top: 10px;
@@ -79,15 +79,15 @@
 
 .imagen-actual img {
   width: 100%;
-  max-height: none;     /* ❗ Permite que la imagen use su altura real */
-  object-fit: contain;  /* ❗ NO RECORTA la imagen */
+  max-height: none;     
+  object-fit: contain;  
   border-radius: 10px;
   border: 2px solid #20321E;
   margin-top: 10px;
   background-color: black;
 }
 
-/* --- MENSAJES --- */
+
 .mensajes-globales {
   margin-bottom: 20px;
   text-align: center;
@@ -113,7 +113,7 @@
   border: 1px solid #f5c6cb;
 }
 
-/* --- BOTONES --- */
+
 
 .botones-container {
   margin-top: 20px;
@@ -131,7 +131,7 @@
   font-size: 1rem;
 }
 
-/* guardar */
+
 .botones-container button[type="submit"] {
   border: none;
   background-color: #20321E;
@@ -142,7 +142,7 @@
   background-color: #466245;
 }
 
-/* cancelar */
+
 .btn-cancel {
   background-color: #DDD8CA;
   color: #20321E;

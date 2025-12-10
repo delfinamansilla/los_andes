@@ -355,9 +355,7 @@
   border: 0;
 }
 
-/*la parte de los globoss*/
 
-/* --- CONTENEDOR DE GLOBOS --- */
 .balloon-container {
   position: fixed;
   top: 0;
@@ -369,19 +367,19 @@
   overflow: hidden;
 }
 
-/* --- EL GLOBO (Forma y animación) --- */
+
 .balloon {
   position: absolute;
-  bottom: -150px; /* Empiezan más abajo */
-  width: 60px;    /* Ancho del globo */
-  height: 80px;   /* Alto del globo */
-  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; /* Forma de gota invertida */
-  background-color: var(--balloon-color); /* Color dinámico */
-  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.1); /* Sombra interna 3D */
+  bottom: -150px; 
+  width: 60px;    
+  height: 80px;   
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; 
+  background-color: var(--balloon-color); 
+  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.1); 
   animation: floatUp linear infinite;
 }
 
-/* --- EL BRILLO (Reflejo de luz) --- */
+
 .balloon::before {
   content: '';
   position: absolute;
@@ -394,11 +392,11 @@
   transform: rotate(45deg);
 }
 
-/* --- EL HILO (Cuerda) --- */
+
 .balloon::after {
   content: '';
   position: absolute;
-  bottom: -60px; /* Largo del hilo */
+  bottom: -60px;
   left: 50%;
   width: 1px;
   height: 60px;
@@ -406,7 +404,7 @@
   transform: translateX(-50%);
 }
 
-/* --- ANIMACIÓN (Subida y balanceo) --- */
+
 @keyframes floatUp {
   0% {
     bottom: -150px;
@@ -427,26 +425,26 @@
   }
 }
 
-/* --- TARJETA DE SALUDO (Un poco más elegante) --- */
+
 .birthday-message {
   position: fixed;
   top: 120px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(5px); /* Efecto vidrio */
+  backdrop-filter: blur(5px); 
   padding: 20px 40px;
   border-radius: 15px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   z-index: 9998;
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.5);
-  animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Rebote elástico */
+  animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
 }
 
 .birthday-message h3 {
   margin: 0;
-  color: #20321E; /* Color institucional */
+  color: #20321E; 
   font-size: 1.5rem;
   font-weight: 700;
 }

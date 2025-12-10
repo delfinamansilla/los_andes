@@ -102,7 +102,7 @@
   border-color: #466245;
 }
 
-/* ----------- MENSAJES ----------- */
+
 .mensajes-globales {
   margin-bottom: 20px;
   text-align: center;
@@ -128,7 +128,7 @@
   border: 1px solid #f5c6cb;
 }
 
-/* ----------- PREVIEW DE LA IMAGEN ----------- */
+
 .preview-container {
   margin-top: 15px;
   text-align: center;
@@ -136,10 +136,10 @@
 
 .preview-img {
   width: 100%;
-  max-height: none;     /* ❗ Permite que la imagen use su altura real */
-  object-fit: contain;  /* ❗ NO RECORTA la imagen */
+  max-height: none;     
+  object-fit: contain;  
   border-radius: 10px;
   border: 2px solid #20321E;
   margin-top: 10px;
-  background-color: black; /* ayuda a ver bordes en imágenes transparentes */
+  background-color: black; 
 }

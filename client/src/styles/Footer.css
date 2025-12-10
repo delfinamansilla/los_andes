@@ -1,11 +1,11 @@
-/* Footer principal */
+
 .footer-club {
-  background-color: #375133; /* Verde Oscuro */
+  background-color: #375133; 
   color: #DDD8CA;
   padding: 4rem 2rem 1rem 2rem;
   margin-top: auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  border-top: 1px solid #466245; /* Borde más sutil */
+  border-top: 1px solid #466245; 
 }
 
 .footer-contenido {
@@ -17,7 +17,7 @@
   margin-bottom: 3rem;
 }
 
-/* Columnas */
+
 .footer-columna h3 {
   color: #DDD8CA;
   font-size: 1.2rem;
@@ -40,11 +40,11 @@
   margin-bottom: 0.8rem;
 }
 
-/* Botones de navegación limpios */
+
 .footer-columna ul li button {
   background: none;
   border: none;
-  color: #c9c4b5; /* Un poco más apagado que el blanco */
+  color: #c9c4b5; 
   text-decoration: none;
   transition: all 0.3s ease;
   font-size: 1rem;
@@ -59,7 +59,7 @@
   transform: translateX(5px);
 }
 
-/* Información de contacto - ARREGLO DE CAJAS BLANCAS */
+
 .footer-info {
   display: flex;
   flex-direction: column;
@@ -70,11 +70,9 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  color: #DDD8CA; /* Color crema */
+  color: #DDD8CA; 
   font-size: 1rem;
   line-height: 1.5;
-  
-  /* Esto elimina los cuadrados blancos que tenías */
   background-color: transparent !important; 
   border: none !important;
   padding: 0 !important;
@@ -87,13 +85,13 @@
   text-align: center;
 }
 
-/* Recuadro de horario (este sí queda bien con un fondito sutil) */
+
 .info-horario {
   color: #c9c4b5;
   font-size: 0.9rem;
   margin-top: 0.5rem;
   padding: 15px;
-  background: rgba(70, 98, 69, 0.2); /* Verde semitransparente */
+  background: rgba(70, 98, 69, 0.2); 
   border-radius: 8px;
   border-left: 3px solid #DDD8CA;
 }
@@ -114,7 +112,7 @@
 }
 
 
-/* Barra inferior */
+
 .footer-bottom {
   text-align: center;
   padding-top: 2rem;

@@ -65,7 +65,7 @@
   font-size: 1rem;
 }
 
-/* Timeline */
+
 .timeline-actividad {
   position: relative;
   display: flex;
@@ -83,7 +83,7 @@
   background: linear-gradient(to bottom, #a69d85 0%, #a69d85 100%);
 }
 
-/* Evento individual */
+
 .evento-item {
   position: relative;
   display: flex;
@@ -101,7 +101,7 @@
   transform: scale(1.15);
 }
 
-/* Ícono del evento */
+
 .evento-icono {
   position: relative;
   z-index: 2;
@@ -131,7 +131,7 @@
   color: #FFF5E6;
 }
 
-/* Contenido del evento */
+
 .evento-contenido {
   flex: 1;
   background: #FFFFFF;
@@ -165,7 +165,7 @@
   gap: 4px;
 }
 
-/* Colores de borde según tipo */
+
 .evento-cancha .evento-contenido {
   border-left: 4px solid #4a6f45;
 }
@@ -178,7 +178,7 @@
   border-left: 4px solid #A0522D;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
   .actividad-reciente-widget {
     padding: 1.5rem;

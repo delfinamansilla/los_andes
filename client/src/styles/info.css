@@ -1,4 +1,4 @@
-/* --- ESTRUCTURA DE LA PÁGINA --- */
+
 .info-page {
   background-color: #20321E; /* Fondo verde oscuro general */
   min-height: 100vh;
@@ -8,39 +8,36 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* --- CONTENEDOR CENTRAL --- */
 .info-main-content {
-  /* Esto asegura que el contenido baje y no choque con la navbar */
   margin-top: 40px; 
   margin-bottom: 40px;
   padding: 0 20px;
   flex-grow: 1;
   max-width: 800px;
   width: 100%;
-  align-self: center; /* Centra el contenedor horizontalmente */
+  align-self: center; 
 }
 
-/* --- TÍTULO (Afuera de la tarjeta) --- */
+
 .info-main-content h1 {
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 30px;
-  color: #DDD8CA; /* Color crema para que resalte sobre el verde */
+  color: #DDD8CA; 
   font-weight: 700;
 }
 
-/* --- TARJETA BEIGE (IMPORTANTE) --- */
-/* Esta clase es la que crea el recuadro beige estilo "Canchas" */
+
 .info-card {
-  background-color: #DDD8CA; /* Fondo crema */
-  color: #20321E; /* Texto oscuro */
+  background-color: #DDD8CA; 
+  color: #20321E; 
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-  border-left: 8px solid #466245; /* Borde verde lateral */
+  border-left: 8px solid #466245; 
 }
 
-/* Texto de párrafo dentro de la tarjeta */
+
 .info-card p {
   font-size: 1.1rem;
   line-height: 1.8;
@@ -48,7 +45,7 @@
   margin: 0;
 }
 
-/* --- LISTA --- */
+
 .lista-info {
   list-style: none;
   padding: 0;
@@ -68,7 +65,7 @@
   border-bottom: none;
 }
 
-/* Puntito verde al inicio de cada item */
+
 .lista-info li::before {
   content: "•";
   color: #466245;
@@ -79,7 +76,7 @@
   margin-top: 2px;
 }
 
-/* --- BOTÓN VOLVER --- */
+
 .btn-volver {
   display: block;
   margin: 40px auto 0 auto;

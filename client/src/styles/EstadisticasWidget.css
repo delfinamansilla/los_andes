@@ -95,7 +95,7 @@
   font-weight: 600;
 }
 
-/* Responsive */
+
 @media (max-width: 1024px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
