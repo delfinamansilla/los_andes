@@ -23,6 +23,8 @@ const AgregarHorario: React.FC = () => {
   const [editandoId, setEditandoId] = useState<number | null>(null);
   const [horarioEditado, setHorarioEditado] = useState<Horario | null>(null);
   const [mensaje, setMensaje] = useState<string>("");
+  const [actividad, setActividad] = useState<any>(null);
+
 
   const [mostrarModal, setMostrarModal] = useState(false);
   const [horarioAEliminar, setHorarioAEliminar] = useState<Horario | null>(null);
@@ -34,12 +36,14 @@ const AgregarHorario: React.FC = () => {
 
   useEffect(() => {
     const stored = localStorage.getItem("actividad");
-    if (stored) {
-      const actividad = JSON.parse(stored);
-      setNuevoHorario((prev) => ({ ...prev, id_actividad: actividad.id || 0 }));
-      cargarHorarios(actividad.id);
-	  cargarDatos(actividad);
-    }
+	if (stored) {
+	  const actividadLS = JSON.parse(stored);   // ahora sí existe
+	  setNuevoHorario((prev) => ({ ...prev, id_actividad: actividadLS.id || 0 }));
+	  setActividad(actividadLS);                // usar la variable correcta
+	  cargarHorarios(actividadLS.id);
+	  cargarDatos(actividadLS);
+	}
+
   }, []);
 
   const cargarHorarios = async (id_actividad: number) => {
@@ -151,19 +155,33 @@ const AgregarHorario: React.FC = () => {
 
   const handleGuardarCambios = async (horarioEditado: Horario | null) => {
     if (!horarioEditado?.id) return;
+
+    const payload = {
+      id: horarioEditado.id,
+      dia: horarioEditado.dia,
+      hora_desde: horarioEditado.horaDesde,
+      hora_hasta: horarioEditado.horaHasta,
+      id_actividad: actividad.id
+    };
+
+    console.log("📦 Enviando payload:", payload);
+
     try {
       const response = await fetch("https://losandesback-production.up.railway.app/horario?action=actualizar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(horarioEditado),
+        body: JSON.stringify(payload),
       });
+
       if (!response.ok) throw new Error("Error al actualizar horario");
-      await cargarHorarios(horarioEditado.id_actividad);
+
+      await cargarHorarios(actividad.id);
       setEditandoId(null);
     } catch (error) {
       console.error("❌ Error actualizando horario:", error);
     }
   };
+
 
   
   const cargarDatos = async (actividad: any) => {

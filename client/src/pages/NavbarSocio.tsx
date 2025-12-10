@@ -144,5 +144,3 @@ const NavbarSocio: React.FC = () => {
   };
 
 export default NavbarSocio;
-
-

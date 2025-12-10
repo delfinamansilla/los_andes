@@ -53,7 +53,9 @@ const ModificarSalon: React.FC = () => {
 
     if (nuevaImagen) {
       formData.append('imagen', nuevaImagen);
-    }
+    }	  else {
+	    formData.append('imagenActual', salon.imagen ?? '');
+	  }
 
     try {
       const res = await fetch('https://losandesback-production.up.railway.app/salon', {

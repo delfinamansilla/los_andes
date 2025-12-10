@@ -281,12 +281,12 @@ const CuotasUsuario: React.FC = () => {
                                 
                                 <td>
                                     {estado.pagado ? (
-                                        <span className="status-badge status-pagado">✅ Pagado</span>
+                                        <span className="status-badge status-pagado">Pagado</span>
                                     ) : (
                                         aplicaInteres ? (
-                                             <span className="status-badge status-vencida">⚠ Vencida</span>
+                                             <span className="status-badge status-vencida">Vencida</span>
                                         ) : (
-                                             <span className="status-badge status-pendiente">⏳ Pendiente</span>
+                                             <span className="status-badge status-pendiente">Pendiente</span>
                                         )
                                     )}
                                 </td>

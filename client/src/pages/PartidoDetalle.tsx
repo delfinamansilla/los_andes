@@ -131,7 +131,7 @@ const PartidoDetalle: React.FC = () => {
 		  hora_hasta: partido.hora_hasta,
 		  categoria: partido.categoria,
 		  precio_entrada: Number(partido.precio_entrada),
-		  id_cancha: Number(partido.id_cancha),
+		  id_cancha: partido.id_cancha === 0 ? null : Number(partido.id_cancha),
 		  id_actividad:Number(partido.id_actividad)
         }),
       });

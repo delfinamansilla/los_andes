@@ -34,8 +34,13 @@ public class ServletUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+<<<<<<< HEAD
     	
     	   response.setHeader("Access-Control-Allow-Origin", "*");
+=======
+    	   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    	   response.setHeader("Access-Control-Allow-Credentials", "true");
+>>>>>>> temporal-arreglo
            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
            response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
@@ -134,6 +139,7 @@ public class ServletUsuario extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     	   response.setHeader("Access-Control-Allow-Origin", "*");
+    	   response.setHeader("Access-Control-Allow-Credentials", "true");
            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
            response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
