@@ -52,12 +52,10 @@ public class LogicInscripcion {
 
 
     private void validarInscripcion(Inscripcion insc) throws Exception {
-        // Validar fecha
         if (insc.getFechaInscripcion() == null) {
             throw new Exception("La fecha de inscripción no puede ser nula.");
         }
 
-        // Validar usuario
         int idUsuario = insc.getIdUsuario();
         if (idUsuario <= 0) {
             throw new Exception("Debe especificarse un ID de usuario válido.");
@@ -72,7 +70,6 @@ public class LogicInscripcion {
             throw new Exception("Solo los usuarios con rol 'socio' pueden inscribirse en actividades.");
         }
 
-        // Validar actividad
         int idActividad = insc.getIdActividad();
         if (idActividad <= 0) {
             throw new Exception("Debe especificarse un ID de actividad válido.");
@@ -83,13 +80,11 @@ public class LogicInscripcion {
             throw new Exception("No existe una actividad con ID " + idActividad + ".");
         }
 
-        // Validar fecha de inscripción dentro del período
         LocalDate fecha = insc.getFechaInscripcion();
         if (fecha.isBefore(actividad.getInscripcionDesde()) || fecha.isAfter(actividad.getInscripcionHasta())) {
             throw new Exception("La fecha de inscripción debe estar dentro del período permitido para la actividad.");
         }
 
-        // Validar cupo disponible
         List<Inscripcion> inscripcionesActuales = dataInscripcion.getByActividad(idActividad);
         int inscriptos = inscripcionesActuales.size();
 

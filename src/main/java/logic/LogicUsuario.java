@@ -28,13 +28,11 @@ public class LogicUsuario {
      * @return El usuario completo si el login es exitoso, sino null.
      */
     public Usuario login(Usuario usuario) {
-        // Validación básica de entrada
         if (usuario.getMail() == null || usuario.getMail().isEmpty() ||
             usuario.getContrasenia() == null || usuario.getContrasenia().isEmpty()) {
             return null;
         }
 
-        // Hashear la contraseña antes de enviarla a la base de datos
         usuario.setContrasenia(hashPassword(usuario.getContrasenia()));
         
         return du.getByMailAndContrasenia(usuario);
@@ -54,16 +52,12 @@ public class LogicUsuario {
      * @throws Exception Si alguna validación de negocio falla.
      */
     public void add(Usuario u) throws Exception {
-        // 1. Validar todos los campos del usuario
         validarUsuario(u);
 
-        // 2. Formatear datos antes de guardar
-        u.setMail(u.getMail().toLowerCase()); // Guardar siempre el email en minúsculas
+        u.setMail(u.getMail().toLowerCase()); 
 
-        // 3. Hashear la contraseña por seguridad
         u.setContrasenia(hashPassword(u.getContrasenia()));
 
-        // 4. Llamar a la capa de datos para guardar
         du.add(u);
     }
     

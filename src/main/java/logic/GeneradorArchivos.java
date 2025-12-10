@@ -24,10 +24,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class GeneradorArchivos {
-
-    // Colores de tu marca
-    private static final Color COLOR_PRINCIPAL = new Color(32, 50, 30); // #20321E
-    private static final Color COLOR_FONDO = new Color(221, 216, 202);  // #DDD8CA
+    private static final Color COLOR_PRINCIPAL = new Color(32, 50, 30);
+    private static final Color COLOR_FONDO = new Color(221, 216, 202); 
     private static final Color COLOR_TEXTO = new Color(60, 60, 60);
 
     public byte[] generarConstanciaPDF(Salon salon, Usuario usuario, LocalDate fecha, LocalTime desde, LocalTime hasta) throws Exception {
@@ -36,8 +34,6 @@ public class GeneradorArchivos {
         PdfWriter writer = PdfWriter.getInstance(doc, baos);
         
         doc.open();
-
-        // --- 1. ENCABEZADO CON CAJA DE COLOR ---
         PdfPTable headerTable = new PdfPTable(1);
         headerTable.setWidthPercentage(100);
         
@@ -56,20 +52,15 @@ public class GeneradorArchivos {
         headerTable.addCell(cellHeader);
         doc.add(headerTable);
         
-        doc.add(new Paragraph("\n\n")); // Espacio
-
-        // --- 2. TABLA DE DETALLES ---
-        // Usamos una tabla para alinear "Etiqueta: Valor" perfectamente
+        doc.add(new Paragraph("\n\n")); 
         PdfPTable table = new PdfPTable(2);
         table.setWidthPercentage(100);
-        table.setWidths(new float[]{1, 2}); // La columna de valor es el doble de ancha
+        table.setWidths(new float[]{1, 2}); 
         table.setSpacingBefore(10);
 
-        // Formateadores de fecha/hora
         DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
 
-        // Agregar filas
         agregarFila(table, "SOCIO", usuario.getNombreCompleto());
         agregarFila(table, "DNI", usuario.getDni());
         agregarFila(table, "EMAIL", usuario.getMail());
@@ -80,13 +71,11 @@ public class GeneradorArchivos {
 
         doc.add(table);
 
-        // --- 3. ESTADO ---
         doc.add(new Paragraph("\n"));
         Paragraph pEstado = new Paragraph("ESTADO: CONFIRMADA", new Font(Font.HELVETICA, 16, Font.BOLD, new Color(0, 128, 0)));
         pEstado.setAlignment(Element.ALIGN_RIGHT);
         doc.add(pEstado);
 
-        // --- 4. PIE DE PÁGINA / LINEA DIVISORIA ---
         doc.add(new Paragraph("\n\n\n"));
 
         Paragraph linea = new Paragraph("-----------------------------------------------------------------------------------");
@@ -133,7 +122,7 @@ public class GeneradorArchivos {
             document.open();
 
 
-            Color colorVerde = new Color(32, 50, 30); // #20321E
+            Color colorVerde = new Color(32, 50, 30); 
             
 
             Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, colorVerde);
@@ -208,7 +197,6 @@ public class GeneradorArchivos {
         
         doc.open();
 
-        // --- 1. ENCABEZADO CON CAJA DE COLOR ---
         PdfPTable headerTable = new PdfPTable(1);
         headerTable.setWidthPercentage(100);
         
@@ -227,20 +215,16 @@ public class GeneradorArchivos {
         headerTable.addCell(cellHeader);
         doc.add(headerTable);
         
-        doc.add(new Paragraph("\n\n")); // Espacio
+        doc.add(new Paragraph("\n\n")); 
 
-        // --- 2. TABLA DE DETALLES ---
-        // Usamos una tabla para alinear "Etiqueta: Valor" perfectamente
         PdfPTable table = new PdfPTable(2);
         table.setWidthPercentage(100);
-        table.setWidths(new float[]{1, 2}); // La columna de valor es el doble de ancha
+        table.setWidths(new float[]{1, 2}); 
         table.setSpacingBefore(10);
 
-        // Formateadores de fecha/hora
         DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
 
-        // Agregar filas
         agregarFila(table, "SOCIO", usuario.getNombreCompleto());
         agregarFila(table, "DNI", usuario.getDni());
         agregarFila(table, "EMAIL", usuario.getMail());
@@ -251,16 +235,13 @@ public class GeneradorArchivos {
 
         doc.add(table);
 
-        // --- 3. ESTADO ---
         doc.add(new Paragraph("\n"));
         Paragraph pEstado = new Paragraph("ESTADO: CONFIRMADA", new Font(Font.HELVETICA, 16, Font.BOLD, new Color(0, 128, 0)));
         pEstado.setAlignment(Element.ALIGN_RIGHT);
         doc.add(pEstado);
 
-        // --- 4. PIE DE PÁGINA / LINEA DIVISORIA ---
         doc.add(new Paragraph("\n\n\n"));
         
-        // Linea punteada
         Paragraph linea = new Paragraph("-----------------------------------------------------------------------------------");
         linea.setAlignment(Element.ALIGN_CENTER);
         linea.getFont().setColor(Color.GRAY);

@@ -49,7 +49,6 @@ public class LogicProfesor {
   
     private void validarProfesor(Profesor p) throws Exception {
 
-        // Nombre no vacío ni con números
         if (p.getNombreCompleto() == null || p.getNombreCompleto().trim().isEmpty()) {
             throw new Exception("El nombre completo no puede estar vacío.");
         }
@@ -57,7 +56,6 @@ public class LogicProfesor {
             throw new Exception("El nombre no puede contener números ni caracteres especiales.");
         }
 
-        // Validar teléfono
         if (p.getTelefono() == null || p.getTelefono().trim().isEmpty()) {
             throw new Exception("El teléfono no puede estar vacío.");
         }
@@ -65,7 +63,6 @@ public class LogicProfesor {
             throw new Exception("El teléfono debe contener solo números y tener entre 8 y 15 dígitos.");
         }
 
-        // Validar email
         if (p.getMail() == null || p.getMail().trim().isEmpty()) {
             throw new Exception("El email no puede estar vacío.");
         }
@@ -77,7 +74,6 @@ public class LogicProfesor {
             throw new Exception("El formato del email no es válido.");
         }
 
-        // Validar unicidad de email
         LinkedList<Profesor> profesores = dp.getAll();
         for (Profesor existente : profesores) {
             if (existente.getMail().equalsIgnoreCase(p.getMail()) &&

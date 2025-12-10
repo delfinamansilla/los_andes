@@ -130,7 +130,6 @@ public class LogicSalon {
             throw new Exception("La descripción no puede tener más de 250 caracteres.");
         }
 
-        // Validar que si hay imagen, no exceda cierto tamaño (por ejemplo 2 MB)
         if (s.getImagen() != null && s.getImagen().length > (2 * 1024 * 1024)) {
             throw new Exception("La imagen no puede superar los 2 MB de tamaño.");
         }

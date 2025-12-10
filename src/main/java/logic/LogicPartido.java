@@ -10,11 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.LinkedList;
 
-/**
- * Clase de lógica de negocio para la entidad Partido.
- * Encapsula las validaciones y reglas de negocio antes de interactuar
- * con la capa de datos.
- */
+
 public class LogicPartido {
 
     private final DataPartido dp;
@@ -79,7 +75,6 @@ public class LogicPartido {
      * @throws Exception con el mensaje del error de validación.
      */
     private void validarPartido(Partido p) throws Exception {
-        // 1. Validación de campos básicos no nulos o vacíos
         if (p.getFecha() == null) {
             throw new Exception("La fecha no puede estar vacía.");
         }
@@ -96,17 +91,13 @@ public class LogicPartido {
             throw new Exception("El precio de la entrada debe ser un valor positivo o cero.");
         }
 
-        // 2. Validación de reglas de negocio temporales
         if (p.getId() == 0 && p.getFecha().isBefore(LocalDate.now())) {
-            // Solo validamos la fecha pasada para partidos nuevos, no para ver el historial
             throw new Exception("La fecha del partido no puede ser en el pasado.");
         }
         if (p.getHora_desde().isAfter(p.getHora_hasta()) || p.getHora_desde().equals(p.getHora_hasta())) {
             throw new Exception("La hora de inicio debe ser anterior a la hora de finalización.");
         }
         
-        // 3. Validación de existencia de entidades relacionadas (Foreign Keys)
-     // Si id_cancha es null → significa cancha del oponente → válido
         if (p.getId_cancha() != null) {
             if (dc.getOne(p.getId_cancha()) == null) {
                 throw new Exception("La cancha seleccionada no existe.");
@@ -140,7 +131,6 @@ public class LogicPartido {
         LocalTime finNuevo = partidoAValidar.getHora_hasta();
 
         for (Partido partidoExistente : partidosEnMismaCanchaYFecha) {
-            // Si estamos actualizando un partido, no debemos compararlo consigo mismo.
             if (partidoExistente.getId() == partidoAValidar.getId()) {
                 continue; 
             }

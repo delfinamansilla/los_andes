@@ -114,7 +114,6 @@ const MisCuotas: React.FC = () => {
 	      })
 	      .then(res => res.json())
 	      .then(data => {
-			console.log("Pago registrado en BD:", data);
 			
 			setCuotasProcesadas(prevCuotas => prevCuotas.map(c => {
 	            

@@ -10,10 +10,7 @@ import entities.Usuario;
 import java.time.LocalDate;
 import java.util.LinkedList;
 
-/**
- * Clase de lógica de negocio para la entidad PagoCuota.
- * Encapsula las validaciones y reglas de negocio.
- */
+
 public class LogicPagoCuota {
 
     private final DataPagoCuota dpc;
@@ -54,7 +51,6 @@ public class LogicPagoCuota {
      * @throws Exception Si alguna regla no se cumple.
      */
     private void validarPago(PagoCuota pc) throws Exception {
-        // 1. Validación de campos obligatorios y lógicos
         if (pc.getFecha_pago() == null) {
             throw new Exception("La fecha de pago no puede estar vacía.");
         }
@@ -62,7 +58,6 @@ public class LogicPagoCuota {
             throw new Exception("La fecha de pago no puede ser una fecha futura.");
         }
 
-        // 2. Validación de existencia de las entidades asociadas
         Usuario usuario = du.getById(pc.getId_usuario());
         if (usuario == null) {
             throw new Exception("El usuario con ID " + pc.getId_usuario() + " no existe.");
@@ -73,8 +68,6 @@ public class LogicPagoCuota {
             throw new Exception("La cuota con ID " + pc.getId_cuota() + " no existe.");
         }
 
-
-        // 4. Validación de Duplicados: La cuota no debe haber sido pagada antes
         if (dpc.getByCuotaIdAndUsuarioId(pc.getId_cuota(), pc.getId_usuario()) != null) {
             throw new Exception("Esta cuota ya ha sido pagada previamente.");
         }
