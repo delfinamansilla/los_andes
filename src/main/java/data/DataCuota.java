@@ -13,7 +13,6 @@ public class DataCuota {
         LinkedList<Cuota> cuotas = new LinkedList<>();
         try {
             stmt = DbConnector.getInstancia().getConn().createStatement();
-            // SE QUITÓ id_usuario
             rs = stmt.executeQuery("SELECT id, nro_cuota, fecha_cuota, fecha_vencimiento FROM cuota");
             while (rs != null && rs.next()) {
                 Cuota c = new Cuota();
@@ -42,7 +41,6 @@ public class DataCuota {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            // SE QUITÓ id_usuario
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
                 "SELECT id, nro_cuota, fecha_cuota, fecha_vencimiento FROM cuota WHERE id=?");
             stmt.setInt(1, id);
@@ -72,7 +70,6 @@ public class DataCuota {
         PreparedStatement stmt = null;
         ResultSet keyResultSet = null;
         try {
-            // SE QUITÓ id_usuario DEL INSERT
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
                 "INSERT INTO cuota(nro_cuota, fecha_cuota, fecha_vencimiento) VALUES(?,?,?)",
                 PreparedStatement.RETURN_GENERATED_KEYS
@@ -83,7 +80,6 @@ public class DataCuota {
             
             stmt.executeUpdate();
             
-            // ESTO ES CLAVE PARA QUE FUNCIONE EL FRONTEND: RECUPERAR EL ID GENERADO
             keyResultSet = stmt.getGeneratedKeys();
             if (keyResultSet != null && keyResultSet.next()) {
                 c.setId(keyResultSet.getInt(1));
@@ -104,7 +100,6 @@ public class DataCuota {
     public void update(Cuota c) {
         PreparedStatement stmt = null;
         try {
-            // SE QUITÓ id_usuario DEL UPDATE
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
                 "UPDATE cuota SET nro_cuota=?, fecha_cuota=?, fecha_vencimiento=? WHERE id=?"
             );
@@ -124,14 +119,12 @@ public class DataCuota {
             }
         }
     }
- // En DataCuota.java
 
     public Cuota getByNroCuota(int nroCuota) {
         Cuota c = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            // Buscamos si existe alguna cuota con ese nro_cuota
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
                 "SELECT id, nro_cuota, fecha_cuota, fecha_vencimiento FROM cuota WHERE nro_cuota = ?"
             );

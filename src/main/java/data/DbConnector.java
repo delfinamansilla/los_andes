@@ -32,9 +32,7 @@ public class DbConnector {
     
     public Connection getConn() {
         try {
-            // Si no hay conexión o se cayó, la creamos de nuevo
             if(conn==null || conn.isClosed()) {
-            	// Agregamos ?allowPublicKeyRetrieval=true&useSSL=false
             	conn=DriverManager.getConnection("jdbc:mysql://"+host+":"+port+"/"+db+"?allowPublicKeyRetrieval=true&useSSL=false", user, password);
                 System.out.println("🟢 Conexión a BD establecida.");
             }
@@ -45,8 +43,6 @@ public class DbConnector {
     }
     
     public void releaseConn() {
-        // 🛑 NO HACEMOS NADA AQUÍ.
-        // No cerramos la conexión. La dejamos abierta para las siguientes peticiones.
-        // Al ser un Singleton, se reutiliza la misma siempre.
+
     }
 }

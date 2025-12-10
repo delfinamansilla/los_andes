@@ -11,7 +11,7 @@ const Login: React.FC = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
-  const [isRecovering, setIsRecovering] = useState(false); //acabo d poner yo esa linea
+  const [isRecovering, setIsRecovering] = useState(false); 
 
   const handleClick = () => setIsVisible(!isVisible);
   //puse el handle recuperar
@@ -40,7 +40,6 @@ const Login: React.FC = () => {
 	    try {
 		
 	      const resCuotas = await fetch('https://losandesback-production.up.railway.app/cuota?action=listar');
-	      console.log(resCuotas);
 	      if (!resCuotas.ok) {
 	        console.error('Error al obtener cuotas');
 	        return true; 

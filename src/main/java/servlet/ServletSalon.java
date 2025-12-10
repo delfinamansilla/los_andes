@@ -210,7 +210,6 @@ public class ServletSalon extends HttpServlet {
 
             case "actualizar": {
 
-                // Traer el salon actual de la BD
                 int id = Integer.parseInt(request.getParameter("id"));
                 Salon salonActual = logicSalon.getById(id);
 
@@ -226,7 +225,7 @@ public class ServletSalon extends HttpServlet {
                     InputStream is = imgPart.getInputStream();
                     s.setImagen(is.readAllBytes());
                 } else {
-                    // 👇 Mantener la imagen anterior
+
                     s.setImagen(salonActual.getImagen());
                 }
 

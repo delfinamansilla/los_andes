@@ -93,7 +93,7 @@ public class LogicCancha {
     public boolean canchaDisponible(int idCancha) throws Exception {
         Cancha c = dataCancha.getOne(idCancha);
         if (c == null) throw new Exception("La cancha no existe.");
-        return c.isEstado(); // true si está habilitada
+        return c.isEstado();
     }
 
     public void habilitarCancha(int idCancha, boolean estado) throws Exception {

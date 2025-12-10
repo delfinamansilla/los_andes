@@ -6,15 +6,8 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 
 
-/**
- * Clase para interactuar con la tabla 'usuario' en la base de datos.
- * Contiene métodos CRUD: obtener, buscar, agregar, actualizar y eliminar usuarios.
- */
 public class DataUsuario {
-	/** Busca un usuario por su DNI.
-	 * @param dni El DNI a buscar.
-	 * @return El objeto Usuario completo si existe, o null si no.
-	 */
+
 	public Usuario getByDNI(String dni) {
 	    Usuario u = null;
 	    PreparedStatement stmt = null;
@@ -58,10 +51,7 @@ public class DataUsuario {
 	    return u;
 	}
 
-    /**
-     * Devuelve una lista con todos los usuarios de la base de datos.
-     * @return LinkedList<Usuario> con todos los usuarios.
-     */
+
     public LinkedList<Usuario> getAll() {
         Statement stmt = null;
         ResultSet rs = null;
@@ -107,11 +97,6 @@ public class DataUsuario {
         return usuarios;
     }
 
-    /**
-     * Busca un usuario por su email y clave. Ideal para login.
-     * @param usuario Objeto Usuario con mail y clave cargados.
-     * @return El objeto Usuario completo si existe, o null si no.
-     */
     public Usuario getByMailAndContrasenia(Usuario usuario) {
         Usuario u = null;
         PreparedStatement stmt = null;
@@ -156,10 +141,7 @@ public class DataUsuario {
         return u;
     }
 
-    /**
-     * Inserta un nuevo usuario en la base de datos.
-     * @param u El objeto Usuario con los datos a insertar.
-     */
+
     public void add(Usuario u) {
         PreparedStatement stmt = null;
         ResultSet keyResultSet = null;
@@ -199,10 +181,7 @@ public class DataUsuario {
         }
     }
 
-    /**
-     * Actualiza los datos de un usuario existente.
-     * @param u Objeto Usuario con el ID cargado y los datos actualizados.
-     */
+
     public void update(Usuario u) {
         PreparedStatement stmt = null;
 
@@ -234,11 +213,7 @@ public class DataUsuario {
             }
         }
     }
-    /**
-     * Busca y devuelve un usuario por su ID.
-     * @param id El ID del usuario a buscar.
-     * @return El objeto Usuario completo si se encuentra, o null si no.
-     */
+
     public Usuario getById(int id) {
         Usuario u = null;
         PreparedStatement stmt = null;
@@ -283,10 +258,6 @@ public class DataUsuario {
     }
     
 
-    /**
-     * Elimina un usuario de la base de datos por su ID.
-     * @param idUsuario ID del usuario a eliminar.
-     */
     public void delete(int id) {
         PreparedStatement stmt = null;
 
@@ -309,18 +280,14 @@ public class DataUsuario {
         }
     }
     
-    /**
-     * Actualiza la columna 'foto' de un usuario específico.
-     * @param idUsuario El ID del usuario.
-     * @param fotoStream El flujo de bytes de la imagen a guardar.
-     */
+
     public void updateFoto(int idUsuario, java.io.InputStream fotoStream) {
         PreparedStatement stmt = null;
         try {
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
                 "UPDATE usuario SET foto = ? WHERE id = ?"
             );
-            stmt.setBlob(1, fotoStream); // <-- Guarda los bytes de la imagen
+            stmt.setBlob(1, fotoStream); 
             stmt.setInt(2, idUsuario);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -335,11 +302,7 @@ public class DataUsuario {
         }
     }
 
-    /**
-     * Obtiene los bytes de la foto de un usuario desde la base de datos.
-     * @param idUsuario El ID del usuario.
-     * @return Un array de bytes con los datos de la imagen, o null si no existe.
-     */
+
     public byte[] getFotoById(int idUsuario) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -353,7 +316,7 @@ public class DataUsuario {
             if (rs != null && rs.next()) {
                 java.sql.Blob fotoBlob = rs.getBlob("foto");
                 if (fotoBlob != null) {
-                    // Convierte el BLOB a un array de bytes que Java pueda manejar
+
                     fotoData = fotoBlob.getBytes(1, (int) fotoBlob.length());
                 }
             }

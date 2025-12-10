@@ -159,10 +159,6 @@ public class ServletPagoCuota extends HttpServlet {
 
                 String periodoFormateado = formatearPeriodo(nroCuota);
                 double monto = Double.parseDouble(request.getParameter("monto"));
-                
-                
-                System.out.println("Usuario: " + idUsuario + ", Cuota : " + periodoFormateado + ", Monto: " + monto + ", Nro: " + nroCuota);
-               
                 JsonObject preferenceRequest = new JsonObject();
                 
                 JsonObject item = new JsonObject();
@@ -190,8 +186,6 @@ public class ServletPagoCuota extends HttpServlet {
                 preferenceRequest.addProperty("external_reference", "cuota_" + idCuota + "_usuario_" + idUsuario);
                 
                 String jsonPayload = gson.toJson(preferenceRequest);
-                System.out.println("JSON Request: " + jsonPayload);
-                
                 URL url = new URL("https://api.mercadopago.com/checkout/preferences");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -205,8 +199,6 @@ public class ServletPagoCuota extends HttpServlet {
                 }
                 
                 int responseCode = conn.getResponseCode();
-                System.out.println("Response Code: " + responseCode);
-                
                 BufferedReader in;
                 if (responseCode >= 200 && responseCode < 300) {
                     in = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
@@ -221,7 +213,6 @@ public class ServletPagoCuota extends HttpServlet {
                 }
                 in.close();
                 
-                System.out.println("Response Body: " + responseStr.toString());
                 
                 if (responseCode >= 200 && responseCode < 300) {
 
@@ -236,9 +227,7 @@ public class ServletPagoCuota extends HttpServlet {
                     jsonResponse.addProperty("qr_data", qrData);
                     jsonResponse.addProperty("payment_id", preferenceId);
                     jsonResponse.addProperty("init_point", initPoint);
-                    
-                    System.out.println("PREFERENCIA CREADA");
-                    System.out.println("Link de pago: " + initPoint);
+                   
                     response.getWriter().write(gson.toJson(jsonResponse));
                     
                 } else {
@@ -294,7 +283,6 @@ public class ServletPagoCuota extends HttpServlet {
 
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    System.out.println("El pago se guardó, pero falló el envío del mail: " + ex.getMessage());
 
                 }
                 

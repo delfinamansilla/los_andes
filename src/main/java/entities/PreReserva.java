@@ -15,7 +15,6 @@ public class PreReserva {
     private String token;
     private LocalDateTime expiracion;
 
-    // GETTERS & SETTERS
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

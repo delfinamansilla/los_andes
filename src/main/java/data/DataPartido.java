@@ -61,7 +61,7 @@ public class DataPartido {
 
             while (rs != null && rs.next()) {
                 Partido p = new Partido();
-                // Esto es lo importante: Carga TODOS los datos que necesitas
+
                 p.setId(rs.getInt("id"));
                 p.setFecha(rs.getObject("fecha", LocalDate.class));
                 p.setOponente(rs.getString("oponente"));

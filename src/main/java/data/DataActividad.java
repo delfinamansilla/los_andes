@@ -56,10 +56,9 @@ public class DataActividad {
         ResultSet rs = null;
         LinkedList<Map<String, Object>> actividades = new LinkedList<>();
 
-        // --- SQL CORREGIDO Y MÁS LEGIBLE ---
         String sql = 
             "SELECT " +
-            "    a.*, " + // a.* trae todas las columnas de la tabla actividad
+            "    a.*, " + 
             "    p.nombre_completo as profesor_nombre, " +
             "    c.descripcion as cancha_descripcion, " +
             "    h.dia, " +
@@ -70,7 +69,7 @@ public class DataActividad {
             "        SELECT 1 " +
             "        FROM inscripcion " +
             "        WHERE id_actividad = a.id AND id_usuario = ? " +
-            "    ) as ya_inscripto " + // ¡OJO! Faltaba un espacio aquí
+            "    ) as ya_inscripto " + 
             "FROM " +
             "    actividad a " +
             "LEFT JOIN " +
@@ -83,8 +82,7 @@ public class DataActividad {
         try {
             stmt = DbConnector.getInstancia().getConn().prepareStatement(sql);
             
-            // --- 1. ERROR CRÍTICO CORREGIDO: Faltaba pasar el parámetro ---
-            // Le decimos a la consulta qué valor debe reemplazar en el '?'
+            
             stmt.setInt(1, idUsuario); 
             
             rs = stmt.executeQuery();
@@ -92,16 +90,13 @@ public class DataActividad {
             while (rs != null && rs.next()) {
                 Map<String, Object> actividad = new HashMap<>();
                 
-                // --- 2. MAPEADO CORREGIDO Y COMPLETO ---
-                // Usamos los nombres de columna directamente de la tabla 'actividad' (gracias a 'a.*')
+                
                 actividad.put("id", rs.getInt("id")); 
                 actividad.put("nombre", rs.getString("nombre"));
                 actividad.put("descripcion", rs.getString("descripcion"));
                 actividad.put("cupo", rs.getInt("cupo"));
                 actividad.put("inscripcion_desde", rs.getDate("inscripcion_desde").toLocalDate().toString());
                 actividad.put("inscripcion_hasta", rs.getDate("inscripcion_hasta").toLocalDate().toString());
-                
-                // Campos de las tablas unidas (JOINs)
                 actividad.put("profesor_nombre", rs.getString("profesor_nombre"));
                 actividad.put("cancha_descripcion", rs.getString("cancha_descripcion"));
                 actividad.put("dia", rs.getString("dia"));
@@ -111,7 +106,6 @@ public class DataActividad {
                 actividad.put("hora_desde", horaDesde != null ? horaDesde.toLocalTime().toString() : null);
                 actividad.put("hora_hasta", horaHasta != null ? horaHasta.toLocalTime().toString() : null);
                 
-                // --- 3. AÑADIMOS LOS NUEVOS CAMPOS CALCULADOS ---
                 actividad.put("cupo_restante", rs.getInt("cupo_restante"));
                 actividad.put("yaInscripto", rs.getBoolean("ya_inscripto"));
                 

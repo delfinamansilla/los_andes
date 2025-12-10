@@ -78,18 +78,12 @@ public class DataMonto_cuota {
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
                 "INSERT INTO monto_cuota (fecha, monto, id_cuota) VALUES (?, ?, ?)"
             );
-            stmt.setDate(1, Date.valueOf(mc.getFecha()));  // ✅ Convertir LocalDate a Date
+            stmt.setDate(1, Date.valueOf(mc.getFecha()));  
             stmt.setDouble(2, mc.getMonto());
             stmt.setInt(3, mc.getId_cuota());
-            
-            System.out.println("🔹 Ejecutando INSERT: fecha=" + mc.getFecha() + ", monto=" + mc.getMonto() + ", id_cuota=" + mc.getId_cuota());
-            
             int filasAfectadas = stmt.executeUpdate();
-            System.out.println("✅ Filas insertadas: " + filasAfectadas);
-            
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("❌ Error en INSERT: " + e.getMessage());
         } finally {
             try {
                 if (stmt != null) stmt.close();
@@ -99,11 +93,7 @@ public class DataMonto_cuota {
             }
         }
     }
-    /**
-     * Obtiene todos los montos asociados a una cuota específica.
-     * @param idCuota El ID de la cuota.
-     * @return LinkedList de Monto_cuota para esa cuota.
-     */
+
     public LinkedList<Monto_cuota> getMontosPorCuota(int idCuota) {
         LinkedList<Monto_cuota> montos = new LinkedList<>();
         PreparedStatement stmt = null;

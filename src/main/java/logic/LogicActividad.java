@@ -52,17 +52,14 @@ public class LogicActividad {
     }
 
     private void validarActividad(Actividad act) throws Exception {
-        // Validar nombre
         if (act.getNombre() == null || act.getNombre().trim().isEmpty()) {
             throw new Exception("El nombre de la actividad no puede estar vacío.");
         }
 
-        // Validar cupo
         if (act.getCupo() <= 0) {
             throw new Exception("El cupo debe ser mayor que cero.");
         }
 
-        // Validar fechas
         LocalDate desde = act.getInscripcionDesde();
         LocalDate hasta = act.getInscripcionHasta();
         if (desde == null || hasta == null) {
@@ -72,7 +69,6 @@ public class LogicActividad {
             throw new Exception("La fecha 'hasta' debe ser posterior a la fecha 'desde'.");
         }
 
-        // Validar ID de profesor
         int idProfesor = act.getIdProfesor();
         if (idProfesor <= 0) {
             throw new Exception("Debe especificarse un ID de profesor válido.");
@@ -81,7 +77,6 @@ public class LogicActividad {
             throw new Exception("No existe un profesor con ID " + idProfesor + ".");
         }
 
-        // Validar ID de cancha
         int idCancha = act.getIdCancha();
         if (idCancha <= 0) {
             throw new Exception("Debe especificarse un ID de cancha válido.");

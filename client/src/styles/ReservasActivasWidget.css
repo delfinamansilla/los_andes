@@ -57,7 +57,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Carrusel */
+
 .carrusel-container {
   position: relative;
   display: flex;
@@ -100,7 +100,6 @@
   overflow: hidden;
 }
 
-/* Cards de reserva - REDUCIDAS Y OPTIMIZADAS */
 .reserva-card {
   border: 2px solid #a69d85;
   border-radius: 12px;
@@ -158,7 +157,6 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Imagen - REDUCIDA */
 .reserva-imagen {
   width: 100%;
   height: 100px;
@@ -188,7 +186,6 @@
   transform: scale(1.05);
 }
 
-/* Body - COMPACTO */
 .reserva-body {
   padding: 14px;
   flex: 1;
@@ -231,7 +228,7 @@
   font-weight: 500;
 }
 
-/* Footer - COMPACTO */
+
 .reserva-footer {
   padding: 0 14px 14px 14px;
   margin-top: auto;
@@ -259,7 +256,7 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* Indicadores */
+
 .carrusel-indicadores {
   display: flex;
   justify-content: center;
@@ -290,7 +287,6 @@
   border-radius: 5px;
 }
 
-/* Estado vacío */
 .empty-state {
   padding: 20px;
 }
@@ -326,7 +322,7 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* Footer del widget */
+
 .widget-footer {
   text-align: center;
   padding-top: 20px;
@@ -354,7 +350,7 @@
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* Responsive */
+
 @media (max-width: 1024px) {
   .carrusel-content {
     grid-template-columns: 1fr;

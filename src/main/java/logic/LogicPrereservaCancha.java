@@ -28,15 +28,13 @@ public class LogicPrereservaCancha {
 	    p.setHoraDesde(desde);
 	    p.setHoraHasta(hasta);
 
-	    // Token único
 	    String token = UUID.randomUUID().toString();
 	    p.setToken(token);
 
-	    // Expira en 30 minutos
 	    LocalDateTime exp = LocalDateTime.now().plusMinutes(30);
 	    p.setExpiracion(exp);
 
-	    dp.add(p);  // inserta en la DB
+	    dp.add(p);  
 
 	    return p;
 	}

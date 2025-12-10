@@ -37,9 +37,9 @@ const AgregarHorario: React.FC = () => {
   useEffect(() => {
     const stored = localStorage.getItem("actividad");
 	if (stored) {
-	  const actividadLS = JSON.parse(stored);   // ahora sí existe
+	  const actividadLS = JSON.parse(stored);  
 	  setNuevoHorario((prev) => ({ ...prev, id_actividad: actividadLS.id || 0 }));
-	  setActividad(actividadLS);                // usar la variable correcta
+	  setActividad(actividadLS);     
 	  cargarHorarios(actividadLS.id);
 	  cargarDatos(actividadLS);
 	}
@@ -164,7 +164,6 @@ const AgregarHorario: React.FC = () => {
       id_actividad: actividad.id
     };
 
-    console.log("📦 Enviando payload:", payload);
 
     try {
       const response = await fetch("https://losandesback-production.up.railway.app/horario?action=actualizar", {

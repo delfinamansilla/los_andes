@@ -8,9 +8,6 @@ import java.util.LinkedList;
 
 public class DataAlquiler_salon {
 
-    /**
-     * Devuelve todos los alquileres de la base de datos.
-     */
     public LinkedList<Alquiler_salon> getAll() {
         Statement stmt = null;
         ResultSet rs = null;
@@ -47,7 +44,6 @@ public class DataAlquiler_salon {
         return alquileres;
     }
     
- // Agrega este método en DataAlquiler_salon.java
 
     public LinkedList<Alquiler_salon> getByUsuarioFuturos(int idUsuario) {
         PreparedStatement stmt = null;
@@ -55,8 +51,7 @@ public class DataAlquiler_salon {
         LinkedList<Alquiler_salon> alquileres = new LinkedList<>();
 
         try {
-            // Selecciona reservas del usuario desde HOY en adelante
-            // Ordenadas por fecha y hora de inicio
+
             String sql = "SELECT * FROM alquiler_salon " +
                          "WHERE id_usuario = ? AND fecha >= CURDATE() " +
                          "ORDER BY fecha ASC, hora_desde ASC";
@@ -92,9 +87,6 @@ public class DataAlquiler_salon {
         return alquileres;
     }
 
-    /**
-     * Devuelve un alquiler por su ID.
-     */
     public Alquiler_salon getById(int id) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -132,9 +124,7 @@ public class DataAlquiler_salon {
         return a;
     }
 
-    /**
-     * Inserta un nuevo alquiler en la base de datos.
-     */
+
     public void add(Alquiler_salon a) {
         PreparedStatement stmt = null;
         ResultSet keyResultSet = null;
@@ -171,9 +161,6 @@ public class DataAlquiler_salon {
         }
     }
 
-    /**
-     * Actualiza un alquiler existente.
-     */
     public void update(Alquiler_salon a) {
         PreparedStatement stmt = null;
 
@@ -203,9 +190,7 @@ public class DataAlquiler_salon {
         }
     }
 
-    /**
-     * Elimina un alquiler por su ID.
-     */
+
     public void delete(int id) {
         PreparedStatement stmt = null;
 
@@ -228,18 +213,13 @@ public class DataAlquiler_salon {
         }
     }
     
-    
 
-    /**
-     * Devuelve todos los alquileres de un salón específico.
-     */
 
     public LinkedList<Alquiler_salon> getBySalon(int idSalon) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         LinkedList<Alquiler_salon> alquileres = new LinkedList<>();
         try {
-            // AGREGAMOS EL ORDER BY fecha ASC, hora_desde ASC
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
                 "SELECT * FROM alquiler_salon WHERE id_salon = ? ORDER BY fecha ASC, hora_desde ASC"
             );

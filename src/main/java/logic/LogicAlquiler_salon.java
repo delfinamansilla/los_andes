@@ -77,9 +77,6 @@ public class LogicAlquiler_salon {
         da.delete(id);
     }
 
-    /**
-     * Verifica conflicto por HORA (no solo fecha).
-     */
     private boolean existeConflictoHorario(Alquiler_salon nuevo) {
         LinkedList<Alquiler_salon> existentes =
             da.getBySalonYFecha(nuevo.getIdSalon(), nuevo.getFecha());
@@ -96,20 +93,16 @@ public class LogicAlquiler_salon {
 
         return false;
     }
- // En LogicAlquiler_salon.java, agrega este método:
     public LinkedList<Alquiler_salon> getBySalon(int idSalon) {
         return da.getBySalon(idSalon);
     }
-    
- // Agrega este método en LogicAlquiler_salon.java
+
 
     public LinkedList<Alquiler_salon> getByUsuarioFuturos(int idUsuario) {
         return da.getByUsuarioFuturos(idUsuario);
     }
 
-    /**
-     * Validaciones completas del alquiler.
-     */
+
     private void validarAlquiler(Alquiler_salon a) throws Exception {
         if (a == null) throw new Exception("El alquiler no puede ser nulo.");
 
@@ -125,12 +118,8 @@ public class LogicAlquiler_salon {
         if (!a.getHoraDesde().isBefore(a.getHoraHasta()))
             throw new Exception("La hora de inicio debe ser anterior a la de fin.");
 
-        // Validar rangos de 4 horas (opcional)
-     // Dif exacta en minutos
         long minutos = java.time.Duration.between(a.getHoraDesde(), a.getHoraHasta()).toMinutes();
 
-        // Permitimos 4 horas exactas = 240 min
-        // y permitimos 239 min en caso de usar 23:59 (tolerancia)
         if (minutos < 239 || minutos > 240) {
             throw new Exception("Los alquileres deben ser de exactamente 4 horas.");
         }
