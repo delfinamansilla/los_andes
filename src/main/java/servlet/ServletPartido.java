@@ -185,8 +185,7 @@ public class ServletPartido extends HttpServlet {
             
             BufferedReader reader = request.getReader();
             JsonObject body = gson.fromJson(reader, JsonObject.class);
-            System.out.println("JSON recibido: " + body);
-            
+
             switch (action.toLowerCase()) {
             case "crear":{
                 Partido nuevo = new Partido();

@@ -122,8 +122,6 @@ public class ServletProfesor extends HttpServlet {
  	   response.setHeader("Access-Control-Allow-Origin", "*");
        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        System.out.println("\n--- SERVLET PROFESOR: Petición POST recibida ---");
-
 
         String action = request.getParameter("action");
 
