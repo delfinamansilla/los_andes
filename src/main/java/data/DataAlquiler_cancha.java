@@ -274,7 +274,6 @@ public class DataAlquiler_cancha {
         ResultSet rs = null;
         LinkedList<Alquiler_cancha> alquileres = new LinkedList<>();
         try {
-            // AGREGAMOS EL ORDER BY fecha ASC, hora_desde ASC
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
                 "SELECT * FROM alquiler_cancha WHERE id_cancha = ? ORDER BY fecha_alquiler ASC, hora_desde ASC"
             );

@@ -57,7 +57,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Próxima clase destacada */
 .proxima-clase-destacada {
   background: linear-gradient(135deg, #3d5a39 0%, #4a6f45 100%);
   border: 2px solid #20321E;
@@ -116,7 +115,6 @@
   font-size: 0.95rem;
 }
 
-/* Lista de actividades */
 .actividades-lista {
   display: flex;
   flex-direction: column;
@@ -176,7 +174,6 @@
   flex-shrink: 0;
 }
 
-/* Ver más */
 .ver-mas {
   text-align: center;
   padding: 16px 0 0 0;
@@ -189,7 +186,6 @@
   font-style: italic;
 }
 
-/* Footer del widget */
 .widget-footer {
   text-align: center;
   padding-top: 16px;

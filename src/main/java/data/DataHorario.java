@@ -9,10 +9,6 @@ import java.util.ArrayList;
 
 public class DataHorario {
 
-    /**
-     * Devuelve todos los horarios.
-     * @return LinkedList<Horario> con todos los registros.
-     */
     public LinkedList<Horario> getAll() {
         Statement stmt = null;
         ResultSet rs = null;
@@ -78,11 +74,6 @@ public class DataHorario {
         return horarios;
     }
 
-    /**
-     * Devuelve un horario por ID.
-     * @param id ID del horario.
-     * @return Horario o null si no existe.
-     */
     public Horario getById(int id) {
         Horario h = null;
         PreparedStatement stmt = null;
@@ -119,10 +110,7 @@ public class DataHorario {
         return h;
     }
 
-    /**
-     * Agrega un nuevo horario a la base de datos.
-     * @param h Horario a insertar.
-     */
+
     public void add(Horario h) {
         PreparedStatement stmt = null;
         ResultSet keyResultSet = null;
@@ -157,10 +145,6 @@ public class DataHorario {
         }
     }
 
-    /**
-     * Actualiza un horario existente.
-     * @param h Horario con ID y datos a actualizar.
-     */
     public void update(Horario h) {
         PreparedStatement stmt = null;
 
@@ -188,10 +172,6 @@ public class DataHorario {
         }
     }
 
-    /**
-     * Elimina un horario por su ID.
-     * @param id ID del horario a eliminar.
-     */
     public void delete(int id) {
         PreparedStatement stmt = null;
 

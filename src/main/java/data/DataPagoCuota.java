@@ -66,12 +66,7 @@ public class DataPagoCuota {
             }
         }
     }
-    /**
-     * Busca un pago existente por el ID de la cuota.
-     * Sirve para verificar si una cuota ya ha sido pagada.
-     * @param idCuota el ID de la cuota a buscar.
-     * @return El objeto PagoCuota si se encuentra, sino null.
-     */
+
     public PagoCuota getByCuotaId(int idCuota) {
         PagoCuota pc = null;
         PreparedStatement stmt = null;
