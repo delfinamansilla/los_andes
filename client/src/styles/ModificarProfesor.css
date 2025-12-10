@@ -1,6 +1,4 @@
-/* --- ModificarProfesor.css --- */
 
-/* 1. Estructura principal de la página (igual que las otras) */
 .modify-profesor-page {
   display: flex;
   flex-direction: column;
@@ -8,7 +6,7 @@
   background-color: #20321E;
 }
 
-/* 2. Área de contenido para centrar el formulario */
+
 .content-area {
   flex-grow: 1;
   display: flex;
@@ -18,7 +16,6 @@
   box-sizing: border-box;
 }
 
-/* 3. Contenedor del formulario (el recuadro cremita) */
 .form-container {
   background-color: #DDD8CA;
   color: #20321E;
@@ -30,7 +27,7 @@
   text-align: center;
 }
 
-/* Títulos y textos */
+
 .form-container h2 {
   margin-top: 0;
   margin-bottom: 15px;
@@ -40,7 +37,7 @@
   margin-bottom: 25px;
 }
 
-/* Estructura interna del formulario */
+
 .form-container form {
   display: flex;
   flex-direction: column;
@@ -55,7 +52,7 @@
   font-weight: bold;
 }
 
-/* Inputs (idénticos a los de Agregar) */
+
 .inp {
   width: 100%;
   padding: 10px 12px;
@@ -74,15 +71,14 @@
   box-shadow: 0 0 5px rgba(32, 50, 30, 0.5);
 }
 
-/* Contenedor para los botones para que se separen bien */
 .button-group {
     display: flex;
-    flex-direction: column; /* Apila los botones verticalmente */
-    gap: 10px; /* Espacio entre los botones */
+    flex-direction: column; 
+    gap: 10px; 
     margin-top: 10px;
 }
 
-/* Botón principal "Guardar Cambios" (Verde Oscuro) */
+
 .btn-save {
   width: 100%;
   padding: 12px 0;
@@ -100,7 +96,7 @@
   background-color: #466245;
 }
 
-/* Botón secundario "Volver" (Cremita con borde) */
+
 .btn-secondary {
   width: 100%;
   padding: 12px 0;
@@ -119,7 +115,7 @@
   border-color: #466245;
 }
 
-/* Mensajes de éxito/error */
+
 .success-box, .error-box {
   margin-top: 15px;
   padding: 10px;

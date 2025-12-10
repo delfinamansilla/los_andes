@@ -1,6 +1,4 @@
-/* --- ListadoProfesores.css (Botón Borrar Actualizado) --- */
 
-/* 1. Estructura principal de la página (sin cambios) */
 .admin-page {
   display: flex;
   flex-direction: column;
@@ -8,7 +6,7 @@
   background-color: #20321E;
 }
 
-/* 2. Área de contenido (sin cambios) */
+
 .content-area {
   flex-grow: 1;
   display: flex;
@@ -18,7 +16,7 @@
   box-sizing: border-box;
 }
 
-/* 3. Contenedor principal para el título y la tabla */
+
 .list-container {
   width: 100%;
   max-width: 1000px;
@@ -29,7 +27,7 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Título de la página */
+
 .list-container h2 {
   text-align: center;
   margin-top: 0;
@@ -37,21 +35,21 @@
   font-size: 2rem;
 }
 
-/* Mensaje cuando no hay profesores */
+
 .list-container p {
   text-align: center;
   font-size: 1.1rem;
   padding: 20px;
 }
 
-/* 4. Estilo de la tabla de datos */
+
 .data-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
 
-/* Cabecera de la tabla */
+
 .data-table thead th {
   background-color: #20321E;
   color: #DDD8CA;
@@ -60,24 +58,24 @@
   font-size: 1rem;
 }
 
-/* Celdas del cuerpo de la tabla */
+
 .data-table tbody td {
   padding: 15px;
   border-top: 1px solid #466245;
 }
 
-/* Efecto hover en las filas */
+
 .data-table tbody tr:hover {
   background-color: #c9c4b5;
 }
 
-/* Contenedor para los botones de acción */
+
 .data-table .actions-cell {
   display: flex;
   gap: 10px;
 }
 
-/* 5. Estilo de los botones */
+
 .actions-cell button {
   padding: 8px 16px;
   border-radius: 8px;
@@ -88,7 +86,7 @@
   transition: all 0.2s;
 }
 
-/* Botón de Modificar (se mantiene igual) */
+
 .btn-modify {
   background-color: #DDD8CA;
   color: #20321E;
@@ -99,17 +97,16 @@
   border-color: #466245;
 }
 
-/* Botón de Borrar (Verde Oscuro) */
+
 .btn-delete {
-  /* --- CAMBIO AQUÍ --- */
-  background-color: #20321E; /* Verde oscuro del fondo */
-  color: #DDD8CA;            /* Letras color cremita */
+  background-color: #20321E; 
+  color: #DDD8CA;            
 }
 .btn-delete:hover {
-  background-color: #466245; /* Verde medio para el efecto hover */
+  background-color: #466245; 
 }
 
-/* 6. Estilos para estados de carga y error (sin cambios) */
+
 .loading-container, .access-denied-container {
   display: flex;
   flex-direction: column;
@@ -140,14 +137,11 @@
   box-shadow: 0 0 4px rgba(150, 140, 120, 0.4);
 }
 
-/* =========================================
-   ESTILOS NUEVOS PARA BOTONES Y DROPDOWN
-   ========================================= */
 
-/* 1. Estilo base para el botón de Cuotas */
+
 .btn-cuotas {
-  background-color: #20321E; /* Verde oscuro */
-  color: #DDD8CA;            /* Crema */
+  background-color: #20321E; 
+  color: #DDD8CA;            
   border: 1px solid #20321E;
   padding: 8px 12px;
   border-radius: 6px;
@@ -157,19 +151,19 @@
 }
 
 .btn-cuotas:hover {
-  background-color: #466245; /* Verde un poco más claro */
+  background-color: #466245; 
   border-color: #466245;
 }
 
-/* 2. Contenedor del Dropdown (necesario para posicionar el menú) */
+
 .dropdown-hover {
   position: relative;
   display: inline-block;
 }
 
-/* 3. Botón principal "Alquileres" */
+
 .btn-alquileres {
-  background-color: #857f72; /* Un gris/marrón para diferenciarlo de Cuotas */
+  background-color: #857f72; 
   color: #fff;
   border: 1px solid #857f72;
   padding: 8px 12px;
@@ -180,27 +174,27 @@
 }
 
 .dropdown-hover:hover .btn-alquileres {
-  background-color: #6b665b; /* Color al pasar el mouse */
+  background-color: #6b665b; 
 }
 
-/* 4. El Menú Desplegable (Oculto por defecto) */
+
 .dropdown-hover-menu {
-  display: none; /* Se oculta inicialmente */
+  display: none; 
   position: absolute;
-  top: 100%; /* Aparece justo debajo del botón */
+  top: 100%; 
   left: 50%;
-  transform: translateX(-50%); /* Centrado respecto al botón */
+  transform: translateX(-50%); 
   background-color: #fff;
   min-width: 120px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 100; /* Para que flote sobre las filas de abajo */
+  z-index: 100;
   border-radius: 5px;
   border: 1px solid #ccc;
   padding: 5px 0;
-  margin-top: 5px; /* Un pequeño espacio */
+  margin-top: 5px; 
 }
 
-/* Flechita decorativa arriba del menú (Opcional, queda elegante) */
+
 .dropdown-hover-menu::after {
   content: "";
   position: absolute;
@@ -212,13 +206,13 @@
   border-color: transparent transparent #fff transparent;
 }
 
-/* 5. Mostrar el menú al pasar el mouse (Hover) */
+
 .dropdown-hover:hover .dropdown-hover-menu {
   display: block;
   animation: fadeIn 0.2s ease-in-out;
 }
 
-/* 6. Estilo de los botones DENTRO del menú (Canchas / Salones) */
+
 .dropdown-hover-menu button {
   color: #333;
   padding: 10px 16px;
@@ -233,11 +227,11 @@
 }
 
 .dropdown-hover-menu button:hover {
-  background-color: #f1f1f1; /* Gris clarito al pasar mouse por las opciones */
+  background-color: #f1f1f1; 
   color: #20321E;
 }
 
-/* Pequeña animación de entrada */
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
   to { opacity: 1; transform: translateX(-50%) translateY(0); }

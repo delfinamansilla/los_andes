@@ -1,6 +1,6 @@
 .page-container-horario {
   min-height: 100vh;
-  background-color: #20321E; /* verde oscuro */
+  background-color: #20321E; 
   color: #20321E;
   padding: 40px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -28,7 +28,7 @@
 }
 
 .horario-card {
-  background-color: #DDD8CA; /* cremita */
+  background-color: #DDD8CA; 
   border-radius: 14px;
   padding: 25px 30px;
   width: 300px;
@@ -142,7 +142,7 @@
 }
 
 
-/* --- CONTENEDOR GENERAL DE OCUPADOS --- */
+
 .ocupados-container {
   display: flex;
   justify-content: center;
@@ -152,10 +152,10 @@
   max-width: 900px;
 }
 
-/* --- CAJA DE CADA COLUMNA (Profesor / Cancha) --- */
+
 .ocupados-box {
-  background-color: #DDD8CA;        /* cremita */
-  color: #20321E;                   /* verde oscuro */
+  background-color: #DDD8CA;        
+  color: #20321E;                   
   padding: 20px 25px;
   border-radius: 14px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.4);
@@ -163,7 +163,7 @@
   max-width: 400px;
 }
 
-/* Título */
+
 .ocupados-box h3 {
   color: #20321E;
   font-size: 1.4rem;
@@ -172,7 +172,7 @@
   margin-bottom: 10px;
 }
 
-/* Texto de horarios */
+
 .ocupados-box p {
   color: #20321E;
   font-size: 1.1rem;

@@ -21,7 +21,7 @@
   align-items: center;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #DDD8CA;/*ACA*/
+  border-bottom: 2px solid #DDD8CA;
 }
 
 .widget-header-stats h3 {
@@ -49,14 +49,14 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Grid de estadísticas */
+
 .grid-estadisticas-real {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
-/* Tarjeta individual - FONDO SÓLIDO */
+
 .stat-card-real {
   background: #DDD8CA;
   border-radius: 12px;
@@ -80,7 +80,7 @@
   background: #e5e0d3;
 }
 
-/* Header de la tarjeta */
+
 .stat-header-real {
   display: flex;
   justify-content: space-between;
@@ -106,7 +106,7 @@
   transition: all 0.3s ease;
 }
 
-/* Tendencia */
+
 .stat-tendencia {
   display: flex;
   align-items: center;
@@ -130,7 +130,7 @@
   color: #64748b;
 }
 
-/* Cuerpo de la tarjeta */
+
 .stat-body-real {
   flex: 1;
 }
@@ -159,7 +159,7 @@
   letter-spacing: -1px;
 }
 
-/* NUEVO: Estilo para el monto extra */
+
 .monto-extra {
   display: flex;
   align-items: center;
@@ -184,7 +184,7 @@
   letter-spacing: -0.5px;
 }
 
-/* Responsive */
+
 @media (max-width: 1200px) {
   .grid-estadisticas-real {
     grid-template-columns: repeat(2, 1fr);

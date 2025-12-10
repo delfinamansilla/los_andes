@@ -6,10 +6,7 @@ import java.util.LinkedList;
 
 public class DataSalon {
 
-    /**
-     * Devuelve una lista con todos los salones.
-     * @return LinkedList<Salon> con todos los registros.
-     */
+
     public LinkedList<Salon> getAll() {
         Statement stmt = null;
         ResultSet rs = null;
@@ -26,8 +23,6 @@ public class DataSalon {
                     s.setNombre(rs.getString("nombre"));
                     s.setCapacidad(rs.getInt("capacidad"));
                     s.setDescripcion(rs.getString("descripcion"));
-
-                    // Imagen puede ser null
                     s.setImagen(rs.getBytes("imagen"));
 
                     salones.add(s);
@@ -48,11 +43,6 @@ public class DataSalon {
         return salones;
     }
 
-    /**
-     * Devuelve un salón por su ID.
-     * @param id ID del salón.
-     * @return Salon o null si no se encuentra.
-     */
     public Salon getById(int id) {
         Salon s = null;
         PreparedStatement stmt = null;
@@ -71,7 +61,7 @@ public class DataSalon {
                 s.setNombre(rs.getString("nombre"));
                 s.setCapacidad(rs.getInt("capacidad"));
                 s.setDescripcion(rs.getString("descripcion"));
-                s.setImagen(rs.getBytes("imagen")); // puede ser null
+                s.setImagen(rs.getBytes("imagen")); 
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,10 +78,7 @@ public class DataSalon {
         return s;
     }
 
-    /**
-     * Agrega un nuevo salón a la base de datos.
-     * @param s Objeto Salon con los datos a insertar.
-     */
+
     public void add(Salon s) {
         PreparedStatement stmt = null;
         ResultSet keyResultSet = null;
@@ -131,10 +118,7 @@ public class DataSalon {
         }
     }
 
-    /**
-     * Actualiza los datos de un salón existente.
-     * @param s Objeto Salon con ID y datos actualizados.
-     */
+
     public void update(Salon s) {
         PreparedStatement stmt = null;
 
@@ -167,10 +151,7 @@ public class DataSalon {
         }
     }
 
-    /**
-     * Elimina un salón por su ID.
-     * @param id ID del salón a eliminar.
-     */
+
     public void delete(int id) {
         PreparedStatement stmt = null;
 

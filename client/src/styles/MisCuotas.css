@@ -1,16 +1,14 @@
-/* --- MisCuotas.css (Nuevo Estilo Unificado) --- */
 
-/* 1. Contenedor principal de la página */
 .pagina-cuotas {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #20321E; /* Verde oscuro */
-  color: #DDD8CA; /* Crema */
+  background-color: #20321E; 
+  color: #DDD8CA; 
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* 2. Contenedor del contenido (título y tabla) */
+
 .cuotas-contenido {
   flex: 1;
   max-width: 1200px;
@@ -26,18 +24,18 @@
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-/* 3. Tabla */
+
 .tabla-cuotas {
   width: 100%;
   border-collapse: collapse;
-  background-color: #DDD8CA; /* Fondo crema */
-  color: #20321E; /* Texto verde oscuro */
+  background-color: #DDD8CA; 
+  color: #20321E; 
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Encabezado */
+
 .tabla-cuotas thead tr {
   background-color: #20321E;
   color: #DDD8CA;
@@ -50,7 +48,7 @@
   letter-spacing: 0.5px;
 }
 
-/* Filas */
+
 .tabla-cuotas tbody td {
   padding: 15px 20px;
   border-top: 1px solid #c9c4b5;
@@ -58,29 +56,29 @@
 }
 
 .tabla-cuotas tbody tr:hover {
-  background-color: #d1ccbc; /* Crema más oscuro */
+  background-color: #d1ccbc; 
 }
 
-/* 4. Badges de estado */
+
 .estado-badge {
   padding: 6px 14px;
   border-radius: 20px;
   font-weight: bold;
   font-size: 0.9rem;
-  color: #DDD8CA; /* Texto crema */
+  color: #DDD8CA; 
 }
 
-/* Verde suave de tu paleta */
+
 .estado-pagado {
   background-color: #466245; 
 }
 
-/* Rojo reemplazado por un tono "óxido" natural suave */
+
 .estado-pendiente {
   background-color: #8b3a3a; 
 }
 
-/* 5. Mensajes */
+
 .status-message {
   text-align: center;
   font-size: 1.2rem;
@@ -93,7 +91,7 @@
   font-weight: bold;
 }
 
-/* 6. Botón Pagar */
+
 .btn-pagar {
   background-color: #20321E;
   color: #DDD8CA;
@@ -110,7 +108,7 @@
   border-color: #466245;
 }
 
-/* 7. Modal QR */
+
 .modal-qr-overlay {
   position: fixed;
   top: 0;

@@ -44,7 +44,6 @@ public class Usuario {
         this.rol = rol;
     }
 
-    // Getters
     public int getIdUsuario() { return id; }
     public String getNombreCompleto() { return nombre_completo; }
     public String getDni() { return dni; }
@@ -55,7 +54,6 @@ public class Usuario {
     public boolean isEstado() { return estado; }
     public String getRol() { return rol; }
 
-    // Setters
     public void setNombreCompleto(String nombre_completo) { this.nombre_completo = nombre_completo; }
     public void setDni(String dni) { this.dni = dni; }
     public void setTelefono(String telefono) { this.telefono = telefono; }

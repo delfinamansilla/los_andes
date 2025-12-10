@@ -1,22 +1,20 @@
-/* --- MisActividades.css --- */
 
-/* 1. Contenedor principal de la página */
 .mis-actividades-page {
-  background-color: #20321E; /* Fondo verde oscuro, como en el login */
-  color: #DDD8CA; /* Texto color crema por defecto */
+  background-color: #20321E; 
+  color: #DDD8CA; 
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  min-height: 100vh; /* Asegura que el fondo cubra toda la pantalla */
-  padding-bottom: 50px; /* Espacio extra al final */
+  min-height: 100vh; 
+  padding-bottom: 50px; 
 }
 
-/* 2. Contenedor del contenido (título y tabla) */
+
 .mis-actividades-content {
-  max-width: 1200px; /* Ancho máximo para la tabla */
-  margin: 0 auto; /* Centrar el contenido en la página */
-  padding: 40px 20px; /* Espaciado interno */
+  max-width: 1200px; 
+  margin: 0 auto; 
+  padding: 40px 20px; 
 }
 
-/* Título principal "Mis Actividades" */
+
 .mis-actividades-content h2 {
   text-align: center;
   font-size: 2.8rem;
@@ -25,21 +23,21 @@
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-/* 3. Estilo de la tabla */
+
 .activities-table {
   width: 100%;
-  border-collapse: collapse; /* Bordes limpios */
-  background-color: #DDD8CA; /* Fondo crema para la tabla */
-  color: #20321E; /* Texto verde oscuro */
-  border-radius: 10px; /* Esquinas redondeadas */
-  overflow: hidden; /* Necesario para que el border-radius afecte a los hijos */
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Sombra como la del login */
+  border-collapse: collapse; 
+  background-color: #DDD8CA; 
+  color: #20321E; 
+  border-radius: 10px; 
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Encabezado de la tabla */
+
 .activities-table thead tr {
-  background-color: #20321E; /* Fondo verde oscuro */
-  color: #DDD8CA; /* Texto crema */
+  background-color: #20321E; 
+  color: #DDD8CA; 
   text-align: left;
 }
 
@@ -50,21 +48,21 @@
   letter-spacing: 0.5px;
 }
 
-/* Cuerpo de la tabla */
+
 .activities-table tbody td {
   padding: 15px 20px;
-  border-top: 1px solid #c9c4b5; /* Línea separadora sutil */
-  vertical-align: middle; /* Alineación vertical */
+  border-top: 1px solid #c9c4b5; 
+  vertical-align: middle; 
 }
 
-/* Efecto hover en las filas */
+
 .activities-table tbody tr:hover {
-  background-color: #d1ccbc; /* Un tono de crema ligeramente más oscuro */
+  background-color: #d1ccbc; 
 }
 
 .btn-eliminar {
-  background-color: #466245; /* Verde secundario (más suave) */
-  color: #DDD8CA; /* Texto color crema */
+  background-color: #466245; 
+  color: #DDD8CA; 
   border: none;
   padding: 8px 16px;
   border-radius: 5px;
@@ -75,12 +73,12 @@
 }
 
 .btn-eliminar:hover {
-  background-color: #20321E; /* Verde principal (más oscuro) al pasar el mouse */
-  transform: translateY(-2px); /* Un pequeño efecto de elevación */
+  background-color: #20321E; 
+  transform: translateY(-2px); 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* 5. Mensajes de estado (Cargando, Error, Sin Actividades) */
+
 .status-message {
   text-align: center;
   font-size: 1.2rem;
@@ -89,11 +87,11 @@
 }
 
 .status-message.error {
-  color: #ff8a80; /* Un rojo claro que resalta en el fondo oscuro */
+  color: #ff8a80; 
   font-weight: bold;
 }
 
-/* 6. Estilos para pantallas pequeñas (Responsividad) */
+
 @media (max-width: 768px) {
   .mis-actividades-content {
     padding: 20px 10px;
@@ -103,9 +101,9 @@
     font-size: 2rem;
   }
 
-  /* Transformamos la tabla para que sea legible en móviles */
+
   .activities-table thead {
-    display: none; /* Ocultamos el encabezado original */
+    display: none; 
   }
 
   .activities-table, .activities-table tbody, .activities-table tr, .activities-table td {
@@ -120,8 +118,8 @@
   }
   
   .activities-table td {
-    text-align: right; /* Alineamos el valor a la derecha */
-    padding-left: 50%; /* Dejamos espacio para el "título" */
+    text-align: right; 
+    padding-left: 50%; 
     position: relative;
     border-top: none;
     border-bottom: 1px solid #c9c4b5;
@@ -131,9 +129,9 @@
     border-bottom: none;
   }
 
-  /* Usamos un pseudo-elemento para mostrar el título de la columna */
+
   .activities-table td::before {
-    content: attr(data-label); /* Usaremos un atributo 'data-label' que añadiremos en el TSX */
+    content: attr(data-label); 
     position: absolute;
     left: 15px;
     width: 45%;
