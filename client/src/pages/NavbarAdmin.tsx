@@ -56,7 +56,7 @@ const NavbarAdmin: React.FC = () => {
           </button>
         </div>
 
-        <div className="navbar-logo" onClick={() => navigate('/inicio-socio')}>
+        <div className="navbar-logo" onClick={() => navigate('/inicio-admin')}>
           <img src={logoClub} alt="logo" />
         </div>
 
