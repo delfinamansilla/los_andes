@@ -27,15 +27,25 @@ public class LogicUsuario {
      * @param usuario Objeto con mail y contraseña.
      * @return El usuario completo si el login es exitoso, sino null.
      */
-    public Usuario login(Usuario usuario) {
+    public Usuario login(Usuario usuario) throws Exception{
         if (usuario.getMail() == null || usuario.getMail().isEmpty() ||
             usuario.getContrasenia() == null || usuario.getContrasenia().isEmpty()) {
             return null;
         }
 
         usuario.setContrasenia(hashPassword(usuario.getContrasenia()));
-        
-        return du.getByMailAndContrasenia(usuario);
+
+        Usuario u = du.getByMailAndContrasenia(usuario);
+
+        if (u == null) {
+            return null;
+        }
+
+        if (!u.isEstado()) {
+            throw new Exception("Tu cuenta está pendiente de aprobación por un administrador.");
+        }
+
+        return u;
     }
     
     /**
@@ -60,6 +70,7 @@ public class LogicUsuario {
 
         du.add(u);
     }
+    
     
     /**
      * Procesa la actualización de un usuario existente.
@@ -202,5 +213,12 @@ public class LogicUsuario {
             e.printStackTrace();
             throw new RuntimeException("No se pudo hashear la contraseña.", e);
         }
+    }
+    public LinkedList<Usuario> getSociosPendientes() {
+        return du.getSociosPendientes();
+    }
+
+    public void aprobarSocio(int id) {
+        du.aprobarSocio(id);
     }
 }

@@ -141,11 +141,13 @@ const Login: React.FC = () => {
 				  }
 				}, 2000);
 
-      } else if (res.status === 401) {
-        setError('Correo o contraseña incorrectos.');
-      } else {
-        setError('Error inesperado en el servidor.');
-      }
+			} else if (res.status === 401) {
+			    setError('Correo o contraseña incorrectos.');
+			} else if (res.status === 403 && data?.status === "pendiente") {
+			    setError(data.mensaje);
+			} else {
+			    setError('Error inesperado en el servidor.');
+			}
     } catch (err) {
       console.error(err);
       setError('Error al conectar con el servidor.');

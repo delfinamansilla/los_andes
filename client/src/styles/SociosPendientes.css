@@ -1,0 +1,96 @@
+.socios-pendientes-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20321E;
+}
+
+.socios-pendientes-content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.socios-pendientes-container {
+  width: 100%;
+  max-width: 1000px;
+  background-color: #DDD8CA;
+  color: #20321E;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+.socios-pendientes-container h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 2rem;
+}
+
+
+/* Tabla */
+
+.socios-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.socios-table thead th {
+  background-color: #20321E;
+  color: #DDD8CA;
+  padding: 15px;
+  text-align: left;
+}
+
+.socios-table tbody td {
+  padding: 15px;
+  border-top: 1px solid #466245;
+}
+
+.socios-table tbody tr:hover {
+  background-color: #c9c4b5;
+}
+
+
+/* Botones */
+
+.acciones-socio {
+  display: flex;
+  gap: 10px;
+}
+
+
+.btn-aprobar {
+  background-color: #20321E;
+  color: #DDD8CA;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.btn-aprobar:hover {
+  background-color: #466245;
+}
+
+
+.btn-rechazar {
+  background-color: #857f72;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.btn-rechazar:hover {
+  background-color: #6b665b;
+}
