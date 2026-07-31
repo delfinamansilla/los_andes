@@ -31,6 +31,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import logic.LogicCancha;
 import logic.LogicPrereservaCancha;
+import util.AppConfig;
 
 @WebServlet({"/alquiler_cancha"})
 public class ServletAlquiler_cancha extends HttpServlet {
@@ -263,7 +264,9 @@ public class ServletAlquiler_cancha extends HttpServlet {
                         break; 
                     }
                     
-                    String link = "http://losandesback-production.up.railway.app/alquiler_cancha?action=confirmar&token=" + p.getToken();
+                    String link = AppConfig.getBackendUrl()
+                            + "/alquiler_cancha?action=confirmar&token="
+                            + p.getToken();
 
                     
                     String cuerpo = "<div style='background-color: #f4f4f4; padding: 40px; font-family: Arial, sans-serif;'>"
@@ -306,7 +309,10 @@ public class ServletAlquiler_cancha extends HttpServlet {
                     String estiloCss = "<style>body{font-family:sans-serif;background:#20321E;color:white;display:flex;justify-content:center;align-items:center;height:100vh}.card{background:#DDD8CA;padding:40px;border-radius:10px;color:#333;text-align:center}.btn{background:#466245;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;display:inline-block;margin-top:10px}</style>";
 
                     if (pr == null || pr.getExpiracion().isBefore(LocalDateTime.now())) {
-                        resp.getWriter().write("<html><head>" + estiloCss + "</head><body><div class='card'><h1>Enlace inválido o expirado</h1><a href='http://losandesback-production.up.railway.app' class='btn'>Volver</a></div></body></html>");
+                        resp.getWriter().write("<html><head>" + estiloCss + "</head><body>"
+                            + "<div class='card'><h1>Enlace inválido o expirado</h1>"
+                            + "<a href='" + AppConfig.getFrontendUrl() + "' class='btn'>Volver al Inicio</a>" // Cambio aquí
+                            + "</div></body></html>");
                         return;
                     }
 
@@ -331,14 +337,15 @@ public class ServletAlquiler_cancha extends HttpServlet {
                     
                     if (u != null && u.getMail() != null) {
                         
-                        String baseUrl = "https://los-andes-six.vercel.app/alquiler_cancha";
-                        String params = "&id_cancha=" + pr.getIdCancha() + 
-                                        "&id_usuario=" + pr.getIdUsuario() +
-                                        "&fecha=" + pr.getFecha() +
-                                        "&hora_desde=" + pr.getHoraDesde() +
-                                        "&hora_hasta=" + pr.getHoraHasta();
+                    	String baseUrl = AppConfig.getBackendUrl();
+                    	String params = "?action=descargar_constancia" +
+                                "&id_cancha=" + pr.getIdCancha() + 
+                                "&id_usuario=" + pr.getIdUsuario() +
+                                "&fecha=" + pr.getFecha() +
+                                "&hora_desde=" + pr.getHoraDesde() +
+                                "&hora_hasta=" + pr.getHoraHasta();
 
-                        String linkPDF = baseUrl + "?action=descargar_constancia" + params;
+                    	String linkPDF = baseUrl + params;
 
                         String cuerpoMail = "<div style='background-color: #f4f4f4; padding: 40px; font-family: Arial, sans-serif;'>"
                                 + "<div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);'>"
@@ -364,7 +371,7 @@ public class ServletAlquiler_cancha extends HttpServlet {
                     resp.getWriter().write("<div class='card'>");
                     resp.getWriter().write("<h1>¡Reserva Confirmada!</h1>");
                     resp.getWriter().write("<p>Hemos enviado un correo a <b>" + (u != null ? u.getMail() : "tu casilla") + "</b> con las opciones de descarga.</p>");
-                    resp.getWriter().write("<a href='http://losandesback-production.up.railway.app/alquileres-cancha' class='btn'>Ir a Mis Reservas</a>");
+                    resp.getWriter().write("<a href='" + AppConfig.getFrontendUrl() + "/alquileres-cancha' class='btn'>Ir a Mis Reservas</a>");
                     resp.getWriter().write("</div></body></html>");
                     break;
                 }
