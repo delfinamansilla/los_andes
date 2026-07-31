@@ -43,7 +43,7 @@ import MisAlquileresCancha from './pages/MisAlquileresCancha';
 import CambioContrasenia from './pages/CambioContrasenia';
 import AlquileresCanchaSocio from './pages/AlquileresCanchaSocio';
 import AlquileresSalonSocio from './pages/AlquileresSalonSocio';
-
+import SociosPendientes from './pages/SociosPendientes';
 
 
 function App() {
@@ -95,6 +95,7 @@ function App() {
 		<Route path="/alquileres-admin" element={<AlquilerCanchasAdmin/>} />
 		<Route path="/alquileres-cancha" element={<MisAlquileresCancha/>} />
 		<Route path="/cambiar-contrasenia" element={<CambioContrasenia />} />
+		<Route path="/socios-pendientes" element={<SociosPendientes />} />
 		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>

@@ -333,6 +333,78 @@ public class DataUsuario {
         }
         return fotoData;
     }
-    
+    public LinkedList<Usuario> getSociosPendientes() {
+        LinkedList<Usuario> usuarios = new LinkedList<>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT * FROM usuario WHERE rol = ? AND estado = ?"
+            );
+
+            stmt.setString(1, "socio");
+            stmt.setBoolean(2, false);
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Usuario u = new Usuario();
+
+                u.setIdUsuario(rs.getInt("id"));
+                u.setNombreCompleto(rs.getString("nombre_completo"));
+                u.setDni(rs.getString("dni"));
+                u.setTelefono(rs.getString("telefono"));
+                u.setMail(rs.getString("mail"));
+
+                Date fecha = rs.getDate("fecha_nacimiento");
+                if (fecha != null) {
+                    u.setFechaNacimiento(fecha.toLocalDate());
+                }
+
+                u.setContrasenia(rs.getString("contrasenia"));
+                u.setEstado(rs.getBoolean("estado"));
+                u.setRol(rs.getString("rol"));
+
+                usuarios.add(u);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return usuarios;
+    }
+    public void aprobarSocio(int id) {
+        PreparedStatement stmt = null;
+
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "UPDATE usuario SET estado = true WHERE id = ?"
+            );
+
+            stmt.setInt(1, id);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     
 }
