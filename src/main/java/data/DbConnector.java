@@ -31,13 +31,21 @@ public class DbConnector {
                 String password = System.getenv("MYSQLPASSWORD");
                 String db = System.getenv("MYSQLDATABASE");
 
-                if (host == null) {
+                /*if (host == null) {
                 
                     host = "switchyard.proxy.rlwy.net"; 
                     port = "18386"; 
                     user = "root";
                     password = "sbZNmaGRhgoaqiMYhPysbuiRDOGeCuVl"; 
                     db = "railway";
+                } esto es para conectarse a railway*/
+                if (host == null) {
+
+                    host = "localhost";
+                    port = "3306";
+                    user = "los_andes_user";
+                    password = "lasnenas";
+                    db = "los_andes";
                 }
 
                 String url = "jdbc:mysql://" + host + ":" + port + "/" + db + "?allowPublicKeyRetrieval=true&useSSL=false";
