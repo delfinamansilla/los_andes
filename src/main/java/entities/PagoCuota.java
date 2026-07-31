@@ -7,15 +7,20 @@ public class PagoCuota {
     private LocalDate fecha_pago;
     private int id_usuario;
     private int id_cuota;
+    private String nro_transaccion;
 
     public PagoCuota() {}
 
-    public PagoCuota(LocalDate fecha_pago, int id_usuario, int id_cuota) {
+    public PagoCuota(LocalDate fecha_pago, int id_usuario, int id_cuota, String nro_transaccion) {
         this.fecha_pago = fecha_pago;
         this.id_usuario = id_usuario;
         this.id_cuota = id_cuota;
+        this.nro_transaccion = nro_transaccion;
     }
-
+    
+    public String getNro_transaccion() { return nro_transaccion; }
+    public void setNro_transaccion(String nro_transaccion) { this.nro_transaccion = nro_transaccion; }
+    
     public int getId() {
         return id;
     }
@@ -47,4 +52,5 @@ public class PagoCuota {
     public void setId_cuota(int id_cuota) {
         this.id_cuota = id_cuota;
     }
+    
 }

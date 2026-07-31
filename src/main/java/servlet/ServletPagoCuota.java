@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import util.AppConfig;
 
 @WebServlet({"/pagocuota", "/PagoCuota"})
 public class ServletPagoCuota extends HttpServlet {
@@ -174,11 +175,11 @@ public class ServletPagoCuota extends HttpServlet {
                 JsonObject payer = new JsonObject();
                 payer.addProperty("email", "test_user_123@test.com");
                 preferenceRequest.add("payer", payer);
-                
+                String frontendUrl = AppConfig.getFrontendUrl();
                 JsonObject backUrls = new JsonObject();
-                backUrls.addProperty("success", "https://los-andes-six.vercel.app/mis-cuotas");
-                backUrls.addProperty("failure", "https://los-andes-six.vercel.app/mis-cuotas");
-                backUrls.addProperty("pending", "https://los-andes-six.vercel.app/mis-cuotas");
+                backUrls.addProperty("success", frontendUrl + "/mis-cuotas");
+                backUrls.addProperty("failure", frontendUrl + "/mis-cuotas");
+                backUrls.addProperty("pending", frontendUrl + "/mis-cuotas");
                 preferenceRequest.add("back_urls", backUrls);
                 
                 preferenceRequest.addProperty("auto_return", "approved");
@@ -239,12 +240,14 @@ public class ServletPagoCuota extends HttpServlet {
             } else if ("pagar".equalsIgnoreCase(action)) {
                 int idUsuario = Integer.parseInt(request.getParameter("id_usuario"));
                 int idCuota = Integer.parseInt(request.getParameter("id_cuota"));
+                String nroTransaccion = request.getParameter("payment_id");
                 
                 PagoCuota pago = new PagoCuota();
                 pago.setId_usuario(idUsuario);
                 pago.setId_cuota(idCuota);
                 pago.setFecha_pago(LocalDate.now());
-
+                pago.setNro_transaccion(nroTransaccion);
+                
                 logicPago.add(pago);
                 try {
                     

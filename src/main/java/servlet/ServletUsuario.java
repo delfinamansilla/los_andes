@@ -16,6 +16,7 @@ import java.io.InputStream;
 import entities.Usuario;
 import logic.LogicUsuario;
 import logic.LogicRecuperacionPass;
+import util.AppConfig;
 
 @WebServlet("/usuario")
 @MultipartConfig
@@ -113,7 +114,7 @@ public class ServletUsuario extends HttpServlet {
                 break;
             }
 
-            case "pendientes": {
+            /*case "pendientes": {
 
                 LinkedList<Usuario> lista = logicUsuario.getSociosPendientes();
 
@@ -130,13 +131,14 @@ public class ServletUsuario extends HttpServlet {
                 response.getWriter().write(json);
 
                 break;
+            }*/
+            case "eliminar": {
+                int id = Integer.parseInt(request.getParameter("id"));
+                logicUsuario.delete(id);
+                // Redirigimos usando la URL base del Backend
+                response.sendRedirect(AppConfig.getBackendUrl() + "/usuario?action=listar");
+                break;
             }
-                case "eliminar": {
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    logicUsuario.delete(id);
-                    response.sendRedirect("usuario?action=listar");
-                    break;
-                }
                 default:
                     response.getWriter().append("Acción no reconocida en GET: ").append(action);
             }
@@ -269,7 +271,7 @@ public class ServletUsuario extends HttpServlet {
 	
 	                    break;
 	                }
-	                case "aprobar": {
+	                /*case "aprobar": {
 
 	                    int id = Integer.parseInt(request.getParameter("id"));
 
@@ -280,7 +282,7 @@ public class ServletUsuario extends HttpServlet {
 	                    response.getWriter().write("{\"message\":\"Socio aprobado correctamente\"}");
 
 	                    break;
-	                }
+	                }*/
 	
 	                case "actualizar": {
 	                    Usuario u = new Usuario();
@@ -340,7 +342,7 @@ public class ServletUsuario extends HttpServlet {
 	                        }
 
 	                        
-	                        String link = "https://los-andes-six.vercel.app/cambiar-contrasenia?token=" + rp.getToken();
+	                        String link = AppConfig.getFrontendUrl() + "/cambiar-contrasenia?token=" + rp.getToken();
 	                        String cuerpo = "<div style='background-color: #20321E; padding: 50px; font-family: Arial, sans-serif;'>"
 	                                + "  <div style='max-width: 500px; margin: 0 auto; background-color: #E8E4D9; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.5);'>"
 	                                + "    <div style='background-color: #1a2918; padding: 20px; text-align: center; border-bottom: 4px solid #466245;'>"

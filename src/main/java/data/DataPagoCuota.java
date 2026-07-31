@@ -13,13 +13,14 @@ public class DataPagoCuota {
         LinkedList<PagoCuota> pagos = new LinkedList<>();
         try {
             stmt = DbConnector.getInstancia().getConn().createStatement();
-            rs = stmt.executeQuery("SELECT id, fecha_pago, id_usuario, id_cuota FROM pago_cuota");
+            rs = stmt.executeQuery("SELECT id, fecha_pago, id_usuario, id_cuota, nro_transaccion FROM pago_cuota");
             while (rs != null && rs.next()) {
                 PagoCuota pc = new PagoCuota();
                 pc.setId(rs.getInt("id"));
                 pc.setFecha_pago(rs.getObject("fecha_pago", LocalDate.class));
                 pc.setId_usuario(rs.getInt("id_usuario"));
                 pc.setId_cuota(rs.getInt("id_cuota"));
+                pc.setNro_transaccion(rs.getString("nro_transaccion"));
                 pagos.add(pc);
             }
         } catch (SQLException e) {
@@ -42,12 +43,13 @@ public class DataPagoCuota {
         ResultSet keyResultSet = null;
         try {
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
-                "INSERT INTO pago_cuota(fecha_pago, id_usuario, id_cuota) VALUES(?,?,?)",
+                "INSERT INTO pago_cuota(fecha_pago, id_usuario, id_cuota, nro_transaccion) VALUES(?,?,?)",
                 PreparedStatement.RETURN_GENERATED_KEYS
             );
             stmt.setObject(1, pc.getFecha_pago());
             stmt.setInt(2, pc.getId_usuario());
             stmt.setInt(3, pc.getId_cuota());
+            stmt.setString(4, pc.getNro_transaccion());
             stmt.executeUpdate();
             keyResultSet = stmt.getGeneratedKeys();
             if (keyResultSet != null && keyResultSet.next()) {

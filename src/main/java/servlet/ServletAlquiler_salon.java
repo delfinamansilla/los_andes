@@ -12,7 +12,7 @@ import java.util.UUID;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import entities.Alquiler_cancha;
+
 import entities.Alquiler_salon;
 import entities.PreReserva;
 import entities.MailSender;
@@ -29,6 +29,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import logic.LogicAlquiler_salon;
 import logic.LogicPreReserva;
+
+import util.AppConfig;
+
 
 @WebServlet({"/alquiler_salon"})
 public class ServletAlquiler_salon extends HttpServlet {
@@ -213,7 +216,7 @@ public class ServletAlquiler_salon extends HttpServlet {
                     LocalTime hasta = LocalTime.parse(req.getParameter("hora_hasta"));
                     String emailDestino = req.getParameter("email");
                     PreReserva p = logicPre.crearPreReserva(idUsuario, idSalon, fecha, desde, hasta);
-                    String link = "https://los-andes-six.vercel.app/alquiler_salon?action=confirmar&token=" + p.getToken();
+                    String link = AppConfig.getBackendUrl() + "/alquiler_salon?action=confirmar&token=" + p.getToken();
 
                     String cuerpo = "<div style='background-color: #f4f4f4; padding: 40px; font-family: Arial, sans-serif;'>"
                             + "<div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);'>"
@@ -261,7 +264,10 @@ public class ServletAlquiler_salon extends HttpServlet {
                     String estiloCss = "<style>body{font-family:sans-serif;background:#20321E;color:white;display:flex;justify-content:center;align-items:center;height:100vh}.card{background:#DDD8CA;padding:40px;border-radius:10px;color:#333;text-align:center}.btn{background:#466245;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;display:inline-block;margin-top:10px}</style>";
 
                     if (pr == null || pr.getExpiracion().isBefore(LocalDateTime.now())) {
-                        resp.getWriter().write("<html><head>" + estiloCss + "</head><body><div class='card'><h1>Enlace inválido o expirado</h1><a href='http://losandesback-production.up.railway.app' class='btn'>Volver</a></div></body></html>");
+                    	resp.getWriter().write("<html><head>" + estiloCss + "</head><body>"
+                    	        + "<div class='card'><h1>Enlace inválido o expirado</h1>"
+                    	        + "<a href='" + AppConfig.getFrontendUrl() + "' class='btn'>Volver al Inicio</a>" // Cambio aquí
+                    	        + "</div></body></html>");
                         return;
                     }
 
@@ -282,14 +288,16 @@ public class ServletAlquiler_salon extends HttpServlet {
                     }
 
                     if (u != null && u.getMail() != null) {
-                        String baseUrl = "http://losandesback-production.up.railway.app/alquiler_salon"; 
-                        String params = "&id_salon=" + pr.getIdSalon() + 
+                    	String baseUrl = AppConfig.getBackendUrl(); 
+                        
+                        String params = "?action=descargar_constancia" +
+                                        "&id_salon=" + pr.getIdSalon() + 
                                         "&id_usuario=" + pr.getIdUsuario() +
                                         "&fecha=" + pr.getFecha() +
                                         "&hora_desde=" + pr.getHoraDesde() +
                                         "&hora_hasta=" + pr.getHoraHasta();
 
-                        String linkPDF = baseUrl + "?action=descargar_constancia" + params;
+                        String linkPDF = baseUrl + params;
 
                         String cuerpoMail = "<div style='background-color: #f4f4f4; padding: 40px; font-family: Arial, sans-serif;'>"
                                 + "<div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);'>"
@@ -314,7 +322,7 @@ public class ServletAlquiler_salon extends HttpServlet {
                     resp.getWriter().write("<div class='card'>");
                     resp.getWriter().write("<h1>¡Reserva Confirmada!</h1>");
                     resp.getWriter().write("<p>Hemos enviado un correo a <b>" + (u != null ? u.getMail() : "tu casilla") + "</b> con las opciones de descarga.</p>");
-                    resp.getWriter().write("<a href='http://losandesback-production.up.railway.app/mis-alquileres-salon' class='btn'>Ir a Mis Reservas</a>");
+                    resp.getWriter().write("<a href='" + AppConfig.getFrontendUrl() + "/alquileres-salon' class='btn'>Ir a Mis Reservas</a>");
                     resp.getWriter().write("</div></body></html>");
                     break;
                 }

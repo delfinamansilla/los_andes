@@ -20,6 +20,7 @@ interface Monto {
 interface Pago {
   id_cuota: number;
   fecha_pago: string;
+  nro_transaccion: string;
 }
 
 interface CuotaProcesada {
@@ -29,6 +30,7 @@ interface CuotaProcesada {
   monto: number;
   estaPagada: boolean;
   fecha_pago: string | null;
+  nro_transaccion: string | null;
 }
 
 const MisCuotas: React.FC = () => {
@@ -71,7 +73,8 @@ const MisCuotas: React.FC = () => {
           fecha_vencimiento: cuota.fecha_vencimiento,
           monto: montoEncontrado ? montoEncontrado.monto : 0,
           estaPagada: !!pagoEncontrado,
-          fecha_pago: pagoEncontrado ? pagoEncontrado.fecha_pago : null
+          fecha_pago: pagoEncontrado ? pagoEncontrado.fecha_pago : null,
+		  nro_transaccion: pagoEncontrado ? pagoEncontrado.nro_transaccion : null
         };
       });
 
@@ -95,6 +98,7 @@ const MisCuotas: React.FC = () => {
 	    const queryParams = new URLSearchParams(location.search);
 	    const status = queryParams.get('collection_status');
 	    const externalRef = queryParams.get('external_reference');
+		const paymentId = queryParams.get('payment_id');
 	    
 	    if (status === 'approved' && externalRef) {
 	      
@@ -106,7 +110,7 @@ const MisCuotas: React.FC = () => {
 	      params.append('action', 'pagar');
 	      params.append('id_cuota', idCuotaRecuperado);
 	      params.append('id_usuario', idUsuarioRecuperado);
-
+		  params.append('payment_id', paymentId || '');
 
 	      fetch(`${API_URL}/pagocuota`, {
 	        method: 'POST',
@@ -122,7 +126,8 @@ const MisCuotas: React.FC = () => {
 	                return { 
 	                    ...c, 
 	                    estaPagada: true, 
-	                    fecha_pago: new Date().toLocaleDateString() 
+	                    fecha_pago: new Date().toLocaleDateString(),
+						nro_transaccion: paymentId
 	                };
 	            }
 	            return c;
@@ -223,34 +228,45 @@ const MisCuotas: React.FC = () => {
                   <th>Estado</th>
                   <th>Fecha de Pago</th>
                   <th>Acción</th>
+				  <th>Nro. Transacción</th>
                 </tr>
               </thead>
-              <tbody>
-                {cuotasFiltradas.map(cuota => (
-                  <tr key={cuota.id_cuota}>
-                    <td>{formatearPeriodo(cuota.nro_cuota)}</td>
-                    <td>{cuota.fecha_vencimiento}</td>
-                    <td>${cuota.monto.toFixed(2)}</td>
-                    <td>
-                      <span className={`estado-badge ${cuota.estaPagada ? 'estado-pagado' : 'estado-pendiente'}`}>
-                        {cuota.estaPagada ? 'Pagado' : 'Pendiente'}
-                      </span>
-                    </td>
-                    <td>{cuota.fecha_pago || '-'}</td>
-                    <td>
-                      {!cuota.estaPagada && (
-                        <button 
-                          onClick={() => handlePagar(cuota)} 
-                          className="btn-pagar"
-                          disabled={isPagarLoading}
-                        >
-                          {isPagarLoading ? '...' : 'Pagar'}
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+			  <tbody>
+			    {cuotasFiltradas.map(cuota => (
+			      <tr key={cuota.id_cuota}>
+			        {/* 1. Período */}
+			        <td>{formatearPeriodo(cuota.nro_cuota)}</td>
+			        {/* 2. Vencimiento */}
+			        <td>{cuota.fecha_vencimiento}</td>
+			        {/* 3. Monto */}
+			        <td>${cuota.monto.toFixed(2)}</td>
+			        {/* 4. Estado */}
+			        <td>
+			          <span className={`estado-badge ${cuota.estaPagada ? 'estado-pagado' : 'estado-pendiente'}`}>
+			            {cuota.estaPagada ? 'Pagado' : 'Pendiente'}
+			          </span>
+			        </td>
+			        {/* 5. Fecha de Pago */}
+			        <td>{cuota.fecha_pago || '-'}</td>
+			        {/* 6. Acción */}
+			        <td>
+			          {!cuota.estaPagada && (
+			            <button 
+			              onClick={() => handlePagar(cuota)} 
+			              className="btn-pagar"
+			              disabled={isPagarLoading}
+			            >
+			              {isPagarLoading ? '...' : 'Pagar'}
+			            </button>
+			          )}
+			        </td>
+			        {/* 7. Nro. Transacción (NUEVO) */}
+			        <td style={{fontSize: '0.8rem', color: '#666'}}>
+			          {cuota.estaPagada ? (cuota.nro_transaccion || 'S/N') : '-'}
+			        </td>
+			      </tr>
+			    ))}
+			  </tbody>
             </table>
           </>
         )}
