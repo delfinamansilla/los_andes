@@ -13,7 +13,7 @@ public class DataCuota {
         LinkedList<Cuota> cuotas = new LinkedList<>();
         try {
             stmt = DbConnector.getInstancia().getConn().createStatement();
-            rs = stmt.executeQuery("SELECT id, nro_cuota, fecha_cuota, fecha_vencimiento FROM cuota");
+            rs = stmt.executeQuery("SELECT id, nro_cuota, fecha_cuota, fecha_vencimiento FROM cuota ORDER BY nro_cuota DESC");
             while (rs != null && rs.next()) {
                 Cuota c = new Cuota();
                 c.setId(rs.getInt("id"));

@@ -41,7 +41,7 @@ public class ServletPagoCuota extends HttpServlet {
     private LogicMonto_cuota logicMonto;
     private Gson gson;
     
-    private static final String MP_ACCESS_TOKEN = System.getenv("MP_ACCESS_TOKEN");
+    String MP_ACCESS_TOKEN = "APP_USR-823938148084228-112018-cd6d4b64190341ff5f31cc38c0b4312d-660480912";
     
     
 
@@ -70,6 +70,9 @@ public class ServletPagoCuota extends HttpServlet {
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         
+        System.out.println("ACTION RECIBIDA: " + request.getParameter("action"));
+        System.out.println("ID USUARIO: " + request.getParameter("id_usuario"));
+        System.out.println("ID CUOTA: " + request.getParameter("id_cuota"));
         String action = request.getParameter("action");
         response.setContentType("application/json;charset=UTF-8");
         
@@ -143,13 +146,6 @@ public class ServletPagoCuota extends HttpServlet {
 
         String action = request.getParameter("action");
         response.setContentType("application/json;charset=UTF-8");
-        if ("crear_orden_pago".equalsIgnoreCase(action)) {
-        
-        if (MP_ACCESS_TOKEN == null || MP_ACCESS_TOKEN.isEmpty()) {
-            System.err.println("❌ ERROR GRAVE: No se encontró el Token de Mercado Pago en las variables de entorno.");
-            response.sendError(500, "Error de configuración del servidor (Falta Token MP).");
-            return;
-        }}
 
         try {
             if ("crear_orden_pago".equalsIgnoreCase(action)) {
@@ -188,6 +184,8 @@ public class ServletPagoCuota extends HttpServlet {
                 preferenceRequest.addProperty("external_reference", "cuota_" + idCuota + "_usuario_" + idUsuario);
                 
                 String jsonPayload = gson.toJson(preferenceRequest); // aca serializamos convirtiendo el objeto java en un texto plano
+                System.out.println("JSON ENVIADO A MP:");
+                System.out.println(jsonPayload);
                 URL url = new URL("https://api.mercadopago.com/checkout/preferences");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -233,7 +231,12 @@ public class ServletPagoCuota extends HttpServlet {
                     response.getWriter().write(gson.toJson(jsonResponse));
                     
                 } else {
-                    System.err.println("ERROR DE MERCADO PAGO");
+                	System.err.println("=========== ERROR MERCADO PAGO ===========");
+                    System.err.println("Código HTTP: " + responseCode);
+                    System.err.println("Respuesta:");
+                    System.err.println(responseStr.toString());
+                    System.err.println("=========================================");
+
                     response.setStatus(500);
                     response.getWriter().write("{\"error\":\"Error de MercadoPago: " + responseStr.toString() + "\"}");
                 }
