@@ -113,7 +113,24 @@ public class ServletUsuario extends HttpServlet {
                 break;
             }
 
+            case "pendientes": {
 
+                LinkedList<Usuario> lista = logicUsuario.getSociosPendientes();
+
+                com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
+                    .registerTypeAdapter(java.time.LocalDate.class,
+                        (com.google.gson.JsonSerializer<java.time.LocalDate>)
+                        (src, typeOfSrc, context) ->
+                            new com.google.gson.JsonPrimitive(src.toString()))
+                    .create();
+
+                String json = gson.toJson(lista);
+
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write(json);
+
+                break;
+            }
                 case "eliminar": {
                     int id = Integer.parseInt(request.getParameter("id"));
                     logicUsuario.delete(id);
@@ -171,31 +188,46 @@ public class ServletUsuario extends HttpServlet {
 	            case "login": {
 	                String mail = request.getParameter("mail");
 	                String contrasenia = request.getParameter("contrasenia");
-	
+
 	                Usuario u = new Usuario();
 	                u.setMail(mail);
 	                u.setContrasenia(contrasenia);
-	
-	                Usuario usuarioLogueado = logicUsuario.login(u);
-	
+
 	                response.setContentType("application/json;charset=UTF-8");
-	
-	                if (usuarioLogueado != null) {
-	                    request.getSession().setAttribute("usuarioActual", usuarioLogueado);
-	
-	                    com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
-	                        .registerTypeAdapter(java.time.LocalDate.class,
-	                            (com.google.gson.JsonSerializer<java.time.LocalDate>)
-	                            (src, typeOfSrc, context) ->
-	                                new com.google.gson.JsonPrimitive(src.toString()))
-	                        .create();
-	
-	                    String usuarioJson = gson.toJson(usuarioLogueado);
-	                    response.getWriter().write("{\"status\":\"ok\", \"usuario\":" + usuarioJson + "}");
-	                } else {
-	                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-	                    response.getWriter().write("{\"status\":\"error\", \"mensaje\":\"Correo o contraseña incorrectos.\"}");
+
+	                try {
+
+	                    Usuario usuarioLogueado = logicUsuario.login(u);
+
+	                    if (usuarioLogueado != null) {
+
+	                        request.getSession().setAttribute("usuarioActual", usuarioLogueado);
+
+	                        com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
+	                            .registerTypeAdapter(java.time.LocalDate.class,
+	                                (com.google.gson.JsonSerializer<java.time.LocalDate>)
+	                                (src, typeOfSrc, context) ->
+	                                    new com.google.gson.JsonPrimitive(src.toString()))
+	                            .create();
+
+	                        String usuarioJson = gson.toJson(usuarioLogueado);
+
+	                        response.getWriter().write("{\"status\":\"ok\", \"usuario\":" + usuarioJson + "}");
+
+	                    } else {
+
+	                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+	                        response.getWriter().write("{\"status\":\"error\", \"mensaje\":\"Correo o contraseña incorrectos.\"}");
+
+	                    }
+
+	                } catch (Exception e) {
+
+	                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+	                    response.getWriter().write("{\"status\":\"pendiente\", \"mensaje\":\"" + e.getMessage() + "\"}");
+
 	                }
+
 	                break;
 	            }
 	
@@ -209,7 +241,11 @@ public class ServletUsuario extends HttpServlet {
 	                    nuevo.setMail(request.getParameter("mail"));
 	                    nuevo.setContrasenia(request.getParameter("contrasenia"));
 	                    nuevo.setRol(request.getParameter("rol"));
-	                    nuevo.setEstado(true);
+	                    if (nuevo.getRol().equalsIgnoreCase("socio")) {
+	                        nuevo.setEstado(false);
+	                    } else {
+	                        nuevo.setEstado(true);
+	                    }
 	
 	                    String fecha = request.getParameter("fecha_nacimiento");
 	                    if (fecha != null && !fecha.isEmpty()) {
@@ -231,6 +267,18 @@ public class ServletUsuario extends HttpServlet {
 	                        response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
 	                    }
 	
+	                    break;
+	                }
+	                case "aprobar": {
+
+	                    int id = Integer.parseInt(request.getParameter("id"));
+
+	                    logicUsuario.aprobarSocio(id);
+
+	                    response.setContentType("application/json");
+	                    response.setCharacterEncoding("UTF-8");
+	                    response.getWriter().write("{\"message\":\"Socio aprobado correctamente\"}");
+
 	                    break;
 	                }
 	
@@ -351,8 +399,9 @@ public class ServletUsuario extends HttpServlet {
 	                        response.getWriter().write("{\"error\":\"El enlace es inválido o ha expirado.\"}");
 	                    }
 	                    break;
+                    
 	                }
-	
+	                
 	                default:
 	                    response.getWriter().append("Acción POST no reconocida: ").append(action);
 	            }
