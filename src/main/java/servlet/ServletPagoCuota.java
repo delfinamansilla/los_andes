@@ -143,12 +143,13 @@ public class ServletPagoCuota extends HttpServlet {
 
         String action = request.getParameter("action");
         response.setContentType("application/json;charset=UTF-8");
+        if ("crear_orden_pago".equalsIgnoreCase(action)) {
         
         if (MP_ACCESS_TOKEN == null || MP_ACCESS_TOKEN.isEmpty()) {
             System.err.println("❌ ERROR GRAVE: No se encontró el Token de Mercado Pago en las variables de entorno.");
             response.sendError(500, "Error de configuración del servidor (Falta Token MP).");
             return;
-        }
+        }}
 
         try {
             if ("crear_orden_pago".equalsIgnoreCase(action)) {
