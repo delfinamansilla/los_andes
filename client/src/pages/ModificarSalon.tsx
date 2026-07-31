@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavbarAdmin from './NavbarAdmin';
 import { useNavigate } from 'react-router-dom';
 import '../styles/ModificarSalon.css';
+import { API_URL } from "../config";
 
 interface Salon {
   id: number;
@@ -58,7 +59,7 @@ const ModificarSalon: React.FC = () => {
 	  }
 
     try {
-      const res = await fetch('https://losandesback-production.up.railway.app/salon', {
+      const res = await fetch(`${API_URL}/salon`, {
         method: 'POST',
         body: formData
       });

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
-import '../styles/CuotasUsuario.css'; 
+import '../styles/CuotasUsuario.css';
+import { API_URL } from "../config";
 
 interface AlquilerSalon {
   id: number;
@@ -43,7 +44,7 @@ const AlquileresSalonUsuario: React.FC = () => {
     setSocio(socioParsed);
 
     try {
-      const res = await fetch(`https://losandesback-production.up.railway.app/alquiler_salon?action=listar_por_usuario&id_usuario=${socioParsed.id}`);
+      const res = await fetch(`${API_URL}/alquiler_salon?action=listar_por_usuario&id_usuario=${socioParsed.id}`);
       
       if (!res.ok) throw new Error('Error al conectar con el servidor.');
       

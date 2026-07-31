@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavbarAdmin from './NavbarAdmin';
 import '../styles/CanchasAdmin.css';
+import { API_URL } from "../config";
 
 interface Cancha {
   id: number;
@@ -19,7 +20,7 @@ const CanchasAdmin = () => {
 
   const fetchCanchas = async () => {
     try {
-      const res = await fetch('https://losandesback-production.up.railway.app/cancha?action=listar');
+      const res = await fetch(`${API_URL}/cancha?action=listar`);
       if (!res.ok) throw new Error('Error al traer las canchas');
       const data: Cancha[] = await res.json();
       setCanchas(data);
@@ -42,7 +43,7 @@ const CanchasAdmin = () => {
     if (!canchaAEliminar) return;
     try {
       const res = await fetch(
-        `https://losandesback-production.up.railway.app/cancha?action=eliminar&id=${canchaAEliminar.id}`
+        `${API_URL}/cancha?action=eliminar&id=${canchaAEliminar.id}`
       );
       if (!res.ok) throw new Error('Error al eliminar cancha');
       setShowModalEliminar(false);

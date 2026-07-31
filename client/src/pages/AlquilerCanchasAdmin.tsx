@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavbarAdmin from './NavbarAdmin';
 import '../styles/VerAlquileresSalon.css';
-
+import { API_URL } from "../config";
 
 interface AlquilerData {
   id: number;
@@ -44,7 +44,7 @@ const AlquileresCanchasAdmin = () => {
 
   const fetchAlquileres = async (idCancha: number) => {
     try {
-      const res = await fetch(`https://losandesback-production.up.railway.app/alquiler_cancha?action=listar_por_cancha&id_cancha=${idCancha}`);
+      const res = await fetch(`${API_URL}/alquiler_cancha?action=listar_por_cancha&id_cancha=${idCancha}`);
       if (!res.ok) throw new Error('Error al obtener alquileres.');
       const data = await res.json();
       setAlquileres(data);

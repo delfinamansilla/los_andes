@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, Clock, MapPin, User, ChevronRight } from 'lucide-react';
 import '../styles/ProximasActividadesWidget.css';
+import { API_URL } from "../config";
 
 interface Inscripcion {
   inscripcion_id: number;
@@ -28,7 +29,7 @@ const ProximasActividadesWidget: React.FC = () => {
       return;
     }
 
-    const url = `https://losandesback-production.up.railway.app/inscripcion?action=porusuario&id_usuario=${usuario.id}`;
+    const url = `${API_URL}/inscripcion?action=porusuario&id_usuario=${usuario.id}`;
 
     fetch(url)
       .then(res => res.json())

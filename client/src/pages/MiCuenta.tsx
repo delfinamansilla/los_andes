@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
 import NavbarSocio from './NavbarSocio';
 import Footer from './Footer';
-
 import '../styles/MiCuenta.css';
+import { API_URL } from "../config";
 
 
 const MiCuenta: React.FC = () => {
@@ -56,7 +56,7 @@ const MiCuenta: React.FC = () => {
     if (fechaNacimiento) params.append('fecha_nacimiento', fechaNacimiento);
 
     try {
-      const res = await fetch('https://losandesback-production.up.railway.app/usuario', {
+      const res = await fetch(`${API_URL}/usuario`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),
@@ -101,7 +101,7 @@ const MiCuenta: React.FC = () => {
       params.append('estado', 'true');
       if (fechaNacimiento) params.append('fecha_nacimiento', fechaNacimiento);
 
-      const res = await fetch('https://losandesback-production.up.railway.app/usuario', {
+      const res = await fetch(`${API_URL}/usuario`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),

@@ -5,6 +5,7 @@ import logoClub from '../assets/los_andes.png';
 import NavbarSocio from './NavbarSocio';
 import Footer from './Footer';
 import { QRCodeSVG } from "qrcode.react";
+import { API_URL } from "../config";
 
 const Credencial: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,9 +18,9 @@ const Credencial: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      setImageUrl(`https://losandesback-production.up.railway.app/usuario?action=verfoto&id=${id}&t=${new Date().getTime()}`);
+      setImageUrl(`${API_URL}/usuario?action=verfoto&id=${id}&t=${new Date().getTime()}`);
       
-      fetch(`https://losandesback-production.up.railway.app/usuario?action=buscarc&id=${id}`)
+      fetch(`${API_URL}/usuario?action=buscarc&id=${id}`)
         .then(res => res.ok ? res.json() : Promise.reject('Usuario no encontrado'))
         .then(data => setSocio(data))
         .catch(err => setError(err.message));
@@ -34,11 +35,11 @@ const Credencial: React.FC = () => {
     formData.append('idUsuario', id);
     formData.append('foto', file);
     try {
-      const res = await fetch('https://losandesback-production.up.railway.app/usuario', { method: 'POST', body: formData });
+      const res = await fetch(`${API_URL}/usuario`, { method: 'POST', body: formData });
       const result = await res.json();
       if (res.ok) {
         setMensaje('¡Foto actualizada!');
-        setImageUrl(`https://losandesback-production.up.railway.app/usuario?action=verfoto&id=${id}&t=${new Date().getTime()}`);
+        setImageUrl(`${API_URL}/usuario?action=verfoto&id=${id}&t=${new Date().getTime()}`);
       } else {
         setError(result.error || 'Error al subir la foto.');
       }

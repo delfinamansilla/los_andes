@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavbarAdmin from './NavbarAdmin';
 import { useNavigate } from 'react-router-dom';
 import '../styles/ModificarCancha.css';
+import { API_URL } from "../config";
 
 interface Cancha {
   id: number;
@@ -53,7 +54,7 @@ const ModificarCancha: React.FC = () => {
     params.append('estado', estado.toString());
 
     try {
-      const res = await fetch('https://losandesback-production.up.railway.app/cancha', {
+      const res = await fetch(`${API_URL}/cancha`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),

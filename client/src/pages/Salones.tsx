@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavbarSocio from './NavbarSocio';
 import Footer from './Footer';
 import '../styles/Salones.css';
+import { API_URL } from "../config";
 
 interface Salon {
   id: number;
@@ -19,7 +20,7 @@ const Salones: React.FC = () => {
   useEffect(() => {
     const fetchSalones = async () => {
       try {
-        const res = await fetch('https://losandesback-production.up.railway.app/salon?action=listar');
+        const res = await fetch(`${API_URL}/salon?action=listar`);
         if (!res.ok) throw new Error('No se pudieron cargar los salones.');
         const data: Salon[] = await res.json();
         setSalones(data);

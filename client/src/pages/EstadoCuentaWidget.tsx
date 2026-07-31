@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DollarSign, AlertCircle, CheckCircle, Calendar } from 'lucide-react';
 import '../styles/EstadoCuentaWidget.css';
+import { API_URL } from "../config";
 
 interface Cuota {
   id: number;
@@ -43,9 +44,9 @@ const EstadoCuentaWidget: React.FC = () => {
     }
 
     Promise.all([
-      fetch('https://losandesback-production.up.railway.app/cuota?action=listar').then(res => res.json()),
-      fetch('https://losandesback-production.up.railway.app/montocuota?action=listar').then(res => res.json()),
-      fetch(`https://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`).then(res => res.json())
+      fetch(`${API_URL}/cuota?action=listar`).then(res => res.json()),
+      fetch(`${API_URL}/montocuota?action=listar`).then(res => res.json()),
+      fetch(`${API_URL}/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`).then(res => res.json())
     ])
     .then(([todasLasCuotas, todosLosMontos, misPagos]: [Cuota[], Monto[], Pago[]]) => {
       const datosCombinados = todasLasCuotas.map(cuota => {

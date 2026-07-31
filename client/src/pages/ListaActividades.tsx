@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
 import '../styles/ListaActividades.css';
+import { API_URL } from "../config";
 
 
 interface Actividad {
@@ -23,7 +24,7 @@ const ListaActividades: React.FC = () => {
       setError(null);
 
       try {
-        const res = await fetch('https://losandesback-production.up.railway.app/actividad?action=listar', {
+        const res = await fetch(`${API_URL}/actividad?action=listar`, {
           method: 'GET'
         });
 

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import NavbarSocio from './NavbarSocio';
 import Footer from './Footer';
 import '../styles/AlquilarSalon.css';
+import { API_URL } from "../config";
 
 interface Rango {
   horaDesde: string;
@@ -44,7 +45,7 @@ const AlquilarSalon: React.FC = () => {
     setLoadingHoras(true);
 
     try {
-      const url = `https://losandesback-production.up.railway.app/alquiler_salon?action=horarios&idSalon=${idSalon}&fecha=${value}`;
+      const url = `${API_URL}/alquiler_salon?action=horarios&idSalon=${idSalon}&fecha=${value}`;
 
       const res = await fetch(url);
       const text = await res.text();
@@ -97,7 +98,7 @@ const AlquilarSalon: React.FC = () => {
       params.append("id_usuario", usuario.id);
       params.append("email", usuario.mail); 
 
-      const url = `https://losandesback-production.up.railway.app/alquiler_salon?${params.toString()}`;
+      const url = `${API_URL}/alquiler_salon?${params.toString()}`;
 
       const res = await fetch(url);
       const text = await res.text();

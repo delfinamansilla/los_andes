@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavbarAdmin from './NavbarAdmin';
 import '../styles/VerAlquileresSalon.css'; 
+import { API_URL } from "../config";
 
 interface AlquilerData {
   id: number;
@@ -42,7 +43,7 @@ const VerAlquileresSalon = () => {
 
   const fetchAlquileres = async (idSalon: number) => {
     try {
-      const res = await fetch(`https://losandesback-production.up.railway.app/alquiler_salon?action=listar_por_salon&id_salon=${idSalon}`);
+      const res = await fetch(`${API_URL}/alquiler_salon?action=listar_por_salon&id_salon=${idSalon}`);
       if (!res.ok) throw new Error('Error al obtener alquileres');
       const data = await res.json();
       setAlquileres(data);

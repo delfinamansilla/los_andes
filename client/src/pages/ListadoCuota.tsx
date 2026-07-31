@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
 import '../styles/CuotasUsuario.css'; 
+import { API_URL } from "../config";
 
 interface Cuota {
   id: number;
@@ -30,8 +31,8 @@ const ListadoCuotas: React.FC = () => {
   const cargarDatos = async () => {
     try {
       const [resCuotas, resMontos] = await Promise.all([
-        fetch('https://losandesback-production.up.railway.app/cuota?action=listar'),
-        fetch('https://losandesback-production.up.railway.app/montocuota?action=listar')
+        fetch(`${API_URL}/cuota?action=listar`),
+        fetch(`${API_URL}/montocuota?action=listar`)
       ]);
 
       if (!resCuotas.ok) throw new Error('Error al cargar el listado de cuotas');

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import NavbarAdmin from "./NavbarAdmin";
 import Modal from "./Modal";
 import "../styles/AgregarHorario.css";
+import { API_URL } from "../config";
 
 interface Horario {
   id?: number;
@@ -49,7 +50,7 @@ const AgregarHorario: React.FC = () => {
   const cargarHorarios = async (id_actividad: number) => {
     try {
       const response = await fetch(
-        `https://losandesback-production.up.railway.app/horario?action=buscar_por_actividad&id_actividad=${id_actividad}`
+        `${API_URL}/horario?action=buscar_por_actividad&id_actividad=${id_actividad}`
       );
       if (!response.ok) throw new Error("Error al obtener horarios");
       const data = await response.json();
@@ -102,7 +103,7 @@ const AgregarHorario: React.FC = () => {
       formData.append("hora_hasta", nuevoHorario.horaHasta);
       formData.append("id_actividad", nuevoHorario.id_actividad.toString());
 
-      const response = await fetch("https://losandesback-production.up.railway.app/horario", {
+      const response = await fetch("${API_URL}/horario", {
         method: "POST",
         body: formData,
       });
@@ -125,7 +126,7 @@ const AgregarHorario: React.FC = () => {
     if (!horarioAEliminar?.id) return;
     try {
       await fetch(
-        `https://losandesback-production.up.railway.app/horario?action=eliminar&id=${horarioAEliminar.id}`,
+        `${API_URL}/horario?action=eliminar&id=${horarioAEliminar.id}`,
         { method: "GET" }
       );
       setHorarios((prev) => prev.filter((h) => h.id !== horarioAEliminar.id));
@@ -166,7 +167,7 @@ const AgregarHorario: React.FC = () => {
 
 
     try {
-      const response = await fetch("https://losandesback-production.up.railway.app/horario?action=actualizar", {
+      const response = await fetch(`${API_URL}/horario?action=actualizar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -187,13 +188,13 @@ const AgregarHorario: React.FC = () => {
 	cargarHorarios(actividad.id);
 
 	const rProf = await fetch(
-	  `https://losandesback-production.up.railway.app/horario?action=ocupados_profesor&id_profesor=${actividad.id_profesor}`
+	  `${API_URL}/horario?action=ocupados_profesor&id_profesor=${actividad.id_profesor}`
 	);
 	const dataProf = await rProf.json();
 	setOcupadosProfesor(Array.isArray(dataProf) ? dataProf : []);
 
 	const rCan = await fetch(
-	  `https://losandesback-production.up.railway.app/horario?action=ocupados_cancha&id_cancha=${actividad.id_cancha}`
+	  `${API_URL}/horario?action=ocupados_cancha&id_cancha=${actividad.id_cancha}`
 	);
 	const dataCan = await rCan.json();
 	setOcupadosCancha(Array.isArray(dataCan) ? dataCan : []);

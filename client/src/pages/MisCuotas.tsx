@@ -4,6 +4,7 @@ import NavbarSocio from './NavbarSocio';
 import Footer from './Footer';
 import '../styles/MisCuotas.css';
 import { QRCodeSVG } from 'qrcode.react';
+import { API_URL } from "../config";
 
 interface Cuota {
   id: number;
@@ -55,9 +56,9 @@ const MisCuotas: React.FC = () => {
     setLoading(true);
 
     Promise.all([
-      fetch('https://losandesback-production.up.railway.app/cuota?action=listar').then(res => res.json()),
-      fetch('https://losandesback-production.up.railway.app/montocuota?action=listar').then(res => res.json()),
-      fetch(`https://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`).then(res => res.json())
+      fetch(`${API_URL}/cuota?action=listar`).then(res => res.json()),
+      fetch(`${API_URL}/montocuota?action=listar`).then(res => res.json()),
+      fetch(`${API_URL}/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`).then(res => res.json())
     ])
     .then(([todasLasCuotas, todosLosMontos, misPagos]: [Cuota[], Monto[], Pago[]]) => {
       const datosCombinados = todasLasCuotas.map(cuota => {
@@ -107,7 +108,7 @@ const MisCuotas: React.FC = () => {
 	      params.append('id_usuario', idUsuarioRecuperado);
 
 
-	      fetch('https://losandesback-production.up.railway.app/pagocuota', {
+	      fetch(`${API_URL}/pagocuota`, {
 	        method: 'POST',
 	        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 	        body: params
@@ -165,7 +166,7 @@ const MisCuotas: React.FC = () => {
     params.append('id_cuota', String(cuota.id_cuota));
     params.append('monto', String(cuota.monto));
 
-    fetch('https://losandesback-production.up.railway.app/pagocuota', {
+    fetch(`${API_URL}/pagocuota`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: params

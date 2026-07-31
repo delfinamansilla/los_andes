@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
 import Modal from './Modal'; 
 import '../styles/CuotasUsuario.css';
+import { API_URL } from "../config";
 
 interface Usuario {
   id: number;
@@ -67,13 +68,13 @@ const CuotasUsuario: React.FC = () => {
     setUsuario(userObj);
 
     try {
-      const resCuotas = await fetch('https://losandesback-production.up.railway.app/cuota?action=listar');
+      const resCuotas = await fetch(`${API_URL}/cuota?action=listar`);
       if (!resCuotas.ok) throw new Error('Error al cargar cuotas');
       
-      const resMontos = await fetch('https://losandesback-production.up.railway.app/montocuota?action=listar');
+      const resMontos = await fetch(`${API_URL}/montocuota?action=listar`);
       if (!resMontos.ok) throw new Error('Error al cargar montos');
 
-      const resPagos = await fetch(`https://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${userObj.id}`);
+      const resPagos = await fetch(`${API_URL}/pagocuota?action=listar_por_usuario&id_usuario=${userObj.id}`);
       if (!resPagos.ok) throw new Error('Error al cargar pagos');
 
       const dataCuotas = await resCuotas.json();
@@ -108,7 +109,7 @@ const CuotasUsuario: React.FC = () => {
       params.append('id_usuario', usuario.id.toString());
       params.append('id_cuota', idCuota.toString());
 
-      const response = await fetch('https://losandesback-production.up.railway.app/pagocuota', {
+      const response = await fetch(`${API_URL}/pagocuota`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),
@@ -121,7 +122,7 @@ const CuotasUsuario: React.FC = () => {
             mensaje: 'El pago se ha registrado correctamente en el sistema.'
         });
 
-        const resPagos = await fetch(`https://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`);
+        const resPagos = await fetch(`${API_URL}/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`);
         const dataPagos = await resPagos.json();
         setPagos(dataPagos);
       } else {

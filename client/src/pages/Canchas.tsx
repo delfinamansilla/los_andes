@@ -3,6 +3,7 @@ import NavbarSocio from './NavbarSocio';
 import '../styles/Canchas.css';
 import { useNavigate } from 'react-router-dom';
 import Footer from './Footer';
+import { API_URL } from "../config";
 
 interface Cancha {
   id: number;
@@ -23,7 +24,7 @@ const Canchas: React.FC = () => {
   useEffect(() => {
     const fetchCanchas = async () => {
       try {
-        const res = await fetch('https://losandesback-production.up.railway.app/cancha?action=listar');
+        const res = await fetch(`${API_URL}/cancha?action=listar`);
         if (!res.ok) throw new Error('No se pudieron cargar las canchas.');
         const data: Cancha[] = await res.json();
         setCanchas(data);

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import NavbarSocio from './NavbarSocio';
 import '../styles/MisAlquileresCancha.css';
 import Footer from './Footer';
-
+import { API_URL } from "../config";
 
 interface Cancha {
   id: number;
@@ -45,11 +45,11 @@ const MisAlquileresCancha: React.FC = () => {
       }
       const usuario = JSON.parse(usuarioStorage);
 
-      const resReservas = await fetch(`https://losandesback-production.up.railway.app/alquiler_cancha?action=mis_reservas&idUsuario=${usuario.id}`);
+      const resReservas = await fetch(`${API_URL}/alquiler_cancha?action=mis_reservas&idUsuario=${usuario.id}`);
       if (!resReservas.ok) throw new Error('Error al obtener reservas');
       const dataReservas: Alquiler[] = await resReservas.json();
 
-      const resCanchas = await fetch('https://losandesback-production.up.railway.app/cancha?action=listar');
+      const resCanchas = await fetch(`${API_URL}/cancha?action=listar`);
       if (!resCanchas.ok) throw new Error('Error al obtener canchas');
       const dataCanchas: Cancha[] = await resCanchas.json();
 
@@ -82,7 +82,7 @@ const MisAlquileresCancha: React.FC = () => {
   const confirmarEliminar = async () => {
     if (!reservaAEliminar) return;
     try {
-      const res = await fetch(`https://losandesback-production.up.railway.app/alquiler_cancha?action=eliminar&id=${reservaAEliminar.id}`);
+      const res = await fetch(`${API_URL}/alquiler_cancha?action=eliminar&id=${reservaAEliminar.id}`);
       if (!res.ok) throw new Error('No se pudo eliminar');
 
       setShowModalEliminar(false);

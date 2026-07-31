@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
 import '../styles/AgregarPartido.css';
-
+import { API_URL } from "../config";
 
 
 const AgregarPartido: React.FC = () => {
@@ -33,8 +33,8 @@ const AgregarPartido: React.FC = () => {
 	  const fetchData = async () => {
 	    try {
 	      const [actRes, canchaRes] = await Promise.all([
-	        fetch('https://losandesback-production.up.railway.app/actividad?action=listar'),
-	        fetch('https://losandesback-production.up.railway.app/cancha?action=listar'),
+	        fetch(`${API_URL}/actividad?action=listar`),
+	        fetch(`${API_URL}/cancha?action=listar`),
 	      ]);
 
 	      const actividadesData = await actRes.json();
@@ -70,7 +70,7 @@ const AgregarPartido: React.FC = () => {
 	  };
 
 	  try {
-	    const res = await fetch('https://losandesback-production.up.railway.app/partido?action=crear', {
+	    const res = await fetch(`${API_URL}/partido?action=crear`, {
 	      method: 'POST',
 	      headers: { 'Content-Type': 'application/json' },
 	      body: JSON.stringify(payload),

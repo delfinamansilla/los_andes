@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import NavbarAdmin from './NavbarAdmin'; 
-import '../styles/AgregarCuota.css'; 
+import '../styles/AgregarCuota.css';
+import { API_URL } from "../config";
 
 const AgregarCuota: React.FC = () => {
   const [fechaVencimiento, setFechaVencimiento] = useState('');
@@ -33,7 +34,7 @@ const AgregarCuota: React.FC = () => {
       paramsCuota.append('fecha_vencimiento', fechaVencimiento);
 
 
-      const resCuota = await fetch('https://losandesback-production.up.railway.app/cuota', {
+      const resCuota = await fetch(`${API_URL}/cuota`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: paramsCuota.toString(),
@@ -58,7 +59,7 @@ const AgregarCuota: React.FC = () => {
       paramsMonto.append('monto', monto);
       paramsMonto.append('id_cuota', idCuotaGenerado.toString());
       
-      const resMonto = await fetch('https://losandesback-production.up.railway.app/montocuota', {
+      const resMonto = await fetch(`${API_URL}/montocuota`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: paramsMonto.toString(),

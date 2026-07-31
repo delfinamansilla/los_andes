@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from '../pages/NavbarAdmin';
 import '../styles/ModificarProfesor.css'; 
+import { API_URL } from "../config";
 
 interface Profesor {
   id: number;
@@ -59,7 +60,7 @@ const ModificarProfesor: React.FC = () => {
         params.append('telefono', telefono);
         params.append('mail', mail);
 
-        const response = await fetch('https://losandesback-production.up.railway.app/profesor', {
+        const response = await fetch(`${API_URL}/profesor`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: params.toString(),

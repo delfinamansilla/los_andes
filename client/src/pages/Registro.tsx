@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Registro.css';
 import Navbar from './Navbar';
+import { API_URL } from "../config";
 
 const Registro: React.FC = () => {
   const [rol, setRol] = useState<'socio' | 'administrador'>('socio');
@@ -51,7 +52,7 @@ const Registro: React.FC = () => {
       params.append('contrasenia', formData.contrasenia);
       params.append('rol', rol);
 
-	  const res = await fetch('https://losandesback-production.up.railway.app/usuario', {
+	  const res = await fetch(`${API_URL}/usuario`, {
 	    method: 'POST',
 	    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 	    body: params.toString(),

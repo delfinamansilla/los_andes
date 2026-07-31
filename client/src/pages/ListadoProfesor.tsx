@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from '../pages/NavbarAdmin';
 import Modal from './Modal'; 
 import '../styles/ListadoProfesor.css';
+import { API_URL } from "../config";
 
 interface Profesor {
   id: number;
@@ -46,7 +47,7 @@ const ListadoProfesor: React.FC = () => {
 
   const fetchProfesores = async () => {
     try {
-      const response = await fetch('https://losandesback-production.up.railway.app/profesor?action=listar');
+      const response = await fetch(`${API_URL}/profesor?action=listar`);
 
       if (!response.ok) {
         throw new Error('La respuesta del servidor no fue exitosa.');
@@ -77,7 +78,7 @@ const ListadoProfesor: React.FC = () => {
     if (profesorAEliminar === null) return;
 
     try {
-      const response = await fetch(`https://losandesback-production.up.railway.app/profesor?action=eliminar&id=${profesorAEliminar}`);
+      const response = await fetch(`${API_URL}/profesor?action=eliminar&id=${profesorAEliminar}`);
       const data = await response.json();
 
       if (!response.ok || data.status !== 'ok') {

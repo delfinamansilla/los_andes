@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
 import '../styles/ListadoSocio.css';
+import { API_URL } from "../config";
 
 interface Socio {
   id: number;
@@ -44,7 +45,7 @@ const ListadoSocios: React.FC = () => {
 
   const fetchSocios = async () => {
     try {
-      const response = await fetch('https://losandesback-production.up.railway.app/usuario?action=listar');
+      const response = await fetch(`${API_URL}/usuario?action=listar`);
 
       if (!response.ok) {
         throw new Error('Error al conectar con el servidor.');

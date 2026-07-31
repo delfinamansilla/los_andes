@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, DollarSign, Clock, MapPin, Building } from 'lucide-react';
 import '../styles/ActividadRecienteWidget.css';
+import { API_URL } from "../config";
 
 interface AlquilerCancha {
   id: number;
@@ -73,13 +74,13 @@ const ActividadRecienteWidget: React.FC = () => {
         resAlqSalon,
         resPagos
       ] = await Promise.all([
-        fetch('https://losandesback-production.up.railway.app/usuario?action=listar'),
-        fetch('https://losandesback-production.up.railway.app/cancha?action=listar'),
-        fetch('https://losandesback-production.up.railway.app/salon?action=listar'),
-        fetch('https://losandesback-production.up.railway.app/cuota?action=listar'),
-        fetch('https://losandesback-production.up.railway.app/alquiler_cancha?action=listar'),
-        fetch('https://losandesback-production.up.railway.app/alquiler_salon?action=listar'),
-        fetch('https://losandesback-production.up.railway.app/pagocuota?action=listar')
+        fetch(`${API_URL}/usuario?action=listar`),
+        fetch(`${API_URL}/cancha?action=listar`),
+        fetch(`${API_URL}/salon?action=listar`),
+        fetch(`${API_URL}/cuota?action=listar`),
+        fetch(`${API_URL}/alquiler_cancha?action=listar`),
+        fetch(`${API_URL}/alquiler_salon?action=listar`),
+        fetch(`${API_URL}/pagocuota?action=listar`)
       ]);
 
       const usuarios: Usuario[] = await resUsuarios.json();

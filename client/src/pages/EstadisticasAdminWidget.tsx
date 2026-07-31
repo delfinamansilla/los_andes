@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Calendar, DollarSign, GraduationCap, TrendingUp, TrendingDown } from 'lucide-react';
 import '../styles/EstadisticasAdminWidget.css';
+import { API_URL } from "../config";
 
 interface Usuario {
   id: number;
@@ -73,30 +74,30 @@ const EstadisticasAdminWidget: React.FC = () => {
 
   const cargarEstadisticas = async () => {
     try {
-      const resUsuarios = await fetch('https://losandesback-production.up.railway.app/usuario?action=listar');
+      const resUsuarios = await fetch(`${API_URL}/usuario?action=listar`);
       const usuarios: Usuario[] = await resUsuarios.json();
       const socios = usuarios.filter(u => u.rol.toLowerCase() === 'socio' && u.estado);
       setSociosActivos(socios.length);
 
       const hoy = new Date().toISOString().split('T')[0];
       
-      const resCanchas = await fetch('https://losandesback-production.up.railway.app/alquiler_cancha?action=listar');
+      const resCanchas = await fetch(`${API_URL}/alquiler_cancha?action=listar`);
       const alquileresCanchas: AlquilerCancha[] = await resCanchas.json();
       const canchasHoy = alquileresCanchas.filter(a => a.fecha_alquiler === hoy).length;
 
-      const resSalones = await fetch('https://losandesback-production.up.railway.app/alquiler_salon?action=listar');
+      const resSalones = await fetch(`${API_URL}/alquiler_salon?action=listar`);
       const alquileresSalones: AlquilerSalon[] = await resSalones.json();
       const salonesHoy = alquileresSalones.filter(a => a.fecha === hoy).length;
 
       setReservasHoy(canchasHoy + salonesHoy);
 
-      const resCuotas = await fetch('https://losandesback-production.up.railway.app/cuota?action=listar');
+      const resCuotas = await fetch(`${API_URL}/cuota?action=listar`);
       const cuotas: Cuota[] = await resCuotas.json();
 
-      const resMontos = await fetch('https://losandesback-production.up.railway.app/montocuota?action=listar');
+      const resMontos = await fetch(`${API_URL}/montocuota?action=listar`);
       const montos: MontoCuota[] = await resMontos.json();
 
-      const resPagos = await fetch('https://losandesback-production.up.railway.app/pagocuota?action=listar');
+      const resPagos = await fetch(`${API_URL}/pagocuota?action=listar`);
       const pagos: PagoCuota[] = await resPagos.json();
 
       const idsPagadas = new Set(pagos.map(p => p.id_cuota));
@@ -113,7 +114,7 @@ const EstadisticasAdminWidget: React.FC = () => {
       setCuotasPendientes(cuotasPendientes.length);
       setMontoPendiente(totalPendiente);
 
-      const resProfesores = await fetch('https://losandesback-production.up.railway.app/profesor?action=listar');
+      const resProfesores = await fetch(`${API_URL}/profesor?action=listar`);
       const profesores: Profesor[] = await resProfesores.json();
       setProfesoresActivos(profesores.length);
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../styles/Login.css';
 import Navbar from './Navbar';
+import { API_URL } from "../config";
 
 
 const Login: React.FC = () => {
@@ -25,7 +26,7 @@ const Login: React.FC = () => {
           params.append('action', 'recuperar');
           params.append('mail', mail);
 
-          const res = await fetch('https://losandesback-production.up.railway.app/usuario', {
+          const res = await fetch(`${API_URL}/usuario`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
               body: params.toString(),
@@ -39,7 +40,7 @@ const Login: React.FC = () => {
 	const verificarCuotas = async (usuarioId: number): Promise<boolean> => {
 	    try {
 		
-	      const resCuotas = await fetch('https://losandesback-production.up.railway.app/cuota?action=listar');
+	      const resCuotas = await fetch(`${API_URL}/cuota?action=listar`);
 	      if (!resCuotas.ok) {
 	        console.error('Error al obtener cuotas');
 	        return true; 
@@ -60,7 +61,7 @@ const Login: React.FC = () => {
 	        return true; 
 	      }
 
-	      const resPagos = await fetch(`https://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${usuarioId}`);
+	      const resPagos = await fetch(`${API_URL}/pagocuota?action=listar_por_usuario&id_usuario=${usuarioId}`);
 	      
 	      if (!resPagos.ok) {
 	        console.error('Error al obtener pagos');
@@ -102,7 +103,7 @@ const Login: React.FC = () => {
       params.append('action', 'login');
       params.append('mail', mail);
       params.append('contrasenia', contrasenia);
-      const res = await fetch('https://losandesback-production.up.railway.app/usuario', {
+      const res = await fetch(`${API_URL}/usuario`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),

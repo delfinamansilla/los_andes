@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
 import '../styles/AgregarActividad.css';
-
+import { API_URL } from "../config";
 
 const AgregarActividad: React.FC = () => {
   const navigate = useNavigate();
@@ -27,8 +27,8 @@ const AgregarActividad: React.FC = () => {
     const fetchData = async () => {
       try {
         const [profRes, canchaRes] = await Promise.all([
-          fetch('https://losandesback-production.up.railway.app/profesor?action=listar'),
-          fetch('https://losandesback-production.up.railway.app/cancha?action=listar'),
+          fetch(`${API_URL}/profesor?action=listar`),
+          fetch(`${API_URL}/cancha?action=listar`),
         ]);
 
         const profesoresData = await profRes.json();
@@ -64,7 +64,7 @@ const AgregarActividad: React.FC = () => {
     };
 
     try {
-      const res = await fetch('https://losandesback-production.up.railway.app/actividad?action=crear', {
+      const res = await fetch(`${API_URL}/actividad?action=crear`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

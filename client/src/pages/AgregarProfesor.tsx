@@ -2,6 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from '../pages/NavbarAdmin';
 import '../styles/AgregarProfesor.css';
+import { API_URL } from "../config";
 
 const AgregarProfesor: React.FC = () => {
   const [nombreCompleto, setNombreCompleto] = useState('');
@@ -27,10 +28,8 @@ const AgregarProfesor: React.FC = () => {
       params.append('nombre_completo', nombreCompleto);
       params.append('telefono', telefono);
       params.append('mail', mail);
-	  
-	  const url = 'https://losandesback-production.up.railway.app/profesor';
 
-      const res = await fetch('https://losandesback-production.up.railway.app/profesor', {
+      const res = await fetch(`${API_URL}/profesor`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),

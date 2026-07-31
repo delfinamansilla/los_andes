@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, Clock, MapPin, Building, ChevronRight, ChevronLeft } from 'lucide-react';
 import '../styles/ReservasActivasWidget.css';
+import { API_URL } from "../config";
 
 interface Cancha {
   id: number;
@@ -62,16 +63,16 @@ const ReservasActivasWidget: React.FC = () => {
 
   const fetchReservas = async () => {
     try {
-      const resCanchas = await fetch(`https://losandesback-production.up.railway.app/alquiler_cancha?action=mis_reservas&idUsuario=${usuario.id}`);
+      const resCanchas = await fetch(`${API_URL}/alquiler_cancha?action=mis_reservas&idUsuario=${usuario.id}`);
       const dataCanchas: AlquilerCancha[] = await resCanchas.json();
 
-      const resCanchasInfo = await fetch('https://losandesback-production.up.railway.app/cancha?action=listar');
+      const resCanchasInfo = await fetch(`${API_URL}/cancha?action=listar`);
       const canchasInfo: Cancha[] = await resCanchasInfo.json();
 
-      const resSalones = await fetch(`https://losandesback-production.up.railway.app/alquiler_salon?action=mis_reservas&idUsuario=${usuario.id}`);
+      const resSalones = await fetch(`${API_URL}/alquiler_salon?action=mis_reservas&idUsuario=${usuario.id}`);
       const dataSalones: AlquilerSalon[] = await resSalones.json();
 
-      const resSalonesInfo = await fetch('https://losandesback-production.up.railway.app/salon?action=listar');
+      const resSalonesInfo = await fetch(`${API_URL}/salon?action=listar`);
       const salonesInfo: Salon[] = await resSalonesInfo.json();
 
       const reservasCanchas: ReservaUnificada[] = dataCanchas.map(alq => {
@@ -158,10 +159,10 @@ const ReservasActivasWidget: React.FC = () => {
         <div className="empty-state">
           <p>No tienes reservas activas.</p>
           <div className="empty-actions">
-            <a href="/socio/canchas" className="btn-reservar">
+            <a href="/canchas" className="btn-reservar">
               Reservar Cancha
             </a>
-            <a href="/socio/salones" className="btn-reservar">
+            <a href="/salones" className="btn-reservar">
               Reservar Salón
             </a>
           </div>

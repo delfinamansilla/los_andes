@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import NavbarAdmin from "./NavbarAdmin";
 import Modal from "./Modal";
 import '../styles/PartidoDetalle.css';
-
+import { API_URL } from "../config";
 
 interface Partido {
 	id: number;
@@ -50,8 +50,8 @@ const PartidoDetalle: React.FC = () => {
     const fetchData = async () => {
       try {
         const [actRes, canchaRes] = await Promise.all([
-          fetch("https://losandesback-production.up.railway.app/actividad?action=listar"),
-          fetch("https://losandesback-production.up.railway.app/cancha?action=listar"),
+          fetch(`${API_URL}/actividad?action=listar`),
+          fetch(`${API_URL}/cancha?action=listar`),
         ]);
         const actividadesData = await actRes.json();
         const canchasData = await canchaRes.json();
@@ -73,7 +73,7 @@ const PartidoDetalle: React.FC = () => {
       try {
         if (partido.id_actividad) {
           const resAct = await fetch(
-            `https://losandesback-production.up.railway.app/actividad?action=buscar&id=${partido.id_actividad}`
+            `${API_URL}/actividad?action=buscar&id=${partido.id_actividad}`
           );
           const dataAct = await resAct.json();
           setNombreActividad(dataAct?.nombre|| "Actividad no encontrada");
@@ -82,7 +82,7 @@ const PartidoDetalle: React.FC = () => {
 		setNombreCancha("Partido en cancha del oponente");
         if (partido.id_cancha && partido.id_cancha !== 0) {
           const resCancha = await fetch(
-            `https://losandesback-production.up.railway.app/cancha?action=buscar&id=${partido.id_cancha}`
+            `${API_URL}/cancha?action=buscar&id=${partido.id_cancha}`
           );
           const text = await resCancha.text();
           if (text) {
@@ -120,7 +120,7 @@ const PartidoDetalle: React.FC = () => {
   const handleGuardarCambios = async () => {
     if (!partido) return;
     try {
-      const res = await fetch(`https://losandesback-production.up.railway.app/partido?action=actualizar`, {
+      const res = await fetch(`${API_URL}/partido?action=actualizar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -162,7 +162,7 @@ const PartidoDetalle: React.FC = () => {
     if (!partido) return;
     try {
       const res = await fetch(
-        `https://losandesback-production.up.railway.app/partido?action=eliminar&id=${partido.id}`,
+        `${API_URL}/partido?action=eliminar&id=${partido.id}`,
         { method: "GET"}
       );
       const text = await res.text();

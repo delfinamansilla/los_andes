@@ -3,6 +3,7 @@ import NavbarSocio from './NavbarSocio';
 import Modal from './Modal'; 
 import Footer from './Footer';
 import '../styles/MisActividades.css';
+import { API_URL } from "../config";
 
 interface Inscripcion {
   inscripcion_id: number;
@@ -38,7 +39,7 @@ const MisActividades: React.FC = () => {
       return;
     }
 
-    const url = `https://losandesback-production.up.railway.app/inscripcion?action=porusuario&id_usuario=${usuario.id}`;
+    const url = `${API_URL}/inscripcion?action=porusuario&id_usuario=${usuario.id}`;
 
     try {
       const res = await fetch(url);
@@ -62,7 +63,7 @@ const MisActividades: React.FC = () => {
     if (!inscripcionAEliminar) return;
 
     try {
-      const url = `https://losandesback-production.up.railway.app/inscripcion?action=eliminar&id=${inscripcionAEliminar.inscripcion_id}`;
+      const url = `${API_URL}/inscripcion?action=eliminar&id=${inscripcionAEliminar.inscripcion_id}`;
       const res = await fetch(url, { method: 'GET' });
       if (!res.ok) throw new Error('Error al eliminar');
 

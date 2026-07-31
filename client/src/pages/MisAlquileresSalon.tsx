@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import NavbarSocio from './NavbarSocio';
 import '../styles/MisAlquileresSalon.css';
 import Footer from './Footer';
+import { API_URL } from "../config";
+
 interface Salon {
   id: number;
   nombre: string;
@@ -42,11 +44,11 @@ const MisAlquileresSalon: React.FC = () => {
       }
       const usuario = JSON.parse(usuarioStorage);
       
-      const resReservas = await fetch(`https://losandesback-production.up.railway.app/alquiler_salon?action=mis_reservas&idUsuario=${usuario.id}`);
+      const resReservas = await fetch(`${API_URL}/alquiler_salon?action=mis_reservas&idUsuario=${usuario.id}`);
       if (!resReservas.ok) throw new Error('Error al obtener reservas');
       const dataReservas: Alquiler[] = await resReservas.json();
 
-      const resSalones = await fetch('https://losandesback-production.up.railway.app/salon?action=listar');
+      const resSalones = await fetch(`${API_URL}/salon?action=listar`);
       if (!resSalones.ok) throw new Error('Error al obtener salones');
       const dataSalones: Salon[] = await resSalones.json();
 
@@ -79,7 +81,7 @@ const MisAlquileresSalon: React.FC = () => {
   const confirmarEliminar = async () => {
     if (!reservaAEliminar) return;
     try {
-      const res = await fetch(`https://losandesback-production.up.railway.app/alquiler_salon?action=eliminar&id=${reservaAEliminar.id}`);
+      const res = await fetch(`${API_URL}/alquiler_salon?action=eliminar&id=${reservaAEliminar.id}`);
       if (!res.ok) throw new Error('No se pudo eliminar');
       
       setShowModalEliminar(false);

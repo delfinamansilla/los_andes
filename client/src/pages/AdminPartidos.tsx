@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
 import '../styles/AdminPartidos.css';
+import { API_URL } from "../config";
 
 interface Partido {
   id: number;
@@ -58,9 +59,9 @@ const AdminPartidos: React.FC = () => {
 
       if (filtro === "semana") {
         const { desde, hasta } = obtenerFechasSemana();
-        url = `https://losandesback-production.up.railway.app/partido?action=listar_por_rango&desde=${desde}&hasta=${hasta}`;
+        url = `${API_URL}/partido?action=listar_por_rango&desde=${desde}&hasta=${hasta}`;
       } else {
-        url = `https://losandesback-production.up.railway.app/partido?action=listar`;
+        url = `${API_URL}/partido?action=listar`;
       }
 
       const res = await fetch(url, { method: "GET"});
@@ -79,7 +80,7 @@ const AdminPartidos: React.FC = () => {
           let cancha = null;
           try {
             const actRes = await fetch(
-              `https://losandesback-production.up.railway.app/actividad?action=buscar&id=${p.idActividad ?? p.id_actividad}`
+              `${API_URL}/actividad?action=buscar&id=${p.idActividad ?? p.id_actividad}`
             );
             const actTxt = await actRes.text();
             actividad = actTxt ? JSON.parse(actTxt) : null;
@@ -91,7 +92,7 @@ const AdminPartidos: React.FC = () => {
           if (idCancha && idCancha !== 0) {
             try {
               const canchaRes = await fetch(
-                `https://losandesback-production.up.railway.app/cancha?action=buscar&id=${idCancha}`
+                `${API_URL}/cancha?action=buscar&id=${idCancha}`
               );
               const canchaTxt = await canchaRes.text();
               cancha = canchaTxt ? JSON.parse(canchaTxt) : null;

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import NavbarAdmin from "./NavbarAdmin";
 import Modal from "./Modal";
 import "../styles/ActividadDetalle.css";
+import { API_URL } from "../config";
+
 
 interface Actividad {
   id: number;
@@ -48,8 +50,8 @@ const ActividadDetalle: React.FC = () => {
     const fetchData = async () => {
       try {
         const [profRes, canchaRes] = await Promise.all([
-          fetch("https://losandesback-production.up.railway.app/profesor?action=listar"),
-          fetch("https://losandesback-production.up.railway.app/cancha?action=listar"),
+          fetch(`${API_URL}/profesor?action=listar`),
+          fetch(`${API_URL}/cancha?action=listar`),
         ]);
         const profesoresData = await profRes.json();
         const canchasData = await canchaRes.json();
@@ -70,14 +72,14 @@ const ActividadDetalle: React.FC = () => {
       try {
         if (actividad.id_profesor) {
           const resProf = await fetch(
-            `https://losandesback-production.up.railway.app/profesor?action=buscar&id=${actividad.id_profesor}`
+            `${API_URL}/profesor?action=buscar&id=${actividad.id_profesor}`
           );
           const dataProf = await resProf.json();
           setNombreProfesor(dataProf?.nombre_completo || "Profesor no encontrado");
         }
         if (actividad.id_cancha) {
           const resCancha = await fetch(
-            `https://losandesback-production.up.railway.app/cancha?action=buscar&id=${actividad.id_cancha}`
+            `${API_URL}/cancha?action=buscar&id=${actividad.id_cancha}`
           );
           const text = await resCancha.text();
           if (text) {
@@ -115,7 +117,7 @@ const ActividadDetalle: React.FC = () => {
   const handleGuardarCambios = async () => {
     if (!actividad) return;
     try {
-      const res = await fetch(`https://losandesback-production.up.railway.app/actividad?action=actualizar`, {
+      const res = await fetch(`${API_URL}/actividad?action=actualizar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -156,7 +158,7 @@ const ActividadDetalle: React.FC = () => {
     if (!actividad) return;
     try {
       const res = await fetch(
-        `https://losandesback-production.up.railway.app/actividad?action=eliminar&id=${actividad.id}`,
+        `${API_URL}/actividad?action=eliminar&id=${actividad.id}`,
         { method: "GET", credentials: "include" }
       );
       const text = await res.text();

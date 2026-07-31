@@ -185,7 +185,7 @@ public class ServletPagoCuota extends HttpServlet {
                 
                 preferenceRequest.addProperty("external_reference", "cuota_" + idCuota + "_usuario_" + idUsuario);
                 
-                String jsonPayload = gson.toJson(preferenceRequest);
+                String jsonPayload = gson.toJson(preferenceRequest); // aca serializamos convirtiendo el objeto java en un texto plano
                 URL url = new URL("https://api.mercadopago.com/checkout/preferences");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");

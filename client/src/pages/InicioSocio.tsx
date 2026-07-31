@@ -44,12 +44,12 @@ const InicioSocio: React.FC = () => {
 		    const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#1A535C', '#FF9F1C', '#9B5DE5'];
 
 		    for (let i = 0; i < 30; i++) {
-		      const randomLeft = Math.floor(Math.random() * 100);
+		      const randomLeft = Math.floor(Math.random() * 100); //posicion horizontal
 		      
 		 
-		      const randomDuration = Math.floor(Math.random() * 3) + 10; 
+		      const randomDuration = Math.floor(Math.random() * 3) + 10; //duracion
 		
-		      const randomDelay = Math.floor(Math.random() * 4);
+		      const randomDelay = Math.floor(Math.random() * 4); //retraso
 		      
 		      const randomColor = colors[Math.floor(Math.random() * colors.length)];
 		      const randomScale = 0.7 + Math.random() * 0.6;

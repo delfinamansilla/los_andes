@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import '../styles/Login.css';
 import Navbar from './Navbar';
+import { API_URL } from "../config";
 
 const CambioContrasenia: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -28,7 +29,7 @@ const CambioContrasenia: React.FC = () => {
     params.append('nueva_pass', pass1);
 
     try {
-        const res = await fetch('https://losandesback-production.up.railway.app/usuario', {
+        const res = await fetch(`${API_URL}/usuario`, {
             method: 'POST',
             body: params
         });

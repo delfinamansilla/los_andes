@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavbarSocio from "./NavbarSocio";
 import '../styles/PartidoDetalleSocio.css';
-
+import { API_URL } from "../config";
 
 interface Partido {
 	id: number;
@@ -53,7 +53,7 @@ const PartidoDetalleSocio: React.FC = () => {
       try {
         if (partido.id_actividad) {
           const resAct = await fetch(
-            `https://losandesback-production.up.railway.app/actividad?action=buscar&id=${partido.id_actividad}`
+            `${API_URL}/actividad?action=buscar&id=${partido.id_actividad}`
           );
           const dataAct = await resAct.json();
           setNombreActividad(dataAct?.nombre|| "Actividad no encontrada");
@@ -62,7 +62,7 @@ const PartidoDetalleSocio: React.FC = () => {
 		setNombreCancha("Partido en cancha del oponente");
         if (partido.id_cancha && partido.id_cancha !== 0) {
           const resCancha = await fetch(
-            `https://losandesback-production.up.railway.app/cancha?action=buscar&id=${partido.id_cancha}`
+            `${API_URL}/cancha?action=buscar&id=${partido.id_cancha}`
           );
           const text = await resCancha.text();
           if (text) {

@@ -3,6 +3,7 @@ import NavbarSocio from './NavbarSocio';
 import Modal from './Modal';
 import '../styles/InscripcionActividad.css';
 import Footer from './Footer';
+import { API_URL } from "../config";
 
 interface Actividad {
   id: number;
@@ -41,7 +42,7 @@ const InscripcionActividad: React.FC = () => {
       setLoading(false);
       return;
     }
-    const url = `https://losandesback-production.up.railway.app/actividad?action=listarcondetalles&format=json&id_usuario=${usuario.id}`;
+    const url = `${API_URL}/actividad?action=listarcondetalles&format=json&id_usuario=${usuario.id}`;
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
@@ -73,7 +74,7 @@ const InscripcionActividad: React.FC = () => {
 
     try {
       const fechaHoy = new Date().toISOString().split('T')[0];
-      const url = `https://losandesback-production.up.railway.app/inscripcion?action=crear&fecha_inscripcion=${fechaHoy}&id_usuario=${usuario.id}&id_actividad=${actividadAInscribir.id}`;
+      const url = `${API_URL}/inscripcion?action=crear&fecha_inscripcion=${fechaHoy}&id_usuario=${usuario.id}&id_actividad=${actividadAInscribir.id}`;
       
       const res = await fetch(url, { method: 'POST' });
       const result = await res.json();

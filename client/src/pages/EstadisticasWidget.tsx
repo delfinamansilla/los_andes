@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, Calendar, CheckCircle } from 'lucide-react';
 import '../styles/EstadisticasWidget.css';
+import { API_URL } from "../config";
 
 const EstadisticasWidget: React.FC = () => {
   const [stats, setStats] = useState({
@@ -23,18 +24,18 @@ const EstadisticasWidget: React.FC = () => {
 
   const fetchEstadisticas = async () => {
     try {
-      const resActividades = await fetch(`https://losandesback-production.up.railway.app/inscripcion?action=porusuario&id_usuario=${usuario.id}`);
+      const resActividades = await fetch(`${API_URL}/inscripcion?action=porusuario&id_usuario=${usuario.id}`);
       const actividades = await resActividades.json();
 
-      const resCanchas = await fetch(`https://losandesback-production.up.railway.app/alquiler_cancha?action=mis_reservas&idUsuario=${usuario.id}`);
+      const resCanchas = await fetch(`${API_URL}/alquiler_cancha?action=mis_reservas&idUsuario=${usuario.id}`);
       const canchas = await resCanchas.json();
 
-      const resSalones = await fetch(`https://losandesback-production.up.railway.app/alquiler_salon?action=mis_reservas&idUsuario=${usuario.id}`);
+      const resSalones = await fetch(`${API_URL}/alquiler_salon?action=mis_reservas&idUsuario=${usuario.id}`);
       const salones = await resSalones.json();
 
       const totalReservas = canchas.length + salones.length;
 
-      const resPagos = await fetch(`https://losandesback-production.up.railway.app/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`);
+      const resPagos = await fetch(`${API_URL}/pagocuota?action=listar_por_usuario&id_usuario=${usuario.id}`);
       const pagos = await resPagos.json();
 
       setStats({

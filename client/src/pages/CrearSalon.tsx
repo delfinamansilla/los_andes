@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import NavbarAdmin from './NavbarAdmin';
 import { useNavigate } from 'react-router-dom';
 import '../styles/CrearSalon.css';
+import { API_URL } from "../config";
 
 const CrearSalon: React.FC = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const CrearSalon: React.FC = () => {
     }
 
     try {
-      const res = await fetch('https://losandesback-production.up.railway.app/salon', {
+      const res = await fetch(`${API_URL}/salon`, {
         method: 'POST',
         body: formData,
       });
