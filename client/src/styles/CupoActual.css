@@ -1,0 +1,109 @@
+
+.pag-cupo-actual {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20321E;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.contenido-cupo {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center;     
+  padding: 40px;
+}
+
+.contenido-cupo h1 {
+  font-size: 2.5rem;
+  color: #DDD8CA;
+  font-weight: 800;
+  margin: 0 0 30px 0; 
+  text-align: center;
+}
+
+.card-cupo {
+  background-color: #DDD8CA;
+  color: #20321E;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 500px; 
+}
+
+.info-cupo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 2px solid rgba(32, 50, 30, 0.1);
+  padding-bottom: 10px;
+}
+
+.info-item label {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #466245; 
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.info-item span {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #20321E;
+}
+
+.cupo-restante-valor {
+  font-size: 2.2rem !important;
+  text-align: center;
+  margin-top: 5px;
+}
+
+.cupo-positivo { color: #2e7d32 !important; } 
+.cupo-critico { color: #c62828 !important; } 
+
+.botones-container {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.botones-container button, .btn-volver {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.2s;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn-volver {
+  background-color: #20321E;
+  color: #DDD8CA;
+  border: none;
+}
+
+.btn-volver:hover {
+  background-color: #466245;
+}
+
+.btn-config {
+  background-color: #DDD8CA;
+  color: #20321E;
+  border: 2px solid #20321E;
+}
+
+.btn-config:hover {
+  background-color: #c9c4b5;
+}

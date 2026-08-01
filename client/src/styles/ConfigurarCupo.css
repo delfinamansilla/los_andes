@@ -1,0 +1,133 @@
+
+.pag-configurar-cupo {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20321E; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+.contenido-configurar {
+  flex-grow: 1; 
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  padding: 40px;
+}
+
+.form-configurar {
+  background-color: #DDD8CA; 
+  color: #20321E;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 500px;
+}
+
+.form-configurar h1 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+}
+
+.configurar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: left;
+}
+
+.configurar-group label {
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin-bottom: -5px;
+}
+
+.configurar-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #466245;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s;
+  background-color: #DDD8CA;
+  color: #20321E;
+}
+
+.configurar-group input:focus {
+  border-color: #20321E;
+  box-shadow: 0 0 5px rgba(32, 50, 30, 0.5);
+}
+
+.botones-container {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.botones-container button {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.botones-container button[type="submit"] {
+  border: none;
+  background-color: #20321E;
+  color: #DDD8CA;
+}
+
+.botones-container button[type="submit"]:hover {
+  background-color: #466245;
+}
+
+.btn-cancel {
+  background-color: #DDD8CA;
+  color: #20321E;
+  border: 2px solid #20321E;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-cancel:hover {
+  background-color: #c9c4b5;
+  border-color: #466245;
+}
+.mensajes-globales {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.mensaje-exito,
+.mensaje-error {
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.mensaje-exito {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.mensaje-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}

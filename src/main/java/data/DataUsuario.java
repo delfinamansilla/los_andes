@@ -96,7 +96,25 @@ public class DataUsuario {
 
         return usuarios;
     }
-
+    public int getCantSociosActivos() {
+        int cant = 0;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(
+                "SELECT COUNT(*) FROM usuario WHERE rol = 'socio' AND estado = 1"
+            );
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                cant = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbConnector.getInstancia().releaseConn();
+        }
+        return cant;
+    }
     public Usuario getByMailAndContrasenia(Usuario usuario) {
         Usuario u = null;
         PreparedStatement stmt = null;

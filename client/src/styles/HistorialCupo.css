@@ -1,0 +1,76 @@
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20321E;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.content-area {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.list-container {
+  width: 100%;
+  max-width: 1000px;
+  background-color: #DDD8CA;
+  color: #20321E;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.list-container h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.data-table thead th {
+  background-color: #20321E;
+  color: #DDD8CA;
+  padding: 15px;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.data-table tbody td {
+  padding: 15px;
+  border-top: 1px solid #466245;
+  font-size: 1.05rem;
+}
+
+.data-table tbody tr:hover {
+  background-color: #c9c4b5;
+}
+
+.mensaje-vacio {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #466245;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #20321E;
+  color: #DDD8CA;
+  font-size: 1.5rem;
+}

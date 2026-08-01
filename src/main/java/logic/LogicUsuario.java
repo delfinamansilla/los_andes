@@ -12,14 +12,16 @@ import java.util.regex.Pattern;
 //import javax.xml.bind.DatatypeConverter;
 import java.util.HexFormat;
 import java.io.InputStream;
-
+import logic.LogicConfiguracion;
 
 public class LogicUsuario {
 
     private DataUsuario du;
+    private LogicConfiguracion lc;
 
     public LogicUsuario() {
         this.du = new DataUsuario();
+        this.lc = new LogicConfiguracion();
     }
 
     /**
@@ -62,7 +64,17 @@ public class LogicUsuario {
      * @throws Exception Si alguna validación de negocio falla.
      */
     public void add(Usuario u) throws Exception {
+    
         validarUsuario(u);
+        if (u.getRol().equalsIgnoreCase("socio")) {
+            int cupoMax = lc.getCupoActual();
+            int actuales = (int) du.getAll().stream()
+                             .filter(user -> user.getRol().equalsIgnoreCase("socio") && user.isEstado())
+                             .count();
+            if (actuales >= cupoMax) {
+                throw new Exception("Cupo de socios lleno (" + cupoMax + "). No se permiten más registros.");
+            }
+        }
 
         u.setMail(u.getMail().toLowerCase()); 
 
@@ -218,7 +230,15 @@ public class LogicUsuario {
         return du.getSociosPendientes();
     }
 
-    public void aprobarSocio(int id) {
+    public void aprobarSocio(int id) throws Exception{
+    	int cupoMax = lc.getCupoActual();
+        int actuales = (int) du.getAll().stream()
+                         .filter(user -> user.getRol().equalsIgnoreCase("socio") && user.isEstado())
+                         .count();
+        
+        if (actuales >= cupoMax) {
+            throw new Exception("Capacidad máxima del club alcanzada. No se puede aprobar más socios.");
+        }
         du.aprobarSocio(id);
     }
 }

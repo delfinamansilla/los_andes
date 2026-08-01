@@ -274,7 +274,6 @@ public class ServletUsuario extends HttpServlet {
 	                case "aprobar": {
 
 	                    int id = Integer.parseInt(request.getParameter("id"));
-
 	                    logicUsuario.aprobarSocio(id);
 
 	                    response.setContentType("application/json");

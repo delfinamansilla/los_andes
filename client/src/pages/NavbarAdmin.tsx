@@ -140,7 +140,21 @@ const NavbarAdmin: React.FC = () => {
               </ul>
             )}
           </li>
-
+		  <li
+		    className="menu-item"
+		    onMouseOver={() => handleMouseEnter('configClub')}
+		    onMouseOut={handleMouseLeave}
+		  >
+		    <i></i> Gestión Club
+		    {activeMenu === 'configClub' && (
+		      <ul className="dropdown">
+		        <li><button onClick={() => navigate('/cupo-actual')}>Cupo Actual</button></li>
+		        <li><button onClick={() => navigate('/configurar-cupo')}>Configurar Nuevo Cupo</button></li>
+		        <hr />
+		        <li><button onClick={() => navigate('/historial-cupo')}>Historial de Cupos</button></li>
+		      </ul>
+		    )}
+		  </li>
         </ul>
       </nav>
 
