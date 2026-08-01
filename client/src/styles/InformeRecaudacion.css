@@ -1,0 +1,108 @@
+.recaudacion-page {
+    min-height: 100vh;
+    background: #20321E;
+}
+
+.contenido-recaudacion {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.bienvenida-header {
+    background: rgba(221,216,202,.95);
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 25px;
+}
+
+.bienvenida-header h2 {
+    color: #20321E;
+    margin-bottom: 8px;
+}
+
+.bienvenida-header p {
+    color: #4a5c48;
+}
+
+.seccion-card {
+    background: rgba(221,216,202,.95);
+    padding: 2rem;
+    border-radius: 15px;
+}
+
+.filtros {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.filtros select,
+.filtros input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #bbb;
+    font-size: 15px;
+}
+
+.filtros button {
+    background: #20321E;
+    color: #DDD8CA;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 700;
+    transition: .2s;
+}
+
+.filtros button:hover {
+    background: #355230;
+}
+
+.total-card {
+    background: linear-gradient(135deg,#20321E,#355230);
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.tabla-informe {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-informe th {
+    background: #20321E;
+    color: white;
+    padding: 12px;
+}
+
+.tabla-informe td {
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+}
+
+.tabla-informe tr:nth-child(even) {
+    background: rgba(0,0,0,.03);
+}
+
+.tabla-informe tr:hover {
+    background: rgba(32,50,30,.1);
+}
+.campo-filtro{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.campo-filtro label{
+    font-weight:700;
+    color:#20321E;
+}

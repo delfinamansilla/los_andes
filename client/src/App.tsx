@@ -44,7 +44,7 @@ import CambioContrasenia from './pages/CambioContrasenia';
 import AlquileresCanchaSocio from './pages/AlquileresCanchaSocio';
 import AlquileresSalonSocio from './pages/AlquileresSalonSocio';
 import SociosPendientes from './pages/SociosPendientes';
-
+import InformeRecaudacion from './pages/InformeRecaudacion';
 
 function App() {
   return (
@@ -96,6 +96,7 @@ function App() {
 		<Route path="/alquileres-cancha" element={<MisAlquileresCancha/>} />
 		<Route path="/cambiar-contrasenia" element={<CambioContrasenia />} />
 		<Route path="/socios-pendientes" element={<SociosPendientes />} />
+		<Route path="/informe-recaudacion" element={<InformeRecaudacion />} />
 		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>

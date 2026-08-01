@@ -113,6 +113,13 @@ const NavbarAdmin: React.FC = () => {
               <ul className="dropdown">
                 <li><button onClick={() => navigate('/listado-cuota')}>Cuotas</button></li>
                 <li><button onClick={() => navigate('/agregar-cuota')}>Agregar cuota</button></li>
+				<hr />
+
+				    <li>
+				      <button onClick={() => navigate('/informe-recaudacion')}>
+				        Informe de recaudación
+				      </button>
+				    </li>
               </ul>
             )}
           </li>
