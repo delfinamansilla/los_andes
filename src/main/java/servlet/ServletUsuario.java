@@ -114,7 +114,7 @@ public class ServletUsuario extends HttpServlet {
                 break;
             }
 
-            /*case "pendientes": {
+            case "pendientes": {
 
                 LinkedList<Usuario> lista = logicUsuario.getSociosPendientes();
 
@@ -131,7 +131,7 @@ public class ServletUsuario extends HttpServlet {
                 response.getWriter().write(json);
 
                 break;
-            }*/
+            }
             case "eliminar": {
                 int id = Integer.parseInt(request.getParameter("id"));
                 logicUsuario.delete(id);
@@ -271,7 +271,7 @@ public class ServletUsuario extends HttpServlet {
 	
 	                    break;
 	                }
-	                /*case "aprobar": {
+	                case "aprobar": {
 
 	                    int id = Integer.parseInt(request.getParameter("id"));
 
@@ -282,7 +282,7 @@ public class ServletUsuario extends HttpServlet {
 	                    response.getWriter().write("{\"message\":\"Socio aprobado correctamente\"}");
 
 	                    break;
-	                }*/
+	                }
 	
 	                case "actualizar": {
 	                    Usuario u = new Usuario();
