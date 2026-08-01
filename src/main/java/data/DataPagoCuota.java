@@ -43,7 +43,7 @@ public class DataPagoCuota {
         ResultSet keyResultSet = null;
         try {
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
-                "INSERT INTO pago_cuota(fecha_pago, id_usuario, id_cuota, nro_transaccion) VALUES(?,?,?)",
+                "INSERT INTO pago_cuota(fecha_pago, id_usuario, id_cuota, nro_transaccion) VALUES(?,?,?,?)",
                 PreparedStatement.RETURN_GENERATED_KEYS
             );
             stmt.setObject(1, pc.getFecha_pago());

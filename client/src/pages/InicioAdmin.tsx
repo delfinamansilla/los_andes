@@ -62,23 +62,30 @@ const InicioAdmin: React.FC = () => {
                 <p>Consulta cuotas pendientes y genera recordatorios</p>
               </div>
             </div>
+			<div className="item-guia">
+			    <span className="numero-guia">5</span>
+
+			    <div className="contenido-guia">
+			      <h5>Socios pendientes</h5>
+
+			      <p>Revisar solicitudes de nuevos socios</p>
+
+			     
+
+			    </div>
+			  </div>
+			  <div
+			    className="item-guia"
+			  >
+			      <span className="numero-guia">6</span>
+
+			      <div className="contenido-guia">
+			          <h5>Informe de recaudación</h5>
+			          <p>Consultar los pagos realizados por los socios</p>
+			      </div>
+			  </div>
           </div>
-		  <div className="item-guia">
-		    <span className="numero-guia">5</span>
-
-		    <div className="contenido-guia">
-		      <h5>Socios pendientes</h5>
-
-		      <p>Revisar solicitudes de nuevos socios</p>
-
-		      <button
-		        onClick={() => navigate("/admin/socios-pendientes")}
-		      >
-		        Ver solicitudes
-		      </button>
-
-		    </div>
-		  </div>
+		  
         </div>
 
         <EstadisticasAdminWidget />
