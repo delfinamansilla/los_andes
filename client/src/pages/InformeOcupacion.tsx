@@ -12,22 +12,19 @@ interface InformeOcupacionData {
   horario: string;
 }
 
-const meses = [
-  "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
-];
-
 export default function InformeOcupacion() {
-  const hoy = new Date();
-  const [mes, setMes] = useState(hoy.getMonth() + 1);
-  const [anio, setAnio] = useState(hoy.getFullYear());
+  const hoy = new Date().toISOString().split("T")[0];
+
+  const [fechaDesde, setFechaDesde] = useState(hoy);
+  const [fechaHasta, setFechaHasta] = useState(hoy);
   const [datos, setDatos] = useState<InformeOcupacionData[]>([]);
   const [loading, setLoading] = useState(false);
 
   const cargarInforme = () => {
     setLoading(true);
-    fetch(`${API_URL}/informe?action=ocupacion&mes=${mes}&anio=${anio}`)
-      .then((r) => r.json())
+	fetch(
+	  `${API_URL}/informe?action=ocupacion&desde=${fechaDesde}&hasta=${fechaHasta}`
+	)      .then((r) => r.json())
       .then((data) => {
         setDatos(data);
         setLoading(false);
@@ -54,25 +51,25 @@ export default function InformeOcupacion() {
 
         <div className="seccion-card">
           <div className="filtros">
-            <div className="campo-filtro">
-              <label>Mes</label>
-              <select value={mes} onChange={(e) => setMes(Number(e.target.value))}>
-                {meses.map((nombre, index) => (
-                  <option key={index + 1} value={index + 1}>
-                    {nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
+		  <div className="campo-filtro">
+		    <label>Fecha desde</label>
 
-            <div className="campo-filtro">
-              <label>Año</label>
-              <input
-                type="number"
-                value={anio}
-                onChange={(e) => setAnio(Number(e.target.value))}
-              />
-            </div>
+		    <input
+		      type="date"
+		      value={fechaDesde}
+		      onChange={(e) => setFechaDesde(e.target.value)}
+		    />
+		  </div>
+
+		  <div className="campo-filtro">
+		    <label>Fecha hasta</label>
+
+		    <input
+		      type="date"
+		      value={fechaHasta}
+		      onChange={(e) => setFechaHasta(e.target.value)}
+		    />
+		  </div>
 
             <button onClick={cargarInforme}>Generar Informe</button>
           </div>

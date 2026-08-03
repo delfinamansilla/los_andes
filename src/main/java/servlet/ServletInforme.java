@@ -11,6 +11,8 @@ import logic.LogicInformeOcupacion;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.time.LocalDate;
+import logic.GeneradorArchivos;
+import java.io.OutputStream;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,10 +26,13 @@ public class ServletInforme extends HttpServlet {
 
     private LogicInformeRecaudacion logicInforme;
     private Gson gson;
+    private GeneradorArchivos generadorArchivos;
+
 
 
     public ServletInforme() {
         logicInforme = new LogicInformeRecaudacion();
+        generadorArchivos = new GeneradorArchivos();
 
         gson = new GsonBuilder()
             .registerTypeAdapter(LocalDate.class,
@@ -57,31 +62,96 @@ public class ServletInforme extends HttpServlet {
                 response.getWriter().write("{\"error\":\"Falta el parámetro action\"}");
                 return;
             }
+            
+            if ("pdf".equalsIgnoreCase(action)) {
 
-            String mesStr = request.getParameter("mes");
-            String anioStr = request.getParameter("anio");
+                String desdeStr = request.getParameter("desde");
+                String hastaStr = request.getParameter("hasta");
 
-            if (mesStr == null || anioStr == null) {
-                response.setStatus(400);
-                response.getWriter().write("{\"error\":\"Faltan parámetros de fecha (mes/anio)\"}");
+                if (desdeStr == null || hastaStr == null) {
+                    response.setStatus(400);
+                    response.getWriter().write(
+                        "{\"error\":\"Faltan fechas\"}"
+                    );
+                    return;
+                }
+
+
+                LocalDate desde = LocalDate.parse(desdeStr);
+                LocalDate hasta = LocalDate.parse(hastaStr);
+
+
+                LinkedList<InformeRecaudacion> informe =
+                    logicInforme.generarInforme(desde, hasta);
+
+                String rutaLogo = getServletContext().getRealPath("/WEB-INF/los_andes.png");
+                byte[] pdf =
+                    generadorArchivos.generarInformeRecaudacionPDF(
+                        informe,
+                        desde,
+                        hasta,
+                        rutaLogo
+                    );
+
+
+                response.setContentType("application/pdf");
+
+                response.setHeader(
+                    "Content-Disposition",
+                    "attachment; filename=informe_recaudacion.pdf"
+                );
+
+
+                response.getOutputStream().write(pdf);
+
                 return;
             }
 
-            int mes = Integer.parseInt(mesStr);
-            int anio = Integer.parseInt(anioStr);
-
             if ("recaudacion".equalsIgnoreCase(action)) {
-                LinkedList<InformeRecaudacion> informe = logicInforme.generarInforme(mes, anio);
+
+                String desdeStr = request.getParameter("desde");
+                String hastaStr = request.getParameter("hasta");
+
+                if (desdeStr == null || hastaStr == null) {
+                    response.setStatus(400);
+                    response.getWriter().write("{\"error\":\"Faltan parámetros desde/hasta\"}");
+                    return;
+                }
+
+                LocalDate desde = LocalDate.parse(desdeStr);
+                LocalDate hasta = LocalDate.parse(hastaStr);
+
+                LinkedList<InformeRecaudacion> informe =
+                        logicInforme.generarInforme(desde, hasta);
+
                 response.getWriter().write(gson.toJson(informe));
 
             } else if ("ocupacion".equalsIgnoreCase(action)) {
+
+                String desdeStr = request.getParameter("desde");
+                String hastaStr = request.getParameter("hasta");
+
+                if (desdeStr == null || hastaStr == null) {
+                    response.setStatus(400);
+                    response.getWriter().write("{\"error\":\"Faltan parámetros desde/hasta\"}");
+                    return;
+                }
+
+                LocalDate desde = LocalDate.parse(desdeStr);
+                LocalDate hasta = LocalDate.parse(hastaStr);
+
                 LogicInformeOcupacion logicOcupacion = new LogicInformeOcupacion();
-                LinkedList<InformeOcupacion> informe = logicOcupacion.generarInforme(mes, anio);
+
+                LinkedList<InformeOcupacion> informe =
+                        logicOcupacion.generarInforme(desde, hasta);
+
                 response.getWriter().write(gson.toJson(informe));
 
-            } else {
+            }else {
+
                 response.setStatus(400);
                 response.getWriter().write("{\"error\":\"Acción inválida: " + action + "\"}");
+
             }
 
         } catch (NumberFormatException e) {
@@ -91,6 +161,6 @@ public class ServletInforme extends HttpServlet {
             e.printStackTrace();
             response.setStatus(500);
             response.getWriter().write("{\"error\":\"Error interno: " + e.getMessage() + "\"}");
-        }
+        } 
     }
 }

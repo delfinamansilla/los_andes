@@ -12,11 +12,13 @@ public class LogicInformeOcupacion {
     private DataSalon ds = new DataSalon();
     private DataUsuario du = new DataUsuario();
 
-    public LinkedList<InformeOcupacion> generarInforme(int mes, int anio) {
+    public LinkedList<InformeOcupacion> generarInforme(LocalDate desde, LocalDate hasta) { 
         LinkedList<InformeOcupacion> listaFinal = new LinkedList<>();
         LinkedList<Alquiler_cancha> alquileresC = dac.getAll();
         for (Alquiler_cancha ac : alquileresC) {
-            if (ac.getFechaAlquiler().getMonthValue() == mes && ac.getFechaAlquiler().getYear() == anio) {
+        	LocalDate fecha = ac.getFechaAlquiler();
+
+        	if (!fecha.isBefore(desde) && !fecha.isAfter(hasta)) {
                 InformeOcupacion io = new InformeOcupacion();
                 io.setTipoRecurso("Cancha");
                 
@@ -35,7 +37,9 @@ public class LogicInformeOcupacion {
 
         LinkedList<Alquiler_salon> alquileresS = das.getAll();
         for (Alquiler_salon as : alquileresS) {
-            if (as.getFecha().getMonthValue() == mes && as.getFecha().getYear() == anio) {
+        	LocalDate fecha = as.getFecha();
+
+        	if (!fecha.isBefore(desde) && !fecha.isAfter(hasta)) {
                 InformeOcupacion io = new InformeOcupacion();
                 io.setTipoRecurso("Salón");
                 

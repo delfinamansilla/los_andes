@@ -30,7 +30,7 @@ public class LogicInformeRecaudacion {
     }
 
 
-    public LinkedList<InformeRecaudacion> generarInforme(int mes, int anio) {
+    public LinkedList<InformeRecaudacion> generarInforme(LocalDate desde, LocalDate hasta) {
 
         LinkedList<InformeRecaudacion> informe = new LinkedList<>();
 
@@ -40,7 +40,8 @@ public class LogicInformeRecaudacion {
 
             LocalDate fecha = pago.getFecha_pago();
 
-            if (fecha.getMonthValue() == mes && fecha.getYear() == anio) {
+            if (!fecha.isBefore(desde) &&
+            	    !fecha.isAfter(hasta)) {
 
                 Usuario usuario = du.getById(pago.getId_usuario());
 

@@ -8,31 +8,27 @@ interface Informe {
   monto: number;
   fechaPago: string;
 }
-const meses = [
-  "Enero",
-  "Febrero",
-  "Marzo",
-  "Abril",
-  "Mayo",
-  "Junio",
-  "Julio",
-  "Agosto",
-  "Septiembre",
-  "Octubre",
-  "Noviembre",
-  "Diciembre",
-];
+
 export default function InformeRecaudacion() {
-  const hoy = new Date();
+	const hoy = new Date().toISOString().split("T")[0];
 
-  const [mes, setMes] = useState(hoy.getMonth() + 1);
-  const [anio, setAnio] = useState(hoy.getFullYear());
+	  const [fechaDesde, setFechaDesde] = useState(hoy);
+	  const [fechaHasta, setFechaHasta] = useState(hoy);
+	  const [datos, setDatos] = useState<Informe[]>([]);
 
-  const [datos, setDatos] = useState<Informe[]>([]);
+	  const descargarPDF = () => {
 
+	    window.open(
+	      `http://localhost:8080/club/informe?action=pdf&desde=${fechaDesde}&hasta=${fechaHasta}`,
+	      "_blank"
+	    );
+
+	  };
+	  
+	  
   const cargarInforme = () => {
     fetch(
-      `http://localhost:8080/club/informe?action=recaudacion&mes=${mes}&anio=${anio}`
+		`http://localhost:8080/club/informe?action=recaudacion&desde=${fechaDesde}&hasta=${fechaHasta}`
     )
       .then((r) => r.json())
       .then((data) => setDatos(data))
@@ -62,35 +58,35 @@ export default function InformeRecaudacion() {
           <div className="filtros">
 
             <div className="campo-filtro">
-              <label>Mes</label>
+			<label>Fecha desde</label>
 
-              <select
-                value={mes}
-                onChange={(e) => setMes(Number(e.target.value))}
-              >
-                {meses.map((nombre, index) => (
-                  <option key={index + 1} value={index + 1}>
-                    {nombre}
-                  </option>
-                ))}
-              </select>
+			<input
+			  type="date"
+			  value={fechaDesde}
+			  onChange={(e) => setFechaDesde(e.target.value)}
+			/>
             </div>
 
             <div className="campo-filtro">
-              <label>Año</label>
+			<label>Fecha hasta</label>
 
-              <input
-                type="number"
-                value={anio}
-                onChange={(e) => setAnio(Number(e.target.value))}
-              />
+			<input
+			  type="date"
+			  value={fechaHasta}
+			  onChange={(e) => setFechaHasta(e.target.value)}
+			/>
             </div>
 
             <button onClick={cargarInforme}>
               Generar Informe
             </button>
+			
+			<button onClick={descargarPDF}>
+			 Descargar informe PDF
+			</button>
 
           </div>
+		  
 
           <div className="total-card">
             Total Recaudado: $

@@ -1,6 +1,8 @@
 package logic;
 
 import com.lowagie.text.Document;
+import entities.InformeRecaudacion;
+import java.util.LinkedList;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Font;
@@ -16,6 +18,22 @@ import entities.Cancha;
 import entities.Cuota;
 import entities.Salon;
 import entities.Usuario;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import entities.InformeRecaudacion;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.chart.plot.PiePlot;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.ChartUtils;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+
+import com.lowagie.text.Image;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
@@ -254,6 +272,519 @@ public class GeneradorArchivos {
 
         doc.close();
         return baos.toByteArray();
+    }
+    public byte[] generarInformeRecaudacionPDF(
+            LinkedList<InformeRecaudacion> informe,
+            LocalDate desde,
+            LocalDate hasta,
+            String rutaLogo
+    ) throws Exception {
+
+
+        ByteArrayOutputStream baos =
+                new ByteArrayOutputStream();
+
+        
+        Document doc =
+                new Document(PageSize.A4,50,50,50,50);
+
+
+        PdfWriter.getInstance(doc, baos);
+
+
+        doc.open();
+        Image logo = Image.getInstance(rutaLogo);
+
+        logo.scaleToFit(120, 120);
+        logo.setAlignment(Element.ALIGN_CENTER);
+
+        doc.add(logo);
+
+        doc.add(new Paragraph("\n"));
+
+
+        Font tituloClub =
+                new Font(Font.HELVETICA,28,Font.BOLD,COLOR_PRINCIPAL);
+
+        Paragraph club =
+                new Paragraph("CLUB DEPORTIVO LOS ANDES", tituloClub);
+
+        club.setAlignment(Element.ALIGN_CENTER);
+        club.setSpacingAfter(10);
+
+        doc.add(club);
+
+
+        Paragraph linea = new Paragraph(
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        );
+
+        linea.setAlignment(Element.ALIGN_CENTER);
+        linea.getFont().setColor(COLOR_PRINCIPAL);
+
+        doc.add(linea);
+
+
+
+
+        Font tituloInforme =
+                new Font(Font.HELVETICA,22,Font.BOLD,COLOR_PRINCIPAL);
+
+        Paragraph informeTitulo =
+                new Paragraph("INFORME DE RECAUDACIÓN", tituloInforme);
+
+        informeTitulo.setAlignment(Element.ALIGN_CENTER);
+        informeTitulo.setSpacingBefore(10);
+
+        informeTitulo.setAlignment(Element.ALIGN_CENTER);
+
+        doc.add(informeTitulo);
+
+
+
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+
+
+
+        Font normal =
+                new Font(Font.HELVETICA,13);
+
+        Paragraph periodo =
+                new Paragraph(
+
+        "Período comprendido entre el "
+        + fechaLarga(desde)
+        + " ("
+        + desde.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        + ") y el "
+        + fechaLarga(hasta)
+        + " ("
+        + hasta.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        + ").",
+
+        normal);
+
+        periodo.setAlignment(Element.ALIGN_CENTER);
+
+        doc.add(periodo);
+
+
+
+        doc.add(new Paragraph("\n"));
+
+        Paragraph emision =
+                new Paragraph(
+
+        "Fecha de emisión: "
+        + fechaLarga(LocalDate.now())
+        + " ("
+        + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        + ")",
+
+        normal);
+
+        emision.setAlignment(Element.ALIGN_CENTER);
+
+        doc.add(emision);
+
+
+
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+        doc.add(new Paragraph("\n"));
+
+
+        Paragraph pie =
+                new Paragraph(
+
+        "Administración\nClub Deportivo Los Andes",
+
+        FontFactory.getFont(
+        FontFactory.HELVETICA_OBLIQUE,
+        11,
+        Color.GRAY));
+
+        pie.setAlignment(Element.ALIGN_CENTER);
+
+        doc.add(pie);
+
+
+
+        double total = 0;
+
+        for (InformeRecaudacion i : informe) {
+            total += i.getMonto();
+        }
+
+        int cantidadPagos = informe.size();
+
+        double promedio = 0;
+
+        if (cantidadPagos > 0) {
+            promedio = total / cantidadPagos;
+        }
+        
+        doc.add(new Paragraph("\n"));
+
+        
+
+        doc.add(new Paragraph("\n"));
+        doc.newPage();
+
+        Paragraph tituloGraficos = new Paragraph(
+                "Gráficos del período",
+                FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16)
+        );
+
+        tituloGraficos.setAlignment(Element.ALIGN_CENTER);
+
+        doc.add(tituloGraficos);
+
+        doc.add(new Paragraph("\n"));
+
+        Image grafico = generarGraficoBarras(informe);
+        
+
+        doc.add(grafico);
+
+        doc.add(new Paragraph("\n"));
+
+        Image graficoTorta = generarGraficoTorta(informe);
+
+        doc.add(graficoTorta);
+
+        doc.add(new Paragraph("\n"));
+        doc.newPage();
+
+        PdfPTable resumen =
+                new PdfPTable(2);
+
+        resumen.setWidthPercentage(80);
+        resumen.setHorizontalAlignment(Element.ALIGN_CENTER);
+        resumen.setSpacingBefore(20);
+
+
+        agregarFila(
+            resumen,
+            "Cantidad de pagos",
+            String.valueOf(informe.size())
+        );
+
+
+        agregarFila(
+            resumen,
+            "Total recaudado",
+            "$ " + total
+        );
+
+
+        doc.add(resumen);
+
+
+
+        doc.add(new Paragraph("\n"));
+
+
+
+        PdfPTable tabla = new PdfPTable(new float[]{2.5f, 1f, 1.5f, 1.5f, 2f});
+
+
+        Font headerFont =
+                FontFactory.getFont(
+                    FontFactory.HELVETICA_BOLD,
+                    11,
+                    Color.WHITE
+                );
+
+
+        PdfPCell header;
+
+
+        header = new PdfPCell(new Phrase("Socio", headerFont));
+        header.setBackgroundColor(COLOR_PRINCIPAL);
+        header.setHorizontalAlignment(Element.ALIGN_CENTER);
+        tabla.addCell(header);
+
+
+        header = new PdfPCell(new Phrase("Cuota", headerFont));
+        header.setBackgroundColor(COLOR_PRINCIPAL);
+        header.setHorizontalAlignment(Element.ALIGN_CENTER);
+        tabla.addCell(header);
+
+
+        header = new PdfPCell(new Phrase("Monto", headerFont));
+        header.setBackgroundColor(COLOR_PRINCIPAL);
+        header.setHorizontalAlignment(Element.ALIGN_CENTER);
+        tabla.addCell(header);
+
+
+        header = new PdfPCell(new Phrase("Fecha", headerFont));
+        header.setBackgroundColor(COLOR_PRINCIPAL);
+        header.setHorizontalAlignment(Element.ALIGN_CENTER);
+        tabla.addCell(header);
+
+
+        header = new PdfPCell(new Phrase("Transacción", headerFont));
+        header.setBackgroundColor(COLOR_PRINCIPAL);
+        header.setHorizontalAlignment(Element.ALIGN_CENTER);
+        tabla.addCell(header);
+
+
+
+        for(InformeRecaudacion i : informe){
+
+
+            addCell(tabla,
+                i.getNombreUsuario(),
+                new Font(Font.HELVETICA,10)
+            );
+
+
+            addCell(tabla,
+                String.valueOf(i.getCuota()),
+                new Font(Font.HELVETICA,10)
+            );
+
+
+            addCell(tabla,
+                "$ "+i.getMonto(),
+                new Font(Font.HELVETICA,10)
+            );
+
+
+            addCell(tabla,
+                i.getFechaPago(),
+                new Font(Font.HELVETICA,10)
+            );
+
+
+            String trans =
+                i.getNroTransaccion();
+
+
+            if(trans == null || trans.isEmpty()){
+                trans="Pago efectivo";
+            }
+
+
+            addCell(tabla,
+                trans,
+                new Font(Font.HELVETICA,10)
+            );
+
+        }
+
+        tabla.setSpacingAfter(20);
+        doc.add(tabla);
+
+
+
+        doc.close();
+
+
+        return baos.toByteArray();
+
+    }
+    private Image generarGraficoBarras(LinkedList<InformeRecaudacion> informe) throws Exception {
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        Map<String, Double> recaudacion = new LinkedHashMap<>();
+
+        for (InformeRecaudacion i : informe) {
+
+        	LocalDate fecha = LocalDate.parse(i.getFechaPago());
+
+        	String mes = nombreMes(fecha.getMonthValue()) + " " + fecha.getYear();
+
+            recaudacion.put(
+                    mes,
+                    recaudacion.getOrDefault(mes, 0.0) + i.getMonto()
+            );
+        }
+
+        for (String mes : recaudacion.keySet()) {
+
+            dataset.addValue(
+                    recaudacion.get(mes),
+                    "Recaudación",
+                    mes
+            );
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Recaudación por mes",
+                "Mes",
+                "Monto ($)",
+                dataset,
+                PlotOrientation.VERTICAL,
+                false,
+                true,
+                false
+        );
+        CategoryPlot plot = chart.getCategoryPlot();
+
+        plot.setBackgroundPaint(Color.WHITE);
+
+        plot.setRangeGridlinePaint(Color.LIGHT_GRAY);
+
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+
+        renderer.setSeriesPaint(0, COLOR_PRINCIPAL);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        ChartUtils.writeChartAsPNG(
+                baos,
+                chart,
+                550,
+                300
+        );
+
+        Image img = Image.getInstance(baos.toByteArray());
+
+        img.scaleToFit(500, 280);
+
+        return img;
+    }
+    private Image generarGraficoTorta(LinkedList<InformeRecaudacion> informe) throws Exception {
+    	System.out.println("ENTRO AL GRAFICO DE TORTA");
+
+        DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
+
+        Map<Integer, Double> recaudacionPorCuota = new LinkedHashMap<>();
+        System.out.println(recaudacionPorCuota);
+
+        for (InformeRecaudacion i : informe) {
+
+            int cuota = i.getCuota();
+
+            recaudacionPorCuota.put(
+                    cuota,
+                    recaudacionPorCuota.getOrDefault(cuota, 0.0) + i.getMonto()
+            );
+        }
+
+        for (Integer cuota : recaudacionPorCuota.keySet()) {
+
+            dataset.setValue(
+                    "Cuota " + cuota,
+                    recaudacionPorCuota.get(cuota)
+            );
+        }
+
+        JFreeChart chart = ChartFactory.createPieChart(
+                "Distribución de la recaudación por cuota",
+                dataset,
+                true,
+                true,
+                false
+        );
+
+        PiePlot<?> plot = (PiePlot<?>) chart.getPlot();
+
+plot.setBackgroundPaint(Color.WHITE);
+plot.setOutlinePaint(null);
+
+
+// Colores institucionales Los Andes
+Color[] colores = {
+        COLOR_PRINCIPAL,
+        COLOR_FONDO,
+        new Color(90, 120, 80),
+        new Color(160, 150, 120),
+        new Color(110, 110, 110)
+};
+
+
+int index = 0;
+
+for (Comparable<?> key : dataset.getKeys()) {
+
+    plot.setSectionPaint(
+            key,
+            colores[index % colores.length]
+    );
+
+    index++;
+}
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        ChartUtils.writeChartAsPNG(
+                baos,
+                chart,
+                500,
+                320
+        );
+
+        Image img = Image.getInstance(baos.toByteArray());
+
+        img.scaleToFit(450, 300);
+
+        return img;
+    }
+    private String nombreMes(int mes){
+
+        switch(mes){
+
+            case 1: return "Enero";
+            case 2: return "Febrero";
+            case 3: return "Marzo";
+            case 4: return "Abril";
+            case 5: return "Mayo";
+            case 6: return "Junio";
+            case 7: return "Julio";
+            case 8: return "Agosto";
+            case 9: return "Septiembre";
+            case 10: return "Octubre";
+            case 11: return "Noviembre";
+            default: return "Diciembre";
+
+        }
+
+    }
+    private String fechaLarga(LocalDate fecha){
+
+        String mes;
+
+        switch(fecha.getMonthValue()){
+
+            case 1: mes="enero"; break;
+            case 2: mes="febrero"; break;
+            case 3: mes="marzo"; break;
+            case 4: mes="abril"; break;
+            case 5: mes="mayo"; break;
+            case 6: mes="junio"; break;
+            case 7: mes="julio"; break;
+            case 8: mes="agosto"; break;
+            case 9: mes="septiembre"; break;
+            case 10: mes="octubre"; break;
+            case 11: mes="noviembre"; break;
+            default: mes="diciembre";
+
+        }
+
+        return fecha.getDayOfMonth()
+                + " de "
+                + mes
+                + " de "
+                + fecha.getYear();
+
     }
 
 }
