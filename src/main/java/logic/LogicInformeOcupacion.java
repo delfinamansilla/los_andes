@@ -14,7 +14,6 @@ public class LogicInformeOcupacion {
 
     public LinkedList<InformeOcupacion> generarInforme(int mes, int anio) {
         LinkedList<InformeOcupacion> listaFinal = new LinkedList<>();
-¡
         LinkedList<Alquiler_cancha> alquileresC = dac.getAll();
         for (Alquiler_cancha ac : alquileresC) {
             if (ac.getFechaAlquiler().getMonthValue() == mes && ac.getFechaAlquiler().getYear() == anio) {

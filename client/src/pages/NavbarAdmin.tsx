@@ -101,8 +101,8 @@ const NavbarAdmin: React.FC = () => {
                 <li><button onClick={() => navigate('/crear-salon')}>Agregar salón</button></li>
 				<hr />
 				<li>
-				<button onClick={() => navigate('/informe-recaudacion')}>
-					Informe de recaudación
+				<button onClick={() => navigate('/informe-ocupacion')}>
+					Informe de ocupacion
 				</button>
 				</li>
               </ul>
