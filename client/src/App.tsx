@@ -48,7 +48,7 @@ import CupoActual from './pages/CupoActual';
 import ConfigurarCupo from './pages/ConfigurarCupo';
 import HistorialCupo from './pages/HistorialCupo';
 import InformeRecaudacion from './pages/InformeRecaudacion';
-
+import InformeOcupacion from './pages/InformeOcupacion';
 
 
 function App() {
@@ -105,6 +105,7 @@ function App() {
 		<Route path="/cupo-actual" element={<CupoActual />} />
 		<Route path="/configurar-cupo" element={<ConfigurarCupo />} />
 		<Route path="/historial-cupo" element={<HistorialCupo />} />
+		<Route path="/informe-ocupacion" element={<InformeOcupacion />} />
 		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>

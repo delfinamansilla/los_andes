@@ -84,6 +84,16 @@ const InicioAdmin: React.FC = () => {
 			          <p>Consultar los pagos realizados por los socios</p>
 			      </div>
 			  </div>
+			  <div
+			    className="item-guia"
+			  >
+			      <span className="numero-guia">7</span>
+
+			      <div className="contenido-guia">
+			          <h5>Informe de ocupacion</h5>
+			          <p>Consultar la ocupacion de las canchas y salones</p>
+			      </div>
+			  </div>			  
           </div>
 		  
         </div>

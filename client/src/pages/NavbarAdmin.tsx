@@ -99,7 +99,14 @@ const NavbarAdmin: React.FC = () => {
                 <hr />
                 <li><button onClick={() => navigate('/salones-admin')}>Salones</button></li>
                 <li><button onClick={() => navigate('/crear-salon')}>Agregar salón</button></li>
+				<hr />
+				<li>
+				<button onClick={() => navigate('/informe-recaudacion')}>
+					Informe de recaudación
+				</button>
+				</li>
               </ul>
+			  
             )}
           </li>
 
