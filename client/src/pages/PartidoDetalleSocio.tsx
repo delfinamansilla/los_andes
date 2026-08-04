@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavbarSocio from "./NavbarSocio";
 import '../styles/PartidoDetalleSocio.css';
+import Footer from './Footer';
+
 import { API_URL } from "../config";
 
 interface Partido {
@@ -136,6 +138,7 @@ const PartidoDetalleSocio: React.FC = () => {
           </div>
         )}
       </div>
+	  <Footer />
     </div>
   );
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Footer from './Footer';
 import NavbarSocio from './NavbarSocio';
 import '../styles/AdminPartidos.css';
 import { API_URL } from "../config";
@@ -210,6 +211,7 @@ const PartidosSocio: React.FC = () => {
             </>
           )}
         </div>
+		<Footer />
       </div>
     );
 };

@@ -322,7 +322,7 @@ public class ServletAlquiler_salon extends HttpServlet {
                     resp.getWriter().write("<div class='card'>");
                     resp.getWriter().write("<h1>¡Reserva Confirmada!</h1>");
                     resp.getWriter().write("<p>Hemos enviado un correo a <b>" + (u != null ? u.getMail() : "tu casilla") + "</b> con las opciones de descarga.</p>");
-                    resp.getWriter().write("<a href='" + AppConfig.getFrontendUrl() + "/alquileres-salon' class='btn'>Ir a Mis Reservas</a>");
+                    resp.getWriter().write("<a href='" + AppConfig.getFrontendUrl() + "/mis-alquileres-salon' class='btn'>Ir a Mis Reservas</a>");
                     resp.getWriter().write("</div></body></html>");
                     break;
                 }

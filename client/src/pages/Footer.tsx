@@ -30,7 +30,7 @@ const Footer: React.FC = () => {
           </ul>
         </div>
 
-        <div className="footer-columna">
+        <div className="footer-columna contacto">
           <h3>Atención al Socio</h3>
           <div className="footer-info">
             <div className="info-item">
@@ -48,7 +48,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="footer-columna">
+        <div className="footer-columna ubicacion">
           <h3>Visitanos</h3>
           <div className="footer-info">
             <div className="info-item">
@@ -61,7 +61,7 @@ const Footer: React.FC = () => {
       </div>
 
       <div className="footer-bottom">
-        <p>© 2024 Club Deportivo Los Andes - Todos los derechos reservados</p>
+        <p>© 2025 Club Deportivo Los Andes - Todos los derechos reservados</p>
         <p className="footer-creditos">Rosario, Santa Fe, Argentina</p>
       </div>
     </footer>

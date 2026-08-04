@@ -81,7 +81,6 @@ const NavbarAdmin: React.FC = () => {
 
 			  <li><button onClick={() => navigate('/agregar-profesor')}>Agregar profesor</button></li>
 				
-                <li><button onClick={() => navigate('/agregar-profesor')}>Agregar profesor</button></li>
               </ul>
             )}
           </li>
