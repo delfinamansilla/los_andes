@@ -71,7 +71,22 @@ export default function InformeOcupacion() {
 		    />
 		  </div>
 
-            <button onClick={cargarInforme}>Generar Informe</button>
+		  <div style={{ display: "flex", gap: "10px" }}>
+		    <button onClick={cargarInforme}>
+		      Generar Informe
+		    </button>
+
+		    <button
+		      onClick={() => {
+		        window.open(
+		          `${API_URL}/informe?action=pdfOcupacion&desde=${fechaDesde}&hasta=${fechaHasta}`,
+		          "_blank"
+		        );
+		      }}
+		    >
+		      Descargar informe PDF
+		    </button>
+		  </div>
           </div>
 
           <div className="total-card">

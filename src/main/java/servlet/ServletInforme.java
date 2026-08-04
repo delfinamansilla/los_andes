@@ -106,6 +106,50 @@ public class ServletInforme extends HttpServlet {
 
                 return;
             }
+            if ("pdfOcupacion".equalsIgnoreCase(action)) {
+
+                String desdeStr = request.getParameter("desde");
+                String hastaStr = request.getParameter("hasta");
+
+                if (desdeStr == null || hastaStr == null) {
+                    response.setStatus(400);
+                    response.getWriter().write("{\"error\":\"Faltan fechas\"}");
+                    return;
+                }
+
+                LocalDate desde = LocalDate.parse(desdeStr);
+                LocalDate hasta = LocalDate.parse(hastaStr);
+
+                LogicInformeOcupacion logicOcupacion =
+                        new LogicInformeOcupacion();
+
+                LinkedList<InformeOcupacion> informe =
+                        logicOcupacion.generarInforme(desde, hasta);
+
+                String rutaLogo =
+                        getServletContext().getRealPath("/WEB-INF/los_andes.png");
+
+                byte[] pdf =
+                        generadorArchivos.generarInformeOcupacionPDF(
+                                informe,
+                                desde,
+                                hasta,
+                                rutaLogo
+                        );
+
+                response.setContentType("application/pdf");
+
+                response.setHeader(
+                        "Content-Disposition",
+                        "attachment; filename=informe_ocupacion.pdf"
+                );
+
+                OutputStream os = response.getOutputStream();
+                os.write(pdf);
+                os.flush();
+
+                return;
+            }
 
             if ("recaudacion".equalsIgnoreCase(action)) {
 
@@ -163,4 +207,5 @@ public class ServletInforme extends HttpServlet {
             response.getWriter().write("{\"error\":\"Error interno: " + e.getMessage() + "\"}");
         } 
     }
+    
 }
