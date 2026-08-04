@@ -182,6 +182,12 @@ const ActividadDetalle: React.FC = () => {
     localStorage.setItem("actividad", JSON.stringify(actividad));
     navigate("/agregar-horario");
   };
+  const handleVerInscriptos = () => {
+      if (!actividad) return;
+      // Guardamos la actividad para tener el nombre en la lista de inscriptos
+      localStorage.setItem("actividad", JSON.stringify(actividad));
+      navigate("/actividad-inscriptos");
+    };
 
   return (
     <div>
@@ -244,6 +250,9 @@ const ActividadDetalle: React.FC = () => {
             <div>
               <button onClick={handleVolver}><i className="fa-solid fa-right-left"></i> Volver</button>
               <button className="horarios" onClick={handleVerHorarios}><i className="fa-solid fa-calendar-days"></i> Ver horarios</button>
+			  <button className="btn-cuotas" onClick={handleVerInscriptos} style={{marginLeft: '10px'}}>
+			      <i className="fa-solid fa-users"></i> Ver Inscriptos
+			  </button>
               {!editando ? (
                 <>
                   <button onClick={() => setEditando(true)}><i className="fa-solid fa-pen"></i> Modificar</button>
