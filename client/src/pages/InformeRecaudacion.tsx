@@ -1,6 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import NavbarAdmin from "./NavbarAdmin";
 import "../styles/InformeRecaudacion.css";
+import { 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
+  PieChart, Pie, Cell, Legend 
+} from 'recharts';
 
 interface Informe {
   nombreUsuario: string;
@@ -12,7 +16,7 @@ interface Informe {
 export default function InformeRecaudacion() {
 	const hoy = new Date().toISOString().split("T")[0];
 
-	  const [fechaDesde, setFechaDesde] = useState(hoy);
+	  const [fechaDesde, setFechaDesde] = useState("2024-01-01");
 	  const [fechaHasta, setFechaHasta] = useState(hoy);
 	  const [datos, setDatos] = useState<Informe[]>([]);
 
@@ -38,6 +42,28 @@ export default function InformeRecaudacion() {
   useEffect(() => {
     cargarInforme();
   }, []);
+  const datosMes = useMemo(() => {
+      const agrupado: Record<string, number> = {};
+      datos.forEach(d => {
+        const fecha = new Date(d.fechaPago);
+        const etiqueta = fecha.toLocaleString('es-AR', { month: 'short', year: 'numeric' });
+        agrupado[etiqueta] = (agrupado[etiqueta] || 0) + d.monto;
+      });
+      return Object.keys(agrupado).map(key => ({ nombre: key, total: agrupado[key] }));
+    }, [datos]);
+
+    // 2. Datos para Gráfico de Torta (Distribución por Cuota)
+    const datosCuota = useMemo(() => {
+      const agrupado: { [key: string]: number } = {};
+      datos.forEach(d => {
+        const etiqueta = `Cuota ${d.cuota}`;
+        agrupado[etiqueta] = (agrupado[etiqueta] || 0) + d.monto;
+      });
+      return Object.keys(agrupado).map(key => ({ name: key, value: agrupado[key] }));
+    }, [datos]);
+
+    const COLORS = ['#20321E', '#466245', '#8C8578', '#A6A292', '#D9D5C7'];
+
 
   const total = datos.reduce((acc, d) => acc + d.monto, 0);
 
@@ -92,6 +118,43 @@ export default function InformeRecaudacion() {
             Total Recaudado: $
             {total.toLocaleString("es-AR")}
           </div>
+		  {datos.length > 0 && (
+		              <div className="graficos-container">
+		                <div className="grafico-box">
+		                  <h3>Recaudación por Mes</h3>
+		                  <ResponsiveContainer width="100%" height={300}>
+		                    <BarChart data={datosMes}>
+		                      <CartesianGrid strokeDasharray="3 3" />
+		                      <XAxis dataKey="nombre" />
+		                      <YAxis />
+		                      <Tooltip formatter={(value) => `$${value}`} />
+		                      <Bar dataKey="total" fill="#20321E" radius={[4, 4, 0, 0]} />
+		                    </BarChart>
+		                  </ResponsiveContainer>
+		                </div>
+
+		                <div className="grafico-box">
+		                  <h3>Distribución por Cuota</h3>
+		                  <ResponsiveContainer width="100%" height={300}>
+		                    <PieChart>
+		                      <Pie
+		                        data={datosCuota}
+		                        innerRadius={60}
+		                        outerRadius={80}
+		                        paddingAngle={5}
+		                        dataKey="value"
+		                      >
+		                        {datosCuota.map((_entry: any, index: number) => (
+		                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+		                        ))}
+		                      </Pie>
+		                      <Tooltip formatter={(value) => `$${value}`} />
+		                      <Legend />
+		                    </PieChart>
+		                  </ResponsiveContainer>
+		                </div>
+		              </div>
+		            )}
 
           <table className="tabla-informe">
 

@@ -2,6 +2,32 @@
     min-height: 100vh;
     background: #20321E;
 }
+.graficos-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap; /* Para que en móviles se pongan uno abajo del otro */
+}
+
+.grafico-box {
+    flex: 1;
+    min-width: 300px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.grafico-box h3 {
+    color: #20321E;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.total-card {
+    margin-bottom: 30px !important; /* Espacio extra */
+}
 
 .contenido-recaudacion {
     max-width: 1200px;
