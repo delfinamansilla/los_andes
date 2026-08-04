@@ -62,6 +62,12 @@ public class ServletInscripcion extends HttpServlet {
                     response.getWriter().write(gson.toJson(inscripciones));
                     break;
                 }
+                case "listarinscriptos": {
+                    int idAct = Integer.parseInt(request.getParameter("idActividad"));
+                    LinkedList<entities.Usuario> inscriptos = logicInscripcion.getInscriptosByActividad(idAct);
+                    response.getWriter().write(gson.toJson(inscriptos));
+                    break;
+                }
 
                 case "buscar": {
                     int id = Integer.parseInt(request.getParameter("id"));

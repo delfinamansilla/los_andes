@@ -83,6 +83,45 @@ public class DataInscripcion {
 
         return inscripciones;
     }
+    public LinkedList<entities.Usuario> getUsuariosByActividad(int idActividad) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        LinkedList<entities.Usuario> usuarios = new LinkedList<>();
+
+        try {
+            String sql = "SELECT u.id, u.dni, u.nombre_completo, u.mail, u.telefono " +
+                         "FROM usuario u " +
+                         "INNER JOIN inscripcion i ON u.id = i.id_usuario " +
+                         "WHERE i.id_actividad = ?";
+
+            stmt = DbConnector.getInstancia().getConn().prepareStatement(sql);
+            stmt.setInt(1, idActividad);
+            rs = stmt.executeQuery();
+
+            while (rs != null && rs.next()) {
+                entities.Usuario u = new entities.Usuario();
+                
+                // CAMBIAMOS setId por setIdUsuario (o como se llame en tu clase Usuario)
+                // Si el error persiste, probá con u.setIdUsuario(rs.getInt("id"));
+                u.setIdUsuario(rs.getInt("id")); 
+                
+                u.setDni(rs.getString("dni"));
+                u.setNombreCompleto(rs.getString("nombre_completo"));
+                u.setMail(rs.getString("mail"));
+                u.setTelefono(rs.getString("telefono"));
+                usuarios.add(u);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) { e.printStackTrace(); }
+        }
+        return usuarios;
+    }
 
     public LinkedList<Map<String, Object>> getInscripcionesConDetalles(int idUsuario) {
         PreparedStatement stmt = null;

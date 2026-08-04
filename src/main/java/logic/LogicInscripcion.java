@@ -23,6 +23,9 @@ public class LogicInscripcion {
         validarInscripcion(insc);
         dataInscripcion.add(insc);
     }
+    public LinkedList<entities.Usuario> getInscriptosByActividad(int idActividad) throws Exception {
+        return dataInscripcion.getUsuariosByActividad(idActividad);
+    }
 
     public void update(Inscripcion insc) throws Exception {
         validarInscripcion(insc);
