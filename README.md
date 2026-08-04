@@ -8,13 +8,7 @@ Por su parte, los administradores cuentan con herramientas avanzadas para centra
 
 ## Modelo de Dominio
 Puede consultar el modelo de dominio en el siguiente enlace:  
-🔗 [Ver modelo de dominio](https://drive.google.com/file/d/1u3OEWpqnE02TRypaX-TFQbBMNAMUOwi_/view?usp=sharing)
-
----
-
-## Modelo de Datos
-Puede consultar el modelo de datos en el siguiente enlace:  
-🔗 [Ver modelo de datos]([https://drive.google.com/file/d/1u3OEWpqnE02TRypaX-TFQbBMNAMUOwi_/view?usp=sharing](https://app.diagrams.net/#G1_tTyoyUxZY8UrF0o_NhifOYYzEWoCPQO#%7B%22pageId%22%3A%22mJbDxryiVFSr4kU-VdfV%22%7D))
+🔗 [Ver modelo de dominio]([https://drive.google.com/file/d/1u3OEWpqnE02TRypaX-TFQbBMNAMUOwi_/view?usp=sharing](https://app.diagrams.net/#G1u3OEWpqnE02TRypaX-TFQbBMNAMUOwi_#%7B%22pageId%22%3A%225Ts5IIsQ6J3-bFJRZr1w%22%7D)
 
 ---
 ### Entidades del sistema
@@ -39,7 +33,9 @@ Puede consultar el modelo de datos en el siguiente enlace:
 - **Reserva_pendiente**
 - **Prereserva_cancha**
 - **Recuperacion_pass**
-
+- **InformeRecaudacion**
+- **InformeOcupacion**
+  
 #### Entidades de Reporte
 - **InformeRecaudacion**: Entidad utilizada para consolidar datos de pagos, usuarios y montos para el análisis financiero.
 - **InformeOcupacion**: Entidad que unifica los alquileres de toda la infraestructura (Canchas y Salones) para medir el uso del club.
