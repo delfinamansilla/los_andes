@@ -1,5 +1,5 @@
 package logic;
-
+import entities.InformeOcupacion;
 import com.lowagie.text.Document;
 import entities.InformeRecaudacion;
 import java.util.LinkedList;
@@ -591,7 +591,7 @@ public class GeneradorArchivos {
         tabla.setSpacingAfter(20);
         doc.add(tabla);
 
-
+        
 
         doc.close();
 
@@ -756,7 +756,304 @@ for (Comparable<?> key : dataset.getKeys()) {
             default: return "Diciembre";
 
         }
+        
 
+    }
+    public byte[] generarInformeOcupacionPDF(
+            LinkedList<InformeOcupacion> informe,
+            LocalDate desde,
+            LocalDate hasta,
+            String rutaLogo
+    ) throws Exception {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        Document doc = new Document(PageSize.A4,50,50,50,50);
+
+        PdfWriter.getInstance(doc, baos);
+
+        doc.open();
+
+     // --- INICIO CARÁTULA MEJORADA ---
+        Image logo = Image.getInstance(rutaLogo);
+        logo.scaleToFit(120, 120);
+        logo.setAlignment(Element.ALIGN_CENTER);
+        doc.add(logo);
+
+        doc.add(new Paragraph("\n"));
+
+        Font tituloClub = new Font(Font.HELVETICA, 28, Font.BOLD, COLOR_PRINCIPAL);
+        Paragraph club = new Paragraph("CLUB DEPORTIVO LOS ANDES", tituloClub);
+        club.setAlignment(Element.ALIGN_CENTER);
+        club.setSpacingAfter(10);
+        doc.add(club);
+
+        Paragraph linea = new Paragraph("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        linea.setAlignment(Element.ALIGN_CENTER);
+        linea.getFont().setColor(COLOR_PRINCIPAL);
+        doc.add(linea);
+
+        Font tituloInforme = new Font(Font.HELVETICA, 22, Font.BOLD, COLOR_PRINCIPAL);
+        Paragraph informeTitulo = new Paragraph("INFORME DE OCUPACIÓN", tituloInforme);
+        informeTitulo.setAlignment(Element.ALIGN_CENTER);
+        informeTitulo.setSpacingBefore(10);
+        doc.add(informeTitulo);
+
+        doc.add(new Paragraph("\n\n"));
+
+        Font normal = new Font(Font.HELVETICA, 13);
+        Paragraph periodo = new Paragraph(
+            "Período comprendido entre el " + fechaLarga(desde) + 
+            " (" + desde.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + 
+            ") y el " + fechaLarga(hasta) + 
+            " (" + hasta.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ").", 
+            normal
+        );
+        periodo.setAlignment(Element.ALIGN_CENTER);
+        doc.add(periodo);
+
+        doc.add(new Paragraph("\n"));
+
+        Paragraph emision = new Paragraph(
+            "Fecha de emisión: " + fechaLarga(LocalDate.now()) + 
+            " (" + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ")", 
+            normal
+        );
+        emision.setAlignment(Element.ALIGN_CENTER);
+        doc.add(emision);
+
+        // Espacio para empujar la firma al final de la página
+        for(int n=0; n<15; n++) doc.add(new Paragraph("\n"));
+
+        Paragraph pie = new Paragraph(
+            "Administración\nClub Deportivo Los Andes",
+            FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 11, Color.GRAY)
+        );
+        pie.setAlignment(Element.ALIGN_CENTER);
+        doc.add(pie);
+        // --- FIN CARÁTULA MEJORADA ---
+
+        doc.newPage();
+        double totalAlquileres = informe.size();
+
+        int totalCanchas = 0;
+        int totalSalones = 0;
+
+        for (InformeOcupacion i : informe) {
+
+            if (i.getTipoRecurso().equalsIgnoreCase("Cancha")) {
+                totalCanchas++;
+            } else {
+                totalSalones++;
+            }
+
+        }
+
+        long dias = java.time.temporal.ChronoUnit.DAYS.between(desde, hasta) + 1;
+
+        double promedio = totalAlquileres;
+
+        if (dias > 0) {
+            promedio = totalAlquileres / dias;
+        }
+
+        PdfPTable resumen = new PdfPTable(2);
+        resumen.setWidthPercentage(50);
+        resumen.setHorizontalAlignment(Element.ALIGN_LEFT);
+        resumen.setSpacingBefore(15);
+        resumen.setSpacingAfter(20);
+        resumen.setWidthPercentage(100);
+        resumen.setSpacingBefore(15);
+        resumen.setSpacingAfter(20);
+
+        agregarFila(resumen,
+                "Total alquileres",
+                String.valueOf((int) totalAlquileres));
+
+        agregarFila(resumen,
+                "Canchas",
+                String.valueOf(totalCanchas));
+
+        agregarFila(resumen,
+                "Salones",
+                String.valueOf(totalSalones));
+
+        agregarFila(resumen,
+                "Promedio diario",
+                String.format("%.2f", promedio));
+
+        doc.add(resumen);
+
+        doc.add(new Paragraph("\n"));
+        Image grafico = generarGraficoRecursos(informe);
+
+        doc.add(grafico);
+        
+        doc.add(new Paragraph("\n"));
+        Image graficoTorta = generarGraficoTortaTipo(informe);
+        doc.add(graficoTorta);
+        // ------------------------------------
+
+        doc.add(new Paragraph("\n"));
+        PdfPTable tabla = new PdfPTable(new float[]{1.2f, 2f, 2f, 1.5f, 2f});
+        tabla.setWidthPercentage(100);
+
+        Font fontCabecera = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, Color.WHITE);
+        PdfPCell celdaVerde;
+
+        String[] columnas = {"Tipo", "Recurso", "Usuario", "Fecha", "Horario"};
+
+        for (String nombreColumna : columnas) {
+            celdaVerde = new PdfPCell(new Phrase(nombreColumna, fontCabecera));
+            celdaVerde.setBackgroundColor(COLOR_PRINCIPAL);
+            celdaVerde.setHorizontalAlignment(Element.ALIGN_CENTER);
+            celdaVerde.setPadding(6);
+            tabla.addCell(celdaVerde);
+        }
+
+        for(InformeOcupacion i : informe){
+
+            addCell(
+                    tabla,
+                    i.getTipoRecurso(),
+                    new Font(Font.HELVETICA,10)
+            );
+
+            addCell(
+                    tabla,
+                    i.getNombreRecurso(),
+                    new Font(Font.HELVETICA,10)
+            );
+
+            addCell(
+                    tabla,
+                    i.getNombreUsuario(),
+                    new Font(Font.HELVETICA,10)
+            );
+
+            addCell(
+                    tabla,
+                    i.getFecha(),
+                    new Font(Font.HELVETICA,10)
+            );
+
+            addCell(
+                    tabla,
+                    i.getHorario(),
+                    new Font(Font.HELVETICA,10)
+            );
+
+        }
+
+        doc.add(tabla);
+        doc.close();
+
+        return baos.toByteArray();
+
+       
+    }
+    private Image generarGraficoRecursos(LinkedList<InformeOcupacion> informe) throws Exception {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        Map<String, Integer> conteo = new LinkedHashMap<>();
+
+        // Contamos cuántas veces aparece cada nombre de recurso
+        for (InformeOcupacion i : informe) {
+            String nombre = i.getNombreRecurso();
+            conteo.put(nombre, conteo.getOrDefault(nombre, 0) + 1);
+        }
+
+        // Pasamos los datos al dataset
+        for (String recurso : conteo.keySet()) {
+            dataset.addValue(conteo.get(recurso), "Alquileres", recurso);
+        }
+
+        // Creamos un gráfico de barras HORIZONTALES (se lee mejor para nombres largos)
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Uso por Recurso (Canchas/Salones)",
+                "Recurso",
+                "Cantidad de Alquileres",
+                dataset,
+                PlotOrientation.HORIZONTAL, // Cambiado a Horizontal
+                false, true, false
+        );
+
+        CategoryPlot plot = chart.getCategoryPlot();
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setRangeGridlinePaint(Color.LIGHT_GRAY);
+
+        // Eje X (Cantidad) solo números enteros
+        org.jfree.chart.axis.NumberAxis rangeAxis = (org.jfree.chart.axis.NumberAxis) plot.getRangeAxis();
+        rangeAxis.setStandardTickUnits(org.jfree.chart.axis.NumberAxis.createIntegerTickUnits());
+
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setSeriesPaint(0, new Color(70, 90, 60)); // Un verde un poco más suave
+        renderer.setBarPainter(new org.jfree.chart.renderer.category.StandardBarPainter());
+        renderer.setMaximumBarWidth(0.10); // ESTO HACE QUE LA BARRA NO SEA GIGANTE
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ChartUtils.writeChartAsPNG(baos, chart, 550, 300);
+        Image img = Image.getInstance(baos.toByteArray());
+        img.scaleToFit(500, 280);
+        img.setAlignment(Element.ALIGN_CENTER);
+
+        return img;
+    }
+    private Image generarGraficoOcupacion(LinkedList<InformeOcupacion> informe, LocalDate desde, LocalDate hasta) throws Exception {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        Map<String, Integer> ocupacion = new LinkedHashMap<>();
+
+        // Calculamos la diferencia de días para decidir cómo agrupar
+        long diferenciaDias = java.time.temporal.ChronoUnit.DAYS.between(desde, hasta);
+
+        for (InformeOcupacion i : informe) {
+            LocalDate fecha = LocalDate.parse(i.getFecha());
+            String etiqueta;
+
+            if (diferenciaDias > 31) {
+                // Si es más de un mes, agrupamos por "Mes Año" (ej: Enero 2025)
+                etiqueta = nombreMes(fecha.getMonthValue()) + " " + fecha.getYear();
+            } else {
+                // Si es un mes o menos, mostramos el día
+                etiqueta = fecha.format(DateTimeFormatter.ofPattern("dd/MM"));
+            }
+
+            ocupacion.put(etiqueta, ocupacion.getOrDefault(etiqueta, 0) + 1);
+        }
+
+        for (String clave : ocupacion.keySet()) {
+            dataset.addValue(ocupacion.get(clave), "Alquileres", clave);
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Demanda de Alquileres",
+                diferenciaDias > 31 ? "Meses" : "Días",
+                "Cantidad",
+                dataset,
+                PlotOrientation.VERTICAL,
+                false, true, false
+        );
+
+        CategoryPlot plot = chart.getCategoryPlot();
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setRangeGridlinePaint(Color.LIGHT_GRAY);
+
+        // --- AQUÍ CORREGIMOS LOS DECIMALES DEL EJE Y ---
+        org.jfree.chart.axis.NumberAxis rangeAxis = (org.jfree.chart.axis.NumberAxis) plot.getRangeAxis();
+        rangeAxis.setStandardTickUnits(org.jfree.chart.axis.NumberAxis.createIntegerTickUnits());
+        // -----------------------------------------------
+
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setSeriesPaint(0, COLOR_PRINCIPAL);
+        renderer.setBarPainter(new org.jfree.chart.renderer.category.StandardBarPainter()); // Quita el degradado raro
+        renderer.setShadowVisible(false);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ChartUtils.writeChartAsPNG(baos, chart, 550, 300);
+        Image img = Image.getInstance(baos.toByteArray());
+        img.scaleToFit(500, 280);
+        img.setAlignment(Element.ALIGN_CENTER);
+
+        return img;
     }
     private String fechaLarga(LocalDate fecha){
 
@@ -786,5 +1083,48 @@ for (Comparable<?> key : dataset.getKeys()) {
                 + fecha.getYear();
 
     }
+    private Image generarGraficoTortaTipo(LinkedList<InformeOcupacion> informe) throws Exception {
+        DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
+        
+        int canchas = 0;
+        int salones = 0;
+
+        // Contamos cuántos hay de cada uno
+        for (InformeOcupacion i : informe) {
+            if (i.getTipoRecurso().equalsIgnoreCase("Cancha")) {
+                canchas++;
+            } else {
+                salones++;
+            }
+        }
+
+        dataset.setValue("Canchas (" + canchas + ")", canchas);
+        dataset.setValue("Salones (" + salones + ")", salones);
+
+        JFreeChart chart = ChartFactory.createPieChart(
+                "Uso: Canchas vs Salones",
+                dataset,
+                true, 
+                true, 
+                false
+        );
+
+        PiePlot<?> plot = (PiePlot<?>) chart.getPlot();
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setOutlinePaint(null);
+        
+        // Colores: Verde para canchas (césped), Beige para salones
+        plot.setSectionPaint("Canchas (" + canchas + ")", COLOR_PRINCIPAL);
+        plot.setSectionPaint("Salones (" + salones + ")", COLOR_FONDO);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ChartUtils.writeChartAsPNG(baos, chart, 500, 300);
+        Image img = Image.getInstance(baos.toByteArray());
+        img.scaleToFit(450, 250);
+        img.setAlignment(Element.ALIGN_CENTER);
+        
+        return img;
+    }
+    
 
 }
