@@ -113,6 +113,18 @@ public class ServletUsuario extends HttpServlet {
                 }
                 break;
             }
+            case "admins_pendientes": {
+                LinkedList<Usuario> lista = logicUsuario.getAdminsPendientes();
+                com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
+                    .registerTypeAdapter(java.time.LocalDate.class,
+                        (com.google.gson.JsonSerializer<java.time.LocalDate>)
+                        (src, typeOfSrc, context) -> new com.google.gson.JsonPrimitive(src.toString()))
+                    .create();
+                String json = gson.toJson(lista);
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write(json);
+                break;
+            }
 
             case "pendientes": {
 
@@ -235,42 +247,42 @@ public class ServletUsuario extends HttpServlet {
 	
 	
 	
-	                case "registrar": {
-	                    Usuario nuevo = new Usuario();
-	                    nuevo.setNombreCompleto(request.getParameter("nombre_completo"));
-	                    nuevo.setDni(request.getParameter("dni"));
-	                    nuevo.setTelefono(request.getParameter("telefono"));
-	                    nuevo.setMail(request.getParameter("mail"));
-	                    nuevo.setContrasenia(request.getParameter("contrasenia"));
-	                    nuevo.setRol(request.getParameter("rol"));
-	                    if (nuevo.getRol().equalsIgnoreCase("socio")) {
-	                        nuevo.setEstado(false);
-	                    } else {
-	                        nuevo.setEstado(true);
-	                    }
-	
-	                    String fecha = request.getParameter("fecha_nacimiento");
-	                    if (fecha != null && !fecha.isEmpty()) {
-	                        nuevo.setFechaNacimiento(LocalDate.parse(fecha));
-	                    }
-	
-	                    try {
-	                        logicUsuario.add(nuevo);
-	
-	                        response.setContentType("application/json");
-	                        response.setCharacterEncoding("UTF-8");
-	                        response.setStatus(HttpServletResponse.SC_OK);
-	                        response.getWriter().write("{\"message\":\"Usuario registrado correctamente\"}");
-	
-	                    } catch (Exception e) {
-	                        response.setContentType("application/json");
-	                        response.setCharacterEncoding("UTF-8");
-	                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-	                        response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
-	                    }
-	
-	                    break;
-	                }
+	            case "registrar": {
+                    Usuario nuevo = new Usuario();
+                    nuevo.setNombreCompleto(request.getParameter("nombre_completo"));
+                    nuevo.setDni(request.getParameter("dni"));
+                    nuevo.setTelefono(request.getParameter("telefono"));
+                    nuevo.setMail(request.getParameter("mail"));
+                    nuevo.setContrasenia(request.getParameter("contrasenia"));
+                    nuevo.setRol(request.getParameter("rol"));
+                    
+                    // CAMBIO AQUÍ: Ambos empiezan como pendientes (false)
+                    if (nuevo.getRol().equalsIgnoreCase("socio") || nuevo.getRol().equalsIgnoreCase("administrador")) {
+                        nuevo.setEstado(false);
+                    } else {
+                        nuevo.setEstado(true);
+                    }
+
+                    String fecha = request.getParameter("fecha_nacimiento");
+                    if (fecha != null && !fecha.isEmpty()) {
+                        nuevo.setFechaNacimiento(LocalDate.parse(fecha));
+                    }
+
+                    try {
+                        logicUsuario.add(nuevo);
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        response.setStatus(HttpServletResponse.SC_OK);
+                        response.getWriter().write("{\"message\":\"Usuario registrado correctamente. Espere aprobación.\"}");
+
+                    } catch (Exception e) {
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+                    }
+                    break;
+                }
 	                case "aprobar": {
 
 	                    int id = Integer.parseInt(request.getParameter("id"));
