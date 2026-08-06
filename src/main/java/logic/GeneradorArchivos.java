@@ -773,6 +773,20 @@ for (Comparable<?> key : dataset.getKeys()) {
         PdfWriter.getInstance(doc, baos);
 
         doc.open();
+        Map<String, Integer> conteoRecursos = new LinkedHashMap<>();
+        Map<String, String> tipoRecursos = new LinkedHashMap<>();
+        for (InformeOcupacion i : informe) {
+
+            conteoRecursos.put(
+                    i.getNombreRecurso(),
+                    conteoRecursos.getOrDefault(i.getNombreRecurso(), 0) + 1
+            );
+
+            tipoRecursos.put(
+                    i.getNombreRecurso(),
+                    i.getTipoRecurso()
+            );
+        }
 
      // --- INICIO CARÁTULA MEJORADA ---
         Image logo = Image.getInstance(rutaLogo);
@@ -885,6 +899,42 @@ for (Comparable<?> key : dataset.getKeys()) {
         doc.add(resumen);
 
         doc.add(new Paragraph("\n"));
+        Paragraph pPorc = new Paragraph("Participación por Recurso", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, COLOR_PRINCIPAL));
+        pPorc.setSpacingAfter(10);
+        doc.add(pPorc);
+
+        PdfPTable tablaPorc = new PdfPTable(new float[]{3f, 1f, 1f});
+        tablaPorc.setWidthPercentage(100);
+
+        // Cabecera
+        String[] cabeceras = {"Nombre Recurso", "Cant. Alquileres", "% Ocupación"};
+        for (String cab : cabeceras) {
+            PdfPCell c = new PdfPCell(new Phrase(cab, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, Color.WHITE)));
+            c.setBackgroundColor(COLOR_PRINCIPAL);
+            c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tablaPorc.addCell(c);
+        }
+
+        for (Map.Entry<String, Integer> entry : conteoRecursos.entrySet()) {
+
+            int turnosPorDia;
+
+            if (tipoRecursos.get(entry.getKey()).equalsIgnoreCase("Cancha")) {
+                turnosPorDia = 10;
+            } else {
+                turnosPorDia = 4;
+            }
+
+            double porcentaje = (entry.getValue() * 100.0) / (dias * turnosPorDia);
+
+            addCell(tablaPorc, entry.getKey(), new Font(Font.HELVETICA, 10));
+            addCell(tablaPorc, String.valueOf(entry.getValue()), new Font(Font.HELVETICA, 10));
+            addCell(tablaPorc, String.format("%.2f %%", porcentaje), new Font(Font.HELVETICA, 10));
+        }
+        doc.add(tablaPorc);
+        doc.add(new Paragraph("\n"));
+       
+
         Image grafico = generarGraficoRecursos(informe);
 
         doc.add(grafico);
