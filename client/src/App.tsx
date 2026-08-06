@@ -50,7 +50,7 @@ import HistorialCupo from './pages/HistorialCupo';
 import InformeRecaudacion from './pages/InformeRecaudacion';
 import InformeOcupacion from './pages/InformeOcupacion';
 import InscriptosActividad from './pages/InscriptosActividad';
-
+import AdminsPendientes from './pages/AdminsPendientes';
 
 function App() {
   return (
@@ -108,6 +108,7 @@ function App() {
 		<Route path="/historial-cupo" element={<HistorialCupo />} />
 		<Route path="/informe-ocupacion" element={<InformeOcupacion />} />
 		<Route path="/actividad-inscriptos" element={<InscriptosActividad />} />
+		<Route path="/admins-pendientes" element={<AdminsPendientes />} />
 		<Route path="*" element={<h2>404 - Página no encontrada</h2>} />
       </Routes>
     </Router>

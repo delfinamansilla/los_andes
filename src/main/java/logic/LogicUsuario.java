@@ -82,7 +82,9 @@ public class LogicUsuario {
 
         du.add(u);
     }
-    
+    public LinkedList<Usuario> getAdminsPendientes() {
+        return du.getAdminsPendientes();
+    }
     
     /**
      * Procesa la actualización de un usuario existente.

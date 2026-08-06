@@ -74,6 +74,7 @@ const NavbarAdmin: React.FC = () => {
 			  <li><button onClick={() => navigate('/listado-socio')}>Socios</button></li>
 
 			  <li><button onClick={() => navigate('/socios-pendientes')}>Socios pendientes</button></li>
+			  <li><button onClick={() => navigate('/admins-pendientes')}>Administradores pendientes</button></li>
 
 			  <hr />
 
