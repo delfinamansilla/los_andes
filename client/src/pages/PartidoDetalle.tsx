@@ -15,6 +15,7 @@ interface Partido {
 	precio_entrada: number;
 	id_cancha: number;
 	id_actividad:number;
+	resultado: string | null;
 }
 
 const PartidoDetalle: React.FC = () => {
@@ -32,6 +33,9 @@ const PartidoDetalle: React.FC = () => {
   const [modalAccion, setModalAccion] = useState<(() => void) | null>(null);
 
   const navigate = useNavigate();
+  const hoy = new Date();
+  const fechaPartido = partido ? new Date(partido.fecha) : null;
+  const partidoYaSucedio = fechaPartido && fechaPartido <= hoy;
 
   useEffect(() => {
     setLoading(true);
@@ -132,7 +136,8 @@ const PartidoDetalle: React.FC = () => {
 		  categoria: partido.categoria,
 		  precio_entrada: Number(partido.precio_entrada),
 		  id_cancha: partido.id_cancha === 0 ? null : Number(partido.id_cancha),
-		  id_actividad:Number(partido.id_actividad)
+		  id_actividad:Number(partido.id_actividad),
+		  resultado: partido.resultado
         }),
       });
       const text = await res.text();
@@ -184,168 +189,112 @@ const PartidoDetalle: React.FC = () => {
 
 
   return (
-    <div>
-      <NavbarAdmin />
+      <div className="admin-detalle-page">
+        <NavbarAdmin />
+        <div className="page-container">
+          {loading && <p>Cargando detalles...</p>}
+          {error && <p className="error-box">{error}</p>}
+          {mensajeExito && <div className="mensaje-exito">{mensajeExito}</div>}
 
-      <div className="page-container">
+          {partido && (
+            <>
+              <h2>{editando ? "Editando partido" : `Detalle del Partido`}</h2>
 
-        {loading && <p>Cargando detalles...</p>}
-        {error && <p className="error-box">{error}</p>}
-        {mensajeExito && <div className="mensaje-exito">{mensajeExito}</div>}
-
-        {partido && (
-          <>
-            <h2>
-              {editando
-                ? "Editando partido"
-                : `${partido.fecha} — Los Andes VS ${partido.oponente}`}
-            </h2>
-
-            <div className="detalle-actividad">
-
-              <label>
-                Fecha:
-                <input
-                  type="date"
-                  name="fecha"
-                  value={partido.fecha.slice(0, 10)}
-                  onChange={handleChange}
-                  disabled={!editando}
-                />
-              </label>
-
-              <label>
-                Oponente:
-                <input
-                  type="text"
-                  name="oponente"
-                  value={partido.oponente}
-                  onChange={handleChange}
-                  disabled={!editando}
-                />
-              </label>
-
-              <label>
-                Hora desde:
-                <input
-                  type="time"
-                  name="hora_desde"
-                  value={partido.hora_desde}
-                  onChange={handleChange}
-                  disabled={!editando}
-                />
-              </label>
-
-              <label>
-                Hora hasta:
-                <input
-                  type="time"
-                  name="hora_hasta"
-                  value={partido.hora_hasta}
-                  onChange={handleChange}
-                  disabled={!editando}
-                />
-              </label>
-
-              <label>
-                Categoría:
-                <input
-                  type="text"
-                  name="categoria"
-                  value={partido.categoria}
-                  onChange={handleChange}
-                  disabled={!editando}
-                />
-              </label>
-
-              <label>
-                Precio entrada:
-                <input
-                  type="number"
-                  name="precio_entrada"
-                  value={partido.precio_entrada}
-                  onChange={handleChange}
-                  disabled={!editando}
-                />
-              </label>
-
-              <label>
-                Actividad:
-                {editando ? (
-                  <select
-                    name="id_actividad"
-                    value={partido.id_actividad}
-                    onChange={handleChange}
-                  >
-                    <option value="">Seleccionar actividad</option>
-                    {actividades.map((a) => (
-                      <option key={a.id} value={a.id}>
-                        {a.nombre}
-                      </option>
-                    ))}
-                  </select>
+              <div className="detalle-actividad">
+                {/* LÓGICA DE RESULTADO: Solo se muestra si el partido ya sucedió */}
+                {partidoYaSucedio ? (
+                  <label className="campo-resultado-final">
+                    <strong>Resultado Final:</strong>
+                    <input
+                      type="text"
+                      name="resultado"
+                      placeholder="Ej: 2 - 1"
+                      value={partido.resultado || ""}
+                      onChange={handleChange}
+                      disabled={!editando}
+                      className="input-resultado"
+                    />
+                  </label>
                 ) : (
-                  <span>{nombreActividad}</span>
+                  <div className="mensaje-programado">
+                     <i className="fa-solid fa-clock"></i> Partido Programado: El resultado se podrá cargar una vez pasada la fecha.
+                  </div>
                 )}
-              </label>
 
-              <label>
-                Cancha:
-                {editando ? (
-                  <select
-                    name="id_cancha"
-                    value={partido.id_cancha}
-                    onChange={handleChange}
-                  >
-                    <option value="0">Oponente (sin cancha)</option>
-                    {canchas.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.descripcion} (N° {c.nro_cancha})
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <span>{nombreCancha}</span>
-                )}
-              </label>
+                <hr />
 
-            </div>
+                <label>Fecha:
+                  <input type="date" name="fecha" value={partido.fecha.slice(0, 10)} onChange={handleChange} disabled={!editando} />
+                </label>
 
-            <div>
-              <button onClick={handleVolver}>
-                <i className="fa-solid fa-right-left" /> Volver
-              </button>
+                <label>Oponente:
+                  <input type="text" name="oponente" value={partido.oponente} onChange={handleChange} disabled={!editando} />
+                </label>
 
-              {!editando ? (
-                <>
-                  <button onClick={() => setEditando(true)}>
-                    <i className="fa-solid fa-pen" /> Modificar
-                  </button>
+                {/* CAMPOS DE HORARIO (Agregados aquí) */}
+                <label>Hora Inicio:
+                  <input type="time" name="hora_desde" value={partido.hora_desde} onChange={handleChange} disabled={!editando} />
+                </label>
 
-                  <button className="eliminar" onClick={handleEliminar}>
-                    <i className="fa-solid fa-trash" /> Eliminar
-                  </button>
-                </>
-              ) : (
-                <button className="guardar" onClick={handleGuardarCambios}>
-                  <i className="fa-solid fa-floppy-disk" /> Guardar cambios
+                <label>Hora Fin:
+                  <input type="time" name="hora_hasta" value={partido.hora_hasta} onChange={handleChange} disabled={!editando} />
+                </label>
+
+                <label>Categoría:
+                  <input type="text" name="categoria" value={partido.categoria} onChange={handleChange} disabled={!editando} />
+                </label>
+
+                <label>Precio entrada:
+                  <input type="number" name="precio_entrada" value={partido.precio_entrada} onChange={handleChange} disabled={!editando} />
+                </label>
+
+                <label>Actividad:
+                  {editando ? (
+                    <select name="id_actividad" value={partido.id_actividad} onChange={handleChange}>
+                      {actividades.map((a) => <option key={a.id} value={a.id}>{a.nombre}</option>)}
+                    </select>
+                  ) : <span>{nombreActividad}</span>}
+                </label>
+
+                <label>Cancha:
+                  {editando ? (
+                    <select name="id_cancha" value={partido.id_cancha} onChange={handleChange}>
+                      <option value="0">Oponente (sin cancha)</option>
+                      {canchas.map((c) => <option key={c.id} value={c.id}>{c.descripcion}</option>)}
+                    </select>
+                  ) : <span>{nombreCancha}</span>}
+                </label>
+              </div>
+
+              <div className="acciones-detalle">
+                <button onClick={() => navigate("/admin-partidos")} className="btn-volver">
+                  <i className="fa-solid fa-right-left" /> Volver
                 </button>
-              )}
-            </div>
-          </>
+
+                {!editando ? (
+                  <>
+                    <button onClick={() => setEditando(true)} className="btn-modificar">
+                      <i className="fa-solid fa-pen" /> Modificar
+                    </button>
+                    <button className="eliminar" onClick={handleEliminar}>
+                      <i className="fa-solid fa-trash" /> Eliminar
+                    </button>
+                  </>
+                ) : (
+                  <button className="guardar" onClick={handleGuardarCambios}>
+                    <i className="fa-solid fa-floppy-disk" /> Guardar cambios
+                  </button>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+
+        {modalAbierto && (
+          <Modal mensaje={modalMensaje} onCancelar={() => setModalAbierto(false)} onConfirmar={modalAccion || (() => setModalAbierto(false))} />
         )}
       </div>
+    );
+  };
 
-      {modalAbierto && (
-        <Modal
-          mensaje={modalMensaje}
-          onCancelar={() => setModalAbierto(false)}
-          onConfirmar={modalAccion || (() => setModalAbierto(false))}
-        />
-      )}
-    </div>
-  );
-
-};
-
-export default PartidoDetalle;
+  export default PartidoDetalle;

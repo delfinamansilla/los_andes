@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavbarSocio from "./NavbarSocio";
-import '../styles/PartidoDetalleSocio.css';
 import Footer from './Footer';
-
+import '../styles/PartidoDetalleSocio.css';
 import { API_URL } from "../config";
 
 interface Partido {
@@ -15,34 +14,24 @@ interface Partido {
 	categoria: string;
 	precio_entrada: number;
 	id_cancha: number;
-	id_actividad:number;
+	id_actividad: number;
+    resultado: string | null; 
 }
 
 const PartidoDetalleSocio: React.FC = () => {
   const [partido, setPartido] = useState<Partido | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [editando, setEditando] = useState(false);
-  const [mensajeExito, setMensajeExito] = useState<string | null>(null);
-  const [actividades, setactividades] = useState<any[]>([]);
-  const [canchas, setCanchas] = useState<any[]>([]);
   const [nombreActividad, setNombreActividad] = useState<string>("");
   const [nombreCancha, setNombreCancha] = useState<string>("");
-
 
   const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
-    setError(null);
     const storedPartido = localStorage.getItem("partidoSeleccionado");
     if (storedPartido) {
-      try {
-        const parsed = JSON.parse(storedPartido);
-        setPartido(parsed);
-      } catch {
-        setError("Error al leer los datos del partido.");
-      }
+      setPartido(JSON.parse(storedPartido));
     } else {
       setError("No se encontró información del partido.");
     }
@@ -50,99 +39,115 @@ const PartidoDetalleSocio: React.FC = () => {
 
   useEffect(() => {
     const fetchDetalles = async () => {
-      if (!partido
-	  ) return;
+      if (!partido) return;
       try {
-        if (partido.id_actividad) {
-          const resAct = await fetch(
-            `${API_URL}/actividad?action=buscar&id=${partido.id_actividad}`
-          );
-          const dataAct = await resAct.json();
-          setNombreActividad(dataAct?.nombre|| "Actividad no encontrada");
-        }
-		
-		setNombreCancha("Partido en cancha del oponente");
+        const resAct = await fetch(`${API_URL}/actividad?action=buscar&id=${partido.id_actividad}`);
+        const dataAct = await resAct.json();
+        setNombreActividad(dataAct?.nombre || "Actividad no encontrada");
+
         if (partido.id_cancha && partido.id_cancha !== 0) {
-          const resCancha = await fetch(
-            `${API_URL}/cancha?action=buscar&id=${partido.id_cancha}`
-          );
-          const text = await resCancha.text();
-          if (text) {
-            const dataCancha = JSON.parse(text);
-            setNombreCancha(dataCancha?.descripcion || "Cancha no encontrada");
-          }
+          const resCancha = await fetch(`${API_URL}/cancha?action=buscar&id=${partido.id_cancha}`);
+          const dataCancha = await resCancha.json();
+          setNombreCancha(dataCancha?.descripcion || "Cancha no encontrada");
+        } else {
+          setNombreCancha("Partido en cancha del oponente");
         }
-      } catch {
-        console.error("Error al obtener profesor/cancha");
+      } catch (e) {
+        console.error("Error cargando detalles", e);
+      } finally {
+        setLoading(false);
       }
     };
     fetchDetalles();
   }, [partido]);
-
-  useEffect(() => {
-    if (mensajeExito) {
-      const timer = setTimeout(() => setMensajeExito(null), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [mensajeExito]);
 
   const handleVolver = () => {
     localStorage.removeItem("partidoSeleccionado");
     navigate("/partidos-socio");
   };
 
-
   return (
-    <div>
+    <div className="admin-partidos-page"> 
       <NavbarSocio />
 
-      <div className="contenedor">
+      <div className="page-container-detalle">
+        {loading ? (
+          <p className="loading-text">Cargando detalles...</p>
+        ) : error ? (
+          <p className="error-box">{error}</p>
+        ) : (
+          partido && (
+            <div className="card-detalle-socio">
+              
+              <div className="badge-categoria">{partido.categoria}</div>
+              
+              <h2>Los Andes <span className="vs">VS</span> {partido.oponente}</h2>
 
-        {loading && <p>Cargando detalles...</p>}
-        {error && <p className="error-box">{error}</p>}
+              {/* LÓGICA DEL RESULTADO: Solo se muestra si tiene valor cargado */}
+              {partido.resultado ? (
+                <div className="resultado-final-box">
+                  <span className="label-res">Resultado Final</span>
+                  <div className="marcador">{partido.resultado}</div>
+                </div>
+              ) : (
+                <div className="proximamente-aviso">
+                  <i className="fa-solid fa-clock"></i> Partido en espera de resultado
+                </div>
+              )}
 
-        {partido && (
-          <div className="detalle-partido-solo-vista">
+              <div className="info-grid-detalle">
+                <div className="item-info">
+                  <i className="fa-solid fa-person-running"></i>
+                  <div>
+                    <label>Actividad</label>
+                    <span>{nombreActividad}</span>
+                  </div>
+                </div>
 
-            <h2 >
-              Los Andes VS {partido.oponente}
-            </h2>
+                <div className="item-info">
+                  <i className="fa-solid fa-calendar-day"></i>
+                  <div>
+                    <label>Fecha del Encuentro</label>
+                    <span>{partido.fecha}</span>
+                  </div>
+                </div>
 
-			<p>
-			  <i className="fa-solid fa-person-running"></i> Actividad: {nombreActividad}
-			</p>
-			
-            <p>
-              <i className="fa-solid fa-calendar-days"></i> Fecha: {partido.fecha}
-            </p>
+                <div className="item-info">
+                  <i className="fa-solid fa-clock"></i>
+                  <div>
+                    <label>Horario</label>
+                    <span>{partido.hora_desde} hs — {partido.hora_hasta} hs</span>
+                  </div>
+                </div>
 
-            <p>
-              <i className="fa-solid fa-clock"></i> Hora: {partido.hora_desde} — {partido.hora_hasta}
-            </p>
+                <div className="item-info">
+                  <i className="fa-solid fa-location-dot"></i>
+                  <div>
+                    <label>Ubicación / Cancha</label>
+                    <span>{nombreCancha}</span>
+                  </div>
+                </div>
 
-            <p>
-              <i className="fa-solid fa-location-dot"></i> Cancha:{" "}
-              {partido.id_cancha === 0 || partido.id_cancha === null
-                ? "Partido en cancha del oponente"
-                : nombreCancha}
-            </p>
+                <div className="item-info">
+                  <i className="fa-solid fa-ticket"></i>
+                  <div>
+                    <label>Precio Entrada</label>
+                    <span>${partido.precio_entrada}</span>
+                  </div>
+                </div>
+              </div>
 
-            <p>
-              <i className="fa-solid fa-ticket"></i> Precio entrada: ${partido.precio_entrada}
-            </p>
+              <button className="btn-volver-estilizado" onClick={handleVolver}>
+                <i className="fa-solid fa-chevron-left"></i> Volver a la cartelera
+              </button>
 
-            <button onClick={handleVolver}>
-              <i className="fa-solid fa-arrow-left" /> Volver
-            </button>
-
-          </div>
+            </div>
+          )
         )}
       </div>
-	  <Footer />
+      <Footer />
     </div>
   );
-
-
 };
 
 export default PartidoDetalleSocio;

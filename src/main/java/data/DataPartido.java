@@ -15,7 +15,7 @@ public class DataPartido {
 
         try {
             stmt = DbConnector.getInstancia().getConn().createStatement();
-            rs = stmt.executeQuery("SELECT id, fecha, oponente, hora_desde, hora_hasta, categoria, precio_entrada, id_cancha, id_actividad FROM partido");
+            rs = stmt.executeQuery("SELECT id, fecha, oponente, hora_desde, hora_hasta, categoria, precio_entrada, id_cancha, id_actividad, resultado FROM partido");
 
             if (rs != null) {
                 while (rs.next()) {
@@ -29,6 +29,7 @@ public class DataPartido {
                     p.setPrecio_entrada(rs.getDouble("precio_entrada"));
                     p.setId_cancha(rs.getInt("id_cancha"));
                     p.setId_actividad(rs.getInt("id_actividad"));
+                    p.setResultado(rs.getString("resultado"));
                     partidos.add(p);
                 }
             }
@@ -71,6 +72,7 @@ public class DataPartido {
                 p.setPrecio_entrada(rs.getDouble("precio_entrada"));
                 p.setId_cancha(rs.getInt("id_cancha"));
                 p.setId_actividad(rs.getInt("id_actividad"));
+                p.setResultado(rs.getString("resultado"));
                 partidos.add(p);
             }
         } catch (SQLException e) {
@@ -93,7 +95,7 @@ public class DataPartido {
         ResultSet rs = null;
         try {
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
-                "SELECT id, fecha, oponente, hora_desde, hora_hasta, categoria, precio_entrada, id_cancha, id_actividad FROM partido WHERE id=?"
+                "SELECT id, fecha, oponente, hora_desde, hora_hasta, categoria, precio_entrada, id_cancha, id_actividad, resultado FROM partido WHERE id=?"
             );
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
@@ -108,6 +110,7 @@ public class DataPartido {
                 p.setPrecio_entrada(rs.getDouble("precio_entrada"));
                 p.setId_cancha(rs.getInt("id_cancha"));
                 p.setId_actividad(rs.getInt("id_actividad"));
+                p.setResultado(rs.getString("resultado"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -128,7 +131,7 @@ public class DataPartido {
         ResultSet keyResultSet = null;
         try {
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
-                "INSERT INTO partido(fecha, oponente, hora_desde, hora_hasta, categoria, precio_entrada, id_cancha, id_actividad) VALUES(?,?,?,?,?,?,?,?)",
+                "INSERT INTO partido(fecha, oponente, hora_desde, hora_hasta, categoria, precio_entrada, id_cancha, id_actividad, resultado) VALUES(?,?,?,?,?,?,?,?,?)",
                 PreparedStatement.RETURN_GENERATED_KEYS
             );
             stmt.setObject(1, p.getFecha());
@@ -143,6 +146,7 @@ public class DataPartido {
                 stmt.setInt(7, p.getId_cancha());
             }
             stmt.setInt(8, p.getId_actividad());
+            stmt.setString(9, p.getResultado());
             stmt.executeUpdate();
             
             keyResultSet = stmt.getGeneratedKeys();
@@ -166,7 +170,7 @@ public class DataPartido {
         PreparedStatement stmt = null;
         try {
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
-                "UPDATE partido SET fecha=?, oponente=?, hora_desde=?, hora_hasta=?, categoria=?, precio_entrada=?, id_cancha=?, id_actividad=? WHERE id=?"
+                "UPDATE partido SET fecha=?, oponente=?, hora_desde=?, hora_hasta=?, categoria=?, precio_entrada=?, id_cancha=?, id_actividad=?, resultado=? WHERE id=?"
             );
             stmt.setObject(1, p.getFecha());
             stmt.setString(2, p.getOponente());
@@ -180,7 +184,8 @@ public class DataPartido {
                 stmt.setInt(7, p.getId_cancha());
             }
             stmt.setInt(8, p.getId_actividad());
-            stmt.setInt(9, p.getId());
+            stmt.setString(9, p.getResultado());
+            stmt.setInt(10, p.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -221,7 +226,7 @@ public class DataPartido {
 
         try {
             stmt = DbConnector.getInstancia().getConn().prepareStatement(
-                "SELECT id, fecha, oponente, hora_desde, hora_hasta, categoria, precio_entrada, id_cancha, id_actividad " +
+                "SELECT id, fecha, oponente, hora_desde, hora_hasta, categoria, precio_entrada, id_cancha, id_actividad, resultado " +
                 "FROM partido WHERE fecha BETWEEN ? AND ? ORDER BY fecha ASC"
             );
 
@@ -241,7 +246,7 @@ public class DataPartido {
                 p.setPrecio_entrada(rs.getDouble("precio_entrada"));
                 p.setId_cancha(rs.getInt("id_cancha"));
                 p.setId_actividad(rs.getInt("id_actividad"));
-
+                p.setResultado(rs.getString("resultado"));
                 partidos.add(p);
             }
 

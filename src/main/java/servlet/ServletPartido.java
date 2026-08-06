@@ -234,7 +234,7 @@ public class ServletPartido extends HttpServlet {
                 );
 
                 p.setId_actividad(body.get("id_actividad").getAsInt());
-
+                p.setResultado(body.get("resultado").isJsonNull() ? null : body.get("resultado").getAsString());
                 logicPartido.update(p);
 
                 String json = gson.toJson(p);

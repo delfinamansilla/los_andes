@@ -13,11 +13,12 @@ public class Partido {
     private Double precio_entrada;
     private Integer id_cancha;
     private int id_actividad;
+    private String resultado;
 
     public Partido() {}
 
     public Partido(LocalDate fecha, String oponente, LocalTime hora_desde, LocalTime hora_hasta,
-                   String categoria, Double precio_entrada, int id_cancha, int id_actividad) {
+                   String categoria, Double precio_entrada, int id_cancha, int id_actividad, String resultado) {
         this.fecha = fecha;
         this.oponente = oponente;
         this.hora_desde = hora_desde;
@@ -26,9 +27,11 @@ public class Partido {
         this.precio_entrada = precio_entrada;
         this.id_cancha = id_cancha;
         this.id_actividad = id_actividad;
+        this.resultado = resultado;
     }
 
-    // Getters y Setters
+    public String getResultado() { return resultado; }
+    public void setResultado(String resultado) { this.resultado = resultado; }
     public int getId() {
         return id;
     }

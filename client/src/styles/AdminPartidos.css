@@ -1,79 +1,184 @@
+.admin-partidos-page {
+  background-color: #20321E;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
 
+.page-container {
+  flex-grow: 1;
+  padding: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+.header-seccion{
+    text-align:center;
+}
 
+.header-seccion h2 {
+  color: #DDD8CA;
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
 
+.resultado-box {
+  background-color: #20321E;
+  color: #DDD8CA;
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 10px 0;
+  border: 1px solid rgba(221, 216, 202, 0.2);
+}
+
+.partido-titulo {
+  margin-bottom: 5px !important;
+}
+
+.controles-row {
+  display:inline-flex;
+    gap:12px;
+    padding:8px;
+    border-radius:12px;
+    background:rgba(221,216,202,.1);
+}
+
+.btn-agregar-partido {
+  background-color: #DDD8CA;
+  color: #20321E;
+  border: none;
+  padding:  0 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap; 
+}
+
+.tabs-container {
+  display: flex;
+  gap: 8px;
+}
+.btn-agregar-partido,
+.tab-btn {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tab-btn {
+  background: transparent;
+  color: #DDD8CA;
+  border: 1px solid #DDD8CA;
+  padding: 0 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.3s;
+}
+
+.tab-btn.active {
+  background-color: #DDD8CA;
+  color: #20321E;
+}
 
 .partido-lista {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 20px;
   justify-content: center;
-  padding: 10px;
 }
 
-/* TARJETA DE PARTIDO */
-.partido-card,
 .partido-btn {
-  background-color: #F2E9D8 !important;
-  color: #1A1A1A !important;
-  padding: 15px;
-  border-radius: 12px;
-  width: 250px;          
+  background-color: #DDD8CA !important;
   border: none;
-  text-align: left;
+  border-radius: 12px;
+  width: 280px;
+  padding: 15px; 
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  transition: 0.3s;
   cursor: pointer;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: fit-content; 
 }
 
-.partido-card:hover,
 .partido-btn:hover {
-  background-color: #E9DFCA; 
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
 
-.partido-card-content {
+.categoria-tag {
+  background-color: #466245;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.estado-tag {
+  background-color: #8c8578;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+.estado-tag.proximos { background-color: #2e7d32; color: white; }
+.estado-tag.pasados { background-color: #8c8578; color: white; }
+
+.loading-text {
+    color: #DDD8CA;
+    text-align: center;
+    margin-top: 50px;
+}
+.partido-titulo {
+  color: #20321E;
+  font-size: 1.2rem;
+  margin: 5px 0 15px 0;
+  text-align: center;
+}
+
+.partido-info-grid {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-
-.partido-titulo {
-  font-size: 1.2rem;
-  font-weight: bold;
+.partido-info-grid p {
   margin: 0;
-  color: #20321E;
-}
-
-.partido-titulo .vs {
-  font-size: 1rem;
-  margin: 0 4px;
-  color: #6D7A6D;
-}
-
-
-.partido-fecha,
-.partido-actividad {
-  font-size: 1rem;
-  font-weight: 600;
+  color: #333;
+  font-size: 0.85rem;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
-
-.partido-cancha,
-.partido-precio {
-  font-size: 0.9rem;
-  color: #6D7A6D;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-
-.partido-card i,
-.partido-btn i {
+.partido-info-grid i {
   color: #20321E;
+  width: 16px;
+  text-align: center;
+}
+
+.footer-card {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(32, 50, 30, 0.1);
+  font-size: 0.75rem;
+  color: #466245;
+  font-weight: bold;
+  text-align: center;
 }

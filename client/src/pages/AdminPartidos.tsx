@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
+import Footer from './Footer';
 import '../styles/AdminPartidos.css';
 import { API_URL } from "../config";
 
@@ -10,107 +11,93 @@ interface Partido {
   idActividad: number;
   idCancha: number | null;
   oponente: string;
-  precio_entrada?: string;
+  precio_entrada: number;
+  resultado: string | null; 
+  categoria: string;
 
   actividad?: {
     id: number;
     nombre: string;
   };
-
   cancha?: {
     id: number;
     descripcion: string;
   };
-};
+}
 
 const AdminPartidos: React.FC = () => {
   const [partidos, setPartidos] = useState<Partido[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
-  const [filtro, setFiltro] = useState<"semana" | "todos">("semana");
+  const [filtro, setFiltro] = useState<"proximos" | "pasados">("proximos");
 
   useEffect(() => {
     cargarPartidos();
   }, [filtro]);
-  
-  const obtenerFechasSemana = () => {
+
+  const obtenerRangoFechas = () => {
     const hoy = new Date();
-    const diaSemana = hoy.getDay(); 
+    const desde = new Date();
+    const hasta = new Date();
 
-    const lunes = new Date(hoy);
-    lunes.setDate(hoy.getDate() - (diaSemana === 0 ? 6 : diaSemana - 1));
+    if (filtro === "proximos") {
+      hasta.setDate(hoy.getDate() + 15);
+    } else {
+      desde.setDate(hoy.getDate() - 30);
+      hasta.setDate(hoy.getDate() - 1);
+    }
 
-    const domingo = new Date(lunes);
-    domingo.setDate(lunes.getDate() + 6);
-
-    const desde = lunes.toISOString().split("T")[0];
-    const hasta = domingo.toISOString().split("T")[0];
-
-    return { desde, hasta };
+    return { 
+      desde: desde.toISOString().split("T")[0], 
+      hasta: hasta.toISOString().split("T")[0] 
+    };
   };
-  
+
   const cargarPartidos = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      let url = "";
+      const { desde, hasta } = obtenerRangoFechas();
+      const url = `${API_URL}/partido?action=listar_por_rango&desde=${desde}&hasta=${hasta}`;
 
-      if (filtro === "semana") {
-        const { desde, hasta } = obtenerFechasSemana();
-        url = `${API_URL}/partido?action=listar_por_rango&desde=${desde}&hasta=${hasta}`;
-      } else {
-        url = `${API_URL}/partido?action=listar`;
-      }
-
-      const res = await fetch(url, { method: "GET"});
-
-      const texto = await res.text();
-      const data = texto ? JSON.parse(texto) : [];
+      const res = await fetch(url);
+      const data = await res.json();
 
       if (!Array.isArray(data)) {
-        setError("Error al cargar partidos");
+        setPartidos([]);
         return;
       }
 
       const partidosConDatos = await Promise.all(
-        data.map(async (p) => {
+        data.map(async (p: any) => {
           let actividad = null;
           let cancha = null;
+
           try {
-            const actRes = await fetch(
-              `${API_URL}/actividad?action=buscar&id=${p.idActividad ?? p.id_actividad}`
-            );
-            const actTxt = await actRes.text();
-            actividad = actTxt ? JSON.parse(actTxt) : null;
-          } catch (_) {
-            actividad = null;
-          }
+            const actRes = await fetch(`${API_URL}/actividad?action=buscar&id=${p.id_actividad || p.idActividad}`);
+            actividad = await actRes.json();
 
-          const idCancha = p.idCancha ?? p.id_cancha;
-          if (idCancha && idCancha !== 0) {
-            try {
-              const canchaRes = await fetch(
-                `${API_URL}/cancha?action=buscar&id=${idCancha}`
-              );
-              const canchaTxt = await canchaRes.text();
-              cancha = canchaTxt ? JSON.parse(canchaTxt) : null;
-            } catch (_) {
-              cancha = null;
+            if (p.id_cancha || p.idCancha) {
+              const canchaRes = await fetch(`${API_URL}/cancha?action=buscar&id=${p.id_cancha || p.idCancha}`);
+              cancha = await canchaRes.json();
             }
+          } catch (e) {
+            console.error("Error cargando detalles del partido", e);
           }
 
-          return {
-            ...p,
-            actividad,
-            cancha,
-          };
+          return { ...p, actividad, cancha };
         })
       );
 
-      setPartidos(partidosConDatos);
+      const ordenados = partidosConDatos.sort((a, b) => {
+        return filtro === "proximos" 
+          ? new Date(a.fecha).getTime() - new Date(b.fecha).getTime()
+          : new Date(b.fecha).getTime() - new Date(a.fecha).getTime();
+      });
 
+      setPartidos(ordenados);
     } catch (err) {
       console.error(err);
       setError("Error de conexión con el servidor");
@@ -119,102 +106,94 @@ const AdminPartidos: React.FC = () => {
     }
   };
 
-  
   const handleVerDetalle = (partido: Partido) => {
     localStorage.setItem('partidoSeleccionado', JSON.stringify(partido));
-    navigate('/partido-detalle'); 
-  };
-
-  const handleAgregar = () => {
-    navigate('/agregar-partido');
+    navigate('/partido-detalle'); // Aquí es donde el admin podrá editar el resultado
   };
 
   return (
-      <div>
+      <div className="admin-partidos-page">
         <NavbarAdmin />
         <div className="page-container">
-          <h2>Lista de Partidos</h2>
-		  
-		  <div >
-		    <button
-		      className={filtro === "semana" ? "btn-activo" : ""}
-		      onClick={() => setFiltro("semana")}
-		    >
-		      Esta semana
-		    </button>
+          
+          <div className="header-seccion">
+            <h2>Gestión de Partidos</h2>
 
-		    <button
-		      className={filtro === "todos" ? "btn-activo" : ""}
-		      onClick={() => setFiltro("todos")}
-		    >
-		      Todos los partidos
-		    </button>
-		  </div>
+            <div className="controles-row">
+              <button className="btn-agregar-partido" onClick={() => navigate('/agregar-partido')}>
+                <i className="fa-solid fa-plus"></i> Nuevo Partido
+              </button>
 
-          {loading && <p>Cargando Partidos...</p>}
-          {error && <p className="error-box">{error}</p>}
+              <div className="tabs-container">
+                <button 
+                  className={`tab-btn ${filtro === "proximos" ? "active" : ""}`}
+                  onClick={() => setFiltro("proximos")}
+                >
+                  Próximos Partidos
+                </button>
+                <button 
+                  className={`tab-btn ${filtro === "pasados" ? "active" : ""}`}
+                  onClick={() => setFiltro("pasados")}
+                >
+                  Resultados Recientes
+                </button>
+              </div>
+            </div>
+          </div>
 
-          {!loading && !error && (
-            <>
+          {loading ? (
+            <p className="loading-text">Cargando partidos...</p>
+          ) : (
+            <div className="partido-lista">
               {partidos.length > 0 ? (
-                <div className="partido-lista">
+                partidos.map((p) => (
+                  <button key={p.id} className="partido-btn" onClick={() => handleVerDetalle(p)}>
+                    <div className="partido-card-content">
+                      
+                      <div className="card-top">
+                        <span className="categoria-tag">{p.categoria}</span>
+                        <span className={`estado-tag ${filtro}`}>
+                          {filtro === "proximos" ? "Programado" : "Finalizado"}
+                        </span>
+                      </div>
 
-                  {partidos.map((p) => (
-                    <button
-                      key={p.id}
-                      className="partido-btn"
-                      onClick={() => handleVerDetalle(p)}
-                    >
-					<div className="partido-card-content">
+                      <h3 className="partido-titulo">
+                        Los Andes <span className="vs">VS</span> {p.oponente}
+                      </h3>
 
-					  
-					  <h3 className="partido-titulo">
-					    Los Andes <span className="vs">VS</span> {p.oponente}
-					  </h3>
+                      {p.resultado && (
+                        <div className="resultado-box">
+                          {p.resultado}
+                        </div>
+                      )}
 
-					 
-					  <p className="partido-fecha">
-					    <i className="fa-solid fa-calendar-days"></i>
-					    {p.fecha}
-					  </p>
-
-					  
-					  <p className="partido-actividad">
-					    <i className="fa-solid fa-futbol"></i>
-					    {p.actividad?.nombre}
-					  </p>
-
-					  
-					  <p className="partido-cancha">
-					    <i className="fa-solid fa-location-dot"></i>
-					    {p.cancha ? p.cancha.descripcion : "Partido en cancha del oponente"}
-					  </p>
-
-					 
-					  <p className="partido-precio">
-					    <i className="fa-solid fa-ticket"></i>
-					    {p.precio_entrada || "Sin precio"}
-					  </p>
-
-					</div>
-                    </button>
-                  ))}
-                </div>
+                      <div className="partido-info-grid">
+                        <p><i className="fa-solid fa-calendar-days"></i> {p.fecha}</p>
+                        <p><i className="fa-solid fa-futbol"></i> {p.actividad?.nombre}</p>
+                        <p className="descripcion-cancha">
+                          <i className="fa-solid fa-location-dot"></i> 
+                          <span>{p.cancha ? p.cancha.descripcion : "Cancha Oponente"}</span>
+                        </p>
+                        <p><i className="fa-solid fa-ticket"></i> ${p.precio_entrada}</p>
+                      </div>
+                      
+                      <div className="footer-card">
+                         Gestionar {filtro === "pasados" ? "resultado" : "partido"}
+                      </div>
+                    </div>
+                  </button>
+                ))
               ) : (
-                <>
-                  <div className="partido-lista">
-                    <button className="partido-btn agregar-btn" onClick={handleAgregar}>
-                      <strong><i className="fa-solid fa-plus"></i> Agregar partido</strong>
-                    </button>
-                  </div>
-                  <p>No hay partidos registradas.</p>
-                </>
+                <div className="no-partidos">
+                  <p>No hay partidos en este periodo.</p>
+                </div>
               )}
-            </>
+            </div>
           )}
         </div>
+        <Footer />
       </div>
     );
-};
+  };
 
-export default AdminPartidos;
+  export default AdminPartidos;
