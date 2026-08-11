@@ -156,7 +156,7 @@ const PartidoDetalle: React.FC = () => {
     }
   };
 
-  const handleEliminar = () => {
+  /*const handleEliminar = () => {
     if (!partido) return;
     setModalMensaje(`¿Estás seguro de que querés eliminar el partido "${partido.fecha}" Los andes VS "${partido.oponente},"?`);
     setModalAccion(() => eliminarConfirmado);
@@ -184,7 +184,7 @@ const PartidoDetalle: React.FC = () => {
       setModalAccion(null);
       setModalAbierto(true);
     }
-  };
+  };*/
 
 
 
@@ -193,8 +193,6 @@ const PartidoDetalle: React.FC = () => {
         <NavbarAdmin />
         <div className="page-container">
           {loading && <p>Cargando detalles...</p>}
-          {error && <p className="error-box">{error}</p>}
-          {mensajeExito && <div className="mensaje-exito">{mensajeExito}</div>}
 
           {partido && (
             <>
@@ -265,6 +263,8 @@ const PartidoDetalle: React.FC = () => {
                   ) : <span>{nombreCancha}</span>}
                 </label>
               </div>
+			  {error && <p className="error-box">{error}</p>}
+			  				{mensajeExito && <div className="mensaje-exito">{mensajeExito}</div>}
 
               <div className="acciones-detalle">
                 <button onClick={() => navigate("/admin-partidos")} className="btn-volver">
@@ -276,9 +276,7 @@ const PartidoDetalle: React.FC = () => {
                     <button onClick={() => setEditando(true)} className="btn-modificar">
                       <i className="fa-solid fa-pen" /> Modificar
                     </button>
-                    <button className="eliminar" onClick={handleEliminar}>
-                      <i className="fa-solid fa-trash" /> Eliminar
-                    </button>
+                    
                   </>
                 ) : (
                   <button className="guardar" onClick={handleGuardarCambios}>
@@ -288,6 +286,7 @@ const PartidoDetalle: React.FC = () => {
               </div>
             </>
           )}
+		 
         </div>
 
         {modalAbierto && (

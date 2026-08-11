@@ -56,17 +56,24 @@ const AgregarPartido: React.FC = () => {
 	  setError(null);
 	  setSuccess(null);
 
+	  // Validación local
+	  if (!formData.fecha || !formData.oponente || !formData.hora_desde || 
+	      !formData.hora_hasta || !formData.categoria || !formData.precio_entrada || 
+	      !formData.id_actividad || !formData.id_cancha) {
+	    setError('❌ Debe completar todos los campos');
+	    setLoading(false);
+	    return;
+	  }
 
 	  const payload = {
-		fecha: formData.fecha?.slice(0,10),
-		oponente: formData.oponente,
-		hora_desde: formData.hora_desde,
-		hora_hasta: formData.hora_hasta,
-		categoria: formData.categoria,
-		precio_entrada: parseFloat(formData.precio_entrada),
-		id_cancha: formData.id_cancha === "oponente" ? null : parseInt(formData.id_cancha),
-		id_actividad:parseInt(formData.id_actividad)
-
+	    fecha: formData.fecha?.slice(0,10),
+	    oponente: formData.oponente,
+	    hora_desde: formData.hora_desde,
+	    hora_hasta: formData.hora_hasta,
+	    categoria: formData.categoria,
+	    precio_entrada: parseFloat(formData.precio_entrada),
+	    id_cancha: formData.id_cancha === "oponente" ? null : parseInt(formData.id_cancha),
+	    id_actividad: parseInt(formData.id_actividad)
 	  };
 
 	  try {
@@ -76,23 +83,18 @@ const AgregarPartido: React.FC = () => {
 	      body: JSON.stringify(payload),
 	    });
 
-	    const text = await res.text();
-	    const data = JSON.parse(text);
-	    if (!res.ok) throw new Error(data.message || 'Error al crear el partido');
-	  
-	  const nuevaActividad = data.actividad || payload;
-	  setPartido(nuevaActividad);
-	  
-	  setSuccess('✅ Partido creado correctamente');
+	    const data = await res.json();
 
+	    if (!res.ok) {
+	      throw new Error(data.error || 'Error al crear el partido');
+	    }
 
+	    setSuccess('✅ Partido creado correctamente');
+	    setError(null);
 	    
-	  } catch (err) {
-	    console.error('Error al crear actividad:', err);
-		setError('❌ Error al crear el partido.');
-
-
-
+	  } catch (err: any) {
+	    setError(`❌ ${err.message}`); 
+	    console.error('Detalle del error:', err);
 	  } finally {
 	    setLoading(false);
 	  }
@@ -107,7 +109,7 @@ const AgregarPartido: React.FC = () => {
 
 	
   return (
-	<div>
+	<div className="main-admin-container">
 	<NavbarAdmin/>
 	<div className="page-container">
 	  <h2>Nuevo Partido</h2>

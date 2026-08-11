@@ -3,24 +3,33 @@ package logic;
 import data.DataActividad;
 import data.DataCancha;
 import data.DataPartido;
+import data.DataHorario;
+import data.DataAlquiler_cancha;
 import entities.Partido;
-import entities.Actividad; 
+import entities.Horario;
+import entities.Alquiler_cancha;
+
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.LinkedList;
+import java.util.List;
 
 
 public class LogicPartido {
 
-    private final DataPartido dp;
+	private final DataPartido dp;
     private final DataCancha dc;
     private final DataActividad da;
+    private final DataHorario dh;
+    private final DataAlquiler_cancha dac;
 
     public LogicPartido() {
         this.dp = new DataPartido();
         this.dc = new DataCancha();
         this.da = new DataActividad();
+        this.dh = new DataHorario();
+        this.dac = new DataAlquiler_cancha();
     }
 
     /**
@@ -75,40 +84,30 @@ public class LogicPartido {
      * @throws Exception con el mensaje del error de validación.
      */
     private void validarPartido(Partido p) throws Exception {
-        if (p.getFecha() == null) {
-            throw new Exception("La fecha no puede estar vacía.");
-        }
-        if (p.getOponente() == null || p.getOponente().trim().isEmpty()) {
-            throw new Exception("El oponente no puede estar vacío.");
-        }
-        if (p.getHora_desde() == null || p.getHora_hasta() == null) {
-            throw new Exception("Las horas de inicio y fin no pueden estar vacías.");
-        }
-        if (p.getCategoria() == null || p.getCategoria().trim().isEmpty()) {
-            throw new Exception("La categoría no puede estar vacía.");
-        }
-        if (p.getPrecio_entrada() == null || p.getPrecio_entrada() < 0) {
-            throw new Exception("El precio de la entrada debe ser un valor positivo o cero.");
-        }
-
-        if (p.getId() == 0 && p.getFecha().isBefore(LocalDate.now())) {
-            throw new Exception("La fecha del partido no puede ser en el pasado.");
-        }
-        if (p.getHora_desde().isAfter(p.getHora_hasta()) || p.getHora_desde().equals(p.getHora_hasta())) {
-            throw new Exception("La hora de inicio debe ser anterior a la hora de finalización.");
-        }
-        
-        if (p.getId_cancha() != null) {
-            if (dc.getOne(p.getId_cancha()) == null) {
-                throw new Exception("La cancha seleccionada no existe.");
+    	if (p.getFecha() == null || 
+                p.getOponente() == null || p.getOponente().trim().isEmpty() ||
+                p.getHora_desde() == null || p.getHora_hasta() == null ||
+                p.getCategoria() == null || p.getCategoria().trim().isEmpty() ||
+                p.getPrecio_entrada() == null ||
+                p.getId_actividad() <= 0) {
+                throw new Exception("Debe completar todos los campos");
             }
-        }
 
-        if (da.getOne(p.getId_actividad()) == null) {
-            throw new Exception("La actividad seleccionada no existe.");
-        }
+            if (p.getId() == 0 && p.getFecha().isBefore(LocalDate.now())) {
+                throw new Exception("No se pueden registrar partidos en fechas pasadas");
+            }
 
-        validarDisponibilidadCancha(p);
+            if (!p.getHora_desde().isBefore(p.getHora_hasta())) {
+                throw new Exception("La hora de finalización debe ser posterior a la de inicio");
+            }
+            if (p.getResultado() != null && !p.getResultado().trim().isEmpty()) {
+
+                if (!p.getResultado().matches("\\d+\\s*-\\s*\\d+")) {
+                    throw new Exception("Formato de resultado no reconocido");
+                }
+            }
+            
+            validarDisponibilidadCancha(p);
     }
 
     /**
@@ -116,34 +115,52 @@ public class LogicPartido {
      * @param partidoAValidar El partido que se quiere agendar o modificar.
      * @throws Exception si la cancha ya está ocupada en ese horario.
      */
-    private void validarDisponibilidadCancha(Partido partidoAValidar) throws Exception {
-    	
-       if (partidoAValidar.getId_cancha() == null) {
-    	        return;
-    	    }
-       
-        LinkedList<Partido> partidosEnMismaCanchaYFecha = dp.getByCanchaAndFecha(
-            partidoAValidar.getId_cancha(),
-            partidoAValidar.getFecha()
-        );
+    private void validarDisponibilidadCancha(Partido p) throws Exception {
+        if (p.getId_cancha() == null) return; 
 
-        LocalTime inicioNuevo = partidoAValidar.getHora_desde();
-        LocalTime finNuevo = partidoAValidar.getHora_hasta();
+        LocalTime inicioN = p.getHora_desde();
+        LocalTime finN = p.getHora_hasta();
 
-        for (Partido partidoExistente : partidosEnMismaCanchaYFecha) {
-            if (partidoExistente.getId() == partidoAValidar.getId()) {
-                continue; 
+        LinkedList<Partido> partidos = dp.getByCanchaAndFecha(p.getId_cancha(), p.getFecha());
+        for (Partido existente : partidos) {
+            if (existente.getId() != p.getId()) {
+                if (inicioN.isBefore(existente.getHora_hasta()) && finN.isAfter(existente.getHora_desde())) {
+                    throw new Exception("La cancha seleccionada ya tiene un evento asignado en ese horario");
+                }
             }
+        }
 
-            LocalTime inicioExistente = partidoExistente.getHora_desde();
-            LocalTime finExistente = partidoExistente.getHora_hasta();
-
-            if (inicioNuevo.isBefore(finExistente) && finNuevo.isAfter(inicioExistente)) {
-                throw new Exception(
-                    "Conflicto de horario. La cancha ya está reservada de " +
-                    inicioExistente + " a " + finExistente + " en esa fecha."
-                );
+        LinkedList<Alquiler_cancha> alquileres = dac.getByCancha(p.getId_cancha());
+        for (Alquiler_cancha alq : alquileres) {
+            if (alq.getFechaAlquiler().equals(p.getFecha())) {
+                if (inicioN.isBefore(alq.getHoraHasta()) && finN.isAfter(alq.getHoraDesde())) {
+                    throw new Exception("La cancha seleccionada ya tiene un evento asignado en ese horario");
+                }
             }
+        }
+
+        List<Horario> horariosClases = dh.getOcupadosCancha(p.getId_cancha());
+        String diaSemana = getDiaNombre(p.getFecha());
+        
+        for (Horario h : horariosClases) {
+            if (h.getDia().equalsIgnoreCase(diaSemana)) {
+                if (inicioN.isBefore(h.getHoraHasta()) && finN.isAfter(h.getHoraDesde())) {
+                    throw new Exception("La cancha seleccionada ya tiene un evento asignado en ese horario");
+                }
+            }
+        }
+    }
+
+    private String getDiaNombre(LocalDate fecha) {
+        switch (fecha.getDayOfWeek()) {
+            case MONDAY:    return "Lunes";
+            case TUESDAY:   return "Martes";
+            case WEDNESDAY: return "Miercoles";
+            case THURSDAY:  return "Jueves";
+            case FRIDAY:    return "Viernes";
+            case SATURDAY:  return "Sabado";
+            case SUNDAY:    return "Domingo";
+            default:        return "";
         }
     }
     

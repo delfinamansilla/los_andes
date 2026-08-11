@@ -288,7 +288,7 @@ public class ServletAlquiler_salon extends HttpServlet {
                     }
 
                     if (u != null && u.getMail() != null) {
-                    	String baseUrl = AppConfig.getBackendUrl(); 
+                    	String baseUrl = AppConfig.getBackendUrl()+ "/alquiler_salon";  
                         
                         String params = "?action=descargar_constancia" +
                                         "&id_salon=" + pr.getIdSalon() + 

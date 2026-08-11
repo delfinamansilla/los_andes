@@ -177,89 +177,97 @@ public class ServletPartido extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-		response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-		response.setContentType("application/json;charset=UTF-8");
-        String action = request.getParameter("action");
-        
-        try {
-            if (action == null) {
-                response.getWriter().write("{\"error\":\"Debe especificar una acción (crear o actualizar).\"}");
-                return;
-            }
-            
-            BufferedReader reader = request.getReader();
-            JsonObject body = gson.fromJson(reader, JsonObject.class);
+	    response.setHeader("Access-Control-Allow-Origin", "*");
+	    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+	    response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+	    response.setContentType("application/json;charset=UTF-8");
+	    String action = request.getParameter("action");
+	    
+	    try {
+	        if (action == null) {
+	            response.setStatus(400);
+	            response.getWriter().write("{\"error\":\"Debe especificar una acción.\"}");
+	            return;
+	        }
+	        
+	        BufferedReader reader = request.getReader();
+	        JsonObject body = gson.fromJson(reader, JsonObject.class);
 
-            switch (action.toLowerCase()) {
-            case "crear":{
-                Partido nuevo = new Partido();
-                nuevo.setFecha(LocalDate.parse(body.get("fecha").getAsString()));
-                nuevo.setOponente(body.get("oponente").getAsString());
-                nuevo.setHora_desde(LocalTime.parse(body.get("hora_desde").getAsString()));
-                nuevo.setHora_hasta(LocalTime.parse(body.get("hora_hasta").getAsString()));
-                nuevo.setCategoria(body.get("categoria").getAsString());
-                nuevo.setPrecio_entrada(body.get("precio_entrada").getAsDouble());
-                nuevo.setId_cancha(
-                	    body.get("id_cancha").isJsonNull() 
-                        ? null 
-                        : body.get("id_cancha").getAsInt()
-                );
+	        switch (action.toLowerCase()) {
+	            case "crear": {
+	                Partido nuevo = new Partido();
+	                nuevo.setFecha(LocalDate.parse(body.get("fecha").getAsString()));
+	                nuevo.setOponente(body.get("oponente").getAsString());
+	                nuevo.setHora_desde(LocalTime.parse(body.get("hora_desde").getAsString()));
+	                nuevo.setHora_hasta(LocalTime.parse(body.get("hora_hasta").getAsString()));
+	                nuevo.setCategoria(body.get("categoria").getAsString());
+	                nuevo.setPrecio_entrada(body.get("precio_entrada").getAsDouble());
+	                
+	                // Manejo seguro de id_cancha
+	                if (body.has("id_cancha") && !body.get("id_cancha").isJsonNull()) {
+	                    nuevo.setId_cancha(body.get("id_cancha").getAsInt());
+	                } else {
+	                    nuevo.setId_cancha(null);
+	                }
 
-                nuevo.setId_actividad(body.get("id_actividad").getAsInt());
+	                nuevo.setId_actividad(body.get("id_actividad").getAsInt());
+	                
+	                // Al crear, el resultado suele ser null
+	                nuevo.setResultado(null);
 
-                logicPartido.add(nuevo);
+	                logicPartido.add(nuevo);
 
-                String json = gson.toJson(nuevo);
-                response.getWriter().write(
-                    "{\"status\":\"ok\",\"mensaje\":\"Partido creado correctamente\",\"partido\":" + json + "}"
-                );
-                break;
-            }
-            case "actualizar":{
-                Partido p = new Partido();
-                p.setId(body.get("id").getAsInt());
-                p.setFecha(LocalDate.parse(body.get("fecha").getAsString()));
-                p.setOponente(body.get("oponente").getAsString());
-                p.setHora_desde(LocalTime.parse(body.get("hora_desde").getAsString()));
-                p.setHora_hasta(LocalTime.parse(body.get("hora_hasta").getAsString()));
-                p.setCategoria(body.get("categoria").getAsString());
-                p.setPrecio_entrada(body.get("precio_entrada").getAsDouble());
-                p.setId_cancha(
-                	    body.get("id_cancha").isJsonNull() 
-                        ? null 
-                        : body.get("id_cancha").getAsInt()
-                );
+	                String jsonResponse = gson.toJson(nuevo);
+	                response.getWriter().write("{\"status\":\"ok\",\"mensaje\":\"Partido creado correctamente\",\"partido\":" + jsonResponse + "}");
+	                break;
+	            }
+	            
+	            case "actualizar": {
+	                Partido p = new Partido();
+	                p.setId(body.get("id").getAsInt());
+	                p.setFecha(LocalDate.parse(body.get("fecha").getAsString()));
+	                p.setOponente(body.get("oponente").getAsString());
+	                p.setHora_desde(LocalTime.parse(body.get("hora_desde").getAsString()));
+	                p.setHora_hasta(LocalTime.parse(body.get("hora_hasta").getAsString()));
+	                p.setCategoria(body.get("categoria").getAsString());
+	                p.setPrecio_entrada(body.get("precio_entrada").getAsDouble());
+	                
+	                if (body.has("id_cancha") && !body.get("id_cancha").isJsonNull()) {
+	                    p.setId_cancha(body.get("id_cancha").getAsInt());
+	                } else {
+	                    p.setId_cancha(null);
+	                }
 
-                p.setId_actividad(body.get("id_actividad").getAsInt());
-                p.setResultado(body.get("resultado").isJsonNull() ? null : body.get("resultado").getAsString());
-                logicPartido.update(p);
+	                p.setId_actividad(body.get("id_actividad").getAsInt());
+	                
+	                // MANEJO SEGURO DE RESULTADO
+	                if (body.has("resultado") && !body.get("resultado").isJsonNull()) {
+	                    p.setResultado(body.get("resultado").getAsString());
+	                } else {
+	                    p.setResultado(null);
+	                }
 
-                String json = gson.toJson(p);
-                response.getWriter().write(
-                    "{\"status\":\"ok\",\"mensaje\":\"Partido actualizado correctamente\",\"partido\":" + json + "}"
-                );
-                break;
-            }
-            
-            default:
-                response.getWriter().write("{\"error\":\"Acción POST no reconocida: " + action + "\"}");
-            }
+	                logicPartido.update(p);
 
-		} catch (Exception e) {
-		    e.printStackTrace();
+	                String jsonResponse = gson.toJson(p);
+	                response.getWriter().write("{\"status\":\"ok\",\"mensaje\":\"Partido actualizado correctamente\",\"partido\":" + jsonResponse + "}");
+	                break;
+	            }
+	            
+	            default:
+	                response.setStatus(400);
+	                response.getWriter().write("{\"error\":\"Acción POST no reconocida\"}");
+	        }
 
-		    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		    response.setContentType("application/json;charset=UTF-8");
-
-		    String msg = e.getMessage().replace("\"", "'"); 
-
-		    response.getWriter().write(
-		        "{\"error\":\"Error al procesar la solicitud: " + msg + "\"}"
-		    );
-		}
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.setStatus(500);
+	        response.setContentType("application/json;charset=UTF-8");
+	        
+	        // CORRECCIÓN DEL CATCH: Evita NullPointerException si e.getMessage() es null
+	        String errorMsg = (e.getMessage() != null) ? e.getMessage().replace("\"", "'") : "Error interno desconocido";
+	        response.getWriter().write("{\"error\":\"" + errorMsg + "\"}");
+	    }
 	}
 
 }

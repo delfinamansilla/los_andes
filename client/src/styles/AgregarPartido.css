@@ -1,22 +1,38 @@
-.page-container {
-  min-height: 100vh;
+/* 1. Este contenedor asegura que el fondo sea verde detrás de la Navbar y hasta el final */
+.main-admin-container {
   background-color: #20321E;
-  color: #20321E;
-  padding: 40px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 2. Ajustamos el page-container para que sea flexible */
+.page-container {
+  flex-grow: 1;
+  width: 100%;
+  /* Aumentamos el primer valor (TOP) para que el título baje */
+  /* Probá con 80px o 100px dependiendo de qué tan grande sea tu logo */
+  padding: 80px 20px 40px 20px; 
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+  position: relative; /* Agregamos esto para asegurar el orden de capas */
 }
 
+/* 3. Ajustamos el h2 */
 .page-container h2 {
   text-align: center;
   color: #DDD8CA;
+  margin-top: 20px; /* Le devolvemos un poquito de margen para que respire */
   margin-bottom: 30px;
-  font-size: 1.8rem;
+  font-size: 2.2rem;
+  font-weight: 800;
+  text-transform: uppercase; /* Opcional: para que se vea más importante */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* Ayuda a que se lea mejor sobre el verde */
 }
 
+/* 4. Estilos de la tarjeta (se mantienen igual) */
 .form-partido {
   background-color: #DDD8CA;
   padding: 40px;
@@ -30,6 +46,7 @@
   color: #20321E;
 }
 
+/* ... el resto de tus estilos se mantienen ... */
 .form-partido label {
   display: flex;
   flex-direction: column;
