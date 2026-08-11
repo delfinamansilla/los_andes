@@ -265,7 +265,7 @@ public class ServletAlquiler_salon extends HttpServlet {
 
                     if (pr == null || pr.getExpiracion().isBefore(LocalDateTime.now())) {
                     	resp.getWriter().write("<html><head>" + estiloCss + "</head><body>"
-                    	        + "<div class='card'><h1>Enlace inválido o expirado</h1>"
+                    	        + "<div class='card'><h1>El enlace ha expirado</h1>"
                     	        + "<a href='" + AppConfig.getFrontendUrl() + "' class='btn'>Volver al Inicio</a>" // Cambio aquí
                     	        + "</div></body></html>");
                         return;

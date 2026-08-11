@@ -42,7 +42,7 @@ public class LogicAlquiler_salon {
 
 
             if (solapa) {
-                throw new Exception("El horario solicitado ya está reservado");
+                throw new Exception("El horario ya no está disponible");
             }
         }
 

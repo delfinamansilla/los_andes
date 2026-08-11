@@ -101,18 +101,15 @@ const AlquilarSalon: React.FC = () => {
       const url = `${API_URL}/alquiler_salon?${params.toString()}`;
 
       const res = await fetch(url);
-      const text = await res.text();
+      const data = await res.json();
 
-      if (text.includes("mail_enviado")) {
-		setModalType('success');
-			    setModalMessage('Te enviamos un mail para confirmar la reserva. Revisá tu bandeja!');
-			    setTimeout(() => {
-			      navigate('/inicio-socio');
-			    }, 10000);
-      } else {
-		setModalType('error');
-		setModalMessage('No se pudo iniciar la reserva.');
-      }
+	  if (res.ok && data.status === "mail_enviado") {
+	          setModalType('success');
+	          setModalMessage('Te enviamos un mail para confirmar la reserva...');
+	      } else {
+	          setModalType('error');
+	          setModalMessage(data.error || 'El horario ya no está disponible'); 
+	      }
 
     } catch (err) {
       setModalMessage('Error de conexión con el servidor.');
