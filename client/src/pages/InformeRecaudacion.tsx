@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import NavbarAdmin from "./NavbarAdmin";
 import "../styles/InformeRecaudacion.css";
+import Modal from "./Modal";
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell, Legend 
@@ -14,34 +15,88 @@ interface Informe {
 }
 
 export default function InformeRecaudacion() {
-	const hoy = new Date().toISOString().split("T")[0];
-
-	  const [fechaDesde, setFechaDesde] = useState("2024-01-01");
-	  const [fechaHasta, setFechaHasta] = useState(hoy);
+const hoy = new Date().toLocaleDateString('en-CA');
+	  const [fechaDesde, setFechaDesde] = useState("");
+	  const [fechaHasta, setFechaHasta] = useState("");
 	  const [datos, setDatos] = useState<Informe[]>([]);
+	  const [modalVisible, setModalVisible] = useState(false);
+	    const [modalTitulo, setModalTitulo] = useState("");
+	    const [modalMensaje, setModalMensaje] = useState("");
 
-	  const descargarPDF = () => {
+	    const abrirModal = (titulo: string, mensaje: string) => {
+	      setModalTitulo(titulo);
+	      setModalMensaje(mensaje);
+	      setModalVisible(true);
+	    };
 
-	    window.open(
-	      `http://localhost:8080/club/informe?action=pdf&desde=${fechaDesde}&hasta=${fechaHasta}`,
-	      "_blank"
-	    );
+	    const cerrarModal = () => {
+	      setModalVisible(false);
+	    };
 
-	  };
+		const descargarPDF = () => {
+		    // 1. Si no hay fechas, mostramos modal y CORTAMOS con return
+		    if (!fechaDesde || !fechaHasta) {
+		      abrirModal("Atención", "Por favor seleccione un rango de fechas antes de descargar el PDF.");
+		      return; // 👈 ¡ESTE return ES CLAVE!
+		    }
+
+		    // 2. Si las fechas son mayores a hoy, CORTAMOS con return
+		    if (fechaDesde > hoy || fechaHasta > hoy) {
+		      abrirModal("Error en fechas", "Las fechas seleccionadas no pueden ser posteriores al día de hoy.");
+		      return; // 👈 OTRO return
+		    }
+
+		    // 3. Si Desde es mayor a Hasta, CORTAMOS con return
+		    if (fechaDesde > fechaHasta) {
+		      abrirModal("Error en fechas", "La fecha 'Desde' no puede ser posterior a la fecha 'Hasta'.");
+		      return; // 👈 OTRO return
+		    }
+			// 👉 NUEVA VALIDACIÓN: Si ya consultó y no hay pagos
+			    if (datos.length === 0) {
+			      abrirModal("Información", "No existen pagos registrados en el período seleccionado para generar el documento.");
+			      return;
+			    }
+
+		    // 4. Solo si pasó todas las validaciones abre el PDF
+		    window.open(
+		      `http://localhost:8080/club/informe?action=pdf&desde=${fechaDesde}&hasta=${fechaHasta}`,
+		      "_blank"
+		    );
+		  };
 	  
 	  
   const cargarInforme = () => {
+	if (!fechaDesde || !fechaHasta) {
+		abrirModal("Atención", "Por favor seleccione fecha desde y fecha hasta.");
+	     return;
+	   }
+	   if (fechaDesde > hoy || fechaHasta > hoy) {
+	         abrirModal("Error en fechas", "Las fechas seleccionadas no pueden ser posteriores al día de hoy.");
+	         return;
+	       }
+	 if (fechaDesde > fechaHasta) {
+	     abrirModal("Error en fechas", "La fecha 'Desde' no puede ser posterior a la fecha 'Hasta'.");
+	         return;
+	       }
     fetch(
 		`http://localhost:8080/club/informe?action=recaudacion&desde=${fechaDesde}&hasta=${fechaHasta}`
     )
-      .then((r) => r.json())
-      .then((data) => setDatos(data))
-      .catch(console.error);
+	.then((r) => r.json())
+	      .then((data) => {
+	        setDatos(data);
+	        if (data.length === 0) {
+	          abrirModal("Información", "No se encontraron pagos registrados en el período seleccionado.");
+	        }
+	      })
+	      .catch((err) => {
+	        console.error(err);
+	        abrirModal("Error", "Ocurrió un error al conectar con el servidor.");
+	      });
   };
 
-  useEffect(() => {
+ /* useEffect(() => {
     cargarInforme();
-  }, []);
+  }, []);*/
   const datosMes = useMemo(() => {
       const agrupado: Record<string, number> = {};
       datos.forEach(d => {
@@ -88,6 +143,8 @@ export default function InformeRecaudacion() {
 
 			<input
 			  type="date"
+			  max={hoy}
+
 			  value={fechaDesde}
 			  onChange={(e) => setFechaDesde(e.target.value)}
 			/>
@@ -98,6 +155,8 @@ export default function InformeRecaudacion() {
 
 			<input
 			  type="date"
+			  max={hoy}
+
 			  value={fechaHasta}
 			  onChange={(e) => setFechaHasta(e.target.value)}
 			/>
@@ -187,6 +246,16 @@ export default function InformeRecaudacion() {
         </div>
 
       </div>
-    </div>
-  );
+	  {modalVisible && (
+	          <Modal
+	            titulo={modalTitulo}
+	            mensaje={modalMensaje}
+	            textoConfirmar="Aceptar"
+	            onConfirmar={cerrarModal}
+	            onCancelar={cerrarModal}
+	          />
+	        )}
+	      </div>
+	    );
+	  
 }

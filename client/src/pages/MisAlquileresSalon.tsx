@@ -149,15 +149,23 @@ const MisAlquileresSalon: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="card-footer">
-                    <button 
-                      className="btn-cancelar-reserva" 
-                      onClick={() => handleEliminar(item)}
-                    >
-                      <i className="fa-solid fa-trash"></i>
-                      Cancelar Reserva
-                    </button>
-                  </div>
+				  <div className="card-footer" style={{ display: 'flex', gap: '10px' }}>
+				                      <button 
+				                        className="btn-descargar" 
+				                        onClick={() => window.open(`${API_URL}/alquiler_salon?action=descargar_constancia&id_salon=${item.idSalon}&id_usuario=${item.idUsuario}&fecha=${item.fecha}&hora_desde=${item.horaDesde}&hora_hasta=${item.horaHasta}`)}
+				                        style={{ background: '#20321E', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '5px', cursor: 'pointer' }}
+				                      >
+				                        <i className="fa-solid fa-file-pdf"></i> Descargar Constancia
+				                      </button>
+
+				                      <button 
+				                        className="btn-cancelar-reserva" 
+				                        onClick={() => handleEliminar(item)}
+				                      >
+				                        <i className="fa-solid fa-trash"></i>
+				                        Cancelar Reserva
+				                      </button>
+				                    </div>
 
                 </div>
               </div>
@@ -168,11 +176,11 @@ const MisAlquileresSalon: React.FC = () => {
         {showModalEliminar && (
           <div className="modal-backdrop">
             <div className="modal">
-              <h3>¿Cancelar reserva?</h3>
+              <h3>¿Desea cancelar esta reserva?</h3>
               <p>Esta acción es permanente.</p>
               <div className="modal-buttons">
                 <button onClick={confirmarEliminar} className="btn-confirm">
-                  Sí, Eliminar
+                  Sí, Cancelar
                 </button>
                 <button onClick={() => setShowModalEliminar(false)} className="btn-cancel">
                   Volver

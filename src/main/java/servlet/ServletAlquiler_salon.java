@@ -33,7 +33,7 @@ import logic.LogicPreReserva;
 import util.AppConfig;
 
 
-@WebServlet({"/alquiler_salon"})
+@WebServlet({"/alquiler_salon", "/club/alquiler_salon"})
 public class ServletAlquiler_salon extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private LogicSalon logicSalon;
@@ -243,18 +243,21 @@ public class ServletAlquiler_salon extends HttpServlet {
                             + "</div>"
                             + "</div>";
                     try {
-                    MailSender.enviarCorreo(emailDestino, "Acción requerida: Confirmá tu reserva", cuerpo);
-                    resp.getWriter().write("{\"status\":\"mail_enviado\"}");
-                    resp.setContentType("application/json;charset=UTF-8");
-                    resp.getWriter().write("{\"status\":\"mail_enviado\"}");
-                
-                } catch (Exception mailEx) {
-                    System.err.println("❌ [ERROR MAIL] Falló el envío del correo: " + mailEx.getMessage());
-                    mailEx.printStackTrace();
-                    resp.setStatus(500);
-                    resp.getWriter().write("{\"error\":\"Reserva creada, pero falló el envío del mail. Contacte a soporte.\"}");
-                }
-               break;
+                        MailSender.enviarCorreo(emailDestino, "Acción requerida: Confirmá tu reserva", cuerpo);
+                        
+                        // 1. PRIMERO el ContentType
+                        resp.setContentType("application/json;charset=UTF-8");
+                        
+                        // 2. DESPUÉS la respuesta (una sola vez)
+                        resp.getWriter().write("{\"status\":\"mail_enviado\"}");
+                    
+                    } catch (Exception mailEx) {
+                        System.err.println("❌ [ERROR MAIL] Falló el envío del correo: " + mailEx.getMessage());
+                        mailEx.printStackTrace();
+                        resp.setStatus(500);
+                        resp.getWriter().write("{\"error\":\"Reserva creada, pero falló el envío del mail. Contacte a soporte.\"}");
+                    }
+                    break;
                 }
                 case "confirmar": {
                     String token = req.getParameter("token");

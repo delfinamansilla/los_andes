@@ -105,7 +105,7 @@ const AlquilarSalon: React.FC = () => {
 
 	  if (res.ok && data.status === "mail_enviado") {
 	          setModalType('success');
-	          setModalMessage('Te enviamos un mail para confirmar la reserva...');
+	          setModalMessage('Te enviamos un mail para confirmar la reserva. Revisá tu bandeja!');
 	      } else {
 	          setModalType('error');
 	          setModalMessage(data.error || 'El horario ya no está disponible'); 

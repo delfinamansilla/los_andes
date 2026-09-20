@@ -47,6 +47,9 @@ const AgregarProfesor: React.FC = () => {
         setNombreCompleto('');
         setTelefono('');
         setMail('');
+		setTimeout(() => {
+		         navigate('/listado-profesor');
+		       }, 1500);
       } else {
         setError(data.message || 'Error inesperado al agregar el profesor.');
       }
