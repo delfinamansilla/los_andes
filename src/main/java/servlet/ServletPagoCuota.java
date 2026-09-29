@@ -40,10 +40,8 @@ public class ServletPagoCuota extends HttpServlet {
     private LogicCuota logicCuota;
     private LogicMonto_cuota logicMonto;
     private Gson gson;
-    
-    // IMPORTANTE: Para pruebas locales debes usar tu TEST Access Token de Mercado Pago
-    // Puedes obtenerlo en: https://www.mercadopago.com/developers/panel/app
-    private static final String MP_ACCESS_TOKEN = "APP_USR-5311809515451900-092818-b308fabbc037d16623cfccd12c0850a2-3721490884"; 
+  
+    private static final String MP_ACCESS_TOKEN = AppConfig.getMpAccessToken();
 
     public ServletPagoCuota() {
         super();
