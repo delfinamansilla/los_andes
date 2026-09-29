@@ -120,53 +120,7 @@ const InicioSocio: React.FC = () => {
           </div>
         </div>
 
-        <div className="seccion-card">
-          <div className="seccion-titulo">
-            <Award className="icono-titulo" size={28} />
-            <h3>Beneficios de tu membresía</h3>
-          </div>
-          <div className="grid-beneficios">
-            <div className="beneficio-item">
-              <div className="beneficio-icono beneficio-azul">
-                <Dumbbell size={20} />
-              </div>
-              <div>
-                <p className="beneficio-titulo">Acceso ilimitado al gimnasio</p>
-                <p className="beneficio-desc">Equipamiento completo y profesores capacitados</p>
-              </div>
-            </div>
-            <div className="beneficio-item">
-              <div className="beneficio-icono beneficio-verde">
-                <Users size={20} />
-              </div>
-              <div>
-                <p className="beneficio-titulo">Clases grupales incluidas</p>
-                <p className="beneficio-desc">Spinning, yoga, funcional y más</p>
-              </div>
-            </div>
-            <div className="beneficio-item">
-              <div className="beneficio-icono beneficio-morado">
-                <Shield size={20} />
-              </div>
-              <div>
-                <p className="beneficio-titulo">Seguro deportivo</p>
-                <p className="beneficio-desc">Cobertura en todas las actividades del club</p>
-              </div>
-            </div>
-            <div className="beneficio-item">
-              <div className="beneficio-icono beneficio-naranja">
-                <Award size={20} />
-              </div>
-              <div>
-                <p className="beneficio-titulo">Descuentos especiales</p>
-                <p className="beneficio-desc">20% OFF en alquiler de canchas y buffet</p>
-              </div>
-            </div>
-          </div>
-          <div className="invitados-nota">
-            <p><strong>Invitados:</strong> Cada socio puede traer hasta 2 invitados por mes (abonan tarifa reducida)</p>
-          </div>
-        </div>
+        
 
         <div className="seccion-card">
           <div className="seccion-titulo">

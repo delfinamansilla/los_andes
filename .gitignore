@@ -12,3 +12,8 @@
 
 # Otros archivos generados por Eclipse
 .metadata
+
+.env
+config.properties
+*.properties.local
+node_modules/

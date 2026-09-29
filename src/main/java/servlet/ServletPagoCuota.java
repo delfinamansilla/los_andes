@@ -40,10 +40,8 @@ public class ServletPagoCuota extends HttpServlet {
     private LogicCuota logicCuota;
     private LogicMonto_cuota logicMonto;
     private Gson gson;
-    
-    String MP_ACCESS_TOKEN = "APP_USR-823938148084228-112018-cd6d4b64190341ff5f31cc38c0b4312d-660480912";
-    
-    
+  
+    private static final String MP_ACCESS_TOKEN = AppConfig.getMpAccessToken();
 
     public ServletPagoCuota() {
         super();
@@ -70,9 +68,6 @@ public class ServletPagoCuota extends HttpServlet {
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         
-        System.out.println("ACTION RECIBIDA: " + request.getParameter("action"));
-        System.out.println("ID USUARIO: " + request.getParameter("id_usuario"));
-        System.out.println("ID CUOTA: " + request.getParameter("id_cuota"));
         String action = request.getParameter("action");
         response.setContentType("application/json;charset=UTF-8");
         
@@ -121,20 +116,13 @@ public class ServletPagoCuota extends HttpServlet {
     
     private String formatearPeriodo(int nro) {
         if (nro == 0) return "N/A";
-        
         int anio = nro / 100;
         int mes = nro % 100;
-        
         String[] meses = {"", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
                           "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
         
-        if (mes >= 1 && mes < meses.length) {
-            return meses[mes] + " " + anio;
-        } else {
-            return "Mes inválido " + anio;
-        }
+        return (mes >= 1 && mes < meses.length) ? meses[mes] + " " + anio : "Mes inválido " + anio;
     }
-    
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -153,10 +141,9 @@ public class ServletPagoCuota extends HttpServlet {
                 Cuota cuotaObj = logicCuota.getById(idCuota);
                 int nroCuota = cuotaObj.getNro_cuota();
                 int idUsuario = Integer.parseInt(request.getParameter("id_usuario"));
-               
+                double monto = Double.parseDouble(request.getParameter("monto"));
 
                 String periodoFormateado = formatearPeriodo(nroCuota);
-                double monto = Double.parseDouble(request.getParameter("monto"));
                 JsonObject preferenceRequest = new JsonObject();
                 
                 JsonObject item = new JsonObject();
@@ -169,9 +156,10 @@ public class ServletPagoCuota extends HttpServlet {
                 items.add(item);
                 preferenceRequest.add("items", items);
                 
-                JsonObject payer = new JsonObject();
-                payer.addProperty("email", "test_user_123@test.com");
-                preferenceRequest.add("payer", payer);
+                //JsonObject payer = new JsonObject();
+                //payer.addProperty("email", "test_user_comprador@testuser.com");
+                //preferenceRequest.add("payer", payer);
+                
                 String frontendUrl = AppConfig.getFrontendUrl();
                 JsonObject backUrls = new JsonObject();
                 backUrls.addProperty("success", frontendUrl + "/mis-cuotas");
@@ -180,12 +168,10 @@ public class ServletPagoCuota extends HttpServlet {
                 preferenceRequest.add("back_urls", backUrls);
                 
                 preferenceRequest.addProperty("auto_return", "approved");
-                
                 preferenceRequest.addProperty("external_reference", "cuota_" + idCuota + "_usuario_" + idUsuario);
                 
-                String jsonPayload = gson.toJson(preferenceRequest); // aca serializamos convirtiendo el objeto java en un texto plano
-                System.out.println("JSON ENVIADO A MP:");
-                System.out.println(jsonPayload);
+                String jsonPayload = gson.toJson(preferenceRequest);
+                
                 URL url = new URL("https://api.mercadopago.com/checkout/preferences");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -213,32 +199,17 @@ public class ServletPagoCuota extends HttpServlet {
                 }
                 in.close();
                 
-                
                 if (responseCode >= 200 && responseCode < 300) {
-
                     JsonObject mpResponse = JsonParser.parseString(responseStr.toString()).getAsJsonObject();
                     
-                    String preferenceId = mpResponse.get("id").getAsString();
-                    String initPoint = mpResponse.get("init_point").getAsString();
-                    
-                    String qrData = initPoint;
+                    // USAR DIRECTAMENTE INIT_POINT (Producción Real)
+                    String urlRedireccion = mpResponse.get("init_point").getAsString();
                     
                     JsonObject jsonResponse = new JsonObject();
-                    jsonResponse.addProperty("qr_data", qrData);
-                    jsonResponse.addProperty("payment_id", preferenceId);
-                    jsonResponse.addProperty("init_point", initPoint);
+                    jsonResponse.addProperty("init_point", urlRedireccion);
+                    jsonResponse.addProperty("payment_id", mpResponse.get("id").getAsString());
                    
                     response.getWriter().write(gson.toJson(jsonResponse));
-                    
-                } else {
-                	System.err.println("=========== ERROR MERCADO PAGO ===========");
-                    System.err.println("Código HTTP: " + responseCode);
-                    System.err.println("Respuesta:");
-                    System.err.println(responseStr.toString());
-                    System.err.println("=========================================");
-
-                    response.setStatus(500);
-                    response.getWriter().write("{\"error\":\"Error de MercadoPago: " + responseStr.toString() + "\"}");
                 }
                 
             } else if ("pagar".equalsIgnoreCase(action)) {
@@ -254,10 +225,8 @@ public class ServletPagoCuota extends HttpServlet {
                 
                 logicPago.add(pago);
                 try {
-                    
                     Usuario u = logicUsuario.getById(idUsuario);
                     Cuota c = logicCuota.getById(idCuota);
-                    
                     Monto_cuota mc = logicMonto.getByCuota(idCuota); 
  
                     double precioFinal = (mc != null) ? mc.getMonto() : 0;
@@ -285,23 +254,15 @@ public class ServletPagoCuota extends HttpServlet {
                             pdfBytes, 
                             "Recibo_Cuota_" + c.getNro_cuota() + ".pdf"
                         );
-                        System.out.println("Comprobante enviado a: " + u.getMail());
                     }
-
                 } catch (Exception ex) {
                     ex.printStackTrace();
-
                 }
                 
                 response.getWriter().write("{\"mensaje\":\"Pago registrado y comprobante enviado.\"}");
-
-            } else {
-                response.getWriter().write("{\"error\":\"Acción POST no reconocida\"}");
             }
-            
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("ERROR GENERAL: " + e.getMessage());
             response.setStatus(500);
             response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
         }

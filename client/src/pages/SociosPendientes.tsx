@@ -14,6 +14,8 @@ interface Usuario{
 const SociosPendientes = () =>{
 
     const [socios,setSocios]=useState<Usuario[]>([]);
+	const [paginaActual, setPaginaActual] = useState(1);
+	    const PAGE_SIZE = 10;
 
  
 		const cargarSocios=()=>{
@@ -55,68 +57,118 @@ const SociosPendientes = () =>{
         });
 
     }
+	
+	const totalPaginas = Math.ceil(
+	        socios.length / PAGE_SIZE
+	    );
 
-	return(
+    const indiceInicio = (paginaActual - 1) * PAGE_SIZE;
 
-	    <div className="socios-pendientes-page">
+    const indiceFin = indiceInicio + PAGE_SIZE;
 
-	        <NavbarAdmin/>
+    const sociosVisibles = socios.slice(
+        indiceInicio,
+        indiceFin
+    );
 
-	        <div className="socios-pendientes-content">
+    const paginaAnterior = () => {
+        if (paginaActual > 1) {
+            setPaginaActual(paginaActual - 1);
+        }
+    };
 
-	            <div className="socios-pendientes-container">
+    const paginaSiguiente = () => {
+        if (paginaActual < totalPaginas) {
+            setPaginaActual(paginaActual + 1);
+        }
+    };
 
-	                <h2>Socios pendientes de aprobación</h2>
+    const irAPagina = (pagina: number) => {
+        setPaginaActual(pagina);
+    };
 
-	                <table className="socios-table">
+	return (
 
-                <thead>
+	        <div className="socios-pendientes-page">
+	            <NavbarAdmin />
+	            <div className="socios-pendientes-content">
+	                <div className="socios-pendientes-container">
+	                    <h2>Socios pendientes de aprobación</h2>
+	                    {socios.length === 0 ? (
+	                        <p>No hay socios pendientes de aprobación.</p>
+	                    ) : (
+	                        <>
+	                            <table className="socios-table">
+	                                <thead>
+	                                    <tr>
+	                                        <th>Nombre</th>
+	                                        <th>DNI</th>
+	                                        <th>Mail</th>
+	                                        <th>Teléfono</th>
+	                                        <th></th>
+	                                    </tr>
+	                                </thead>
+	                                <tbody>
+	                                    {sociosVisibles.map(s => (
+	                                        <tr key={s.id}>
+	                                            <td>{s.nombreCompleto}</td>
+	                                            <td>{s.dni}</td>
+	                                            <td>{s.mail}</td>
+	                                            <td>{s.telefono}</td>
+	                                            <td className="acciones-socio">
+	                                                <button
+	                                                    className="btn-aprobar"
+	                                                    onClick={() => aprobar(s.id)}
+	                                                >
+	                                                    Aprobar
+	                                                </button>
+	                                            </td>
+	                                        </tr>
+	                                    ))}
+	                                </tbody>
+	                            </table>
 
-                    <tr>
+	                            {totalPaginas > 1 && (
+	                                <div className="paginacion">
+	                                    <button
+	                                        className="btn-paginacion"
+	                                        onClick={paginaAnterior}
+	                                        disabled={paginaActual === 1}
+	                                    >
+	                                        ‹
+	                                    </button>
+	                                    {Array.from(
+	                                        { length: totalPaginas },
+	                                        (_, index) => index + 1
+	                                    ).map(pagina => (
+	                                        <button
+	                                            key={pagina}
+	                                            className={
+	                                                paginaActual === pagina
+	                                                    ? "btn-paginacion activo"
+	                                                    : "btn-paginacion"
+	                                            }
+	                                            onClick={() => irAPagina(pagina)}
+	                                        >
+	                                            {pagina}
+	                                        </button>
+	                                    ))}
 
-                        <th>Nombre</th>
-                        <th>DNI</th>
-                        <th>Mail</th>
-                        <th>Teléfono</th>
-                        <th></th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    {socios.map(s=>(
-                        <tr key={s.id}>
-
-                            <td>{s.nombreCompleto}</td>
-                            <td>{s.dni}</td>
-                            <td>{s.mail}</td>
-                            <td>{s.telefono}</td>
-
-							<td className="acciones-socio">
-
-							    <button
-							        className="btn-aprobar"
-							        onClick={()=>aprobar(s.id)}
-							    >
-							        Aprobar
-							    </button>
-
-							</td>
-
-                        </tr>
-                    ))}
-
-                </tbody>
-
-				</table>
-
-				            </div>
-
-				        </div>
-
-				    </div>
-				);
-				};
+	                                    <button
+	                                        className="btn-paginacion"
+	                                        onClick={paginaSiguiente}
+	                                        disabled={paginaActual === totalPaginas}
+	                                    >
+	                                        ›
+	                                    </button>
+	                                </div>
+	                            )}
+	                        </>
+	                    )}
+	                </div>
+	            </div>
+	        </div>
+	    );
+	};
+			
 export default SociosPendientes;

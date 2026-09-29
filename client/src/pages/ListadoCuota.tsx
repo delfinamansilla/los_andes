@@ -23,6 +23,8 @@ const ListadoCuotas: React.FC = () => {
   const [montos, setMontos] = useState<MontoCuota[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [paginaActual, setPaginaActual] = useState(1);
+  const PAGE_SIZE = 6;
 
   useEffect(() => {
     cargarDatos();
@@ -55,7 +57,37 @@ const ListadoCuotas: React.FC = () => {
     const encontrado = montos.find(m => m.id_cuota === idCuota);
     return encontrado ? encontrado.monto : 0;
   };
-
+  
+  const totalPaginas = Math.ceil(
+	  cuotas.length / PAGE_SIZE
+	);
+	
+	
+  const indiceInicio = (paginaActual - 1) * PAGE_SIZE;
+	
+  const indiceFin = indiceInicio + PAGE_SIZE;
+	
+	
+  const cuotasVisibles = cuotas.slice(
+      indiceInicio,
+      indiceFin
+  );
+	
+  const paginaAnterior = () => {
+	if (paginaActual > 1) {
+	  setPaginaActual(paginaActual - 1);
+  }
+  };
+	
+  const paginaSiguiente = () => {
+	if (paginaActual < totalPaginas) {
+	  setPaginaActual(paginaActual + 1);
+	}
+  };
+	
+  const irAPagina = (pagina: number) => {
+	setPaginaActual(pagina);
+  };
 
   if (loading) return <div className="cuotas-page-container"><p style={{color:'white', marginTop:50}}>Cargando listado...</p></div>;
 
@@ -76,7 +108,7 @@ const ListadoCuotas: React.FC = () => {
       <NavbarAdmin />
 
       <div className="header-bar">
-        <h2>Listado General de Cuotas</h2>
+        <h2>Listado general de cuotas</h2>
         <div className="user-info">
            
         </div>
@@ -86,6 +118,7 @@ const ListadoCuotas: React.FC = () => {
         {cuotas.length === 0 ? (
           <p style={{ color: 'white', textAlign: 'center' }}>No hay cuotas registradas en el sistema.</p>
         ) : (
+		<>
           <table className="styled-table">
             <thead>
               <tr>
@@ -96,7 +129,7 @@ const ListadoCuotas: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {cuotas.map((c) => {
+              {cuotasVisibles.map((c) => {
                 const monto = getMonto(c.id);
                 
                 return (
@@ -115,9 +148,46 @@ const ListadoCuotas: React.FC = () => {
               })}
             </tbody>
           </table>
-        )}
-      </div>
+		  {totalPaginas > 1 && (
+            <div className="paginacion">
+              <button
+                className="btn-paginacion"
+                onClick={paginaAnterior}
+                disabled={paginaActual === 1}
+              >
+                ‹
+              </button>
 
+              {Array.from(
+                { length: totalPaginas },
+                (_, index) => index + 1
+              ).map(pagina => (
+
+                <button
+                  key={pagina}
+                  className={
+                    paginaActual === pagina
+                      ? "btn-paginacion activo"
+                      : "btn-paginacion"
+                  }
+                  onClick={() => irAPagina(pagina)}
+                >
+                  {pagina}
+                </button>
+              ))}
+			  
+              <button
+                className="btn-paginacion"
+                onClick={paginaSiguiente}
+                disabled={paginaActual === totalPaginas}
+              >
+                ›
+              </button>
+            </div>
+          )}
+        </>
+      )}
+      </div>
       <div style={{ display: 'flex', gap: '20px' }}>
         <button onClick={() => navigate('/agregar-cuota')} className="btn-pay" style={{marginTop: '40px'}}>
              Crear Nueva Cuota
@@ -127,7 +197,6 @@ const ListadoCuotas: React.FC = () => {
             Volver al Inicio
         </button>
       </div>
-
     </div>
   );
 };

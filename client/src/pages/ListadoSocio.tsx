@@ -19,8 +19,9 @@ const ListadoSocios: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [busquedaDni, setBusquedaDni] = useState<string>('');
-  const [activeMenu, setActiveMenu] = useState<number | null>(null);
+  const [paginaActual, setPaginaActual] = useState(1);
 
+  const PAGE_SIZE = 5;	
 
   const navigate = useNavigate();
 
@@ -106,6 +107,41 @@ const ListadoSocios: React.FC = () => {
   const sociosFiltrados = socios.filter((s) =>
   	    s.dni.toLowerCase().includes(busquedaDni.toLowerCase())
   	  );
+	  
+  const totalPaginas = Math.ceil(
+      sociosFiltrados.length / PAGE_SIZE
+    );
+
+  const indiceInicio = (paginaActual - 1) * PAGE_SIZE;
+
+  const indiceFin = indiceInicio + PAGE_SIZE;
+
+  const sociosVisibles = sociosFiltrados.slice(
+      indiceInicio,
+      indiceFin
+    );
+
+  const handleBuscar = (valor: string) => {
+      setBusquedaDni(valor);
+      setPaginaActual(1);
+    };
+
+  const irAPagina = (pagina: number) => {
+      setPaginaActual(pagina);
+    };
+
+  const paginaAnterior = () => {
+      if (paginaActual > 1) {
+        setPaginaActual(paginaActual - 1);
+      }
+    };
+
+  const paginaSiguiente = () => {
+	  if (paginaActual < totalPaginas) {
+	    setPaginaActual(paginaActual + 1);
+	  }
+	};
+
 
   return (
     <div className="admin-page">
@@ -119,7 +155,7 @@ const ListadoSocios: React.FC = () => {
 		      type="text"
 		      placeholder="Buscar por DNI..."
 		      value={busquedaDni}
-		      onChange={(e) => setBusquedaDni(e.target.value)}
+		      onChange={(e) => handleBuscar(e.target.value)}
 		      className="input-buscar"
 		    />
 		  </div>
@@ -128,7 +164,10 @@ const ListadoSocios: React.FC = () => {
 
           {!loading && !error && socios.length === 0 ? (
             <p>No se encontraron socios registrados.</p>
-          ) : (
+			) : sociosFiltrados.length === 0 ? (
+	          <p>No se encontraron socios con ese DNI.</p>
+	        ) : (
+			<>
             <table className="data-table">
               <thead>
                 <tr>
@@ -140,7 +179,7 @@ const ListadoSocios: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {sociosFiltrados.map((socio) => (
+                {sociosVisibles.map((socio) => (
                   <tr key={socio.id}>
                     <td>{socio.dni}</td>
                     <td>{socio.nombre_completo}</td>
@@ -173,6 +212,71 @@ const ListadoSocios: React.FC = () => {
 	              ))}
               </tbody>
             </table>
+			{totalPaginas > 1 && (
+
+            <div className="paginacion">
+
+              <button
+
+                className="btn-paginacion"
+
+                onClick={paginaAnterior}
+
+                disabled={paginaActual === 1}
+
+              >
+
+                ‹
+
+              </button>
+
+
+              {Array.from(
+                { length: totalPaginas },
+                (_, index) => index + 1
+              ).map((pagina) => (
+
+                <button
+
+                  key={pagina}
+
+                  className={
+                    paginaActual === pagina
+                      ? "btn-paginacion activo"
+                      : "btn-paginacion"
+                  }
+
+                  onClick={() => irAPagina(pagina)}
+
+                >
+
+                  {pagina}
+
+                </button>
+
+              ))}
+
+
+              <button
+
+                className="btn-paginacion"
+
+                onClick={paginaSiguiente}
+
+                disabled={paginaActual === totalPaginas}
+
+              >
+
+                ›
+
+              </button>
+
+            </div>
+
+          )}
+
+        </>
+
           )}
         </div>
       </div>

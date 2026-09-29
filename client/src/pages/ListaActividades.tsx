@@ -64,50 +64,69 @@ const ListaActividades: React.FC = () => {
   };
 
   return (
-      <div>
-        <NavbarAdmin />
-        <div className="page-container">
-          <h2>Lista de Actividades</h2>
+    <div>
+      <NavbarAdmin />
 
-          {loading && <p>Cargando actividades...</p>}
-          {error && <p className="error-box">{error}</p>}
+      <div className="page-container">
+	  <div className="header-actividades">
+	    <div>
+	      <h2>Actividades</h2>
+	      <p className="subtitulo">
+	        Administrá las actividades deportivas del club.
+	      </p>
+	    </div>
+	  </div>
 
-          {!loading && !error && (
-            <>
-              {actividades.length > 0 ? (
-                <div className="actividad-lista">
-                  <button className="actividad-btn agregar-btn" onClick={handleAgregar}>
-                    <strong><i className="fa-solid fa-plus"></i> Agregar actividad</strong>
-                  </button>
+	  {loading && <p className="estado">Cargando actividades...</p>}
 
-                  {actividades.map((act) => (
-                    <button
-                      key={act.id}
-                      className="actividad-btn"
-                      onClick={() => handleVerDetalle(act)}
-                    >
-                      <strong>{act.nombre}</strong>
-                      <p style={{ fontSize: '0.9rem', color: '#555' }}>
-                        {act.descripcion || 'Sin descripción'}
-                      </p>
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <>
-                  <div className="actividad-lista">
-                    <button className="actividad-btn agregar-btn" onClick={handleAgregar}>
-                      <strong><i className="fa-solid fa-plus"></i> Agregar actividad</strong>
-                    </button>
-                  </div>
-                  <p>No hay actividades registradas.</p>
-                </>
-              )}
-            </>
-          )}
-        </div>
+	  {error && <p className="error-box">{error}</p>}
+
+	  {!loading && !error && (
+	    <>
+	      {actividades.length > 0 ? (
+	        <>
+	          <div className="actividad-lista">
+	            {actividades.map((act) => (
+	              <button
+	                key={act.id}
+	                className="actividad-row"
+	                onClick={() => handleVerDetalle(act)}
+	              >
+	                <div className="actividad-contenido">
+	                  <h3>{act.nombre}</h3>
+	                  <p>{act.descripcion || "Sin descripción"}</p>
+	                </div>
+
+	                <div className="actividad-accion">
+	                  <span>Ver detalle</span>
+	                  <i className="fa-solid fa-chevron-right"></i>
+	                </div>
+	              </button>
+	            ))}
+	          </div>
+
+	          <div className="nueva-actividad-wrapper">
+	            <button className="nueva-actividad-btn" onClick={handleAgregar}>
+	              <i className="fa-solid fa-plus"></i>
+	              Nueva actividad
+	            </button>
+	          </div>
+	        </>
+	      ) : (
+	        <div className="sin-actividades">
+	          <h3>No hay actividades registradas</h3>
+	          <p>Comenzá creando la primera actividad del club.</p>
+	          <button className="nueva-actividad-btn" onClick={handleAgregar}>
+	            <i className="fa-solid fa-plus"></i>
+	            Nueva actividad
+	          </button>
+	        </div>
+	      )}
+	    </>
+	  )}
       </div>
-    );
+    </div>
+  );
 };
 
 export default ListaActividades;
