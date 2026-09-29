@@ -3,6 +3,7 @@ import NavbarAdmin from "./NavbarAdmin";
 import Footer from "./Footer";
 import "../styles/InformeOcupacion.css";
 import { API_URL } from "../config";
+import Modal from "./Modal"; 
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell, Legend 
@@ -19,29 +20,80 @@ interface InformeOcupacionData {
 export default function InformeOcupacion() {
   const hoy = new Date().toISOString().split("T")[0];
 
-  const [fechaDesde, setFechaDesde] = useState("2025-01-01");
-  const [fechaHasta, setFechaHasta] = useState(hoy);
+
   const [datos, setDatos] = useState<InformeOcupacionData[]>([]);
   const [loading, setLoading] = useState(false);
-
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalTitulo, setModalTitulo] = useState("");
+  const [modalMensaje, setModalMensaje] = useState("");
+  const abrirModal = (titulo: string, mensaje: string) => {
+    setModalTitulo(titulo);
+    setModalMensaje(mensaje);
+    setModalVisible(true);
+  };
+  // 1. Inicializa los estados vacíos
+  const [fechaDesde, setFechaDesde] = useState("");
+  const [fechaHasta, setFechaHasta] = useState("");
+  const cerrarModal = () => setModalVisible(false);
+  
   const cargarInforme = () => {
+    // Validación 1: Fechas seleccionadas
+    if (!fechaDesde || !fechaHasta) {
+      abrirModal("Atención", "Por favor seleccione fecha desde y fecha hasta.");
+      return;
+    }
+    // Validación 2: Fechas futuras
+    if (fechaDesde > hoy || fechaHasta > hoy) {
+      abrirModal("Error en fechas", "Las fechas no pueden ser posteriores al día de hoy.");
+      return;
+    }
+    // Validación 3: Lógica de rango
+    if (fechaDesde > fechaHasta) {
+      abrirModal("Error en fechas", "La fecha 'Desde' no puede ser posterior a la 'Hasta'.");
+      return;
+    }
+
     setLoading(true);
-	fetch(
-	  `${API_URL}/informe?action=ocupacion&desde=${fechaDesde}&hasta=${fechaHasta}`
-	)      .then((r) => r.json())
+    fetch(`${API_URL}/informe?action=ocupacion&desde=${fechaDesde}&hasta=${fechaHasta}`)
+      .then((r) => r.json())
       .then((data) => {
         setDatos(data);
         setLoading(false);
+        // Validar si la respuesta viene vacía
+        if (data.length === 0) {
+          abrirModal("Información", "No se encontraron alquileres registrados en el período seleccionado.");
+        }
       })
       .catch((err) => {
         console.error(err);
         setLoading(false);
+        abrirModal("Error", "Ocurrió un error al conectar con el servidor.");
       });
   };
+  const descargarPDF = () => {
+    if (!fechaDesde || !fechaHasta) {
+      abrirModal("Atención", "Por favor seleccione un rango de fechas.");
+      return;
+    }
+    if (fechaDesde > hoy || fechaHasta > hoy) {
+      abrirModal("Error en fechas", "Las fechas no pueden ser posteriores al día de hoy.");
+      return;
+    }
+    if (fechaDesde > fechaHasta) {
+      abrirModal("Error en fechas", "La fecha 'Desde' no puede ser posterior a la 'Hasta'.");
+      return;
+    }
+    // Nueva validación: Si no hay datos cargados, no deja descargar
+	if (datos.length === 0) {
+	      abrirModal(
+	        "Información", 
+	        "No existen alquileres registrados en el período seleccionado para generar el documento."
+	      );
+	      return;
+	    }
 
-  useEffect(() => {
-    cargarInforme();
-  }, []);
+    window.open(`${API_URL}/informe?action=pdfOcupacion&desde=${fechaDesde}&hasta=${fechaHasta}`, "_blank");
+  };
   const datosPorRecurso = useMemo(() => {
       const agrupado: Record<string, number> = {};
       datos.forEach(d => {
@@ -86,6 +138,7 @@ export default function InformeOcupacion() {
 
 		    <input
 		      type="date"
+			  max={hoy}
 		      value={fechaDesde}
 		      onChange={(e) => setFechaDesde(e.target.value)}
 		    />
@@ -96,6 +149,7 @@ export default function InformeOcupacion() {
 
 		    <input
 		      type="date"
+			  max={hoy}
 		      value={fechaHasta}
 		      onChange={(e) => setFechaHasta(e.target.value)}
 		    />
@@ -106,14 +160,7 @@ export default function InformeOcupacion() {
 		      Generar Informe
 		    </button>
 
-		    <button
-		      onClick={() => {
-		        window.open(
-		          `${API_URL}/informe?action=pdfOcupacion&desde=${fechaDesde}&hasta=${fechaHasta}`,
-		          "_blank"
-		        );
-		      }}
-		    >
+		    <button onClick={descargarPDF}>
 		      Descargar informe PDF
 		    </button>
 		  </div>
@@ -195,6 +242,15 @@ export default function InformeOcupacion() {
         </div>
       </div>
       <Footer />
+	  {modalVisible && (
+	    <Modal
+	      titulo={modalTitulo}
+	      mensaje={modalMensaje}
+	      textoConfirmar="Aceptar"
+	      onConfirmar={cerrarModal}
+	      onCancelar={cerrarModal}
+	    />
+	  )}
     </div>
   );
 }
