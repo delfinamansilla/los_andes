@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import NavbarSocio from './NavbarSocio';
 import Footer from './Footer';
 import '../styles/MisCuotas.css';
-import { QRCodeSVG } from 'qrcode.react';
 import { API_URL } from "../config";
 
 interface Cuota {
@@ -37,9 +36,7 @@ const MisCuotas: React.FC = () => {
   const [cuotasProcesadas, setCuotasProcesadas] = useState<CuotaProcesada[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [qrData, setQrData] = useState<string | null>(null);
-  const [paymentId, setPaymentId] = useState<string | null>(null);
-  const [isPagarLoading, setIsPagarLoading] = useState(false);
+  const [pagandoCuotaId, setPagandoCuotaId] = useState<number | null>(null);
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [filtro, setFiltro] = useState("todas");
@@ -49,11 +46,11 @@ const MisCuotas: React.FC = () => {
   const navigate = useNavigate();
   
   const cargarDatos = useCallback(() => {
-      if (!usuario || !usuario.id) {
-        setError('No se pudo identificar al usuario.');
-        setLoading(false);
-        return;
-      }
+    if (!usuario || !usuario.id) {
+      setError('No se pudo identificar al usuario.');
+      setLoading(false);
+      return;
+    }
 
     setLoading(true);
 
@@ -74,7 +71,7 @@ const MisCuotas: React.FC = () => {
           monto: montoEncontrado ? montoEncontrado.monto : 0,
           estaPagada: !!pagoEncontrado,
           fecha_pago: pagoEncontrado ? pagoEncontrado.fecha_pago : null,
-		  nro_transaccion: pagoEncontrado ? pagoEncontrado.nro_transaccion : null
+          nro_transaccion: pagoEncontrado ? pagoEncontrado.nro_transaccion : null
         };
       });
 
@@ -91,63 +88,56 @@ const MisCuotas: React.FC = () => {
   }, [usuario.id]);
   
   useEffect(() => {
-      cargarDatos();
-    }, [cargarDatos]);
+    cargarDatos();
+  }, [cargarDatos]);
   
-	  useEffect(() => {
-	    const queryParams = new URLSearchParams(location.search);
-	    const status = queryParams.get('collection_status');
-	    const externalRef = queryParams.get('external_reference');
-		const paymentId = queryParams.get('payment_id');
-	    
-	    if (status === 'approved' && externalRef) {
-	      
-	      const parts = externalRef.split('_');
-	      const idCuotaRecuperado = parts[1];
-	      const idUsuarioRecuperado = parts[3];
+  // Al volver desde Mercado Pago tras pagar exitosamente
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const status = queryParams.get('collection_status') || queryParams.get('status');
+    const externalRef = queryParams.get('external_reference');
+    const paymentId = queryParams.get('payment_id');
+    
+    if (status === 'approved' && externalRef) {
+      const parts = externalRef.split('_');
+      const idCuotaRecuperado = parts[1];
+      const idUsuarioRecuperado = parts[3];
 
-	      const params = new URLSearchParams();
-	      params.append('action', 'pagar');
-	      params.append('id_cuota', idCuotaRecuperado);
-	      params.append('id_usuario', idUsuarioRecuperado);
-		  params.append('payment_id', paymentId || '');
+      const params = new URLSearchParams();
+      params.append('action', 'pagar');
+      params.append('id_cuota', idCuotaRecuperado);
+      params.append('id_usuario', idUsuarioRecuperado);
+      params.append('payment_id', paymentId || '');
 
-	      fetch(`${API_URL}/pagocuota`, {
-	        method: 'POST',
-	        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-	        body: params
-	      })
-	      .then(res => res.json())
-	      .then(data => {
-			
-			setCuotasProcesadas(prevCuotas => prevCuotas.map(c => {
-	            
-	            if (c.id_cuota.toString() === idCuotaRecuperado) {
-	                return { 
-	                    ...c, 
-	                    estaPagada: true, 
-	                    fecha_pago: new Date().toLocaleDateString(),
-						nro_transaccion: paymentId
-	                };
-	            }
-	            return c;
-	        }));
-	        setQrData(null);
+      fetch(`${API_URL}/pagocuota`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params
+      })
+      .then(res => res.json())
+      .then(() => {
+        setCuotasProcesadas(prevCuotas => prevCuotas.map(c => {
+          if (c.id_cuota.toString() === idCuotaRecuperado) {
+            return { 
+              ...c, 
+              estaPagada: true, 
+              fecha_pago: new Date().toLocaleDateString(),
+              nro_transaccion: paymentId
+            };
+          }
+          return c;
+        }));
 
-			setShowSuccessModal(true);
-			cargarDatos();
-		    navigate(location.pathname, { replace: true });
-	        
-	      })
-	      .catch(err => {
-	        console.error("Error al registrar el pago en el backend", err);
+        setShowSuccessModal(true);
+        cargarDatos();
+        navigate(location.pathname, { replace: true });
+      })
+      .catch(err => {
+        console.error("Error al registrar el pago en el backend", err);
+      });
+    }
+  }, [location, navigate, cargarDatos]);
 
-	      })
-	    }
-	  }, [location, navigate]);
-
-  
-	  
   const formatearPeriodo = (nro: number) => {
     if (!nro) return "N/A";
     const anio = Math.floor(nro / 100);
@@ -156,14 +146,14 @@ const MisCuotas: React.FC = () => {
     return `${meses[mes]} ${anio}`;
   };
 
+  // REDIRECCIÓN DIRECTA A MERCADO PAGO
   const handlePagar = (cuota: CuotaProcesada) => {
     if (!usuario.id) {
       alert("Error: No se pudo identificar al usuario.");
       return;
     }
 
-    setIsPagarLoading(true);
-    setQrData(null);
+    setPagandoCuotaId(cuota.id_cuota);
 
     const params = new URLSearchParams();
     params.append('action', 'crear_orden_pago');
@@ -181,15 +171,17 @@ const MisCuotas: React.FC = () => {
       return res.json();
     })
     .then(data => {
-      setQrData(data.qr_data);
-      setPaymentId(data.payment_id);
+      if (data.init_point) {
+        // Redirige al checkout de Mercado Pago en la misma pestaña
+        window.location.href = data.init_point;
+      } else {
+        throw new Error("No se recibió la URL de pago.");
+      }
     })
     .catch(err => {
       console.error("Error al crear la orden de pago:", err);
-      alert("Hubo un error al generar el código QR. Inténtalo de nuevo.");
-    })
-    .finally(() => {
-      setIsPagarLoading(false);
+      alert("Hubo un error al iniciar el pago. Inténtalo de nuevo.");
+      setPagandoCuotaId(null);
     });
   };
 
@@ -228,45 +220,38 @@ const MisCuotas: React.FC = () => {
                   <th>Estado</th>
                   <th>Fecha de Pago</th>
                   <th>Acción</th>
-				  <th>Nro. Transacción</th>
+                  <th>Nro. Transacción</th>
                 </tr>
               </thead>
-			  <tbody>
-			    {cuotasFiltradas.map(cuota => (
-			      <tr key={cuota.id_cuota}>
-			        {/* 1. Período */}
-			        <td>{formatearPeriodo(cuota.nro_cuota)}</td>
-			        {/* 2. Vencimiento */}
-			        <td>{cuota.fecha_vencimiento}</td>
-			        {/* 3. Monto */}
-			        <td>${cuota.monto.toFixed(2)}</td>
-			        {/* 4. Estado */}
-			        <td>
-			          <span className={`estado-badge ${cuota.estaPagada ? 'estado-pagado' : 'estado-pendiente'}`}>
-			            {cuota.estaPagada ? 'Pagado' : 'Pendiente'}
-			          </span>
-			        </td>
-			        {/* 5. Fecha de Pago */}
-			        <td>{cuota.fecha_pago || '-'}</td>
-			        {/* 6. Acción */}
-			        <td>
-			          {!cuota.estaPagada && (
-			            <button 
-			              onClick={() => handlePagar(cuota)} 
-			              className="btn-pagar"
-			              disabled={isPagarLoading}
-			            >
-			              {isPagarLoading ? '...' : 'Pagar'}
-			            </button>
-			          )}
-			        </td>
-			        {/* 7. Nro. Transacción (NUEVO) */}
-			        <td style={{fontSize: '0.8rem', color: '#666'}}>
-			          {cuota.estaPagada ? (cuota.nro_transaccion || 'S/N') : '-'}
-			        </td>
-			      </tr>
-			    ))}
-			  </tbody>
+              <tbody>
+                {cuotasFiltradas.map(cuota => (
+                  <tr key={cuota.id_cuota}>
+                    <td>{formatearPeriodo(cuota.nro_cuota)}</td>
+                    <td>{cuota.fecha_vencimiento}</td>
+                    <td>${cuota.monto.toFixed(2)}</td>
+                    <td>
+                      <span className={`estado-badge ${cuota.estaPagada ? 'estado-pagado' : 'estado-pendiente'}`}>
+                        {cuota.estaPagada ? 'Pagado' : 'Pendiente'}
+                      </span>
+                    </td>
+                    <td>{cuota.fecha_pago || '-'}</td>
+                    <td>
+                      {!cuota.estaPagada && (
+                        <button 
+                          onClick={() => handlePagar(cuota)} 
+                          className="btn-pagar"
+                          disabled={pagandoCuotaId === cuota.id_cuota}
+                        >
+                          {pagandoCuotaId === cuota.id_cuota ? 'Redirigiendo...' : 'Pagar'}
+                        </button>
+                      )}
+                    </td>
+                    <td style={{fontSize: '0.8rem', color: '#666'}}>
+                      {cuota.estaPagada ? (cuota.nro_transaccion || 'S/N') : '-'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </>
         )}
@@ -274,78 +259,25 @@ const MisCuotas: React.FC = () => {
 
       <Footer />
 
-      {(qrData || isPagarLoading) && (
+      {showSuccessModal && (
         <div className="modal-qr-overlay">
-          <div className="modal-qr-content">
-            {isPagarLoading ? (
-              <p>Generando link de pago...</p>
-            ) : (
-              <>
-                <h3>Paga con Mercado Pago</h3>
-				<p style={{fontSize: '0.9rem', marginBottom: '15px'}}>
-                  Escaneá el QR o usá el botón para pagar ahora mismo.
-                </p>
-                
-                <div style={{background: 'white', padding: '10px', display: 'inline-block', borderRadius: '8px'}}>
-
-                  <QRCodeSVG value={qrData!} size={220} />
-                </div>
-                
-                <div style={{marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center'}}>
-                    
-                    <a 
-                      href={qrData!} 
-                      className="btn-primary" 
-                      style={{
-                          textDecoration: 'none', 
-                          padding: '12px 25px', 
-                          backgroundColor: '#009EE3', 
-                          color: 'white', 
-                          borderRadius: '5px',
-                          fontWeight: 'bold',
-                          display: 'inline-block'
-                      }}
-                    >
-                        Ir a Pagar (Link Web)
-                    </a>
-                    
-                    <p style={{fontSize: '0.8rem', color: '#666'}}>
-                        (Al pagar volverás automáticamente aquí)
-                    </p>
-
-                    <button 
-                        onClick={() => setQrData(null)} 
-                        className="btn-cerrar-modal"
-                        style={{marginTop: '10px'}}
-                    >
-                      Cerrar
-                </button>
-				</div>
-              </>
-            )}
+          <div className="modal-qr-content" style={{borderTop: '5px solid #4CAF50'}}>
+             <div style={{fontSize: '50px', color: '#4CAF50', marginBottom: '10px'}}>
+               ✅
+             </div>
+             <h2 style={{color: '#20321E'}}>¡Pago Exitoso!</h2>
+             <p>El pago se registró correctamente en el sistema.</p>
+             
+             <button 
+               onClick={() => setShowSuccessModal(false)}
+               className="btn-primary"
+               style={{marginTop: '20px'}}
+             >
+               Aceptar
+             </button>
           </div>
         </div>
       )}
-	  
-	  {showSuccessModal && (
-          <div className="modal-qr-overlay">
-            <div className="modal-qr-content" style={{borderTop: '5px solid #4CAF50'}}>
-               <div style={{fontSize: '50px', color: '#4CAF50', marginBottom: '10px'}}>
-                 ✅
-               </div>
-               <h2 style={{color: '#20321E'}}>¡Pago Exitoso!</h2>
-               <p>El pago se registró correctamente en el sistema.</p>
-               
-               <button 
-                 onClick={() => setShowSuccessModal(false)}
-                 className="btn-primary"
-                 style={{marginTop: '20px'}}
-               >
-                 Aceptar
-               </button>
-            </div>
-          </div>
-        )}
     </div>
   );
 };

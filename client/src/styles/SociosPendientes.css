@@ -94,3 +94,41 @@
 .btn-rechazar:hover {
   background-color: #6b665b;
 }
+
+.paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+.btn-paginacion {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.btn-paginacion:hover:not(:disabled) {
+    background-color: #f0f0f0;
+}
+
+.btn-paginacion.activo {
+    background-color: #333;
+    color: white;
+    border-color: #333;
+    font-weight: bold;
+}
+
+.btn-paginacion:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

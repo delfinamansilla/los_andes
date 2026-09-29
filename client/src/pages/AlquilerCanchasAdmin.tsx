@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import NavbarAdmin from './NavbarAdmin';
 import '../styles/VerAlquileresSalon.css';
 import { API_URL } from "../config";
 
+const PAGE_SIZE = 3;
 interface AlquilerData {
   id: number;
   fecha_alquiler: string;
@@ -28,6 +29,11 @@ const AlquileresCanchasAdmin = () => {
   const [cancha, setCancha] = useState<Cancha | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [fechaDesde, setFechaDesde] = useState('');
+  const [fechaHasta, setFechaHasta] = useState('');
+  const [fechaDesdeAplicada, setFechaDesdeAplicada] = useState('');
+  const [fechaHastaAplicada, setFechaHastaAplicada] = useState('');
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   useEffect(() => {
     const canchaStored = localStorage.getItem('canchaVerAlquileres');
@@ -65,6 +71,47 @@ const AlquileresCanchasAdmin = () => {
     if (!hora) return ""; 
     return hora.substring(0, 5);
   };
+  
+  const alquileresFiltrados = useMemo(() => {
+    let lista = [...alquileres];
+
+    if (fechaDesdeAplicada) {
+      lista = lista.filter((item) => item.alquiler.fecha_alquiler >= fechaDesdeAplicada);
+    }
+
+    if (fechaHastaAplicada) {
+      lista = lista.filter((item) => item.alquiler.fecha_alquiler <= fechaHastaAplicada);
+    }
+
+    lista.sort((a, b) => {
+      const fechaHoraA = `${a.alquiler.fecha_alquiler}T${a.alquiler.hora_desde}`;
+      const fechaHoraB = `${b.alquiler.fecha_alquiler}T${b.alquiler.hora_desde}`;
+      return fechaHoraB.localeCompare(fechaHoraA);
+    });
+
+    return lista;
+  }, [alquileres, fechaDesdeAplicada, fechaHastaAplicada]);
+   
+    const alquileresVisibles = alquileresFiltrados.slice(0, visibleCount);
+    const hayMas = visibleCount < alquileresFiltrados.length;
+   
+	const handleFiltrar = () => {
+	  setFechaDesdeAplicada(fechaDesde);
+	  setFechaHastaAplicada(fechaHasta);
+	  setVisibleCount(PAGE_SIZE);
+	};
+   
+	const handleLimpiarFiltro = () => {
+	  setFechaDesde('');
+	  setFechaHasta('');
+	  setFechaDesdeAplicada('');
+	  setFechaHastaAplicada('');
+	  setVisibleCount(PAGE_SIZE);
+	};
+   
+    const handleVerMas = () => {
+      setVisibleCount((prev) => prev + PAGE_SIZE);
+    };
 
   return (
     <div className="ver-alquileres-page">
@@ -78,11 +125,46 @@ const AlquileresCanchasAdmin = () => {
         {loading && <p className="loading-msg">Cargando alquileres...</p>}
 
         {!loading && !error && (
+		<>
+			<div className="filtro-fechas-container">
+              <div className="filtro-campo">
+                <label htmlFor="fecha-desde">Desde</label>
+                <input
+                  id="fecha-desde"
+                  type="date"
+                  value={fechaDesde}
+                  onChange={(e) => setFechaDesde(e.target.value)}
+                />
+              </div>
+ 
+              <div className="filtro-campo">
+                <label htmlFor="fecha-hasta">Hasta</label>
+                <input
+                  id="fecha-hasta"
+                  type="date"
+                  value={fechaHasta}
+                  onChange={(e) => setFechaHasta(e.target.value)}
+                />
+              </div>
+ 
+              <div className="filtro-botones">
+                <button className="btn-filtrar" onClick={handleFiltrar}>
+                  <i className="fa-solid fa-filter"></i> Filtrar
+                </button>
+                {(fechaDesde || fechaHasta) && (
+                  <button className="btn-limpiar-filtro" onClick={handleLimpiarFiltro}>
+                    <i className="fa-solid fa-xmark"></i> Limpiar
+                  </button>
+                )}
+              </div>
+            </div>
+		
           <div className="alquileres-card-container">
 
-            {alquileres.length === 0 ? (
-              <p className="empty-msg">No hay alquileres registrados para esta cancha.</p>
+            {alquileresFiltrados.length === 0 ? (
+              <p className="empty-msg">No hay alquileres registrados para esta cancha en ese rango de fechas.</p>
             ) : (
+			<>
               <table className="tabla-alquileres">
                 <thead>
                   <tr>
@@ -93,7 +175,7 @@ const AlquileresCanchasAdmin = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {alquileres.map((item) => {
+                  {alquileresVisibles.map((item) => {
                     const { alquiler, nombreUsuario } = item;
 
                     const fechaAlquiler = new Date(alquiler.fecha_alquiler + 'T' + alquiler.hora_hasta);
@@ -126,9 +208,20 @@ const AlquileresCanchasAdmin = () => {
                   })}
                 </tbody>
               </table>
-            )}
-          </div>
-        )}
+			  
+			  {hayMas && (
+                      <div className="ver-mas-container">
+                        <button className="btn-ver-mas" onClick={handleVerMas}>
+                          Ver más
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+			</div>
+		  </>
+		)}
+          
 
         <div className="btn-volver-container">
           <button onClick={handleVolver} className="btn-volver">

@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavbarAdmin from './NavbarAdmin';
 import Modal from './Modal'; 
 import '../styles/CuotasUsuario.css';
 import { API_URL } from "../config";
+
+const PAGE_SIZE = 5;
 
 interface Usuario {
   id: number;
@@ -15,6 +17,7 @@ interface Cuota {
   id: number;
   nro_cuota: number;
   fecha_vencimiento: string;
+  fecha_cuota: string;
 }
 
 interface MontoCuota {
@@ -40,6 +43,12 @@ const CuotasUsuario: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [fechaDesde, setFechaDesde] = useState('');
+  const [fechaHasta, setFechaHasta] = useState('');
+  const [fechaDesdeAplicada, setFechaDesdeAplicada] = useState('');
+  const [fechaHastaAplicada, setFechaHastaAplicada] = useState('');
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  
   const [modalConfirmacion, setModalConfirmacion] = useState<{ visible: boolean, idCuota: number | null }>({
     visible: false,
     idCuota: null
@@ -91,6 +100,62 @@ const CuotasUsuario: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+  
+  const cuotasFiltradas = useMemo(() => {
+
+    let lista = [...cuotas];
+
+    if (fechaDesdeAplicada) {
+      lista = lista.filter(
+        (cuota) => cuota.fecha_cuota >= fechaDesdeAplicada
+      );
+    }
+
+    if (fechaHastaAplicada) {
+      lista = lista.filter(
+        (cuota) => cuota.fecha_cuota <= fechaHastaAplicada
+      );
+    }
+
+    lista.sort((a, b) =>
+      b.fecha_cuota.localeCompare(a.fecha_cuota)
+    );
+
+    return lista;
+
+  }, [cuotas, fechaDesdeAplicada, fechaHastaAplicada]);
+
+
+  const cuotasVisibles = cuotasFiltradas.slice(0, visibleCount);
+
+  const hayMas = visibleCount < cuotasFiltradas.length;
+
+
+  const handleFiltrar = () => {
+
+    setFechaDesdeAplicada(fechaDesde);
+    setFechaHastaAplicada(fechaHasta);
+    setVisibleCount(PAGE_SIZE);
+
+  };
+
+
+  const handleLimpiarFiltro = () => {
+
+    setFechaDesde('');
+    setFechaHasta('');
+    setFechaDesdeAplicada('');
+    setFechaHastaAplicada('');
+    setVisibleCount(PAGE_SIZE);
+
+  };
+
+
+  const handleVerMas = () => {
+
+    setVisibleCount((prev) => prev + PAGE_SIZE);
+
   };
 
   const handleBotonPagar = (idCuota: number) => {
@@ -199,9 +264,70 @@ const CuotasUsuario: React.FC = () => {
       </div>
 
       <div className="table-container">
-        {cuotas.length === 0 ? (
-            <p style={{color: 'white', textAlign: 'center'}}>No existen cuotas generadas en el sistema.</p>
+      
+	  <div className="filtro-cuotas">
+
+	    <div className="filtro-cuotas-titulo">
+	      <i className="fa-solid fa-filter"></i>
+	      <span>Filtrar por vencimiento</span>
+	    </div>
+
+	    <div className="filtro-cuotas-controles">
+
+	      <div className="filtro-cuota-campo">
+	        <label htmlFor="fecha-desde-cuota">
+	          Desde
+	        </label>
+
+	        <input
+	          id="fecha-desde-cuota"
+	          type="date"
+	          value={fechaDesde}
+	          onChange={(e) => setFechaDesde(e.target.value)}
+	        />
+	      </div>
+
+	      <div className="filtro-cuota-campo">
+	        <label htmlFor="fecha-hasta-cuota">
+	          Hasta
+	        </label>
+
+	        <input
+	          id="fecha-hasta-cuota"
+	          type="date"
+	          value={fechaHasta}
+	          onChange={(e) => setFechaHasta(e.target.value)}
+	        />
+	      </div>
+
+	      <button
+	        className="btn-filtrar-cuotas"
+	        onClick={handleFiltrar}
+	      >
+	        <i className="fa-solid fa-filter"></i>
+	        Filtrar
+	      </button>
+
+	      {(fechaDesde || fechaHasta) && (
+	        <button
+	          className="btn-limpiar-cuotas"
+	          onClick={handleLimpiarFiltro}
+	        >
+	          <i className="fa-solid fa-xmark"></i>
+	          Limpiar
+	        </button>
+	      )}
+
+	    </div>
+
+	  </div>
+	    
+	  {cuotas.length === 0 ? (
+			
+			
+            <p style={{color: 'white', textAlign: 'center'}}>No hay cuotas en el sistema para el período seleccionado.</p>
         ) : (
+			
             <table className="styled-table">
                 <thead>
                     <tr>
@@ -215,7 +341,7 @@ const CuotasUsuario: React.FC = () => {
                 </thead>
 
                 <tbody>
-                    {cuotas.map((c) => {
+                    {cuotasVisibles.map((c) => {
                         const estado = getEstadoPago(c.id);
                         const montoBase = getMontoCuota(c.id);
                         
@@ -315,7 +441,22 @@ const CuotasUsuario: React.FC = () => {
                     })}
                 </tbody>
             </table>
+			
+			
+			
         )}
+		{hayMas && (
+		  <div className="ver-mas-container">
+
+		    <button
+		      className="btn-ver-mas"
+		      onClick={handleVerMas}
+		    >
+		      Ver más
+		    </button>
+
+		  </div>
+		)}
       </div>
 
       <button onClick={() => navigate('/listado-socio')} className="btn-back">

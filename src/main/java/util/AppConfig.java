@@ -5,7 +5,7 @@ public class AppConfig {
     private static final String FRONTEND_URL =
         System.getenv().getOrDefault(
             "FRONTEND_URL",
-            "http://localhost:3000"
+            "https://manor-routine-boundaries-interaction.trycloudflare.com"
         );
 
     private static final String BACKEND_URL =

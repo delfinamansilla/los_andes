@@ -197,3 +197,157 @@
   color: #cc0000;            
   border: 1px solid #ff9999;
 }
+
+.filtro-cuotas {
+  background-color: rgba(232, 228, 217, 0.97);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.filtro-cuotas-titulo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  color: #20321E;
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.filtro-cuotas-titulo i {
+  font-size: 0.95rem;
+  color: #466245;
+}
+
+.filtro-cuotas-controles {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.filtro-cuota-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filtro-cuota-campo label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #20321E;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filtro-cuota-campo input {
+  height: 36px;
+  padding: 0 9px;
+
+  border: 1px solid #B8B4A8;
+  border-radius: 6px;
+
+  background-color: #F7F5EF;
+  color: #20321E;
+
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.85rem;
+
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filtro-cuota-campo input:focus {
+  border-color: #466245;
+  box-shadow: 0 0 0 2px rgba(70, 98, 69, 0.15);
+}
+
+
+/* =========================
+   BOTONES DEL FILTRO
+   ========================= */
+
+.btn-filtrar-cuotas,
+.btn-limpiar-cuotas {
+  height: 36px;
+  padding: 0 15px;
+
+  border-radius: 6px;
+  cursor: pointer;
+
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+
+  transition: all 0.2s ease;
+}
+
+.btn-filtrar-cuotas {
+  background-color: #20321E;
+  color: #E8E4D9;
+  border: 1px solid #20321E;
+}
+
+.btn-filtrar-cuotas:hover {
+  background-color: #466245;
+  border-color: #466245;
+  transform: translateY(-1px);
+}
+
+.btn-limpiar-cuotas {
+  background-color: transparent;
+  color: #20321E;
+  border: 1px solid #8D8A80;
+}
+
+.btn-limpiar-cuotas:hover {
+  background-color: #20321E;
+  color: #E8E4D9;
+  border-color: #20321E;
+}
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.btn-paginacion {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.btn-paginacion:hover:not(:disabled) {
+  background-color: #f0f0f0;
+}
+
+.btn-paginacion.activo {
+  background-color: #333;
+  color: white;
+  border-color: #333;
+  font-weight: bold;
+}
+
+.btn-paginacion:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
